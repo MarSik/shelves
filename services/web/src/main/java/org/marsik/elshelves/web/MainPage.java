@@ -9,7 +9,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainPage {
-    @RequestMapping("/")
+    @RequestMapping("/status")
+    @ResponseBody
+    public String getStatus() {
+        return "ok";
+    }
+
+    /* MUST STAY AT THE BOTTOM */
+    @RequestMapping(value = {"/", "/**"})
     public String mainPage() {
         return "forward:/index.html";
     }

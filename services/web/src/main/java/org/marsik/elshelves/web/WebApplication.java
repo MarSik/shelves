@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.Ordered;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -113,8 +114,15 @@ public class WebApplication extends WebMvcConfigurerAdapter {
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        registry.addResourceHandler("/index.html")
                 .addResourceLocations("/");
+        registry.addResourceHandler("/robots.txt")
+                .addResourceLocations("/");
+        registry.addResourceHandler("/crossdomain.xml")
+                .addResourceLocations("/");
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("/assets/");
     }
 
     @Bean(name = "messageSource")
