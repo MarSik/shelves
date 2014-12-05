@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.security;
+package org.marsik.elshelves.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
