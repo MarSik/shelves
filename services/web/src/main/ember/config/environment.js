@@ -19,6 +19,11 @@ module.exports = function(environment) {
     }
   };
 
+  ENV['simple-auth'] = {
+    authorizer: 'simple-auth-authorizer:oauth2-bearer',
+    store: 'simple-auth-session-store:cookie'
+  };
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
@@ -27,6 +32,11 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.APP.API_SERVER = 'http://localhost:8080';
+
+    ENV['simple-auth-oauth2'] = {
+      serverTokenEndpoint: ENV.APP.API_SERVER + '/api/1/oauth/token',
+      clientId: 'elshelves.js'
+    }
   }
 
   if (environment === 'test') {
@@ -43,6 +53,11 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
       ENV.APP.API_SERVER = 'http://api.elshelves.net';
+
+      ENV['simple-auth-oauth2'] = {
+          serverTokenEndpoint: ENV.APP.API_SERVER + '/api/1/oauth/token',
+          clientId: 'elshelves.js'
+      }
   }
 
   return ENV;
