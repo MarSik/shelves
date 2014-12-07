@@ -1,10 +1,10 @@
 package org.marsik.elshelves.api.entities;
 
-public class PartGroup {
-    Integer id;
+public class PartGroup extends AbstractEntity {
+    Long id;
     String name;
 
-    public PartGroup(Integer id, String name) {
+    public PartGroup(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -17,11 +17,11 @@ public class PartGroup {
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
