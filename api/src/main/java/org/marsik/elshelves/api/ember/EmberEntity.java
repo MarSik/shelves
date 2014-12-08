@@ -5,9 +5,11 @@ package org.marsik.elshelves.api.ember;
  *
  * The entity classes have to:
  *
+ * - classes have to be annotated with @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
  * - annotate all 1:1 foreign relationship getters with @JsonIdentityReference(alwaysAsId = true) Category getCategory()
  * - create an id based setter for 1:1 relationships -- @JsonSetter void setCategory(Long id)
- * - annotate all 1:n foreign relationship getters with @JsonIgnore -- @JsonIgnore void setCategory(Category c)
+ *
+ * - annotate all 1:n foreign relationship getters with @JsonIgnore -- @JsonIgnore List<Category> getCategories()
  * - have an entities/{id}/posts controller mapping that returns the posts
  * - return the map for 1:n fetchers using getLinks() {"posts": "posts"}
  * - annotate all 1:n foreign relationship setters -- @JsonSetter void setPosts(List<Post> p)

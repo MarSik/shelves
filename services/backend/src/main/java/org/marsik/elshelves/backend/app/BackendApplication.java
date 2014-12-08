@@ -7,6 +7,7 @@ import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
 import org.marsik.elshelves.backend.app.WebFormSupportFilter;
+import org.marsik.elshelves.backend.app.spring.EmberAwareObjectMapper;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -65,6 +68,19 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
         // Extra argument resolvers (the default ones are added as well).
         argumentResolvers.add(currentUserArgumentResolver);
         argumentResolvers.add(renamingProcessor);
+    }
+
+    @Bean
+    MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(new EmberAwareObjectMapper());
+        return converter;
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        super.configureMessageConverters(converters);
+        converters.add(emberJackson2HttpMessageConverter());
     }
 
     @Bean

@@ -11,6 +11,9 @@ Router.map(function() {
         this.route('new');
         this.route('show', {path: '/:group_id'});
     });
+    this.resource('lots', function () {
+        this.route('show', {path: '/:lot_id'});
+    });
 });
 
 export default Router;
