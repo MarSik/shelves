@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import Authenticator from 'simple-auth-oauth2/authenticators/oauth2';
+import ENV from '../config/environment';
 
 export default Authenticator.extend({
     makeRequest: function (url, data) {
-        var client_id = 'elshelves.js';
-        var client_secret = 'public';
+        var client_id = ENV['simple-auth']['client-id'];
+        var client_secret = ENV['simple-auth']['client-secret'];
         data.grant_type = "password";
 
         return Ember.$.ajax({

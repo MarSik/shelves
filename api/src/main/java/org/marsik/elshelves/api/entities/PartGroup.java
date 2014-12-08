@@ -1,5 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
+import org.marsik.elshelves.api.ember.EmberModelName;
+
+@EmberModelName("group")
 public class PartGroup extends AbstractEntity {
     Long id;
     String name;

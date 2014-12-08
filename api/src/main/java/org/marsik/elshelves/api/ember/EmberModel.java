@@ -64,7 +64,12 @@ public final class EmberModel extends HashMap<String, Object> {
 
         private String getSingularName(final Class<?> clazz) {
             Assert.notNull(clazz);
-            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
+            if (clazz.isAnnotationPresent(EmberModelName.class)) {
+                return clazz.getAnnotation(EmberModelName.class).value();
+            }
+            else {
+                return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
+            }
         }
 
         private String getPluralName(final Class<?> clazz) {

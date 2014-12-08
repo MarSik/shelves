@@ -2,6 +2,8 @@ package org.marsik.elshelves.backend.app;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
+import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -41,5 +43,15 @@ public class ApplicationMessaging implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
         registration.setSendTimeLimit(15 * 1000).setSendBufferSizeLimit(512 * 1024);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> handlerMethodArgumentResolvers) {
+
+    }
+
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlerMethodReturnValueHandlers) {
+
     }
 }

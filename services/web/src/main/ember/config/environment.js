@@ -21,7 +21,9 @@ module.exports = function(environment) {
 
   ENV['simple-auth'] = {
     authorizer: 'simple-auth-authorizer:oauth2-bearer',
-    store: 'simple-auth-session-store:cookie'
+    store: 'simple-auth-session-store:cookie',
+    'client-id': 'elshelves.js',
+    'client-secret': 'public'
   };
 
   if (environment === 'development') {

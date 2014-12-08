@@ -62,13 +62,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- Freemarker template engine //-->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
-        </dependency>
-
         <!-- needed for freemarker FreeMarkerConfigurer -->
         <dependency>
             <groupId>org.springframework</groupId>

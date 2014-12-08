@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 // Adapted from http://springember.blogspot.com.au/2014/08/using-ember-data-restadapter-with.html
