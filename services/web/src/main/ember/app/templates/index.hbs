@@ -1,5 +1,30 @@
 <h2>Empty content</h2>
 
-{{#link-to 'login'}}Login{{/link-to}} |
-{{#link-to 'groups.show' 5}}Group 5{{/link-to}} |
-{{#link-to 'lots.show' 5}}Lots 5{{/link-to}} |
+{{#if session.isAuthenticated}}
+    <a {{ action 'invalidateSession' }}>Logout</a> |
+    {{#link-to 'groups.show' 5}}Group 5{{/link-to}} |
+    {{#link-to 'lots.show' 5}}Lots 5{{/link-to}}
+{{else}}
+    <section id="login-form">
+    <h2>Login</h2>
+    <form {{action 'authenticate' on='submit'}}>
+        <label for="identification">Email address</label>
+        {{input type='email' id='identification' placeholder='Enter email address' value=identification}}
+        <label for="password">Password</label>
+        {{input id='password' placeholder='Enter Password' type='password' value=password}}
+        <button type="submit">Login</button>
+    </form>
+    </section>
+
+    <section id="registration-form">
+        <h2>Register</h2>
+        <form {{action 'register' on='submit'}}>
+            <label for="name">Name:</label>
+            {{input id='name' placeholder='Enter your name' value=name required='required'}}
+            <label for="email">Email:</label>
+            {{input type='email' id='email' placeholder='Enter email address' value=email required='required'}}
+            <button type="submit">Register</button>
+        </form>
+    </section>
+{{/if}}
+
