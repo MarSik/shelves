@@ -34,6 +34,7 @@ public class TestController {
         List<Lot> lots = new ArrayList<>();
         lots.add(l1);
         lots.add(l2);
+        lot.setNext(lots);
 
         return new EmberModel.Builder<Lot>(lot)
                 .sideLoad(Lot.class, lots)
@@ -52,6 +53,6 @@ public class TestController {
         lots.add(l1);
         lots.add(l2);
 
-        return new EmberModel.Builder<Lot>("next", lots).build();
+        return new EmberModel.Builder<Lot>(Lot.class, lots).build();
     }
 }

@@ -110,7 +110,7 @@ public class Lot extends AbstractEntity {
         this.previous.setId(previous);
     }
 
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     public List<Lot> getNext() {
         return next;
     }

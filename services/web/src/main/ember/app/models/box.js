@@ -5,8 +5,6 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default DS.Model.extend({
-  name: attr("string"),
-  groups: hasMany("group", {async: true}),
-  footprint: belongsTo("footprint", {async: true}),
+  name: attr(),
   lots: hasMany("lot", {async: true})
 });
