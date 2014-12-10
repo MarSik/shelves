@@ -10,6 +10,7 @@ import gnu.trove.map.hash.THashMap;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This entity represents one step in history of
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Lot extends AbstractEntity {
-    Long id;
+    UUID id;
     Date created;
     Long count;
 
@@ -38,11 +39,11 @@ public class Lot extends AbstractEntity {
         return links;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -73,7 +74,7 @@ public class Lot extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setLocation(Long location) {
+    public void setLocation(UUID location) {
         this.location = new Box();
         this.location.setId(location);
     }
@@ -89,7 +90,7 @@ public class Lot extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setType(Long type) {
+    public void setType(UUID type) {
         this.type = new PartType();
         this.type.setId(type);
     }
@@ -105,7 +106,7 @@ public class Lot extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setPrevious(Long previous) {
+    public void setPrevious(UUID previous) {
         this.previous = new Lot();
         this.previous.setId(previous);
     }

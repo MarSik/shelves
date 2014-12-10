@@ -6,19 +6,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import java.util.UUID;
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Code extends AbstractEntity {
-    Long id;
+    UUID id;
     String code;
 
     Box box;
 
     @Override
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -41,7 +43,7 @@ public class Code extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setBox(Long box) {
+    public void setBox(UUID box) {
         this.box = new Box();
         this.box.setId(box);
     }

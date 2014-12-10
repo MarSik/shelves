@@ -2,8 +2,8 @@
 
 {{#if session.isAuthenticated}}
     <a {{ action 'invalidateSession' }}>Logout</a> |
-    {{#link-to 'groups.show' 5}}Group 5{{/link-to}} |
-    {{#link-to 'lots.show' 5}}Lots 5{{/link-to}}
+    {{#link-to 'groups.show' 'de305d54-75b4-431b-adb2-eb6b9e546013'}}Group de305d54-75b4-431b-adb2-eb6b9e546013{{/link-to}} |
+    {{#link-to 'lots.show' 'de305d54-75b4-431b-adb2-eb6b9e546013'}}Lots de305d54-75b4-431b-adb2-eb6b9e546013{{/link-to}}
 {{else}}
     <section id="login-form">
     <h2>Login</h2>

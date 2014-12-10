@@ -1,20 +1,22 @@
 package org.marsik.elshelves.api.entities;
 
+import java.util.UUID;
+
 /**
  * Represents an user of the system
  */
 public class User extends AbstractEntity {
-    Long id;
+    UUID id;
     String name;
     String password;
     String email;
 
     @Override
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

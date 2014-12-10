@@ -3,9 +3,11 @@ package org.marsik.elshelves.api.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import java.util.UUID;
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Footprint extends AbstractEntity {
-    Long id;
+    UUID id;
     String name;
     String kicad;
 
@@ -13,11 +15,11 @@ public class Footprint extends AbstractEntity {
     Integer holes;
     Integer npth;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

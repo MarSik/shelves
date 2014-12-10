@@ -9,10 +9,11 @@ import gnu.trove.map.hash.THashMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Box extends AbstractEntity {
-    Long id;
+    UUID id;
     String name;
     Code code;
 
@@ -37,11 +38,11 @@ public class Box extends AbstractEntity {
     }
 
     @Override
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -66,7 +67,7 @@ public class Box extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setParent(Long parent) {
+    public void setParent(UUID parent) {
         this.parent = new Box();
         this.parent.setId(parent);
     }
@@ -92,7 +93,7 @@ public class Box extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setCode(Long code) {
+    public void setCode(UUID code) {
         this.code = new Code();
         this.code.setId(code);
     }

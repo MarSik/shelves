@@ -10,11 +10,12 @@ import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("type")
 public class PartType extends AbstractEntity {
-    Long id;
+    UUID id;
     String name;
 
     Footprint footprint;
@@ -27,11 +28,11 @@ public class PartType extends AbstractEntity {
         return links;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -54,7 +55,7 @@ public class PartType extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setFootprint(Long footprint) {
+    public void setFootprint(UUID footprint) {
         this.footprint = new Footprint();
         this.footprint.setId(footprint);
     }

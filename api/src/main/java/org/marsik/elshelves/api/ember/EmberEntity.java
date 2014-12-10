@@ -1,5 +1,7 @@
 package org.marsik.elshelves.api.ember;
 
+import java.util.UUID;
+
 /**
  * See http://springember.blogspot.com.au/2014/08/using-ember-data-restadapter-with.html for full explanation.
  *
@@ -23,5 +25,5 @@ package org.marsik.elshelves.api.ember;
  *             .build();
  */
 public interface EmberEntity extends EmberLinks {
-    Long getId();
+    UUID getId();
 }

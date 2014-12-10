@@ -10,11 +10,12 @@ import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("group")
 public class PartGroup extends AbstractEntity {
-    Long id;
+    UUID id;
     String name;
 
     List<PartGroup> groups;
@@ -33,7 +34,7 @@ public class PartGroup extends AbstractEntity {
     public PartGroup() {
     }
 
-    public PartGroup(Long id, String name) {
+    public PartGroup(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -46,11 +47,11 @@ public class PartGroup extends AbstractEntity {
         this.name = name;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -75,7 +76,7 @@ public class PartGroup extends AbstractEntity {
     }
 
     @JsonSetter
-    public void setParent(Long parent) {
+    public void setParent(UUID parent) {
         this.parent = new PartGroup();
         this.parent.setId(parent);
     }
