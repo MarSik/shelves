@@ -4,6 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.apache.commons.codec.binary.Hex;
 import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
 import org.marsik.elshelves.backend.dtos.MailgunEmailReceived;
+import org.marsik.elshelves.backend.services.MailgunService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ import java.util.Set;
 public class MailgunController {
     static final private Logger logger = LoggerFactory.getLogger(MailgunController.class);
 
+    @Autowired
+    MailgunService mailgunService;
 
     /**
      * Generic email receiver
@@ -47,7 +50,6 @@ public class MailgunController {
      * the processResponseEmail method. (outside communication)
      *
      *
-     * @param config
      * @param timestamp
      * @param token
      * @param signature
@@ -55,16 +57,15 @@ public class MailgunController {
      */
     @Transactional
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
-    public ResponseEntity<String> processEmail(MailgunConfiguration config,
-                                               @RequestParam("timestamp") Integer timestamp,
+    public ResponseEntity<String> processEmail(@RequestParam("timestamp") Integer timestamp,
                                                @RequestParam("token") String token,
                                                @RequestParam("signature") String signature,
                                                @Valid MailgunEmailReceived emailReceived,
                                                HttpServletRequest request
                                                ) {
-        if (!computeSignature(config.getKey(), timestamp, token).equals(signature)) {
+        if (!mailgunService.computeSignature(timestamp, token).equals(signature)) {
             logger.warn("Failed Mailgun auth - key '{}', timestamp {}, token '{}', signature '{}'",
-                    config.getKey(), timestamp, token, signature);
+                    timestamp, token, signature);
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }
 
@@ -72,21 +73,7 @@ public class MailgunController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    static public String computeSignature(String key, Integer timestamp, String token) {
-        try {
-            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            String data = timestamp.toString()+token;
-            SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
-            sha256_HMAC.init(secret_key);
-            return Hex.encodeHexString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
-        } catch (NoSuchAlgorithmException ex) {
-            return "";
-        } catch (InvalidKeyException ex) {
-            return "";
-        } catch (UnsupportedEncodingException ex) {
-            return "";
-        }
-    }
+
 
     @RequestMapping(value = "/test")
     public ResponseEntity<String> logRequest(HttpServletRequest req) {
