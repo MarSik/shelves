@@ -15,6 +15,7 @@
     <modules>
         <module>backend</module>
         <module>web</module>
+        <module>scanner</module>
     </modules>
 
     <dependencies>
