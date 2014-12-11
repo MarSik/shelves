@@ -2,7 +2,6 @@ package org.marsik.elshelves.api.ember;
 
 import com.google.common.base.CaseFormat;
 import org.atteo.evo.inflector.English;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,17 +21,14 @@ public final class EmberModel extends HashMap<String, Object> {
         private final Map<String, Object> metaData = new HashMap<String, Object>();
 
         public Builder(final Object entity) {
-            Assert.notNull(entity);
             sideLoad(entity);
         }
 
         public Builder(final Class<T> clazz, final Collection<T> entities) {
-            Assert.notNull(entities);
             sideLoad(clazz, entities);
         }
 
         public Builder(final String rootName, final Collection<?> entities) {
-            Assert.notNull(entities);
             sideLoad(rootName, entities);
         }
 
@@ -63,7 +59,6 @@ public final class EmberModel extends HashMap<String, Object> {
         }
 
         private String getSingularName(final Class<?> clazz) {
-            Assert.notNull(clazz);
             if (clazz.isAnnotationPresent(EmberModelName.class)) {
                 return clazz.getAnnotation(EmberModelName.class).value();
             }

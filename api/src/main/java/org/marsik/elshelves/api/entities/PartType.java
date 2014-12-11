@@ -23,7 +23,7 @@ public class PartType extends AbstractEntity {
 
     @Override
     public Map getLinks() {
-        Map<String, String> links = new THashMap<>();
+        Map<String, String> links = new THashMap<String, String>();
         links.put("groups", "groups");
         return links;
     }

@@ -24,7 +24,7 @@ public class Box extends AbstractEntity {
 
     @Override
     public Map getLinks() {
-        Map<String, String> links = new THashMap<>();
+        Map<String, String> links = new THashMap<String, String>();
         links.put("lots", "lots");
         return links;
     }
