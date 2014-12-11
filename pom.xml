@@ -9,10 +9,10 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>scanner</module>
         <module>api</module>
         <module>services</module>
         <module>common</module>
+        <module>scanlib</module>
     </modules>
 
     <parent>
@@ -39,6 +39,17 @@
         <jetty.version>9.2.5.v20141112</jetty.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>1.8.7</pdfbox.version>
+
+        <!-- computer vision libs //-->
+
+        <!-- Use the following command to import processing core jar to local
+             maven repository:
+
+             mvn install:install-file -Dfile=core.jar -DgroupId=org.processing -DartifactId=core -Dversion=2.2.1 -Dpackaging=jar
+        //-->
+        <processing.version>2.2.1</processing.version>
+        <javacv.version>0.9</javacv.version>
+        <platform.dependencies>true</platform.dependencies>
     </properties>
 
     <dependencies>
