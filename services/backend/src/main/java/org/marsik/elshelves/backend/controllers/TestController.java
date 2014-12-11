@@ -4,7 +4,7 @@ import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.Lot;
 import org.marsik.elshelves.api.entities.PartGroup;
 import org.marsik.elshelves.api.entities.User;
-import org.marsik.elshelves.backend.services.CustomUserDetailsService;
+import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class TestController {
     UuidGenerator uuidGenerator;
 
     @Autowired
-    CustomUserDetailsService userDetailsService;
+    ElshelvesUserDetailsService userDetailsService;
 
     @Autowired
     MailgunService mailgunService;

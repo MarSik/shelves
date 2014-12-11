@@ -15,14 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("userDetailsService")
-public class CustomUserDetailsService implements UserDetailsService {
+@Service
+public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
-    @Autowired
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    public CustomUserDetailsService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -44,6 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 authorities);
     }
 
+    @Override
     public String createUser(org.marsik.elshelves.api.entities.User userInfo) {
         User user = User.fromDto(userInfo);
         user.setId(null);
@@ -54,6 +58,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return user.getVerificationCode();
     }
 
+    @Override
     public String verifyUser(String code) {
         User u = userRepository.getUserByVerificationCode(code);
 

@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 import java.util.UUID;
 
 public interface UserRepository extends GraphRepository<User> {
-    User getUserByUuid(UUID uuid);
+    User getUserById(UUID id);
     User getUserByEmail(String email);
     User getUserByVerificationCode(String verificationCode);
 }

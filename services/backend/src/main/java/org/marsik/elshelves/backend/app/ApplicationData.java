@@ -25,13 +25,13 @@ import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableNeo4jRepositories("org.marsik.elshelves.services.backend.repositories")
+@EnableNeo4jRepositories("org.marsik.elshelves.backend.repositories")
 @EnableTransactionManagement(mode = AdviceMode.PROXY)
 public class ApplicationData extends Neo4jAspectConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationData.class);
 
     public ApplicationData() {
-        setBasePackage("org.marsik.elshelves.services.backend.entities");
+        setBasePackage("org.marsik.elshelves.backend.entities");
     }
 
     @Bean
