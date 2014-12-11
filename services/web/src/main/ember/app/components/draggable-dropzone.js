@@ -18,7 +18,7 @@ export default Ember.Component.extend({
     drop: function(event) {
         event.preventDefault();
         this.set('dragClass', 'deactivated');
-        data = event.dataTransfer.getData('text/data');
+        var data = event.dataTransfer.getData('text/data');
         // default drop action - change with {{draggable-dropzone dropped=xyz}}
         this.sendAction('dropped', data);
     }
