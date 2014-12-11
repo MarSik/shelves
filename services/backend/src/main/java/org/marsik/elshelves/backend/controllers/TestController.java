@@ -1,11 +1,15 @@
 package org.marsik.elshelves.backend.controllers;
 
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.Lot;
 import org.marsik.elshelves.api.entities.PartGroup;
 import org.marsik.elshelves.api.entities.User;
+import org.marsik.elshelves.backend.dtos.StickerSettings;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
+import org.marsik.elshelves.backend.services.StickerService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +39,9 @@ public class TestController {
 
     @Autowired
     MailgunService mailgunService;
+
+    @Autowired
+    StickerService stickerService;
 
     @RequestMapping("/groups/{id}")
     public EmberModel getGroup(@PathVariable("id") UUID id) {
@@ -95,5 +104,17 @@ public class TestController {
     public EmberModel verifyUser(@PathVariable("code") String code) {
         String password = userDetailsService.verifyUser(code);
         return new EmberModel.Builder<String>(password).build();
+    }
+
+    @RequestMapping(value = "/test/stickers", produces = "application/pdf")
+    public void generateStickers(HttpServletResponse response) throws IOException {
+        StickerService.Result pdf = stickerService.generateStickers(new StickerSettings());
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf");
+
+        pdf.save(response.getOutputStream());
+        pdf.close();
+        response.flushBuffer();
     }
 }
