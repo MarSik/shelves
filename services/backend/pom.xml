@@ -309,6 +309,13 @@
             <artifactId>mbassador</artifactId>
             <version>1.2.0</version>
         </dependency>
+
+        <!-- PDF library //-->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>${pdfbox.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
