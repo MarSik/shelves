@@ -1,10 +1,12 @@
 package org.marsik.elshelves.backend.services;
 
-import net.glxn.qrgen.QRCode;
-import net.glxn.qrgen.image.ImageType;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import net.glxn.qrgen.core.image.ImageType;
+import net.glxn.qrgen.javase.QRCode;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
@@ -14,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 @Service
 public class StickerService {
@@ -41,30 +44,119 @@ public class StickerService {
         }
     }
 
-    private static final float MM_TO_UNITS = 1/(10*2.54f)*72;
+    private static final float MM_TO_UNITS = 72/(10*2.54f);
 
-    public Result generateStickers(StickerSettings settings) throws IOException {
+    private static enum Rotation {
+        LANDSCAPE,
+        PORTRAIT
+    }
+
+    private static enum PageMapping {
+        A4(PDPage.PAGE_SIZE_A4),
+        A4R(PDPage.PAGE_SIZE_A4, Rotation.LANDSCAPE),
+        LETTER(PDPage.PAGE_SIZE_LETTER),
+        LETTERR(PDPage.PAGE_SIZE_LETTER, Rotation.LANDSCAPE);
+
+        final PDRectangle pageFormat;
+        final Rotation rotation;
+
+        PageMapping(PDRectangle pageFormat) {
+            this.pageFormat = pageFormat;
+            this.rotation = Rotation.PORTRAIT;
+        }
+
+        PageMapping(PDRectangle pageFormat, Rotation rotation) {
+            this.pageFormat = pageFormat;
+            this.rotation = rotation;
+        }
+
+        void updatePage(PDPage page) {
+            if (rotation.equals(Rotation.LANDSCAPE)) {
+                page.setRotation(90);
+            }
+        }
+
+        void updateContentStream(PDPage page, PDPageContentStream contentStream) throws IOException {
+            if (rotation.equals(Rotation.LANDSCAPE)) {
+                // Transform coordinates so they still start in lower left corner
+                final float pageWidth = page.getMediaBox().getWidth();
+                contentStream.concatenate2CTM(0, 1, -1, 0, pageWidth, 0);
+            }
+        }
+    }
+
+    public Result generateStickers(StickerSettings settings, List<StickerCapable> objects) throws IOException {
         PDDocument document = new PDDocument();
-        PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
-        document.addPage(page);
+        // Coordinates = millimeters * PDPage.MM_TO_UNITS
 
-        // Coordinates = milimeters * PDPage.MM_TO_UNITS
+        PageMapping pageMapping = PageMapping.valueOf(settings.getPage().name());
+        Float pageHeight = pageMapping.rotation.equals(Rotation.PORTRAIT) ?
+                pageMapping.pageFormat.getHeight() : pageMapping.pageFormat.getWidth();
 
-        ByteArrayOutputStream os = QRCode
-                .from("Hello World")
-                .withSize(Float.valueOf(30 * MM_TO_UNITS).intValue(), Float.valueOf(30 * MM_TO_UNITS).intValue())
-                .to(ImageType.JPG)
-                .withCharset("utf-8")
-                .stream();
+        int pageCount = 0;
+        int stickerCount = 0;
 
-        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+        Float codeEdgeSize = MM_TO_UNITS * Math.min(settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm(),
+                settings.getStickerWidthMm()) - 2*settings.getStickerLeftMarginMm();
 
-        PDJpeg img = new PDJpeg(document, is);
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream contentStream = null;
 
-        contentStream.drawImage(img, 30 * MM_TO_UNITS, 200 * MM_TO_UNITS);
-        contentStream.close();
+        for (StickerCapable object: objects) {
+            stickerCount++;
+
+            if (stickerCount > pageCount * settings.getStickerHorizontalCount() * settings.getStickerVerticalCount()) {
+                if (contentStream != null) {
+                    contentStream.close();
+                }
+
+                PDPage page = new PDPage(pageMapping.pageFormat);
+                pageMapping.updatePage(page);
+                document.addPage(page);
+                pageCount++;
+
+                contentStream = new PDPageContentStream(document, page);
+                pageMapping.updateContentStream(page, contentStream);
+            }
+
+            PDJpeg img = getQRImage(document, object, codeEdgeSize);
+
+            int noInPage = ((stickerCount - 1) % (settings.getStickerHorizontalCount() * settings.getStickerVerticalCount()));
+            int row = noInPage / settings.getStickerHorizontalCount();
+            int col = noInPage % settings.getStickerHorizontalCount();
+
+            float leftCoord = (settings.getLeftMarginMm() * MM_TO_UNITS
+                    + col * (settings.getStickerWidthMm() + settings.getRightSpaceMm()) * MM_TO_UNITS
+                    + settings.getStickerLeftMarginMm() * MM_TO_UNITS);
+            float topCoord = (settings.getTopMarginMm() * MM_TO_UNITS
+                    + row * (settings.getStickerHeightMm() + settings.getBottomSpaceMm()) * MM_TO_UNITS
+                    + settings.getStickerTopMarginMm() * MM_TO_UNITS);
+
+            /*
+              The y coordinate of the image has to be converted to lower-left coordinate system
+              by adding the image height to the top-left coordinates.
+             */
+            contentStream.drawImage(img, leftCoord, pageHeight - (topCoord + codeEdgeSize));
+            contentStream.drawPolygon(new float[] {},
+                    new float[] {});
+        }
+
+        if (contentStream != null) {
+            contentStream.close();
+        }
 
         return new Result(document);
+    }
+
+    private PDJpeg getQRImage(PDDocument document, StickerCapable object, Float size) throws IOException {
+        ByteArrayOutputStream os = QRCode
+                .from("Hello World")
+                .withSize(size.intValue(), size.intValue())
+                .to(ImageType.JPG)
+                .withErrorCorrection(ErrorCorrectionLevel.M)
+                .withCharset("utf-8")
+                .stream();
+        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+        PDJpeg img = new PDJpeg(document, is);
+        return img;
     }
 }

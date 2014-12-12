@@ -34,7 +34,7 @@
         <freemarker.version>2.3.21</freemarker.version>
         <hibernate.version>5.1.3.Final</hibernate.version>
         <hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
-        <glxn.version>1.4</glxn.version>
+        <glxn.version>2.0</glxn.version>
         <neo4j.version>2.1.6</neo4j.version>
         <aspect.version>1.8.4</aspect.version>
         <jetty.version>9.2.5.v20141112</jetty.version>

@@ -10,6 +10,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <!-- This will allow handling of QR code urls
+                     like it is described in http://stackoverflow.com/a/4085365/1996623 //-->
+                <data android:scheme="shv"/>
             </intent-filter>
         </activity>
     </application>
