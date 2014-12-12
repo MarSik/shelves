@@ -14,6 +14,7 @@ Router.map(function() {
     this.resource('lots', function () {
         this.route('show', {path: '/:lot_id'});
     });
+    this.route('account');
 });
 
 export default Router;

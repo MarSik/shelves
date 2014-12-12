@@ -8,5 +8,6 @@ export default DS.Model.extend({
   name: attr("string"),
   groups: hasMany("group", {async: true}),
   footprint: belongsTo("footprint", {async: true}),
-  lots: hasMany("lot", {async: true})
+  lots: hasMany("lot", {async: true}),
+  belongsTo: belongsTo("user", {async: true})
 });

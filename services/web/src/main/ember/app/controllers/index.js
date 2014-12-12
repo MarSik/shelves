@@ -18,7 +18,7 @@ export default Ember.Controller.extend(LoginControllerMixin, {
                     self.growl.info("Please wait for an email to arrive and confirm your registration.");
                 })
                 .catch(function() {
-                    self.growl.error("Registration failed. The administratior was informed.");
+                    self.growl.error("Registration failed. The administrator was informed.");
                 });
         }
     },

@@ -9,5 +9,6 @@ export default DS.Model.extend({
   lots: hasMany("lot", {async: true}),
   parent: belongsTo("box", {async: true, inverse: "boxes"}),
   boxes: hasMany("box", {async: true, inverse: "parent"}),
-  code: belongsTo("code", {async: true})
+  code: belongsTo("code", {async: true}),
+  belongsTo: belongsTo("user", {async: true})
 });

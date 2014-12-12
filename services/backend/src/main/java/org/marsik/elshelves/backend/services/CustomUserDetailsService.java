@@ -6,7 +6,6 @@ import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,13 +17,18 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
+    @Autowired
     UserRepository userRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomUserDetailsService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+    UuidGenerator uuidGenerator;
+
+    @Transactional(readOnly = true)
+    public User getUser(String email) {
+        return userRepository.getUserByEmail(email);
     }
 
     @Override
@@ -32,6 +36,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepository.getUserByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User does not exist.");
+        }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new GrantedAuthority() {
@@ -50,7 +57,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     @Override
     public String createUser(org.marsik.elshelves.api.entities.User userInfo) {
         User user = User.fromDto(userInfo);
-        user.setId(null);
+        user.setUuid(uuidGenerator.generate());
         user.setPassword(null);
 
         userRepository.save(user);

@@ -25,6 +25,8 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                 .antMatchers("/mail/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/users").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/users/verify/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
     }

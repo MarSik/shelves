@@ -10,8 +10,8 @@ import java.util.UUID;
 
 @NodeEntity
 public class User {
-    @Indexed(unique = true)
-    UUID id;
+    @Indexed
+    UUID uuid;
 
     @NotNull
     String name;
@@ -24,12 +24,12 @@ public class User {
     String verificationCode;
     Date registrationDate;
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getName() {
@@ -77,13 +77,13 @@ public class User {
         u.setEmail(dto.getEmail());
         u.setName(dto.getName());
         u.setPassword(dto.getPassword());
-        u.setId(dto.getId());
+        u.setUuid(dto.getId());
         return u;
     }
 
     public org.marsik.elshelves.api.entities.User toDto() {
         org.marsik.elshelves.api.entities.User user = new org.marsik.elshelves.api.entities.User();
-        user.setId(getId());
+        user.setId(getUuid());
         user.setEmail(getEmail());
         user.setName(getName());
         return user;

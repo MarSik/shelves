@@ -23,6 +23,8 @@ public class PartGroup extends AbstractEntity {
 
     List<PartType> types;
 
+    User belongsTo;
+
     @Override
     public Map getLinks() {
         Map<String, String> links = new THashMap<String, String>();
@@ -89,5 +91,21 @@ public class PartGroup extends AbstractEntity {
     @JsonSetter
     public void setTypes(List<PartType> types) {
         this.types = types;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public User getBelongsTo() {
+        return belongsTo;
+    }
+
+    @JsonIgnore
+    public void setBelongsTo(User belongsTo) {
+        this.belongsTo = belongsTo;
+    }
+
+    @JsonSetter
+    public void setBelongsTo(UUID belongsTo) {
+        this.belongsTo = new User();
+        this.belongsTo.setId(belongsTo);
     }
 }

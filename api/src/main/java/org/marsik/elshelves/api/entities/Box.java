@@ -19,6 +19,7 @@ public class Box extends AbstractEntity {
 
     List<Lot> lots;
 
+    User belongsTo;
     Box parent;
     List<Box> boxes;
 
@@ -96,5 +97,21 @@ public class Box extends AbstractEntity {
     public void setCode(UUID code) {
         this.code = new Code();
         this.code.setId(code);
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public User getBelongsTo() {
+        return belongsTo;
+    }
+
+    @JsonIgnore
+    public void setBelongsTo(User belongsTo) {
+        this.belongsTo = belongsTo;
+    }
+
+    @JsonSetter
+    public void setBelongsTo(UUID belongsTo) {
+        this.belongsTo = new User();
+        this.belongsTo.setId(belongsTo);
     }
 }

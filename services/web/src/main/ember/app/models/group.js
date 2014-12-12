@@ -10,5 +10,6 @@ export default DS.Model.extend({
     types: hasMany("type", {async: true}),
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
-    groups: hasMany("group", {inverse: "parent", async: true})
+    groups: hasMany("group", {inverse: "parent", async: true}),
+    belongsTo: belongsTo("user", {async: true})
 });

@@ -17,9 +17,12 @@ import java.util.UUID;
 public class PartType extends AbstractEntity {
     UUID id;
     String name;
+    String description;
 
     Footprint footprint;
     List<PartGroup> groups;
+
+    User belongsTo;
 
     @Override
     public Map getLinks() {
@@ -68,5 +71,29 @@ public class PartType extends AbstractEntity {
     @JsonSetter
     public void setGroups(List<PartGroup> groups) {
         this.groups = groups;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public User getBelongsTo() {
+        return belongsTo;
+    }
+
+    @JsonIgnore
+    public void setBelongsTo(User belongsTo) {
+        this.belongsTo = belongsTo;
+    }
+
+    @JsonSetter
+    public void setBelongsTo(UUID belongsTo) {
+        this.belongsTo = new User();
+        this.belongsTo.setId(belongsTo);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

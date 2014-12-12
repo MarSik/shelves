@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.security;
 
+import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.MethodParameter;
@@ -32,6 +34,15 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
         Principal principal = webRequest.getUserPrincipal();
-        return null;
+
+        if (principal == null) {
+            return null;
+        }
+
+        UserRepository userRepository =
+                applicationContext.getBean("userRepository", UserRepository.class);
+
+        User user = userRepository.getUserByEmail(principal.getName());
+        return user;
     }
 }

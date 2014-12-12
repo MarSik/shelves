@@ -8,8 +8,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.Lot;
 import org.marsik.elshelves.api.entities.PartGroup;
-import org.marsik.elshelves.api.entities.User;
+import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
+import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -94,15 +96,15 @@ public class TestController {
 
     @Transactional
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public ResponseEntity<Void> registerUser(@RequestBody @Valid User user) {
-        if (userDetailsService.loadUserByUsername(user.getEmail()) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public EmberModel registerUser(@RequestBody @Valid org.marsik.elshelves.api.entities.User user) throws UserExists {
+        if (userDetailsService.getUser(user.getEmail()) != null) {
+            throw new UserExists();
         }
 
         String verificationCode = userDetailsService.createUser(user);
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(user).build();
     }
 
     @Transactional
@@ -152,5 +154,10 @@ public class TestController {
 
         response.getOutputStream().write(os.toByteArray());
         response.flushBuffer();
+    }
+
+    @RequestMapping("/users/whoami")
+    public EmberModel getCurrentUser(@CurrentUser User currentUser) {
+        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(currentUser.toDto()).build();
     }
 }

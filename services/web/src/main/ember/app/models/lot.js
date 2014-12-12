@@ -11,5 +11,6 @@ export default DS.Model.extend({
   location: belongsTo("box", {async: true}),
 
   previous: belongsTo("lot", {inverse: "next", async: true}),
-  next: hasMany("lot", {inverse: "previous", async: true})
+  next: hasMany("lot", {inverse: "previous", async: true}),
+  belongsTo: belongsTo("user", {async: true})
 });
