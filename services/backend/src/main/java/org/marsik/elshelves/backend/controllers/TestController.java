@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import gnu.trove.map.hash.THashMap;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.apache.pdfbox.exceptions.COSVisitorException;
@@ -11,6 +12,7 @@ import org.marsik.elshelves.api.entities.PartGroup;
 import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
@@ -50,6 +52,9 @@ public class TestController {
 
     @Autowired
     StickerService stickerService;
+
+    @Autowired
+    UserToEmber userToEmber;
 
     @RequestMapping("/groups/{id}")
     public EmberModel getGroup(@PathVariable("id") UUID id) {
@@ -156,8 +161,9 @@ public class TestController {
         response.flushBuffer();
     }
 
+    @Transactional
     @RequestMapping("/users/whoami")
     public EmberModel getCurrentUser(@CurrentUser User currentUser) {
-        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(currentUser.toDto()).build();
+        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(userToEmber.convert(currentUser, new THashMap<UUID, Object>())).build();
     }
 }

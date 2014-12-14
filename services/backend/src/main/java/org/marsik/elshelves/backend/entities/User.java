@@ -71,21 +71,4 @@ public class User {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
-
-    public static User fromDto(org.marsik.elshelves.api.entities.User dto) {
-        User u = new User();
-        u.setEmail(dto.getEmail());
-        u.setName(dto.getName());
-        u.setPassword(dto.getPassword());
-        u.setUuid(dto.getId());
-        return u;
-    }
-
-    public org.marsik.elshelves.api.entities.User toDto() {
-        org.marsik.elshelves.api.entities.User user = new org.marsik.elshelves.api.entities.User();
-        user.setId(getUuid());
-        user.setEmail(getEmail());
-        user.setName(getName());
-        return user;
-    }
 }

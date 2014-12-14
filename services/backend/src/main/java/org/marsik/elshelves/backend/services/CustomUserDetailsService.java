@@ -1,7 +1,9 @@
 package org.marsik.elshelves.backend.services;
 
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomUserDetailsService implements ElshelvesUserDetailsService {
@@ -25,6 +28,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
     @Autowired
     UuidGenerator uuidGenerator;
+
+    @Autowired
+    EmberToUser emberToUser;
 
     @Transactional(readOnly = true)
     public User getUser(String email) {
@@ -56,9 +62,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
     @Override
     public String createUser(org.marsik.elshelves.api.entities.User userInfo) {
-        User user = User.fromDto(userInfo);
+        User user = emberToUser.convert(userInfo, new THashMap<UUID, Object>());
         user.setUuid(uuidGenerator.generate());
-        user.setPassword(null);
+        user.setPassword(passwordEncoder.encode("password"));
 
         userRepository.save(user);
 
