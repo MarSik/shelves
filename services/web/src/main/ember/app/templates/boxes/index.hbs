@@ -1,0 +1,15 @@
+<form {{action create on 'submit'}}>
+    <label for="name">Name:</label>
+    {{input id='name' placeholder='Enter box name' value=name required='required'}}
+    <input type="submit" value="Create">
+</form>
+
+<h3>Boxes</h3>
+
+<ul>
+    {{#each box in model}}
+        <li>{{model.name}} - {{model.id}}</li>
+    {{/each}}
+</ul>
+
+{{outlet}}

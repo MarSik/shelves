@@ -49,6 +49,8 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
             list.add(dbToRest.convert(item, cache));
         }
 
+        /* XXX fix the collection name in EmberModel */
+
         return new EmberModel.Builder<E>(list).build();
     }
 
