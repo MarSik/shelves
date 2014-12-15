@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
     actions: {
-        create: function () {
+        createBox: function () {
             var name = this.get('name');
             var newBox = this.store.createRecord('box', {
                 name: name

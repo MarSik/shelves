@@ -4,10 +4,12 @@ import gnu.trove.map.hash.THashMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntity;
+import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,82 +28,52 @@ import java.util.UUID;
 
 public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntity> {
 
-    final GraphRepository<T> repository;
-    final CachingConverter<T, E, UUID> dbToRest;
-    final CachingConverter<E, T, UUID> restToDb;
-    final UuidGenerator uuidGenerator;
+    final Class<E> dtoClazz;
+    final AbstractRestService<T, E> service;
 
-    public AbstractRestController(GraphRepository<T> repository, CachingConverter<T, E, UUID> dbToRest, CachingConverter<E, T, UUID> restToDb, UuidGenerator uuidGenerator) {
-        this.repository = repository;
-        this.dbToRest = dbToRest;
-        this.restToDb = restToDb;
-        this.uuidGenerator = uuidGenerator;
+    public AbstractRestController(Class<E> dtoClazz, AbstractRestService<T, E> service) {
+        this.dtoClazz = dtoClazz;
+        this.service = service;
     }
 
     @RequestMapping
     @ResponseBody
     @Transactional
     public EmberModel getAll(@CurrentUser User currentUser) {
-        List<E> list = new ArrayList<>();
-
-        Map<UUID, Object> cache = new THashMap<>();
-
-        for (T item: repository.findAll()) {
-            list.add(dbToRest.convert(item, cache));
-        }
-
-        /* XXX fix the collection name in EmberModel */
-
-        return new EmberModel.Builder<E>(list).build();
+        return new EmberModel.Builder<E>(dtoClazz, service.getAllItems(currentUser)).build();
     }
 
     @RequestMapping("/{id}")
     @ResponseBody
     @Transactional
     public EmberModel getOne(@CurrentUser User currentUser,
-                             @PathVariable("id") UUID uuid) {
-        T one = repository.findBySchemaPropertyValue("uuid", uuid);
-
-        return new EmberModel.Builder<E>(dbToRest.convert(one, new THashMap<UUID, Object>())).build();
+                             @PathVariable("id") UUID uuid) throws PermissionDenied {
+        return new EmberModel.Builder<E>(service.get(uuid, currentUser)).build();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     @Transactional
     public EmberModel create(@CurrentUser User currentUser,
-                             @RequestBody E item) {
-        T create = restToDb.convert(item, new THashMap<UUID, Object>());
-        create.setUuid(uuidGenerator.generate());
-        create.setOwner(currentUser);
-
-        repository.save(create);
-
-        return new EmberModel.Builder<E>(dbToRest.convert(create, new THashMap<UUID, Object>())).build();
+                             @Valid @RequestBody E item) {
+        return new EmberModel.Builder<E>(service.create(item, currentUser)).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     @Transactional
-    public EmberModel create(@CurrentUser User currentUser,
+    public EmberModel update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
-                             @RequestBody E item) throws IllegalAccessException, InvocationTargetException {
-        T one = repository.findBySchemaPropertyValue("uuid", uuid);
-        T update = restToDb.convert(item, new THashMap<UUID, Object>());
-
-        BeanUtils.copyProperties(one, update);
-        repository.save(one);
-
-        return new EmberModel.Builder<E>(dbToRest.convert(one, new THashMap<UUID, Object>())).build();
+                             @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, PermissionDenied {
+        return new EmberModel.Builder<E>(service.update(uuid, item, currentUser)).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @Transactional
     public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
-                                @PathVariable("id") UUID uuid) {
-        T one = repository.findBySchemaPropertyValue("uuid", uuid);
-        repository.delete(one);
-
+                                         @PathVariable("id") UUID uuid) throws PermissionDenied {
+        service.delete(uuid, currentUser);
         return new THashMap<>();
     }
 }

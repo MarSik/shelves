@@ -13,4 +13,10 @@ public class ExceptionHandlingController {
     public void conflict() {
         // Nothing to do
     }
+
+    @ResponseStatus(value= HttpStatus.FORBIDDEN, reason="Permission denied")
+    @ExceptionHandler(UserExists.class)
+    public void denied() {
+        // Nothing to do
+    }
 }

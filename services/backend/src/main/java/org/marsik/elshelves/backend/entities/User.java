@@ -3,9 +3,11 @@ package org.marsik.elshelves.backend.entities;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
@@ -23,6 +25,9 @@ public class User {
 
     String verificationCode;
     Date registrationDate;
+
+    @RelatedTo(type = "OWNS", enforceTargetType = true)
+    Set<Box> boxes;
 
     public UUID getUuid() {
         return uuid;
@@ -70,5 +75,13 @@ public class User {
 
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public Set<Box> getBoxes() {
+        return boxes;
+    }
+
+    public void setBoxes(Set<Box> boxes) {
+        this.boxes = boxes;
     }
 }
