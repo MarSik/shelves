@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
+import org.marsik.elshelves.api.ember.EmberModel;
+import org.marsik.elshelves.api.entities.Lot;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
@@ -20,5 +22,24 @@ public class BoxController extends AbstractRestController<Box, org.marsik.elshel
     public BoxController(BoxService boxService) {
         super(org.marsik.elshelves.api.entities.Box.class,
               boxService);
+    }
+
+    @Override
+    protected void sideLoad(org.marsik.elshelves.api.entities.Box dto, EmberModel.Builder<org.marsik.elshelves.api.entities.Box> builder) {
+        if (dto.getBoxes() != null) {
+            builder.sideLoad(org.marsik.elshelves.api.entities.Box.class, dto.getBoxes());
+        }
+
+        if (dto.getLots() != null) {
+            builder.sideLoad(Lot.class, dto.getLots());
+        }
+
+        if (dto.getParent() != null) {
+            builder.sideLoad(dto.getParent());
+        }
+
+        if (dto.getBelongsTo() != null) {
+            builder.sideLoad(dto.getBelongsTo());
+        }
     }
 }

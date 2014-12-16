@@ -11,6 +11,10 @@ import java.util.UUID;
 public class UserToEmber implements CachingConverter<User, org.marsik.elshelves.api.entities.User, UUID> {
     @Override
     public org.marsik.elshelves.api.entities.User convert(User entity, Map<UUID, Object> cache) {
+        if (entity == null) {
+            return null;
+        }
+
         if (cache.containsKey(entity.getUuid())) {
             return (org.marsik.elshelves.api.entities.User)cache.get(entity.getUuid());
         }

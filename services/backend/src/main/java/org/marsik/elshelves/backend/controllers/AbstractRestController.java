@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,11 +37,22 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
         this.service = service;
     }
 
+    protected void sideLoad(E dto, EmberModel.Builder<E> builder) {
+
+    }
+
     @RequestMapping
     @ResponseBody
     @Transactional
     public EmberModel getAll(@CurrentUser User currentUser) {
-        return new EmberModel.Builder<E>(dtoClazz, service.getAllItems(currentUser)).build();
+        Collection<E> allItems = service.getAllItems(currentUser);
+        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dtoClazz, allItems);
+
+        for (E entity: allItems) {
+            sideLoad(entity, builder);
+        }
+
+        return builder.build();
     }
 
     @RequestMapping("/{id}")
@@ -48,7 +60,10 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @Transactional
     public EmberModel getOne(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid) throws PermissionDenied {
-        return new EmberModel.Builder<E>(service.get(uuid, currentUser)).build();
+        E entity = service.get(uuid, currentUser);
+        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
+        sideLoad(entity, builder);
+        return builder.build();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -56,7 +71,10 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @Transactional
     public EmberModel create(@CurrentUser User currentUser,
                              @Valid @RequestBody E item) {
-        return new EmberModel.Builder<E>(service.create(item, currentUser)).build();
+        E entity = service.create(item, currentUser);
+        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
+        sideLoad(entity, builder);
+        return builder.build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -65,7 +83,10 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     public EmberModel update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
                              @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, PermissionDenied {
-        return new EmberModel.Builder<E>(service.update(uuid, item, currentUser)).build();
+        E entity = service.update(uuid, item, currentUser);
+        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
+        sideLoad(entity, builder);
+        return builder.build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

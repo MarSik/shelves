@@ -11,6 +11,10 @@ import java.util.UUID;
 public class EmberToUser implements CachingConverter<org.marsik.elshelves.api.entities.User, User, UUID> {
     @Override
     public User convert(org.marsik.elshelves.api.entities.User dto, Map<UUID, Object> cache) {
+        if (dto == null) {
+            return null;
+        }
+
         if (cache.containsKey(dto.getId())) {
             return (User)cache.get(dto.getId());
         }

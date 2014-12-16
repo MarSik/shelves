@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.app.spring;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -15,6 +16,8 @@ public class EmberAwareObjectMapper extends ObjectMapper {
 
         //Wite/Read dates as ISO Strings
         configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+        configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
     }
 
 }

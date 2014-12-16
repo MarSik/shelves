@@ -1,10 +1,14 @@
 package org.marsik.elshelves.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.UUID;
 
 /**
  * Represents an user of the system
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends AbstractEntity {
     UUID id;
     String name;
