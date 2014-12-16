@@ -15,6 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AbstractRestService<T extends OwnedEntity, E extends AbstractEntity> {
@@ -55,8 +57,9 @@ public class AbstractRestService<T extends OwnedEntity, E extends AbstractEntity
 
     public Collection<E> getAllItems(User currentUser) {
         List<E> dtos = new ArrayList<>();
+        Map<UUID, Object> cache = new THashMap<>();
         for (T entity: getAllEntities(currentUser)) {
-            dtos.add(dbToRest.convert(entity, new THashMap<UUID, Object>()));
+            dtos.add(dbToRest.convert(entity, cache));
         }
         return dtos;
     }

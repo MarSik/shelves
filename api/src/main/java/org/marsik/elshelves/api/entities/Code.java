@@ -10,19 +10,9 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Code extends AbstractEntity {
-    UUID id;
     String code;
 
     Box box;
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getCode() {
         return code;

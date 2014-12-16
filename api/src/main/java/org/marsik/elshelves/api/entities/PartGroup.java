@@ -15,7 +15,6 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("group")
 public class PartGroup extends AbstractEntity {
-    UUID id;
     String name;
 
     List<PartGroup> groups;
@@ -47,14 +46,6 @@ public class PartGroup extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     @JsonIdentityReference(alwaysAsId = true)

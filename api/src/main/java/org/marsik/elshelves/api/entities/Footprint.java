@@ -7,21 +7,12 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Footprint extends AbstractEntity {
-    UUID id;
     String name;
     String kicad;
 
     Integer pads;
     Integer holes;
     Integer npth;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

@@ -14,8 +14,6 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Box extends AbstractEntity {
-    UUID id;
-
     @NotNull
     String name;
     Code code;
@@ -39,15 +37,6 @@ public class Box extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     @JsonIdentityReference(alwaysAsId = true)

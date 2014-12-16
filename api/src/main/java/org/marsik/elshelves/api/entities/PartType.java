@@ -15,7 +15,6 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("type")
 public class PartType extends AbstractEntity {
-    UUID id;
     String name;
     String description;
 
@@ -29,14 +28,6 @@ public class PartType extends AbstractEntity {
         Map<String, String> links = new THashMap<String, String>();
         links.put("groups", "groups");
         return links;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
