@@ -51,8 +51,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.android.target}</target>
                     <compilerArgs>
                         <arg>-AandroidManifestFile=${project.basedir}/src/main/AndroidManifest.xml</arg>
                     </compilerArgs>
