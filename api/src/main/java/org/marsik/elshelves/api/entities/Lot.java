@@ -35,7 +35,7 @@ public class Lot extends AbstractEntity {
     User belongsTo;
 
     @Override
-    public Map getLinks() {
+    public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("next", "next");
         return links;

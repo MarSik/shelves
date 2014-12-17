@@ -24,7 +24,7 @@ public class PartType extends AbstractEntity {
     User belongsTo;
 
     @Override
-    public Map getLinks() {
+    public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("groups", "groups");
         return links;

@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public abstract class AbstractEntity implements EmberEntity {
     @Override
-    public Map getLinks() {
-        return new THashMap(0);
+    public Map<String, String> getLinks() {
+        return new THashMap<String, String>(0);
     }
 
     UUID id;
