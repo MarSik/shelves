@@ -12,7 +12,14 @@ export default DS.RESTSerializer.extend({
             delete serialized.id;
         }
 
-        //remove the root element
+        //Remove null values
+        Object.keys(serialized).forEach(function(k) {
+            if (!serialized[k]) {
+                delete serialized[k];
+            }
+        });
+
+        //Remove the root element
         Ember.merge(hash, serialized);
     }
 });
