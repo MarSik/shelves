@@ -6,9 +6,11 @@ export default DS.RESTSerializer.extend({
     serializeIntoHash: function(hash, type, record, options) {
         var serialized = this.serialize(record, options);
 
-        //Include the id in the payload
+        //Remove id from the payload for new records
         //Jackson was complaining when it received a null id ...
-        serialized.id = record.id ? record.id : null;
+        if (record.id == null) {
+            delete serialized.id;
+        }
 
         //remove the root element
         Ember.merge(hash, serialized);
