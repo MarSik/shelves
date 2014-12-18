@@ -30,9 +30,9 @@ import java.util.UUID;
 public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntity> {
 
     final Class<E> dtoClazz;
-    final AbstractRestService<T, E> service;
+    final AbstractRestService<? extends GraphRepository<T>, T, E> service;
 
-    public AbstractRestController(Class<E> dtoClazz, AbstractRestService<T, E> service) {
+    public AbstractRestController(Class<E> dtoClazz, AbstractRestService<? extends GraphRepository<T>, T, E> service) {
         this.dtoClazz = dtoClazz;
         this.service = service;
     }

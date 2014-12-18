@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.app;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -19,15 +20,34 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .anonymous().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                .antMatchers("/status", "/favicon.ico").permitAll()
-                .antMatchers("/mail/**").permitAll()
-                .antMatchers("/schema").permitAll()
-                .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/test/**").permitAll()
-                .anyRequest().authenticated();
+                    // Anybody can try to authenticate
+                    .antMatchers("/oauth/token").anonymous()
+
+                    // Status and website icon are open
+                    .antMatchers("/status", "/favicon.ico").permitAll()
+
+                    // Mail api is verified using HMAC
+                    .antMatchers("/mail/**").permitAll()
+
+                    // Schema is needed for clients to start properly
+                    .antMatchers("/schema").permitAll()
+
+                    // User registration is open
+                    .antMatchers(HttpMethod.POST, "/users").permitAll()
+
+                    // Verification of registration emails is open
+                    .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
+
+                    // OPTIONS calls must be open for CORS to work properly
+                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                    // Test endpoints are open
+                    .antMatchers("/test/**").permitAll()
+
+                    // The rest of the API requires valid token
+                    .anyRequest().authenticated();
     }
 }

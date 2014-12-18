@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -12,6 +13,7 @@ public class Box implements OwnedEntity {
     @RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
     User owner;
 
+    @Indexed
     UUID uuid;
     String name;
 

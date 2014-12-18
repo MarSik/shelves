@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class BoxService extends AbstractRestService<Box, org.marsik.elshelves.api.entities.Box> {
+public class BoxService extends AbstractRestService<BoxRepository, Box, org.marsik.elshelves.api.entities.Box> {
     @Autowired
     public BoxService(BoxRepository boxRepository,
                       BoxToEmber boxToEmber,
@@ -23,5 +25,10 @@ public class BoxService extends AbstractRestService<Box, org.marsik.elshelves.ap
     @Override
     protected Iterable<Box> getAllEntities(User currentUser) {
         return currentUser.getBoxes();
+    }
+
+    @Override
+    protected Box getSingleEntity(UUID uuid) {
+        return getRepository().getBoxByUuid(uuid);
     }
 }

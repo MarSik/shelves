@@ -17,7 +17,9 @@ public class BoxToEmber implements CachingConverter<Box, org.marsik.elshelves.ap
 
     @Override
     public org.marsik.elshelves.api.entities.Box convert(Box box, Map<UUID, Object> cache) {
-        if (box == null) return null;
+        if (box == null) {
+            return null;
+        }
 
         if (cache.containsKey(box.getUuid())) {
             return (org.marsik.elshelves.api.entities.Box)cache.get(box.getUuid());

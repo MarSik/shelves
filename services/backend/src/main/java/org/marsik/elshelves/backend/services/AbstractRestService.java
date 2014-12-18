@@ -19,13 +19,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AbstractRestService<T extends OwnedEntity, E extends AbstractEntity> {
-    final GraphRepository<T> repository;
+public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntity> {
+    final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;
     final UuidGenerator uuidGenerator;
 
-    public AbstractRestService(GraphRepository<T> repository,
+    public AbstractRestService(R repository,
                                CachingConverter<T, E, UUID> dbToRest,
                                CachingConverter<E, T, UUID> restToDb,
                                UuidGenerator uuidGenerator) {
@@ -33,6 +33,10 @@ public class AbstractRestService<T extends OwnedEntity, E extends AbstractEntity
         this.dbToRest = dbToRest;
         this.restToDb = restToDb;
         this.uuidGenerator = uuidGenerator;
+    }
+
+    public R getRepository() {
+        return repository;
     }
 
     protected Iterable<T> getAllEntities(User currentUser) {
