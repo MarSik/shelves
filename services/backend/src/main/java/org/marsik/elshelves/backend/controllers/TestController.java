@@ -4,6 +4,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import gnu.trove.map.hash.THashMap;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
+import nl.marcus.ember.EmberSchema;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.marsik.elshelves.api.ember.EmberModel;
@@ -15,6 +16,7 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
+import org.marsik.elshelves.backend.services.EmberSchemaService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.StickerService;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,6 +58,15 @@ public class TestController {
 
     @Autowired
     UserToEmber userToEmber;
+
+    @Autowired
+    EmberSchemaService emberSchemaService;
+
+    @RequestMapping("/schema")
+    @ResponseBody
+    public EmberSchema getEmberSchema() {
+        return emberSchemaService.getEmberSchema();
+    }
 
     @RequestMapping("/groups/{id}")
     public EmberModel getGroup(@PathVariable("id") UUID id) {

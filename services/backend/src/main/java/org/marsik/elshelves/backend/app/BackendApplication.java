@@ -71,9 +71,14 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    EmberAwareObjectMapper emberAwareObjectMapper() {
+        return new EmberAwareObjectMapper();
+    }
+
+    @Bean
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new EmberAwareObjectMapper());
+        converter.setObjectMapper(emberAwareObjectMapper());
         return converter;
     }
 

@@ -23,6 +23,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                 .authorizeRequests()
                 .antMatchers("/status", "/favicon.ico").permitAll()
                 .antMatchers("/mail/**").permitAll()
+                .antMatchers("/schema").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

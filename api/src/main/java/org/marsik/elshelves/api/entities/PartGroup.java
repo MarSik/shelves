@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import gnu.trove.map.hash.THashMap;
+import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class PartGroup extends AbstractEntity {
     User belongsTo;
 
     @Override
+    @EmberIgnore
     public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("groups", "groups");
