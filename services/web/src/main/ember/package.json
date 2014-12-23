@@ -39,6 +39,7 @@
     "ember-infinite-scroll": "^0.1.1",
     "express": "^4.8.5",
     "glob": "^4.0.5",
-    "ember-cli-selectize": "0.0.5"
+    "ember-cli-selectize": "0.0.5",
+    "ember-cli-font-awesome": "0.0.7"
   }
 }
