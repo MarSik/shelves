@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.marsik.elshelves.backend.repositories.UserRepository;
@@ -61,8 +62,8 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
-    public String createUser(org.marsik.elshelves.api.entities.User userInfo) {
-        User user = emberToUser.convert(userInfo, new THashMap<UUID, Object>());
+    public String createUser(UserApiModel userInfo) {
+        User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
         user.setUuid(uuidGenerator.generate());
         user.setPassword(passwordEncoder.encode("password"));
 

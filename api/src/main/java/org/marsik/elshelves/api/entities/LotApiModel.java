@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
+import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,18 +26,24 @@ import java.util.UUID;
  * resulting two new Lots.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Lot extends AbstractEntity {
+@EmberModelName("lot")
+public class LotApiModel extends AbstractEntityApiModel {
     UUID id;
     Date created;
+	@Min(1)
     Long count;
 
-    PartType type;
-    Box location;
+    PartTypeApiModel type;
+    BoxApiModel location;
 
-    Lot previous;
-    List<Lot> next;
+	@NotNull
+    LotApiModel previous;
+    List<LotApiModel> next;
 
-    User belongsTo;
+    UserApiModel belongsTo;
+
+	LotAction action;
+	UserApiModel performedBy;
 
     @Override
     @EmberIgnore
@@ -68,76 +78,100 @@ public class Lot extends AbstractEntity {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Box getLocation() {
+    public BoxApiModel getLocation() {
         return location;
     }
 
     @JsonIgnore
-    public void setLocation(Box location) {
+    public void setLocation(BoxApiModel location) {
         this.location = location;
     }
 
     @JsonSetter
     public void setLocation(UUID location) {
-        this.location = new Box();
+        this.location = new BoxApiModel();
         this.location.setId(location);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public PartType getType() {
+    public PartTypeApiModel getType() {
         return type;
     }
 
     @JsonIgnore
-    public void setType(PartType type) {
+    public void setType(PartTypeApiModel type) {
         this.type = type;
     }
 
     @JsonSetter
     public void setType(UUID type) {
-        this.type = new PartType();
+        this.type = new PartTypeApiModel();
         this.type.setId(type);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Lot getPrevious() {
+    public LotApiModel getPrevious() {
         return previous;
     }
 
     @JsonIgnore
-    public void setPrevious(Lot previous) {
+    public void setPrevious(LotApiModel previous) {
         this.previous = previous;
     }
 
     @JsonSetter
     public void setPrevious(UUID previous) {
-        this.previous = new Lot();
+        this.previous = new LotApiModel();
         this.previous.setId(previous);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<Lot> getNext() {
+    public List<LotApiModel> getNext() {
         return next;
     }
 
     @JsonSetter
-    public void setNext(List<Lot> next) {
+    public void setNext(List<LotApiModel> next) {
         this.next = next;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public User getBelongsTo() {
+    public UserApiModel getBelongsTo() {
         return belongsTo;
     }
 
     @JsonIgnore
-    public void setBelongsTo(User belongsTo) {
+    public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
     }
 
     @JsonSetter
     public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new User();
+        this.belongsTo = new UserApiModel();
         this.belongsTo.setId(belongsTo);
     }
+
+	public LotAction getAction() {
+		return action;
+	}
+
+	public void setAction(LotAction action) {
+		this.action = action;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public UserApiModel getPerformedBy() {
+		return performedBy;
+	}
+
+	@JsonIgnore
+	public void setPerformedBy(UserApiModel performedBy) {
+		this.performedBy = performedBy;
+	}
+
+	@JsonSetter
+	public void setPerformedBy(UUID uuid) {
+		performedBy = new UserApiModel();
+		performedBy.setId(uuid);
+	}
 }

@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Code extends AbstractEntity {
+@EmberModelName("code")
+public class CodeApiModel extends AbstractEntityApiModel {
     String code;
 
-    Box box;
+    BoxApiModel box;
 
     public String getCode() {
         return code;
@@ -23,18 +25,18 @@ public class Code extends AbstractEntity {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Box getBox() {
+    public BoxApiModel getBox() {
         return box;
     }
 
     @JsonIgnore
-    public void setBox(Box box) {
+    public void setBox(BoxApiModel box) {
         this.box = box;
     }
 
     @JsonSetter
     public void setBox(UUID box) {
-        this.box = new Box();
+        this.box = new BoxApiModel();
         this.box.setId(box);
     }
 }

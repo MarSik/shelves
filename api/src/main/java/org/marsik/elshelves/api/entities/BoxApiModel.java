@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
+import org.marsik.elshelves.api.ember.EmberModelName;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -14,16 +15,17 @@ import java.util.Map;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Box extends AbstractEntity {
+@EmberModelName("box")
+public class BoxApiModel extends AbstractEntityApiModel {
     @NotNull
     String name;
-    Code code;
+    CodeApiModel code;
 
-    List<Lot> lots;
+    List<LotApiModel> lots;
 
-    User belongsTo;
-    Box parent;
-    List<Box> boxes;
+    UserApiModel belongsTo;
+    BoxApiModel parent;
+    List<BoxApiModel> boxes;
 
     @Override
     @EmberIgnore
@@ -42,70 +44,70 @@ public class Box extends AbstractEntity {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<Lot> getLots() {
+    public List<LotApiModel> getLots() {
         return lots;
     }
 
     @JsonSetter
-    public void setLots(List<Lot> lots) {
+    public void setLots(List<LotApiModel> lots) {
         this.lots = lots;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Box getParent() {
+    public BoxApiModel getParent() {
         return parent;
     }
 
     @JsonIgnore
-    public void setParent(Box parent) {
+    public void setParent(BoxApiModel parent) {
         this.parent = parent;
     }
 
     @JsonSetter
     public void setParent(UUID parent) {
-        this.parent = new Box();
+        this.parent = new BoxApiModel();
         this.parent.setId(parent);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<Box> getBoxes() {
+    public List<BoxApiModel> getBoxes() {
         return boxes;
     }
 
     @JsonSetter
-    public void setBoxes(List<Box> boxes) {
+    public void setBoxes(List<BoxApiModel> boxes) {
         this.boxes = boxes;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Code getCode() {
+    public CodeApiModel getCode() {
         return code;
     }
 
     @JsonIgnore
-    public void setCode(Code code) {
+    public void setCode(CodeApiModel code) {
         this.code = code;
     }
 
     @JsonSetter
     public void setCode(UUID code) {
-        this.code = new Code();
+        this.code = new CodeApiModel();
         this.code.setId(code);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public User getBelongsTo() {
+    public UserApiModel getBelongsTo() {
         return belongsTo;
     }
 
     @JsonIgnore
-    public void setBelongsTo(User belongsTo) {
+    public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
     }
 
     @JsonSetter
     public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new User();
+        this.belongsTo = new UserApiModel();
         this.belongsTo.setId(belongsTo);
     }
 }

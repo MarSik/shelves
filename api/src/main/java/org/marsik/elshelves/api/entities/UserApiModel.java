@@ -2,14 +2,14 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import java.util.UUID;
+import org.marsik.elshelves.api.ember.EmberModelName;
 
 /**
  * Represents an user of the system
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User extends AbstractEntity {
+@EmberModelName("user")
+public class UserApiModel extends AbstractEntityApiModel {
     String name;
     String password;
     String email;

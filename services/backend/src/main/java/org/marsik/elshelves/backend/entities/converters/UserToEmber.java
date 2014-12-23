@@ -1,28 +1,33 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.entities.User;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class UserToEmber implements CachingConverter<User, org.marsik.elshelves.api.entities.User, UUID> {
+public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
     @Override
-    public org.marsik.elshelves.api.entities.User convert(User entity, Map<UUID, Object> cache) {
+    public UserApiModel convert(User entity, int nested, Map<UUID, Object> cache) {
         if (entity == null) {
             return null;
         }
 
         if (cache.containsKey(entity.getUuid())) {
-            return (org.marsik.elshelves.api.entities.User)cache.get(entity.getUuid());
+            return (UserApiModel)cache.get(entity.getUuid());
         }
 
-        org.marsik.elshelves.api.entities.User user = new org.marsik.elshelves.api.entities.User();
-        user.setId(entity.getUuid());
-        user.setEmail(entity.getEmail());
-        user.setName(entity.getName());
-        return user;
+        UserApiModel user = new UserApiModel();
+		return convert(entity, user, nested, cache);
     }
+
+	@Override
+	public UserApiModel convert(User entity, UserApiModel user, int nested, Map<UUID, Object> cache) {
+		user.setId(entity.getUuid());
+		user.setEmail(entity.getEmail());
+		user.setName(entity.getName());
+		return user;
+	}
 }

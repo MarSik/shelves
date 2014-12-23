@@ -2,13 +2,12 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.beanutils.BeanUtils;
-import org.marsik.elshelves.api.entities.AbstractEntity;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
-import org.marsik.elshelves.backend.security.CurrentUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,10 +15,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
-public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntity> {
+public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
     final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;
@@ -47,15 +45,29 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         return repository.findBySchemaPropertyValue("uuid", uuid);
     }
 
+	protected T relink(T entity) {
+		return entity;
+	}
+
+	protected int conversionDepth() {
+		return 1;
+	}
+
     protected T createEntity(E dto, User currentUser) {
-        T created = restToDb.convert(dto, new THashMap<UUID, Object>());
+        T created = restToDb.convert(dto, conversionDepth(), new THashMap<UUID, Object>());
+		created = relink(created);
         created.setUuid(uuidGenerator.generate());
         created.setOwner(currentUser);
         return created;
     }
 
-    protected T updateEntity(T entity, E dto) throws IllegalAccessException, InvocationTargetException {
+	protected void deleteEntity(T entity) throws OperationNotPermitted {
+		repository.delete(entity);
+	}
+
+    protected T updateEntity(T entity, E dto) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
         BeanUtils.copyProperties(entity, dto);
+		entity = relink(entity);
         return entity;
     }
 
@@ -63,7 +75,7 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         List<E> dtos = new ArrayList<>();
         Map<UUID, Object> cache = new THashMap<>();
         for (T entity: getAllEntities(currentUser)) {
-            dtos.add(dbToRest.convert(entity, cache));
+            dtos.add(dbToRest.convert(entity, conversionDepth(), cache));
         }
         return dtos;
     }
@@ -71,7 +83,7 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
     public E create(E dto, User currentUser) {
         T created = createEntity(dto, currentUser);
         repository.save(created);
-        return dbToRest.convert(created, new THashMap<UUID, Object>());
+        return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());
     }
 
     public E get(UUID uuid, User currentUser) throws PermissionDenied {
@@ -81,21 +93,21 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
             throw new PermissionDenied();
         }
 
-        return dbToRest.convert(one, new THashMap<UUID, Object>());
+        return dbToRest.convert(one, conversionDepth(), new THashMap<UUID, Object>());
     }
 
-    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied {
+    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted {
         T one = getSingleEntity(uuid);
 
         if (!one.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
         }
 
-        repository.delete(one);
+        deleteEntity(one);
         return true;
     }
 
-    public E update(UUID uuid, E dto, User currentUser) throws PermissionDenied {
+    public E update(UUID uuid, E dto, User currentUser) throws PermissionDenied, OperationNotPermitted {
         T one = getSingleEntity(uuid);
 
         if (!one.getOwner().equals(currentUser)) {
@@ -108,6 +120,6 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
             ex.printStackTrace();
         }
 
-        return dbToRest.convert(one, new THashMap<UUID, Object>());
+        return dbToRest.convert(one, conversionDepth(), new THashMap<UUID, Object>());
     }
 }

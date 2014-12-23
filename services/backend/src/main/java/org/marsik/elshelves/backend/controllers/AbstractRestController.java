@@ -1,16 +1,15 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
-import org.apache.commons.beanutils.BeanUtils;
 import org.marsik.elshelves.api.ember.EmberModel;
-import org.marsik.elshelves.api.entities.AbstractEntity;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
-import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntity> {
+public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel> {
 
     final Class<E> dtoClazz;
     final AbstractRestService<? extends GraphRepository<T>, T, E> service;
@@ -59,7 +56,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @ResponseBody
     @Transactional
     public EmberModel getOne(@CurrentUser User currentUser,
-                             @PathVariable("id") UUID uuid) throws PermissionDenied {
+                             @PathVariable("id") UUID uuid) throws PermissionDenied, EntityNotFound {
         E entity = service.get(uuid, currentUser);
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
@@ -82,7 +79,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @Transactional
     public EmberModel update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
-                             @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, PermissionDenied {
+                             @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted, PermissionDenied {
         E entity = service.update(uuid, item, currentUser);
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
@@ -93,7 +90,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @ResponseBody
     @Transactional
     public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
-                                         @PathVariable("id") UUID uuid) throws PermissionDenied {
+                                         @PathVariable("id") UUID uuid) throws PermissionDenied, OperationNotPermitted {
         service.delete(uuid, currentUser);
         return new THashMap<>();
     }

@@ -1,19 +1,26 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.marsik.elshelves.api.ember.EmberModelName;
+
+import java.util.UUID;
 
 /**
  * The initial lot created when parts are purchased
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Purchase extends Lot {
+@EmberModelName("purchase")
+public class PurchaseApiModel extends LotApiModel {
     Double singlePrice;
     Double totalPrice;
     Double vat;
     Boolean vatIncluded;
 
-    /* TODO source */
+    SourceApiModel source;
 
     public Double getSinglePrice() {
         return singlePrice;
@@ -46,4 +53,20 @@ public class Purchase extends Lot {
     public void setVatIncluded(Boolean vatIncluded) {
         this.vatIncluded = vatIncluded;
     }
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public SourceApiModel getSource() {
+		return source;
+	}
+
+	@JsonIgnore
+	public void setSource(SourceApiModel source) {
+		this.source = source;
+	}
+
+	@JsonSetter
+	public void setSource(UUID source) {
+		this.source = new SourceApiModel();
+		this.source.setId(source);
+	}
 }

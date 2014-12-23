@@ -15,14 +15,17 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("type")
-public class PartType extends AbstractEntity {
+public class PartTypeApiModel extends AbstractEntityApiModel {
     String name;
     String description;
 
-    Footprint footprint;
-    List<PartGroup> groups;
+	String vendor;
+	String vendorId;
 
-    User belongsTo;
+    FootprintApiModel footprint;
+    List<PartGroupApiModel> groups;
+
+    UserApiModel belongsTo;
 
     @Override
     @EmberIgnore
@@ -41,44 +44,44 @@ public class PartType extends AbstractEntity {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public Footprint getFootprint() {
+    public FootprintApiModel getFootprint() {
         return footprint;
     }
 
     @JsonIgnore
-    public void setFootprint(Footprint footprint) {
+    public void setFootprint(FootprintApiModel footprint) {
         this.footprint = footprint;
     }
 
     @JsonSetter
     public void setFootprint(UUID footprint) {
-        this.footprint = new Footprint();
+        this.footprint = new FootprintApiModel();
         this.footprint.setId(footprint);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartGroup> getGroups() {
+    public List<PartGroupApiModel> getGroups() {
         return groups;
     }
 
     @JsonSetter
-    public void setGroups(List<PartGroup> groups) {
+    public void setGroups(List<PartGroupApiModel> groups) {
         this.groups = groups;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public User getBelongsTo() {
+    public UserApiModel getBelongsTo() {
         return belongsTo;
     }
 
     @JsonIgnore
-    public void setBelongsTo(User belongsTo) {
+    public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
     }
 
     @JsonSetter
     public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new User();
+        this.belongsTo = new UserApiModel();
         this.belongsTo.setId(belongsTo);
     }
 
@@ -89,4 +92,20 @@ public class PartType extends AbstractEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public String getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
+	}
+
+	public String getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
+	}
 }

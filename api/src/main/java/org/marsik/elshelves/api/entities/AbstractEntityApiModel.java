@@ -7,7 +7,7 @@ import org.marsik.elshelves.api.ember.EmberEntity;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class AbstractEntity implements EmberEntity {
+public abstract class AbstractEntityApiModel implements EmberEntity {
     @Override
     @EmberIgnore
     public Map<String, String> getLinks() {
@@ -30,7 +30,7 @@ public abstract class AbstractEntity implements EmberEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractEntity that = (AbstractEntity) o;
+        AbstractEntityApiModel that = (AbstractEntityApiModel) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 

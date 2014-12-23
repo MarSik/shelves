@@ -5,11 +5,8 @@ import gnu.trove.map.hash.THashMap;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import nl.marcus.ember.EmberSchema;
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.marsik.elshelves.api.ember.EmberModel;
-import org.marsik.elshelves.api.entities.Lot;
-import org.marsik.elshelves.api.entities.PartGroup;
+import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
 import org.marsik.elshelves.backend.entities.User;
@@ -22,8 +19,6 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.StickerService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,11 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,52 +61,9 @@ public class TestController {
         return emberSchemaService.getEmberSchema();
     }
 
-    @RequestMapping("/groups/{id}")
-    public EmberModel getGroup(@PathVariable("id") UUID id) {
-        PartGroup g = new PartGroup(id, "TEST");
-        return new EmberModel.Builder<PartGroup>(g).build();
-    }
-
-    @RequestMapping("/lots/{id}")
-    public EmberModel getLot(@PathVariable("id") UUID id) {
-        Lot lot = new Lot();
-        lot.setId(id);
-        lot.setCreated(new Date());
-
-        Lot l1 = new Lot();
-        l1.setId(uuidGenerator.generate());
-
-        Lot l2 = new Lot();
-        l2.setId(uuidGenerator.generate());
-
-        List<Lot> lots = new ArrayList<>();
-        lots.add(l1);
-        lots.add(l2);
-        lot.setNext(lots);
-
-        return new EmberModel.Builder<Lot>(lot)
-                .sideLoad(Lot.class, lots)
-                .build();
-    }
-
-    @RequestMapping("/lots/{id}/next")
-    public EmberModel getNextLots(@PathVariable("id") UUID id) {
-        Lot l1 = new Lot();
-        l1.setId(uuidGenerator.generate());
-
-        Lot l2 = new Lot();
-        l2.setId(uuidGenerator.generate());
-
-        List<Lot> lots = new ArrayList<>();
-        lots.add(l1);
-        lots.add(l2);
-
-        return new EmberModel.Builder<Lot>(Lot.class, lots).build();
-    }
-
     @Transactional
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public EmberModel registerUser(@RequestBody @Valid org.marsik.elshelves.api.entities.User user) throws UserExists {
+    public EmberModel registerUser(@RequestBody @Valid UserApiModel user) throws UserExists {
         if (userDetailsService.getUser(user.getEmail()) != null) {
             throw new UserExists();
         }
@@ -121,7 +71,7 @@ public class TestController {
         String verificationCode = userDetailsService.createUser(user);
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 
-        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(user).build();
+        return new EmberModel.Builder<UserApiModel>(user).build();
     }
 
     @Transactional
@@ -176,6 +126,6 @@ public class TestController {
     @Transactional
     @RequestMapping("/users/whoami")
     public EmberModel getCurrentUser(@CurrentUser User currentUser) {
-        return new EmberModel.Builder<org.marsik.elshelves.api.entities.User>(userToEmber.convert(currentUser, new THashMap<UUID, Object>())).build();
+        return new EmberModel.Builder<UserApiModel>(userToEmber.convert(currentUser, 1, new THashMap<UUID, Object>())).build();
     }
 }

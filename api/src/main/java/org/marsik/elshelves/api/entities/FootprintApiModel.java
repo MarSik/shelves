@@ -1,18 +1,25 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Footprint extends AbstractEntity {
+@EmberModelName("footprint")
+public class FootprintApiModel extends AbstractEntityApiModel {
     String name;
     String kicad;
 
     Integer pads;
     Integer holes;
     Integer npth;
+
+	UserApiModel belongsTo;
 
     public String getName() {
         return name;
@@ -53,4 +60,20 @@ public class Footprint extends AbstractEntity {
     public void setNpth(Integer npth) {
         this.npth = npth;
     }
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public UserApiModel getBelongsTo() {
+		return belongsTo;
+	}
+
+	@JsonIgnore
+	public void setBelongsTo(UserApiModel belongsTo) {
+		this.belongsTo = belongsTo;
+	}
+
+	@JsonSetter
+	public void setBelongsTo(UUID belongsTo) {
+		this.belongsTo = new UserApiModel();
+		this.belongsTo.setId(belongsTo);
+	}
 }

@@ -23,6 +23,9 @@ public class Box implements OwnedEntity {
     @RelatedTo(type = "PARENT")
     Box parent;
 
+	@RelatedTo(type = "LOCATED_AT", direction = Direction.INCOMING)
+	Set<Lot> lots;
+
     @Override
     public User getOwner() {
         return owner;
@@ -66,4 +69,12 @@ public class Box implements OwnedEntity {
     public void setParent(Box parent) {
         this.parent = parent;
     }
+
+	public Set<Lot> getLots() {
+		return lots;
+	}
+
+	public void setLots(Set<Lot> lots) {
+		this.lots = lots;
+	}
 }

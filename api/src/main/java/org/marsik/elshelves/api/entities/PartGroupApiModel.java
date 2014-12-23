@@ -15,15 +15,15 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("group")
-public class PartGroup extends AbstractEntity {
+public class PartGroupApiModel extends AbstractEntityApiModel {
     String name;
 
-    List<PartGroup> groups;
-    PartGroup parent;
+    List<PartGroupApiModel> groups;
+    PartGroupApiModel parent;
 
-    List<PartType> types;
+    List<PartTypeApiModel> types;
 
-    User belongsTo;
+    UserApiModel belongsTo;
 
     @Override
     @EmberIgnore
@@ -34,10 +34,10 @@ public class PartGroup extends AbstractEntity {
         return links;
     }
 
-    public PartGroup() {
+    public PartGroupApiModel() {
     }
 
-    public PartGroup(UUID id, String name) {
+    public PartGroupApiModel(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -51,54 +51,54 @@ public class PartGroup extends AbstractEntity {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartGroup> getGroups() {
+    public List<PartGroupApiModel> getGroups() {
         return groups;
     }
 
     @JsonSetter
-    public void setGroups(List<PartGroup> groups) {
+    public void setGroups(List<PartGroupApiModel> groups) {
         this.groups = groups;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public PartGroup getParent() {
+    public PartGroupApiModel getParent() {
         return parent;
     }
 
     @JsonIgnore
-    public void setParent(PartGroup parent) {
+    public void setParent(PartGroupApiModel parent) {
         this.parent = parent;
     }
 
     @JsonSetter
     public void setParent(UUID parent) {
-        this.parent = new PartGroup();
+        this.parent = new PartGroupApiModel();
         this.parent.setId(parent);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartType> getTypes() {
+    public List<PartTypeApiModel> getTypes() {
         return types;
     }
 
     @JsonSetter
-    public void setTypes(List<PartType> types) {
+    public void setTypes(List<PartTypeApiModel> types) {
         this.types = types;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public User getBelongsTo() {
+    public UserApiModel getBelongsTo() {
         return belongsTo;
     }
 
     @JsonIgnore
-    public void setBelongsTo(User belongsTo) {
+    public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
     }
 
     @JsonSetter
     public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new User();
+        this.belongsTo = new UserApiModel();
         this.belongsTo.setId(belongsTo);
     }
 }
