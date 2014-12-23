@@ -20,11 +20,15 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+				// Enable anonymous access
+				.anonymous()
+				.and()
+				// Disable sessions
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                     // Anybody can try to authenticate
-                    .antMatchers("/oauth/token").anonymous()
+                    .antMatchers("/oauth/token").permitAll()
 
                     // Status and website icon are open
                     .antMatchers("/status", "/favicon.ico").permitAll()
@@ -48,6 +52,6 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/test/**").permitAll()
 
                     // The rest of the API requires valid token
-                    .anyRequest().authenticated();
+                    .anyRequest().hasAuthority("USER");
     }
 }
