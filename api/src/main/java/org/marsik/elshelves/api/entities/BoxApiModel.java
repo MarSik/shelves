@@ -32,6 +32,7 @@ public class BoxApiModel extends AbstractEntityApiModel {
     public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("lots", "lots");
+		links.put("boxes", "boxes");
         return links;
     }
 

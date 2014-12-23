@@ -37,7 +37,19 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         return repository;
     }
 
-    protected Iterable<T> getAllEntities(User currentUser) {
+	public CachingConverter<T, E, UUID> getDbToRest() {
+		return dbToRest;
+	}
+
+	public CachingConverter<E, T, UUID> getRestToDb() {
+		return restToDb;
+	}
+
+	public UuidGenerator getUuidGenerator() {
+		return uuidGenerator;
+	}
+
+	protected Iterable<T> getAllEntities(User currentUser) {
         return repository.findAll();
     }
 

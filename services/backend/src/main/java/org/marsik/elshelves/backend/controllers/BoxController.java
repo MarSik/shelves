@@ -6,6 +6,7 @@ import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.User;
@@ -52,6 +53,18 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
             builder.sideLoad(dto.getBelongsTo());
         }
     }
+
+	@Transactional
+	@RequestMapping(value = "/{uuid}/boxes")
+	public EmberModel getNestedBoxes(@CurrentUser User currentUser,
+									 @PathVariable("uuid") UUID uuid) throws PermissionDenied, EntityNotFound {
+		Iterable<BoxApiModel> boxes = boxService.getNestedBoxes(uuid, currentUser);
+		EmberModel.Builder<BoxApiModel> modelBuilder = new EmberModel.Builder<BoxApiModel>(boxes);
+		for (BoxApiModel b: boxes) {
+			sideLoad(b, modelBuilder);
+		}
+		return modelBuilder.build();
+	}
 
     @Transactional
     @RequestMapping(value = "/{uuid}/qr", produces = "image/png")
