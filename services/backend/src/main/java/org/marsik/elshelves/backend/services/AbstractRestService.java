@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
@@ -108,8 +109,12 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         return dbToRest.convert(one, conversionDepth(), new THashMap<UUID, Object>());
     }
 
-    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted {
+    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         T one = getSingleEntity(uuid);
+
+		if (one == null) {
+			throw new EntityNotFound();
+		}
 
         if (!one.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
@@ -119,10 +124,14 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         return true;
     }
 
-    public E update(UUID uuid, E dto, User currentUser) throws PermissionDenied, OperationNotPermitted {
+    public E update(UUID uuid, E dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         T one = getSingleEntity(uuid);
 
-        if (!one.getOwner().equals(currentUser)) {
+		if (one == null) {
+			throw new EntityNotFound();
+		}
+
+		if (!one.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
         }
 

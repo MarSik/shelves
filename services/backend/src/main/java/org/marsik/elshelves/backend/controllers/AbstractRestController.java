@@ -79,7 +79,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @Transactional
     public EmberModel update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
-                             @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted, PermissionDenied {
+                             @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted, PermissionDenied, EntityNotFound {
         E entity = service.update(uuid, item, currentUser);
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
@@ -90,7 +90,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @ResponseBody
     @Transactional
     public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
-                                         @PathVariable("id") UUID uuid) throws PermissionDenied, OperationNotPermitted {
+                                         @PathVariable("id") UUID uuid) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         service.delete(uuid, currentUser);
         return new THashMap<>();
     }
