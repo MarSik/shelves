@@ -1,7 +1,28 @@
 {{view 'title-bar'}}
 
-<div class="main-content">
+<div class="main-content row">
+    <div class="column large-1">
+        <div class="icon-bar vertical five-up">
+            {{#link-to 'groups.index' class='item'}}
+                {{fa-icon "database"}}
+            {{/link-to}}
+            {{#link-to 'boxes.index' class='item'}}
+                {{fa-icon "cube"}}
+            {{/link-to}}
+            {{#link-to 'footprints.index' class='item'}}
+                {{fa-icon "file-o"}}
+            {{/link-to}}
+            <a class="item">
+                {{fa-icon "folder-open-o"}}
+            </a>
+            {{#link-to 'projects.index' class='item'}}
+                {{fa-icon "flask"}}
+            {{/link-to}}
+        </div>
+    </div>
+    <div class="columns large-11">
     {{outlet}}
+    </div>
 </div>
 
 {{growl-manager notifications=growl.notifications}}

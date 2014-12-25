@@ -1,14 +1,15 @@
 <form {{action 'createBox' on='submit'}}>
     <label for="name">Name:</label>
     {{input id='name' placeholder='Enter box name' value=name required='required'}}
-    <input type="submit" value="Create">
+    <label for="parent">Parent: <div>parent box</div></label>
+    <input type="submit" value="Create box">
 </form>
 
 <h3>Boxes</h3>
 
 <ul>
     {{#each box in model}}
-        <li>{{box.name}} - {{box.id}} - {{view 'entity-qr' models='boxes' entity=box size=100}}</li>
+        {{box-tree box=box}}
     {{/each}}
 </ul>
 

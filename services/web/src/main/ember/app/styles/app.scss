@@ -4,5 +4,48 @@
 
 .main-content {
   max-width: 62.5rem;
+  margin: 0.5em auto 0 auto;
+}
+
+#header-block .breadcrumbs {
   margin: 0 auto;
+  max-width: 62.5rem;
+}
+
+.box-entity {
+  display: block;
+  position: relative;
+
+  form {
+    display: inline-block;
+
+    input, button {
+      display: inline-block;
+    }
+  }
+
+  nav {
+    display: none;
+  }
+
+  nav {
+    ul {
+      display: inline;
+
+      li, li a {
+        display: inline;
+      }
+    }
+  }
+
+  &:hover nav {
+    display: inline;
+  }
+
+  &:hover nav.qr {
+    display: block;
+    position: absolute;
+    right: -5ex;
+    top: 0;
+  }
 }

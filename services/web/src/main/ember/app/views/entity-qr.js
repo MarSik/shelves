@@ -14,5 +14,5 @@ export default Ember.View.extend({
     }.property('size'),
     height: function() {
         return this.get('size');
-    }.property('size')
+    }.property('size', 'entity.id')
 });

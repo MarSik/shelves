@@ -1,0 +1,39 @@
+{{#if hasBoxes}}
+{{#if isExpanded}}
+<a {{toggleExpand}}>{{fa-icon 'fa-minus-square-o'}}</a>
+{{else}}
+<a {{toggleExpand}}>{{fa-icon 'fa-plus-square-o'}}</a>
+{{/if}}
+{{else}}
+{{fa-icon 'square-o'}}
+{{/if}}
+{{#if isEditing}}
+<form {{action 'editDone' on='submit'}} class="row collapse">
+    <div class="small-10 columns">
+        {{input type='text' value=box.name}}
+    </div>
+    <div class="small-2 columns">
+        <button type="submit">save</button>
+    </div>
+</form>
+{{else}}
+<a {{action 'selectBox'}}>{{box.name}}</a>
+{{/if}}
+<nav>
+    <ul>
+        <li><a {{action 'createBox'}}>{{fa-icon 'plus'}}</a></li>
+        <li><a {{action 'editBox'}}>{{fa-icon 'edit'}}</a></li>
+        <li><a {{action 'deleteBox'}}>{{fa-icon 'times'}}</a></li>
+    </ul>
+</nav>
+<nav class="qr">{{view 'entity-qr' models='boxes' entity=box size=100}}</nav>
+
+{{#if showBoxes}}
+<ul>
+{{#each box in box.boxes}}
+    {{box-tree box=box}}
+{{/each}}
+</ul>
+{{/if}}
+
+{{yield}}

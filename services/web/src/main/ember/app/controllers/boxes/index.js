@@ -17,6 +17,9 @@ export default Ember.Controller.extend({
                     newBox.rollback();
                     self.growl.error("Box creation failed");
                 });
+        },
+        deleteBox: function(box) {
+            box.destroyRecord();
         }
     }
 });

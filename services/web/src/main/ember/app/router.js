@@ -6,18 +6,19 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-    this.route('login');
     this.resource('groups', function () {
-        this.route('new');
         this.route('show', {path: '/:group_id'});
     });
-    this.resource('lots', function () {
-        this.route('show', {path: '/:lot_id'});
+    this.resource('boxes', function () {
+        this.route('show', {path: '/:box_id'});
+    });
+    this.resource('footprints', function () {
+        this.route('show', {path: '/:footprint_id'});
+    });
+    this.resource('projects', function () {
+        this.route('show', {path: '/:project_id'});
     });
     this.route('account');
-    this.resource('boxes', function () {
-
-    });
 });
 
 export default Router;
