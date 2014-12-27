@@ -12,6 +12,13 @@
   max-width: 62.5rem;
 }
 
+nav.qr {
+  display: block;
+  position: absolute;
+  right: 5ex;
+  top: 1em;
+}
+
 .box-entity {
   display: block;
   position: relative;
@@ -26,9 +33,6 @@
 
   nav {
     display: none;
-  }
-
-  nav {
     ul {
       display: inline;
 
@@ -42,10 +46,5 @@
     display: inline;
   }
 
-  &:hover nav.qr {
-    display: block;
-    position: absolute;
-    right: -5ex;
-    top: 0;
-  }
+
 }

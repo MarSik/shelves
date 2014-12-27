@@ -1,0 +1,48 @@
+{{#if hasChildren}}
+
+{{#if isExpanded}}
+<a {{action 'toggleExpand'}}>{{fa-icon 'fa-minus-square-o'}}</a>
+{{else}}
+<a {{action 'toggleExpand'}}>{{fa-icon 'fa-plus-square-o'}}</a>
+{{/if}}
+
+{{else}}
+{{fa-icon 'square-o'}}
+{{/if}}
+
+{{#if isEditing}}
+<form {{action 'editDone' on='submit'}} class="row collapse">
+<div class="small-10 columns">
+    {{input type='text' value=item.name}}
+</div>
+<div class="small-2 columns">
+    <button type="submit">save</button>
+</div>
+</form>
+{{else}}
+<a {{action 'selectItem'}}>{{item.name}}</a>
+{{/if}}
+
+<nav>
+    <ul>
+        {{#if isDeleting}}
+        <li><a {{action 'cancelDeleteItem'}}>cancel delete</a></li>
+        <li>| <a {{action 'confirmDeleteItem'}}>{{fa-icon 'times'}} confirm delete</a></li>
+        {{else}}
+        <li><a {{action 'createItem'}}>{{fa-icon 'plus'}}</a></li>
+        <li><a {{action 'editItem'}}>{{fa-icon 'edit'}}</a></li>
+        <li><a {{action 'deleteItem'}}>{{fa-icon 'times'}}</a></li>
+        {{/if}}
+    </ul>
+</nav>
+
+{{#if showChildren}}
+<ul>
+    {{#each i in item.children}}
+        {{item-tree item=i class=class action='nestedSelectItem'
+                   hoverAction='nestedHoverItem' deleteAction='nestedDeleteItem'
+                   editAction='nestedEditItem' createAction='nestedCreateItem'}}
+    {{/each}}
+</ul>
+{{/if}}
+
