@@ -2,10 +2,6 @@
 
 <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}}</button>
 
-{{#if selectedGroup}}
-<nav class="qr">{{view 'entity-qr' models='boxes' entity=selectedGroup size=200}}</nav>
-{{/if}}
-
 <ul>
     {{#each group in model}}
     {{item-tree item=group class='group-entity' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
