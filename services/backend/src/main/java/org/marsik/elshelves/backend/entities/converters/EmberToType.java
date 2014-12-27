@@ -27,8 +27,9 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		}
 
 		Type model = new Type();
-		cache.put(object.getId(), model);
-
+		if (nested > 0) {
+			cache.put(object.getId(), model);
+		}
 		return convert(object, model, nested, cache);
 	}
 

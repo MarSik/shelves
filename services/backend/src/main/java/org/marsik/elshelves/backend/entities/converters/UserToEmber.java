@@ -20,6 +20,10 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
         }
 
         UserApiModel user = new UserApiModel();
+		if (nested > 0) {
+			cache.put(entity.getUuid(), user);
+		}
+
 		return convert(entity, user, nested, cache);
     }
 

@@ -41,7 +41,10 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
         }
 
         BoxApiModel model = new BoxApiModel();
-		cache.put(box.getUuid(), model);
+
+		if (nested > 0) {
+			cache.put(box.getUuid(), model);
+		}
 
 		return convert(box, model, nested, cache);
     }

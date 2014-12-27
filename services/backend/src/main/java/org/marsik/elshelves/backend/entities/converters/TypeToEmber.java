@@ -33,8 +33,9 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		}
 
 		PartTypeApiModel model = new PartTypeApiModel();
-		cache.put(object.getUuid(), model);
-
+		if (nested > 0) {
+			cache.put(object.getUuid(), model);
+		}
 		return convert(object, model, nested, cache);
 	}
 

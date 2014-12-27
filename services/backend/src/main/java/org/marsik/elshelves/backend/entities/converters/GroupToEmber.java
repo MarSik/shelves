@@ -30,7 +30,9 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 		}
 
 		PartGroupApiModel model = new PartGroupApiModel();
-		cache.put(object.getUuid(), model);
+		if (nested > 0) {
+			cache.put(object.getUuid(), model);
+		}
 
 		return convert(object, model, nested, cache);
 	}

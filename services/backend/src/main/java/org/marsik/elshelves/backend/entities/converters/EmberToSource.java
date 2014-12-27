@@ -24,8 +24,9 @@ public class EmberToSource implements CachingConverter<SourceApiModel, Source, U
 		}
 
 		Source model = new Source();
-		cache.put(object.getId(), model);
-
+		if (nested > 0) {
+			cache.put(object.getId(), model);
+		}
 		return convert(object, model, nested, cache);
 	}
 

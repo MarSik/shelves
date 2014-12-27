@@ -27,8 +27,9 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 		}
 
 		Purchase entity = new Purchase();
-		cache.put(object.getId(), entity);
-
+		if (nested > 0) {
+			cache.put(object.getId(), entity);
+		}
 		return convert(object, entity, nested, cache);
 	}
 

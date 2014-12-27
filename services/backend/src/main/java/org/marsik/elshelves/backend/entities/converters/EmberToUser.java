@@ -20,8 +20,9 @@ public class EmberToUser implements CachingConverter<UserApiModel, User, UUID> {
         }
 
         User u = new User();
-		cache.put(dto.getId(), u);
-
+		if (nested > 0) {
+			cache.put(dto.getId(), u);
+		}
 		return convert(dto, u, nested, cache);
     }
 

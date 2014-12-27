@@ -59,8 +59,9 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		}
 
 		LotApiModel entity = createEntity();
-		cache.put(object.getUuid(), entity);
-
+		if (nested > 0) {
+			cache.put(object.getUuid(), entity);
+		}
 		return convert(object, entity, nested, cache);
 	}
 }

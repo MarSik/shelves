@@ -30,8 +30,9 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 		}
 
 		Lot entity = new Lot();
-		cache.put(object.getId(), entity);
-
+		if (nested > 0) {
+			cache.put(object.getId(), entity);
+		}
 		return convert(object, entity, nested, cache);
 	}
 

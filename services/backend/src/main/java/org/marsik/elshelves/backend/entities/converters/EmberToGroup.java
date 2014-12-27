@@ -24,7 +24,9 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
 		}
 
 		Group model = new Group();
-		cache.put(object.getId(), model);
+		if (nested > 0) {
+			cache.put(object.getId(), model);
+		}
 
 		return convert(object, model, nested, cache);
 	}
