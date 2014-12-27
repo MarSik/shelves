@@ -62,4 +62,13 @@ public class BoxService extends AbstractRestService<BoxRepository, Box, BoxApiMo
 
 		return boxes;
 	}
+
+	@Override
+	protected Box relink(Box entity) {
+		if (entity.getParent() != null) {
+			Box b = getRepository().getBoxByUuid(entity.getParent().getUuid());
+			entity.setParent(b);
+		}
+		return super.relink(entity);
+	}
 }

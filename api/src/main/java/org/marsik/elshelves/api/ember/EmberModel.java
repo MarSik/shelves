@@ -35,7 +35,12 @@ public final class EmberModel extends HashMap<String, Object> {
             payloadName = getPluralName(clazz);
         }
 
-        public Builder(final String rootName, final Collection<?> entities) {
+		public Builder(final Class<T> clazz, final Iterable<T> entities) {
+			payload = entities;
+			payloadName = getPluralName(clazz);
+		}
+
+		public Builder(final String rootName, final Collection<?> entities) {
             payload = entities;
             payloadName = English.plural(rootName);
         }

@@ -59,7 +59,7 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
 	public EmberModel getNestedBoxes(@CurrentUser User currentUser,
 									 @PathVariable("uuid") UUID uuid) throws PermissionDenied, EntityNotFound {
 		Iterable<BoxApiModel> boxes = boxService.getNestedBoxes(uuid, currentUser);
-		EmberModel.Builder<BoxApiModel> modelBuilder = new EmberModel.Builder<BoxApiModel>(boxes);
+		EmberModel.Builder<BoxApiModel> modelBuilder = new EmberModel.Builder<BoxApiModel>(BoxApiModel.class, boxes);
 		for (BoxApiModel b: boxes) {
 			sideLoad(b, modelBuilder);
 		}

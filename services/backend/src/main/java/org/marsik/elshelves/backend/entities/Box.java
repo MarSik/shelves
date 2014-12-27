@@ -17,7 +17,7 @@ public class Box implements OwnedEntity {
     UUID uuid;
     String name;
 
-    @RelatedTo(type = "CONTAINS")
+    @RelatedTo(type = "PARENT", direction = Direction.INCOMING)
     Set<Box> contains;
 
     @RelatedTo(type = "PARENT")
