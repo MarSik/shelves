@@ -6,6 +6,8 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
   name: attr("string"),
+  description: attr("string"),
+  vendor: attr("string"),
   groups: hasMany("group", {async: true}),
   footprint: belongsTo("footprint", {async: true}),
   lots: hasMany("lot", {async: true}),

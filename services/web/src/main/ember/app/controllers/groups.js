@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ArrayController.extend({
     actions: {
         showCreateGroup: function (group) {
             this.set('selectedGroup', group);
@@ -41,5 +41,7 @@ export default Ember.Controller.extend({
         hoverGroup: function(group) {
             this.set('selectedGroup', group);
         }
-    }
+    },
+    sortProperties: ['name'],
+    sortAscending: true
 });

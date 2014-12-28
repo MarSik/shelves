@@ -18,6 +18,10 @@ Router.map(function() {
     this.resource('projects', function () {
         this.route('show', {path: '/:project_id'});
     });
+    this.resource('sources', function () {
+        this.route('show', {path: '/:source_id'});
+    });
+    this.route('purchase');
     this.route('account');
 });
 

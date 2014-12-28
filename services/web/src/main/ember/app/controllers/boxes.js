@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ArrayController.extend({
     actions: {
         showCreateBox: function (box) {
             this.set('selectedBox', box);
@@ -41,5 +41,7 @@ export default Ember.Controller.extend({
         hoverBox: function(box) {
             this.set('selectedBox', box);
         }
-    }
+    },
+    sortProperties: ['name'],
+    sortAscending: true
 });

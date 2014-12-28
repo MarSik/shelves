@@ -22,5 +22,12 @@ export default DS.Model.extend({
     hasParent: function() {
         // XXX this is a hack, belongsTo returns a promise..
         return !Ember.isNone(this.get('parent.content'));
-    }.property('parent.content')
+    }.property('parent.content'),
+    fullName: function() {
+        if (Ember.isNone(this.get('parent.content'))) {
+            return this.get('name');
+        } else {
+            return this.get('parent.content.fullName') + ' | ' + this.get('name');
+        }
+    }.property('parent.content', 'parent.content.fullName', 'name')
 });

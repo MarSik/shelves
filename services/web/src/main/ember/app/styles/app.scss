@@ -5,11 +5,7 @@
 .main-content {
   max-width: 62.5rem;
   margin: 0.5em auto 0 auto;
-}
-
-#header-block .breadcrumbs {
-  margin: 0 auto;
-  max-width: 62.5rem;
+  position: relative;
 }
 
 nav.qr {
@@ -42,9 +38,31 @@ nav.qr {
     }
   }
 
-  &:hover nav {
+  &:hover > nav {
     display: inline;
   }
 
 
+}
+
+.purchase {
+  table {
+    width: 100%;
+
+    td.vat {
+      width: 9ex;
+    }
+
+    td.count {
+      width: 9ex;
+    }
+
+    td.vat-included {
+      width: 5ex;
+    }
+
+    td.price {
+      width: 12ex;
+    }
+  }
 }

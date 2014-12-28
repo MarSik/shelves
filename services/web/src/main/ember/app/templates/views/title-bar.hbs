@@ -22,20 +22,45 @@
                 <li class="has-dropdown">
                     <a href="#">{{fa-icon "user"}}</a>
                     <ul class="dropdown">
-                        <li><a href="#">First link in dropdown</a></li>
-                        <li class="active"><a href="#">Active link in dropdown</a></li>
+                        <li class="active">{{#link-to 'account'}}Account info{{/link-to}}</li>
+                        <li><a href="#">Logout</a></li>
                     </ul>
                 </li>
             </ul>
 
             <!-- Left Nav Section -->
             <ul class="left">
+                <li>
+                {{#link-to 'groups.index' class='item'}}
+                {{fa-icon "database"}}
+                {{/link-to}}
+                </li>
+                <li>
+                {{#link-to 'boxes.index' class='item'}}
+                {{fa-icon "cube"}}
+                {{/link-to}}
+                </li>
+                <li>
+                {{#link-to 'footprints.index' class='item'}}
+                {{fa-icon "file-o"}}
+                {{/link-to}}
+                </li>
+                <li>
+                {{#link-to 'purchase' class='item'}}
+                {{fa-icon "shopping-cart"}}
+                {{/link-to}}
+                </li>
+                <li>
+                {{#link-to 'projects.index' class='item'}}
+                {{fa-icon "flask"}}
+                {{/link-to}}
+                </li>
+                <li>
+                {{#link-to 'sources' class='item'}}
+                {{fa-icon "truck"}}
+                {{/link-to}}
+                </li>
             </ul>
         </section>
     </nav>
-
-    <section class="breadcrumbs">
-        <li>{{#link-to 'index'}}Dashboard{{/link-to}}</li>
-        <li>{{#link-to 'index'}}Dashboard{{/link-to}}</li>
-    </section>
 </div>

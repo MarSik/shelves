@@ -1,0 +1,106 @@
+<section class="purchase">
+<h2>Purchase</h2>
+
+<form {{action 'purchase' on='submit'}}>
+
+<label for="source">
+    Source:
+</label>
+    <div class="row collapse">
+        <div class="small-11 columns">
+            {{ember-selectize
+            content=sortedSources
+            optionValuePath="content.id"
+            optionLabelPath="content.name"
+            selection=selectedSource
+            placeholder="Select a source" }}
+        </div>
+        <div class="small-1 columns">
+            <button {{action 'manageSources'}} class='postfix' title='Manage sources'>{{fa-icon 'gear'}}</button>
+        </div>
+    </div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th colspan="4">Box</th>
+    </tr>
+    <tr>
+        <th>SKU</th>
+        <th>Cnt.</th>
+        <th>Price</th>
+        <th>w/</th>
+        <th>Vat %</th>
+    </tr>
+    </thead>
+    {{#each purchase in model}}
+    <tbody>
+    <tr>
+        <td>
+            <div class="row collapse">
+                <div class="small-11 columns">
+                    {{ember-selectize
+                    content=sortedTypes
+                    optionValuePath="content.id"
+                    optionLabelPath="content.fullName"
+                    selection=purchase.type
+                    sort="content.fullName"
+                    placeholder="Select a type" }}
+                </div>
+                <div class="small-1 columns">
+                    <button {{action 'manageTypes' purchase}} class='postfix'>{{fa-icon 'gear'}}</button>
+                </div>
+            </div>
+        </td>
+        <td colspan="4">
+            <div class="row collapse">
+                <div class="small-11 columns">
+                    {{ember-selectize
+                    content=sortedBoxes
+                    optionValuePath="content.id"
+                    optionLabelPath="content.fullName"
+                    selection=purchase.box
+                    sort="content.fullName"
+                    placeholder="Select a location" }}
+                </div>
+                <div class="small-1 columns">
+                    <button {{action 'manageBoxes' purchase}} class='postfix'>{{fa-icon 'gear'}}</button>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="sku">
+            {{input type='text' value=purchase.sku id=sku placeholder='SKU'}}
+        </td>
+        <td class="count">
+            {{input type='text' value=purchase.count id=count placeholder='count'}}
+        </td>
+        <td class="price">
+            {{input type='text' value=purchase.singlePrice id=price placeholder='price'}}
+        </td>
+        <td class="vat-included">
+            {{input type='checkbox' checked=purchase.vatIncluded id=vatIncluded}}
+        </td>
+        <td class="vat">
+            {{input type='text' value=purchase.vat id=vat placeholder='vat%'}}
+        </td>
+    </tr>
+    </tbody>
+    {{/each}}
+
+    <tr>
+        <td colspan="6"><button {{action 'addRow'}}>{{fa-icon 'plus'}} Add row</button></td>
+    </tr>
+</table>
+
+
+
+
+
+<button type="submit">Purchase</button>
+</form>
+</section>
+
+{{outlet}}
