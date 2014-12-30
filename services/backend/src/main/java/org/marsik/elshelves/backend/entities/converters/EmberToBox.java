@@ -25,7 +25,8 @@ public class EmberToBox implements CachingConverter<BoxApiModel, Box, UUID> {
 
         Box box = new org.marsik.elshelves.backend.entities.Box();
 
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getId() != null) {
 			cache.put(object.getId(), box);
 		}
 

@@ -41,8 +41,11 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		entity.setNext(new ArrayList<LotApiModel>());
-		for (Lot l: object.getNext()) {
-			entity.getNext().add(convert(l, nested - 1, cache));
+
+		if (object.getNext() != null) {
+			for (Lot l : object.getNext()) {
+				entity.getNext().add(convert(l, nested - 1, cache));
+			}
 		}
 
 		return entity;
@@ -59,7 +62,8 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		}
 
 		LotApiModel entity = createEntity();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), entity);
 		}
 		return convert(object, entity, nested, cache);

@@ -43,6 +43,10 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 		if (entity.getGroups() != null) {
 			Set<Group> groups = new THashSet<>();
 			for (Group g: entity.getGroups()) {
+				if (g.getUuid() == null) {
+					groups.add(g);
+					continue;
+				}
 				Group ng = groupRepository.getGroupByUuid(g.getUuid());
 				groups.add(ng);
 			}

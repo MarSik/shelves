@@ -24,7 +24,8 @@ public class FootprintToEmber implements CachingConverter<Footprint, FootprintAp
 		}
 
 		FootprintApiModel model = new FootprintApiModel();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);

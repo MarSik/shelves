@@ -58,6 +58,10 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 		if (entity.getItems() != null) {
 			Collection<Purchase> items = new ArrayList<>();
 			for (Purchase p: entity.getItems()) {
+				if (p.getUuid() == null) {
+					items.add(p);
+					continue;
+				}
 				Purchase linked = purchaseRepository.getPurchaseByUuid(p.getUuid());
 				items.add(linked);
 			}

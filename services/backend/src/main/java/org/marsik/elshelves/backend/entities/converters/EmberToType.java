@@ -33,7 +33,8 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		}
 
 		Type model = new Type();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getId() != null) {
 			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
@@ -54,9 +55,11 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		model.setFootprint(emberToFootprint.convert(object.getFootprint(), nested - 1, cache));
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
 
-		model.setGroups(new THashSet<Group>());
-		for (PartGroupApiModel g: object.getGroups()) {
-			model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
+		if (object.getGroups() != null) {
+			model.setGroups(new THashSet<Group>());
+			for (PartGroupApiModel g : object.getGroups()) {
+				model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
+			}
 		}
 
 		return model;

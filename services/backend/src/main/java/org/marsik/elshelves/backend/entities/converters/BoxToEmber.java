@@ -22,11 +22,14 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 		model.setName(box.getName());
 		model.setParent(convert(box.getParent(), 1, cache));
 
-		List<BoxApiModel> boxes = new ArrayList<>();
-		for (Box b: box.getContains()) {
-			boxes.add(convert(b, 1, cache));
+		if (box.getContains() != null) {
+			List<BoxApiModel> boxes = new ArrayList<>();
+			for (Box b : box.getContains()) {
+				boxes.add(convert(b, 1, cache));
+			}
+			model.setBoxes(boxes);
 		}
-		model.setBoxes(boxes);
+
 		return model;
 	}
 
@@ -42,7 +45,8 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 
         BoxApiModel model = new BoxApiModel();
 
-		if (nested > 0) {
+		if (nested > 0
+				&& box.getUuid() != null) {
 			cache.put(box.getUuid(), model);
 		}
 

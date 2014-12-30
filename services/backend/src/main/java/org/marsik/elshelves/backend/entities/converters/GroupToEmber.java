@@ -30,7 +30,8 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 		}
 
 		PartGroupApiModel model = new PartGroupApiModel();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 
@@ -49,14 +50,18 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 		model.setParent(convert(object.getParent(), nested - 1, cache));
 
-		model.setGroups(new ArrayList<PartGroupApiModel>());
-		for (Group g: object.getGroups()) {
-			model.getGroups().add(convert(g, nested - 1, cache));
+		if (object.getGroups() != null) {
+			model.setGroups(new ArrayList<PartGroupApiModel>());
+			for (Group g : object.getGroups()) {
+				model.getGroups().add(convert(g, nested - 1, cache));
+			}
 		}
 
-		model.setTypes(new ArrayList<PartTypeApiModel>());
-		for (Type t: object.getTypes()) {
-			model.getTypes().add(typeToEmber.convert(t, nested - 1, cache));
+		if (object.getTypes() != null) {
+			model.setTypes(new ArrayList<PartTypeApiModel>());
+			for (Type t : object.getTypes()) {
+				model.getTypes().add(typeToEmber.convert(t, nested - 1, cache));
+			}
 		}
 
 		return model;

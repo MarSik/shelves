@@ -33,7 +33,8 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		}
 
 		PartTypeApiModel model = new PartTypeApiModel();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);
@@ -53,9 +54,12 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 		model.setFootprint(footprintToEmber.convert(object.getFootprint(), nested - 1, cache));
-		model.setGroups(new ArrayList<PartGroupApiModel>());
-		for (Group g: object.getGroups()) {
-			model.getGroups().add(groupToEmber.convert(g, nested - 1, cache));
+
+		if (object.getGroups() != null) {
+			model.setGroups(new ArrayList<PartGroupApiModel>());
+			for (Group g : object.getGroups()) {
+				model.getGroups().add(groupToEmber.convert(g, nested - 1, cache));
+			}
 		}
 
 		return model;

@@ -20,7 +20,8 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
         }
 
         UserApiModel user = new UserApiModel();
-		if (nested > 0) {
+		if (nested > 0
+				&& entity.getUuid() != null) {
 			cache.put(entity.getUuid(), user);
 		}
 

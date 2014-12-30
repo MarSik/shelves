@@ -31,7 +31,8 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 
 		Transaction model = new Transaction();
 
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getId() != null) {
 			cache.put(object.getId(), model);
 		}
 
@@ -49,10 +50,12 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 		}
 
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
-		model.setItems(new THashSet<Purchase>());
 
-		for (PurchaseApiModel p: object.getItems()) {
-			model.getItems().add(emberToPurchase.convert(p, nested - 1, cache));
+		if (object.getItems() != null) {
+			model.setItems(new THashSet<Purchase>());
+			for (PurchaseApiModel p : object.getItems()) {
+				model.getItems().add(emberToPurchase.convert(p, nested - 1, cache));
+			}
 		}
 
 		return model;

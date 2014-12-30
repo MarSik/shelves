@@ -43,15 +43,18 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 		model.setName(object.getName());
 		model.setDate(object.getDate());
 
-		if (nested == 0) {
+		if (nested == 0
+				&& object.getUuid() != null) {
 			return model;
 		}
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
-		model.setItems(new THashSet<PurchaseApiModel>());
 
-		for (Purchase p: object.getItems()) {
-			model.getItems().add(purchaseToEmber.convert(p, nested - 1, cache));
+		if (object.getItems() != null) {
+			model.setItems(new THashSet<PurchaseApiModel>());
+			for (Purchase p : object.getItems()) {
+				model.getItems().add(purchaseToEmber.convert(p, nested - 1, cache));
+			}
 		}
 
 		return model;

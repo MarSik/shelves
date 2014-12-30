@@ -27,7 +27,8 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 		}
 
 		PurchaseApiModel model = new PurchaseApiModel();
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);

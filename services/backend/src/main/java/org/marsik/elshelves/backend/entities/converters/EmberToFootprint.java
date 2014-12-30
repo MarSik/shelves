@@ -25,7 +25,8 @@ public class EmberToFootprint implements CachingConverter<FootprintApiModel, Foo
 
 		Footprint model = new Footprint();
 
-		if (nested > 0) {
+		if (nested > 0
+				&& object.getId() != null) {
 			cache.put(object.getId(), model);
 		}
 
