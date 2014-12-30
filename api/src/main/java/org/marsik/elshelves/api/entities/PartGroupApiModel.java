@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.PartGroupIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.List;
 import java.util.Map;
@@ -65,15 +69,10 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
         return parent;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = PartGroupIdDeserializer.class)
     public void setParent(PartGroupApiModel parent) {
         this.parent = parent;
-    }
-
-    @JsonSetter
-    public void setParent(UUID parent) {
-        this.parent = new PartGroupApiModel();
-        this.parent.setId(parent);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -82,6 +81,7 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
     }
 
     @JsonSetter
+	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
     public void setTypes(List<PartTypeApiModel> types) {
         this.types = types;
     }
@@ -91,14 +91,9 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
         return belongsTo;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
     public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
-    }
-
-    @JsonSetter
-    public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new UserApiModel();
-        this.belongsTo.setId(belongsTo);
     }
 }

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
 
 import java.util.UUID;
 
@@ -59,14 +61,9 @@ public class PurchaseApiModel extends LotApiModel {
 		return source;
 	}
 
-	@JsonIgnore
+	@JsonSetter
+	@JsonDeserialize(using = SourceIdDeserializer.class)
 	public void setSource(SourceApiModel source) {
 		this.source = source;
-	}
-
-	@JsonSetter
-	public void setSource(UUID source) {
-		this.source = new SourceApiModel();
-		this.source.setId(source);
 	}
 }

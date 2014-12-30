@@ -5,9 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 
 import javax.validation.constraints.Min;
@@ -82,15 +87,10 @@ public class LotApiModel extends AbstractEntityApiModel {
         return location;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = BoxIdDeserializer.class)
     public void setLocation(BoxApiModel location) {
         this.location = location;
-    }
-
-    @JsonSetter
-    public void setLocation(UUID location) {
-        this.location = new BoxApiModel();
-        this.location.setId(location);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -98,15 +98,10 @@ public class LotApiModel extends AbstractEntityApiModel {
         return type;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = PartTypeIdDeserializer.class)
     public void setType(PartTypeApiModel type) {
         this.type = type;
-    }
-
-    @JsonSetter
-    public void setType(UUID type) {
-        this.type = new PartTypeApiModel();
-        this.type.setId(type);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -114,15 +109,10 @@ public class LotApiModel extends AbstractEntityApiModel {
         return previous;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = LotIdDeserializer.class)
     public void setPrevious(LotApiModel previous) {
         this.previous = previous;
-    }
-
-    @JsonSetter
-    public void setPrevious(UUID previous) {
-        this.previous = new LotApiModel();
-        this.previous.setId(previous);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -131,6 +121,7 @@ public class LotApiModel extends AbstractEntityApiModel {
     }
 
     @JsonSetter
+	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
     public void setNext(List<LotApiModel> next) {
         this.next = next;
     }
@@ -140,15 +131,10 @@ public class LotApiModel extends AbstractEntityApiModel {
         return belongsTo;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
     public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
-    }
-
-    @JsonSetter
-    public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new UserApiModel();
-        this.belongsTo.setId(belongsTo);
     }
 
 	public LotAction getAction() {
@@ -164,14 +150,9 @@ public class LotApiModel extends AbstractEntityApiModel {
 		return performedBy;
 	}
 
-	@JsonIgnore
+	@JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setPerformedBy(UserApiModel performedBy) {
 		this.performedBy = performedBy;
-	}
-
-	@JsonSetter
-	public void setPerformedBy(UUID uuid) {
-		performedBy = new UserApiModel();
-		performedBy.setId(uuid);
 	}
 }

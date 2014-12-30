@@ -5,9 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.EmberIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.FootprintIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.PartGroupIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +29,8 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	String vendorId;
 
     FootprintApiModel footprint;
-    List<PartGroupApiModel> groups;
+	List<PartGroupApiModel> groups;
+	List<LotApiModel> lots;
 
     UserApiModel belongsTo;
 
@@ -32,6 +39,7 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
     public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("groups", "groups");
+		links.put("lots", "lots");
         return links;
     }
 
@@ -48,15 +56,10 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
         return footprint;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = FootprintIdDeserializer.class)
     public void setFootprint(FootprintApiModel footprint) {
         this.footprint = footprint;
-    }
-
-    @JsonSetter
-    public void setFootprint(UUID footprint) {
-        this.footprint = new FootprintApiModel();
-        this.footprint.setId(footprint);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -64,25 +67,21 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
         return groups;
     }
 
-    @JsonSetter
-    public void setGroups(List<PartGroupApiModel> groups) {
-        this.groups = groups;
-    }
+	@JsonSetter
+	@JsonDeserialize(contentUsing = PartGroupIdDeserializer.class)
+	public void setGroups(List<PartGroupApiModel> groups) {
+		this.groups = groups;
+	}
 
     @JsonIdentityReference(alwaysAsId = true)
     public UserApiModel getBelongsTo() {
         return belongsTo;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
     public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
-    }
-
-    @JsonSetter
-    public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new UserApiModel();
-        this.belongsTo.setId(belongsTo);
     }
 
     public String getDescription() {
@@ -107,5 +106,16 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 
 	public void setVendorId(String vendorId) {
 		this.vendorId = vendorId;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public List<LotApiModel> getLots() {
+		return lots;
+	}
+
+	@JsonSetter
+	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
+	public void setLots(List<LotApiModel> lots) {
+		this.lots = lots;
 	}
 }

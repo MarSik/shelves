@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -50,6 +54,7 @@ public class BoxApiModel extends AbstractEntityApiModel {
     }
 
     @JsonSetter
+	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
     public void setLots(List<LotApiModel> lots) {
         this.lots = lots;
     }
@@ -59,15 +64,10 @@ public class BoxApiModel extends AbstractEntityApiModel {
         return parent;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = BoxIdDeserializer.class)
     public void setParent(BoxApiModel parent) {
         this.parent = parent;
-    }
-
-    @JsonSetter
-    public void setParent(UUID parent) {
-        this.parent = new BoxApiModel();
-        this.parent.setId(parent);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -76,6 +76,7 @@ public class BoxApiModel extends AbstractEntityApiModel {
     }
 
     @JsonSetter
+	@JsonDeserialize(contentUsing = BoxIdDeserializer.class)
     public void setBoxes(List<BoxApiModel> boxes) {
         this.boxes = boxes;
     }
@@ -101,14 +102,9 @@ public class BoxApiModel extends AbstractEntityApiModel {
         return belongsTo;
     }
 
-    @JsonIgnore
+    @JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
     public void setBelongsTo(UserApiModel belongsTo) {
         this.belongsTo = belongsTo;
-    }
-
-    @JsonSetter
-    public void setBelongsTo(UUID belongsTo) {
-        this.belongsTo = new UserApiModel();
-        this.belongsTo.setId(belongsTo);
     }
 }

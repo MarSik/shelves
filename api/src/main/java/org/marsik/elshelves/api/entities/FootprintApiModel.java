@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.UUID;
 
@@ -66,14 +68,9 @@ public class FootprintApiModel extends AbstractEntityApiModel {
 		return belongsTo;
 	}
 
-	@JsonIgnore
+	@JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
-	}
-
-	@JsonSetter
-	public void setBelongsTo(UUID belongsTo) {
-		this.belongsTo = new UserApiModel();
-		this.belongsTo.setId(belongsTo);
 	}
 }

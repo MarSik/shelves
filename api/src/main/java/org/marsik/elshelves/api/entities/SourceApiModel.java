@@ -1,6 +1,10 @@
 package org.marsik.elshelves.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 @EmberModelName("source")
 public class SourceApiModel extends AbstractEntityApiModel {
@@ -25,10 +29,13 @@ public class SourceApiModel extends AbstractEntityApiModel {
 		this.url = url;
 	}
 
+	@JsonIdentityReference(alwaysAsId = true)
 	public UserApiModel getBelongsTo() {
 		return belongsTo;
 	}
 
+	@JsonSetter
+	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
 	}
