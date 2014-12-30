@@ -94,4 +94,8 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
         service.delete(uuid, currentUser);
         return new THashMap<>();
     }
+
+	protected AbstractRestService<? extends GraphRepository<T>, T, E> getService() {
+		return service;
+	}
 }

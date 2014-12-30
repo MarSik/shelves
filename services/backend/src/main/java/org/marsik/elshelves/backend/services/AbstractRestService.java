@@ -99,8 +99,12 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
         return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());
     }
 
-    public E get(UUID uuid, User currentUser) throws PermissionDenied {
+    public E get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
         T one = getSingleEntity(uuid);
+
+		if (one == null) {
+			throw new EntityNotFound();
+		}
 
         if (!one.getOwner().equals(currentUser)) {
             throw new PermissionDenied();

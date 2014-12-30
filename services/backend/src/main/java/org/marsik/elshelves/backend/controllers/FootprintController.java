@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.services.AbstractRestService;
@@ -15,5 +16,11 @@ public class FootprintController extends AbstractRestController<Footprint, Footp
 	@Autowired
 	public FootprintController(FootprintService service) {
 		super(FootprintApiModel.class, service);
+	}
+
+	@Override
+	protected void sideLoad(FootprintApiModel dto, EmberModel.Builder<FootprintApiModel> builder) {
+		super.sideLoad(dto, builder);
+		builder.sideLoad(dto.getBelongsTo());
 	}
 }

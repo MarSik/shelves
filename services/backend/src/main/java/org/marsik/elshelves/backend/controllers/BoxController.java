@@ -70,7 +70,7 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
     @RequestMapping(value = "/{uuid}/qr", produces = "image/png")
     public void generateQr(HttpServletResponse response,
                            @CurrentUser User currentUser,
-                           @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied {
+                           @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
         BoxApiModel box = boxService.get(uuid, currentUser);
 
         response.setContentType("image/jpg");
