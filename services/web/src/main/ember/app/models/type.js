@@ -11,5 +11,13 @@ export default DS.Model.extend({
   groups: hasMany("group", {async: true}),
   footprint: belongsTo("footprint", {async: true}),
   lots: hasMany("lot", {async: true}),
-  belongsTo: belongsTo("user", {async: true})
+  belongsTo: belongsTo("user", {async: true}),
+
+  fullName: function () {
+      return this.get('name')
+          + ' | '
+          + this.get('footprint.name')
+          + ' | '
+          + this.get('vendor');
+  }.property('name', 'footprint.name', 'vendor')
 });
