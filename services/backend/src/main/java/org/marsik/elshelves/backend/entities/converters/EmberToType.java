@@ -1,6 +1,9 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 
 	@Autowired
 	EmberToFootprint emberToFootprint;
+
+	@Autowired
+	EmberToGroup emberToGroup;
 
 	@Override
 	public Type convert(PartTypeApiModel object, int nested, Map<UUID, Object> cache) {
@@ -36,12 +42,23 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 	@Override
 	public Type convert(PartTypeApiModel object, Type model, int nested, Map<UUID, Object> cache) {
 		model.setUuid(object.getId());
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
 		model.setName(object.getName());
 		model.setDescription(object.getDescription());
-		model.setFootprint(emberToFootprint.convert(object.getFootprint(), 1, cache));
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
+
+		if (nested == 0) {
+			return model;
+		}
+
+		model.setFootprint(emberToFootprint.convert(object.getFootprint(), nested - 1, cache));
+		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
+
+		model.setGroups(new THashSet<Group>());
+		for (PartGroupApiModel g: object.getGroups()) {
+			model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
+		}
+
 		return model;
 	}
 }
