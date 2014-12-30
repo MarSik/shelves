@@ -1,0 +1,13 @@
+<h2>{{model.name}}</h2>
+
+ <form {{action 'saveSource' model on='submit'}}>
+<h3>Name</h3>
+{{input type='text' value=model.name}}
+
+<h3>URL</h3>
+{{input type='text' value=model.url}}
+
+ <button type="submit">Save</button>
+ </form>
+
+{{outlet}}
