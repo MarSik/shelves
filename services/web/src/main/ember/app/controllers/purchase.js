@@ -14,7 +14,15 @@ export default Ember.Controller.extend({
         addRow: function () {
             this.store.createRecord('purchase', {
                 vat: 20,
-                vatIncluded: true
+                vatIncluded: true,
+                transaction: this.get('model')
+            });
+        },
+        purchase: function () {
+            this.model.save().then(function (transaction) {
+
+            }).catch(function (reason) {
+
             });
         }
     },

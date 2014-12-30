@@ -14,10 +14,6 @@ export default DS.Model.extend({
   belongsTo: belongsTo("user", {async: true}),
 
   fullName: function () {
-      return this.get('name')
-          + ' | '
-          + this.get('footprint.name')
-          + ' | '
-          + this.get('vendor');
+      return this.get('name') + ' | ' + this.get('footprint.name') + ' | ' + this.get('vendor');
   }.property('name', 'footprint.name', 'vendor')
 });

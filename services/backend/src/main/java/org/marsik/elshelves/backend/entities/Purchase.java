@@ -10,8 +10,8 @@ public class Purchase extends Lot {
 	Double vat;
 	Boolean vatIncluded;
 
-	@RelatedTo(type = "PURCHASED_FROM")
-	Source source;
+	@RelatedTo(type = "IN_TRANSACTION")
+	Transaction transaction;
 
 	public Double getSinglePrice() {
 		return singlePrice;
@@ -46,11 +46,16 @@ public class Purchase extends Lot {
 	}
 
 	public Source getSource() {
-		return source;
+		Transaction transaction1 = getTransaction();
+		return (transaction1 == null) ? null : transaction1.getSource();
 	}
 
-	public void setSource(Source source) {
-		this.source = source;
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 	@Override

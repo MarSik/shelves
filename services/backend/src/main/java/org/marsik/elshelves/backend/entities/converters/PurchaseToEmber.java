@@ -13,6 +13,8 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 	@Autowired
 	LotToEmber lotToEmber;
 
+	@Autowired
+	TransactionToEmber transactionToEmber;
 
 	@Override
 	public PurchaseApiModel convert(Purchase object, int nested, Map<UUID, Object> cache) {
@@ -38,6 +40,12 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 		model.setTotalPrice(object.getTotalPrice());
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
+
+		if (nested == 0) {
+			return model;
+		}
+
+		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
 		return model;
 	}
 }

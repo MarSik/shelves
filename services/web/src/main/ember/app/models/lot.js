@@ -9,6 +9,7 @@ export default DS.Model.extend({
   created: attr("date"),
 
   location: belongsTo("box", {async: true}),
+  type: belongsTo("type"),
 
   previous: belongsTo("lot", {inverse: "next", async: true}),
   next: hasMany("lot", {inverse: "previous", async: true}),

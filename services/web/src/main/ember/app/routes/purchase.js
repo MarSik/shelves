@@ -2,9 +2,15 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     model: function () {
-        return  this.store.filter('purchase', function (purchase) {
+        var transactions = this.store.filter('transaction', function (purchase) {
             return purchase.get('isNew');
         });
+
+        if (transactions.get("length") == 0) {
+            return this.store.createRecord('transaction')
+        }
+
+        return transactions.get(0);
     },
     setupController: function(controller, model) {
         controller.set('model', model);

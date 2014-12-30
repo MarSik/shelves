@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.TransactionIdDeserializer;
 
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class PurchaseApiModel extends LotApiModel {
     Double vat;
     Boolean vatIncluded;
 
-    SourceApiModel source;
+	TransactionApiModel transaction;
 
     public Double getSinglePrice() {
         return singlePrice;
@@ -57,13 +58,13 @@ public class PurchaseApiModel extends LotApiModel {
     }
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public SourceApiModel getSource() {
-		return source;
+	public TransactionApiModel getTransaction() {
+		return transaction;
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = SourceIdDeserializer.class)
-	public void setSource(SourceApiModel source) {
-		this.source = source;
+	@JsonDeserialize(using = TransactionIdDeserializer.class)
+	public void setTransaction(TransactionApiModel transaction) {
+		this.transaction = transaction;
 	}
 }

@@ -4,12 +4,14 @@ import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EmberToPurchase;
 import org.marsik.elshelves.backend.entities.converters.PurchaseToEmber;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
+import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 	TypeRepository typeRepository;
 
 	@Autowired
-	SourceRepository sourceRepository;
+	TransactionRepository transactionRepository;
 
 	@Autowired
 	public PurchaseService(PurchaseRepository repository,
@@ -53,9 +55,9 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 
 	@Override
 	protected Purchase relink(Purchase entity) {
-		if (entity.getSource() != null) {
-			Source source = sourceRepository.getSourceByUuid(entity.getSource().getUuid());
-			entity.setSource(source);
+		if (entity.getTransaction() != null) {
+			Transaction transaction = transactionRepository.getTransactionByUuid(entity.getTransaction().getUuid());
+			entity.setTransaction(transaction);
 		}
 
 		if (entity.getType() != null) {

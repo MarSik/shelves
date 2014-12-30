@@ -12,7 +12,7 @@
             content=sortedSources
             optionValuePath="content.id"
             optionLabelPath="content.name"
-            selection=selectedSource
+            selection=model.source
             placeholder="Select a source" }}
         </div>
         <div class="small-1 columns">
@@ -34,7 +34,7 @@
         <th>Vat %</th>
     </tr>
     </thead>
-    {{#each purchase in model}}
+    {{#each purchase in model.items}}
     <tbody>
     <tr>
         <td>
@@ -60,7 +60,7 @@
                     content=sortedBoxes
                     optionValuePath="content.id"
                     optionLabelPath="content.fullName"
-                    selection=purchase.box
+                    selection=purchase.location
                     sort="content.fullName"
                     placeholder="Select a location" }}
                 </div>
