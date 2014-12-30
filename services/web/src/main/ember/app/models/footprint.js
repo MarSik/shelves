@@ -10,5 +10,6 @@ export default DS.Model.extend({
 
   pads: attr("number"),
   holes: attr("number"),
-  npth: attr("number", {defaultValue: 0})
+  npth: attr("number", {defaultValue: 0}),
+  pitch: attr()
 });

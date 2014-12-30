@@ -1,11 +1,18 @@
 @import "settings";
-
 @import "foundation";
+
+#header-block {
+  margin-bottom: 1em;
+}
 
 .main-content {
   max-width: 62.5rem;
   margin: 0.5em auto 0 auto;
   position: relative;
+
+  ul {
+    list-style: none;
+  }
 }
 
 nav.qr {
@@ -31,6 +38,7 @@ nav.qr {
     display: none;
     ul {
       display: inline;
+      list-style-type: none;
 
       li, li a {
         display: inline;
@@ -63,6 +71,37 @@ nav.qr {
 
     td.price {
       width: 12ex;
+    }
+  }
+}
+
+.growl-manager {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  margin: 0;
+
+  left: auto;
+}
+
+.growl-instance {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  h1, h2, h3, h4 {
+    color: #fff;
+  }
+}
+
+.footprint-summary {
+  @extend .row;
+
+  dl {
+    @extend .column;
+    @extend .small-3;
+
+    dd, dt {
+      display: block;
     }
   }
 }

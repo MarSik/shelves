@@ -1,0 +1,12 @@
+<h2>Footprints</h2>
+
+
+
+<ul>
+{{#each footprint in this}}
+    <li>{{#link-to 'footprints.show' footprint}}{{footprint.name}}{{/link-to}}</li>
+{{/each}}
+</ul>
+
+{{outlet}}
+

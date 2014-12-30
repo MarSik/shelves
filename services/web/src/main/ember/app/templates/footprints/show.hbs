@@ -1,0 +1,10 @@
+<h3>{{name}}</h3>
+
+<form {{action 'save' model on='submit'}}>
+    {{input type='text' value=pads placeholder='pads'}}
+    {{input type='text' value=holes placeholder='holes'}}
+    {{input type='text' value=npth placeholder='npth'}}
+    {{input type='text' value=pitch placeholder='pitch'}}
+
+    <button type="submit">Save</button>
+</form>

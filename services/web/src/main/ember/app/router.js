@@ -14,15 +14,24 @@ Router.map(function() {
     });
     this.resource('footprints', function () {
         this.route('show', {path: '/:footprint_id'});
+        this.route('new');
     });
     this.resource('projects', function () {
         this.route('show', {path: '/:project_id'});
+        this.route('new');
     });
     this.resource('sources', function () {
         this.route('show', {path: '/:source_id'});
+        this.route('new');
     });
     this.route('purchase');
     this.route('account');
+    this.resource('types', function () {
+        this.route('show', {path: '/:type_id'});
+        this.route('new');
+    });
+  this.route('footprints/new');
+  this.route('types/new');
 });
 
 export default Router;

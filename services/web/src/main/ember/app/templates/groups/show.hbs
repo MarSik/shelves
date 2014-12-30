@@ -1,1 +1,14 @@
-<h2>Group id {{id}}</h2>
+<div class="group-detail">
+<h2>Group {{name}} / id {{id}}</h2>
+
+<table>
+{{#each type in types}}
+    <tr>
+        <td>{{type.name}}</td>
+        <td>{{type.vendor}}</td>
+        <td>{{type.footprint.name}}</td>
+    </tr>
+{{/each}}
+</table>
+
+</div>

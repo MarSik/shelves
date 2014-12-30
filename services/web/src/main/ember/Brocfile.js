@@ -23,4 +23,7 @@ var app = new EmberApp({
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
+// Import Ember droplet for html5 uploads
+app.import('bower_components/ember-droplet/dist/ember-droplet.min.js');
+
 module.exports = app.toTree();

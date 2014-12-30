@@ -7,8 +7,8 @@ export default DS.RESTSerializer.extend({
         var serialized = this.serialize(record, options);
 
         //Remove id from the payload for new records
-        //Jackson was complaining when it received a null id ...
-        if (record.id == null) {
+        //Jackson was complaining when it received a null or 'new' id ...
+        if (record.get('id') == null || record.get('isNew')) {
             delete serialized.id;
         }
 

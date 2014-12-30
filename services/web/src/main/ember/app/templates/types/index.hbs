@@ -1,0 +1,7 @@
+<button {{action 'createType'}}>{{fa-icon 'plus'}} Create type</button>
+
+<ul>
+    {{#each type in this}}
+    <li>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</li>
+    {{/each}}
+</ul>

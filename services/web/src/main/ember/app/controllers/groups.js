@@ -37,6 +37,7 @@ export default Ember.ArrayController.extend({
         },
         selectGroup: function(group) {
             this.set('selectedGroup', group);
+            this.transitionTo('groups.show', group);
         },
         hoverGroup: function(group) {
             this.set('selectedGroup', group);
