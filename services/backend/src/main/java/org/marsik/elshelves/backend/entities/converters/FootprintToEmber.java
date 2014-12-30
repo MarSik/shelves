@@ -38,7 +38,12 @@ public class FootprintToEmber implements CachingConverter<Footprint, FootprintAp
 		model.setPads(object.getPads());
 		model.setNpth(object.getNpth());
 		model.setKicad(object.getKicad());
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), 1, cache));
+
+		if (nested == 0) {
+			return model;
+		}
+
+		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		return model;
 	}
