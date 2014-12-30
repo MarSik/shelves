@@ -1,16 +1,22 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+    actions: {
+        purchase: function (transaction) {
+            var self = this;
+            transaction.save().then(function (transaction) {
+                self.growl.info("Saved as "+transaction.get("id"));
+            }).catch(function (reason) {
+                self.growl.error(reason);
+            });
+        }
+    },
     model: function () {
-        var transactions = this.store.filter('transaction', function (purchase) {
-            return purchase.get('isNew');
-        });
-
-        if (transactions.get("length") == 0) {
-            return this.store.createRecord('transaction')
+        if (this.get('currentModel') && this.get('currentModel.isNew')) {
+            return this.get('currentModel');
         }
 
-        return transactions.get(0);
+        return this.store.createRecord('transaction');
     },
     setupController: function(controller, model) {
         controller.set('model', model);
