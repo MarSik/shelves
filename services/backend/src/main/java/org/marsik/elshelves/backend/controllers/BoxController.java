@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -87,4 +88,24 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
         response.getOutputStream().write(os.toByteArray());
         response.flushBuffer();
     }
+
+	@RequestMapping("{uuid}/lots")
+	@ResponseBody
+	@Transactional
+	public EmberModel getLots(@PathVariable("uuid") UUID uuid,
+							  @CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
+		BoxApiModel box = getService().get(uuid, currentUser);
+
+		EmberModel.Builder<LotApiModel> builder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, box.getLots());
+		builder.sideLoad(box.getBelongsTo());
+		builder.sideLoad(box);
+
+		for (LotApiModel t: box.getLots()) {
+			builder.sideLoad(t.getLocation());
+			builder.sideLoad(t.getPerformedBy());
+			builder.sideLoad(t.getPrevious());
+		}
+
+		return builder.build();
+	}
 }

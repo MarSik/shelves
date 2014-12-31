@@ -28,5 +28,13 @@ export default DS.Model.extend({
       } else {
           return this.get('parent.content.fullName') + ' | ' + this.get('name');
       }
-  }.property('parent.content', 'parent.content.fullName', 'name')
+  }.property('parent.content', 'parent.content.fullName', 'name'),
+
+  count: function () {
+    var sum = 0;
+    this.get('lots').filterBy('next.length', 0).forEach(function (item, index) {
+      sum += item.get('count');
+    });
+    return sum;
+  }.property('lots.@each.count', 'lots.@each.next.length')
 });

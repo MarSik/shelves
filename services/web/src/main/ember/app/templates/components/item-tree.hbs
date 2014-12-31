@@ -20,7 +20,7 @@
 </div>
 </form>
 {{else}}
-<a {{action 'selectItem'}}>{{item.name}}</a>
+<a {{action 'selectItem'}}>{{item.name}} ({{auxInfo}})</a>
 {{/if}}
 
 <nav>
@@ -39,7 +39,7 @@
 {{#if showChildren}}
 <ul>
     {{#each i in sorted}}
-        {{item-tree item=i class=class action='nestedSelectItem'
+        {{item-tree item=i class=class count=count action='nestedSelectItem'
                    hoverAction='nestedHoverItem' deleteAction='nestedDeleteItem'
                    editAction='nestedEditItem' createAction='nestedCreateItem'}}
     {{/each}}

@@ -29,5 +29,9 @@ export default DS.Model.extend({
         } else {
             return this.get('parent.content.fullName') + ' | ' + this.get('name');
         }
-    }.property('parent.content', 'parent.content.fullName', 'name')
+    }.property('parent.content', 'parent.content.fullName', 'name'),
+
+    count: function () {
+        return this.get('types.length');
+    }.property('types')
 });
