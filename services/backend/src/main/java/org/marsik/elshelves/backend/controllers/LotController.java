@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.LotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,7 @@ public class LotController {
 
 	@ResponseBody
 	@RequestMapping
+	@Transactional
 	public EmberModel getAll(@CurrentUser User currentUser) {
 		Collection<LotApiModel> lots = lotService.getAll(currentUser);
 
@@ -51,6 +53,7 @@ public class LotController {
 
 	@RequestMapping("/{uuid}")
 	@ResponseBody
+	@Transactional
 	public EmberModel getOne(@CurrentUser User currentUser,
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		LotApiModel lot = lotService.get(id, currentUser);
@@ -61,6 +64,7 @@ public class LotController {
 
 	@RequestMapping("/{uuid}/next")
 	@ResponseBody
+	@Transactional
 	public EmberModel getNext(@CurrentUser User currentUser,
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		Iterable<LotApiModel> lots = lotService.getNext(id, currentUser);
@@ -73,6 +77,7 @@ public class LotController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public EmberModel split(@CurrentUser User currentUser,
 							@RequestBody @Validated LotApiModel lot) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
 		LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser);

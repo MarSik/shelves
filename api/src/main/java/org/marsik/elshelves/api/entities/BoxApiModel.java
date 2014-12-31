@@ -16,6 +16,7 @@ import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -25,11 +26,11 @@ public class BoxApiModel extends AbstractEntityApiModel {
     String name;
     CodeApiModel code;
 
-    List<LotApiModel> lots;
+    Set<LotApiModel> lots;
 
     UserApiModel belongsTo;
     BoxApiModel parent;
-    List<BoxApiModel> boxes;
+    Set<BoxApiModel> boxes;
 
     @Override
     @EmberIgnore
@@ -49,13 +50,13 @@ public class BoxApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<LotApiModel> getLots() {
+    public Set<LotApiModel> getLots() {
         return lots;
     }
 
     @JsonSetter
 	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
-    public void setLots(List<LotApiModel> lots) {
+    public void setLots(Set<LotApiModel> lots) {
         this.lots = lots;
     }
 
@@ -71,13 +72,13 @@ public class BoxApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<BoxApiModel> getBoxes() {
+    public Set<BoxApiModel> getBoxes() {
         return boxes;
     }
 
     @JsonSetter
 	@JsonDeserialize(contentUsing = BoxIdDeserializer.class)
-    public void setBoxes(List<BoxApiModel> boxes) {
+    public void setBoxes(Set<BoxApiModel> boxes) {
         this.boxes = boxes;
     }
 

@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Group;
@@ -51,14 +52,14 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 		model.setParent(convert(object.getParent(), nested - 1, cache));
 
 		if (object.getGroups() != null) {
-			model.setGroups(new ArrayList<PartGroupApiModel>());
+			model.setGroups(new THashSet<PartGroupApiModel>());
 			for (Group g : object.getGroups()) {
 				model.getGroups().add(convert(g, nested - 1, cache));
 			}
 		}
 
 		if (object.getTypes() != null) {
-			model.setTypes(new ArrayList<PartTypeApiModel>());
+			model.setTypes(new THashSet<PartTypeApiModel>());
 			for (Type t : object.getTypes()) {
 				model.getTypes().add(typeToEmber.convert(t, nested - 1, cache));
 			}

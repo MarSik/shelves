@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import org.marsik.elshelves.api.ember.EmberModel;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -30,8 +31,8 @@ public class TypeController extends AbstractRestController<Type, PartTypeApiMode
 
 	@Override
 	protected void sideLoad(PartTypeApiModel dto, EmberModel.Builder<PartTypeApiModel> builder) {
-		super.sideLoad(dto, builder);
 		builder.sideLoad(dto.getFootprint());
+		super.sideLoad(dto, builder);
 	}
 
 	@RequestMapping("{uuid}/groups")
@@ -48,6 +49,26 @@ public class TypeController extends AbstractRestController<Type, PartTypeApiMode
 			builder.sideLoad(PartGroupApiModel.class, t.getGroups());
 			builder.sideLoad(t.getParent());
 			builder.sideLoad(t.getBelongsTo());
+		}
+
+		return builder.build();
+	}
+
+	@RequestMapping("{uuid}/lots")
+	@ResponseBody
+	@Transactional
+	public EmberModel getLots(@PathVariable("uuid") UUID uuid,
+								@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
+		PartTypeApiModel g = getService().get(uuid, currentUser);
+
+		EmberModel.Builder<LotApiModel> builder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, g.getLots());
+		builder.sideLoad(g.getBelongsTo());
+		builder.sideLoad(g);
+
+		for (LotApiModel t: g.getLots()) {
+			builder.sideLoad(t.getLocation());
+			builder.sideLoad(t.getPerformedBy());
+			builder.sideLoad(t.getPrevious());
 		}
 
 		return builder.build();

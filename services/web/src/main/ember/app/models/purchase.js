@@ -10,5 +10,6 @@ export default Lot.extend({
   totalPrice: attr("number"),
   vat: attr("number"),
   vatIncluded: attr("boolean"),
-  transaction: belongsTo("transaction")
+  transaction: belongsTo("transaction"),
+  belongsTo: belongsTo('user')
 });

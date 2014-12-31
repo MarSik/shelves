@@ -15,6 +15,7 @@ import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -22,10 +23,10 @@ import java.util.UUID;
 public class PartGroupApiModel extends AbstractEntityApiModel {
     String name;
 
-    List<PartGroupApiModel> groups;
+    Set<PartGroupApiModel> groups;
     PartGroupApiModel parent;
 
-    List<PartTypeApiModel> types;
+    Set<PartTypeApiModel> types;
 
     UserApiModel belongsTo;
 
@@ -55,12 +56,12 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartGroupApiModel> getGroups() {
+    public Set<PartGroupApiModel> getGroups() {
         return groups;
     }
 
     @JsonSetter
-    public void setGroups(List<PartGroupApiModel> groups) {
+    public void setGroups(Set<PartGroupApiModel> groups) {
         this.groups = groups;
     }
 
@@ -76,13 +77,13 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartTypeApiModel> getTypes() {
+    public Set<PartTypeApiModel> getTypes() {
         return types;
     }
 
     @JsonSetter
 	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
-    public void setTypes(List<PartTypeApiModel> types) {
+    public void setTypes(Set<PartTypeApiModel> types) {
         this.types = types;
     }
 

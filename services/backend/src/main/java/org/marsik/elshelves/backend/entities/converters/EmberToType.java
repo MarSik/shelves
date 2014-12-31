@@ -1,9 +1,11 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Group;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 
 	@Autowired
 	EmberToGroup emberToGroup;
+
+	@Autowired
+	EmberToLot emberToLot;
 
 	@Override
 	public Type convert(PartTypeApiModel object, int nested, Map<UUID, Object> cache) {
@@ -59,6 +64,13 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 			model.setGroups(new THashSet<Group>());
 			for (PartGroupApiModel g : object.getGroups()) {
 				model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
+			}
+		}
+
+		if (object.getLots() != null) {
+			model.setLots(new THashSet<Lot>());
+			for (LotApiModel l: object.getLots()) {
+				model.getLots().add(emberToLot.convert(l, nested - 1, cache));
 			}
 		}
 

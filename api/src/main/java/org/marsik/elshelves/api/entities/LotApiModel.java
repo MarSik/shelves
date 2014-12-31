@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -33,7 +34,6 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("lot")
 public class LotApiModel extends AbstractEntityApiModel {
-    UUID id;
     Date created;
 	@Min(1)
     Long count;
@@ -43,7 +43,7 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	@NotNull
     LotApiModel previous;
-    List<LotApiModel> next;
+    Set<LotApiModel> next;
 
     UserApiModel belongsTo;
 
@@ -116,13 +116,13 @@ public class LotApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<LotApiModel> getNext() {
+    public Set<LotApiModel> getNext() {
         return next;
     }
 
     @JsonSetter
 	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
-    public void setNext(List<LotApiModel> next) {
+    public void setNext(Set<LotApiModel> next) {
         this.next = next;
     }
 

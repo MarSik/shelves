@@ -5,9 +5,14 @@ export default Ember.Route.extend({
         purchase: function (transaction) {
             var self = this;
             transaction.save().then(function (transaction) {
-                self.growl.info("Saved as "+transaction.get("id"));
+                // Delete the items that were saved using nested POST and ended up
+                // duplicated.
+                transaction.get('items').filterBy('isNew', true).forEach(function (item) {
+                    item.destroyRecord();
+                });
+                self.transitionTo('purchase.show', transaction);
             }).catch(function (reason) {
-                self.growl.error(reason);
+                console.log(reason);
             });
         }
     },

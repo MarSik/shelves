@@ -15,5 +15,13 @@ export default DS.Model.extend({
 
   fullName: function () {
       return this.get('name') + ' | ' + this.get('footprint.name') + ' | ' + this.get('vendor');
-  }.property('name', 'footprint.name', 'vendor')
+  }.property('name', 'footprint.name', 'vendor'),
+
+  available: function () {
+      var sum = 0;
+      this.get('lots').filterBy('next.length', 0).forEach(function (item, index) {
+          sum += item.get('count');
+      });
+      return sum;
+  }.property('lots.@each.count', 'lots.@each.next.length')
 });

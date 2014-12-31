@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setPrevious(convert(object.getPrevious(), nested - 1, cache));
 		entity.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
-		entity.setNext(new ArrayList<LotApiModel>());
+		entity.setNext(new THashSet<LotApiModel>());
 
 		if (object.getNext() != null) {
 			for (Lot l : object.getNext()) {

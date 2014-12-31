@@ -17,6 +17,9 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 	PurchaseToEmber purchaseToEmber;
 
 	@Autowired
+	SourceToEmber sourceToEmber;
+
+	@Autowired
 	UserToEmber userToEmber;
 
 	@Override
@@ -49,6 +52,7 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 		}
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+		model.setSource(sourceToEmber.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<PurchaseApiModel>());

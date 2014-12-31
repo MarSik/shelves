@@ -28,6 +28,9 @@ public class Type implements OwnedEntity {
 	@RelatedTo(type = "CONTAINS", direction = Direction.INCOMING)
 	Set<Group> groups;
 
+	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
+	Set<Lot> lots;
+
 	@Override
 	public UUID getUuid() {
 		return uuid;
@@ -94,5 +97,13 @@ public class Type implements OwnedEntity {
 
 	public void setGroups(Set<Group> groups) {
 		this.groups = groups;
+	}
+
+	public Set<Lot> getLots() {
+		return lots;
+	}
+
+	public void setLots(Set<Lot> lots) {
+		this.lots = lots;
 	}
 }

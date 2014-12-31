@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import org.apache.commons.beanutils.BeanUtils;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
@@ -85,7 +87,7 @@ public class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEn
     }
 
     public Collection<E> getAllItems(User currentUser) {
-        List<E> dtos = new ArrayList<>();
+        Set<E> dtos = new THashSet<>();
         Map<UUID, Object> cache = new THashMap<>();
         for (T entity: getAllEntities(currentUser)) {
             dtos.add(dbToRest.convert(entity, conversionDepth(), cache));

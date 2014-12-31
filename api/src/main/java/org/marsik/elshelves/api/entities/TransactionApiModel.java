@@ -12,13 +12,14 @@ import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("transaction")
 public class TransactionApiModel extends AbstractEntityApiModel {
 	String name;
 	Date date;
-	Collection<PurchaseApiModel> items;
+	Set<PurchaseApiModel> items;
 	UserApiModel belongsTo;
 
 	SourceApiModel source;
@@ -40,13 +41,13 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public Collection<PurchaseApiModel> getItems() {
+	public Set<PurchaseApiModel> getItems() {
 		return items;
 	}
 
 	@JsonSetter
 	@JsonDeserialize(contentUsing = PurchaseIdDeserializer.class)
-	public void setItems(Collection<PurchaseApiModel> items) {
+	public void setItems(Set<PurchaseApiModel> items) {
 		this.items = items;
 	}
 

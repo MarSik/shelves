@@ -4,6 +4,7 @@ import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.User;
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -13,8 +14,10 @@ import java.util.UUID;
 
 @NodeEntity
 public class Transaction implements OwnedEntity {
+	@Indexed
 	UUID uuid;
 
+	@Indexed
 	String name;
 	Date date;
 

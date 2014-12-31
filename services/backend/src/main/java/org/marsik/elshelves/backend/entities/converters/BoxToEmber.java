@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -23,7 +25,7 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 		model.setParent(convert(box.getParent(), 1, cache));
 
 		if (box.getContains() != null) {
-			List<BoxApiModel> boxes = new ArrayList<>();
+			Set<BoxApiModel> boxes = new THashSet<>();
 			for (Box b : box.getContains()) {
 				boxes.add(convert(b, 1, cache));
 			}

@@ -42,7 +42,11 @@ Router.map(function() {
     this.route("new");
   });
 
-  this.route("purchase");
+  this.resource("purchase", function () {
+      this.route("show", {
+          path: "/:transaction_id"
+      })
+  });
   this.route("account");
 
   this.resource("types", function() {

@@ -17,6 +17,7 @@ import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -29,8 +30,8 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	String vendorId;
 
     FootprintApiModel footprint;
-	List<PartGroupApiModel> groups;
-	List<LotApiModel> lots;
+	Set<PartGroupApiModel> groups;
+	Set<LotApiModel> lots;
 
     UserApiModel belongsTo;
 
@@ -63,13 +64,13 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public List<PartGroupApiModel> getGroups() {
+    public Set<PartGroupApiModel> getGroups() {
         return groups;
     }
 
 	@JsonSetter
 	@JsonDeserialize(contentUsing = PartGroupIdDeserializer.class)
-	public void setGroups(List<PartGroupApiModel> groups) {
+	public void setGroups(Set<PartGroupApiModel> groups) {
 		this.groups = groups;
 	}
 
@@ -109,13 +110,13 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public List<LotApiModel> getLots() {
+	public Set<LotApiModel> getLots() {
 		return lots;
 	}
 
 	@JsonSetter
 	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
-	public void setLots(List<LotApiModel> lots) {
+	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}
 }

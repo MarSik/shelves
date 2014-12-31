@@ -19,6 +19,9 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 	@Autowired
 	EmberToPurchase emberToPurchase;
 
+	@Autowired
+	EmberToSource emberToSource;
+
 	@Override
 	public Transaction convert(TransactionApiModel object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
@@ -50,6 +53,7 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 		}
 
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
+		model.setSource(emberToSource.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<Purchase>());

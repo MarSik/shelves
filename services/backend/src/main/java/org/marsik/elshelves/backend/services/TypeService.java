@@ -57,4 +57,9 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 
 		return super.relink(entity);
 	}
+
+	@Override
+	protected int conversionDepth() {
+		return 2;
+	}
 }
