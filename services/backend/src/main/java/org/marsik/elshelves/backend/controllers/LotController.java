@@ -34,15 +34,6 @@ public class LotController {
 	@Autowired
 	LotService lotService;
 
-	protected void sideload(EmberModel.Builder<LotApiModel> modelBuilder,
-							LotApiModel l) {
-		modelBuilder.sideLoad(l.getBelongsTo());
-		modelBuilder.sideLoad(l.getPerformedBy());
-		modelBuilder.sideLoad(l.getType());
-		modelBuilder.sideLoad(l.getLocation());
-		modelBuilder.sideLoad(l.getPrevious());
-	}
-
 	@ResponseBody
 	@RequestMapping
 	@Transactional
@@ -50,10 +41,6 @@ public class LotController {
 		Collection<LotApiModel> lots = lotService.getAll(currentUser);
 
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(lots);
-		for (LotApiModel l: lots) {
-			sideload(modelBuilder, l);
-		}
-
 		return modelBuilder.build();
 	}
 
@@ -64,7 +51,6 @@ public class LotController {
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		LotApiModel lot = lotService.get(id, currentUser);
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(lot);
-		sideload(modelBuilder, lot);
 		return modelBuilder.build();
 	}
 
@@ -75,9 +61,6 @@ public class LotController {
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		Iterable<LotApiModel> lots = lotService.getNext(id, currentUser);
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, lots);
-		for (LotApiModel l: lots) {
-			sideload(modelBuilder, l);
-		}
 		return modelBuilder.build();
 	}
 
@@ -88,7 +71,6 @@ public class LotController {
 							@RequestBody @Validated LotApiModel lot) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
 		LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser);
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
-		sideload(modelBuilder, result.getRemainder());
 		return modelBuilder.build();
 	}
 

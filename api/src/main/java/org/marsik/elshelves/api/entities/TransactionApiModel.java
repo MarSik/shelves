@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.PurchaseIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
@@ -19,9 +20,14 @@ import java.util.Set;
 public class TransactionApiModel extends AbstractEntityApiModel {
 	String name;
 	Date date;
+
+	@Sideload(asType = PurchaseApiModel.class)
 	Set<PurchaseApiModel> items;
+
+	@Sideload
 	UserApiModel belongsTo;
 
+	@Sideload
 	SourceApiModel source;
 
 	public String getName() {

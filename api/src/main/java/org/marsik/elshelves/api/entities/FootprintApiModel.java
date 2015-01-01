@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class FootprintApiModel extends AbstractEntityApiModel {
     Integer holes;
     Integer npth;
 
+	@Sideload
 	UserApiModel belongsTo;
 
     public String getName() {

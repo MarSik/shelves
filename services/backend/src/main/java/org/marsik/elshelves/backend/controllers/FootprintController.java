@@ -17,10 +17,4 @@ public class FootprintController extends AbstractRestController<Footprint, Footp
 	public FootprintController(FootprintService service) {
 		super(FootprintApiModel.class, service);
 	}
-
-	@Override
-	protected void sideLoad(FootprintApiModel dto, EmberModel.Builder<FootprintApiModel> builder) {
-		super.sideLoad(dto, builder);
-		builder.sideLoad(dto.getBelongsTo());
-	}
 }

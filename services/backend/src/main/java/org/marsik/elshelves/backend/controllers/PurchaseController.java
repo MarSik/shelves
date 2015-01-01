@@ -17,13 +17,4 @@ public class PurchaseController extends AbstractRestController<Purchase, Purchas
 	public PurchaseController(PurchaseService service) {
 		super(PurchaseApiModel.class, service);
 	}
-
-	@Override
-	protected void sideLoad(PurchaseApiModel dto, EmberModel.Builder<PurchaseApiModel> builder) {
-		builder.sideLoad(dto.getBelongsTo());
-		builder.sideLoad(dto.getLocation());
-		builder.sideLoad(dto.getPerformedBy());
-		builder.sideLoad(dto.getType());
-		super.sideLoad(dto, builder);
-	}
 }

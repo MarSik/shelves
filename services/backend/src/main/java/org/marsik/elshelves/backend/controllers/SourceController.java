@@ -23,13 +23,4 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 		super(SourceApiModel.class, service);
 		this.sourceService = service;
 	}
-
-	@Override
-	protected void sideLoad(SourceApiModel dto, EmberModel.Builder<SourceApiModel> builder) {
-		super.sideLoad(dto, builder);
-
-		if (dto.getBelongsTo() != null) {
-			builder.sideLoad(dto.getBelongsTo());
-		}
-	}
 }

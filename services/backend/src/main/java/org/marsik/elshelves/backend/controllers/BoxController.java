@@ -36,33 +36,6 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
         this.boxService = boxService;
     }
 
-    @Override
-    protected void sideLoad(BoxApiModel dto, EmberModel.Builder<BoxApiModel> builder) {
-        if (dto.getBoxes() != null) {
-            builder.sideLoad(BoxApiModel.class, dto.getBoxes());
-        }
-
-        if (dto.getLots() != null) {
-            builder.sideLoad(LotApiModel.class, dto.getLots());
-
-			for (LotApiModel lot: dto.getLots()) {
-				if (lot.getType() != null) {
-					builder.sideLoad(lot.getType());
-				}
-			}
-        }
-
-        if (dto.getParent() != null) {
-            builder.sideLoad(dto.getParent());
-        }
-
-        if (dto.getBelongsTo() != null) {
-            builder.sideLoad(dto.getBelongsTo());
-        }
-
-		super.sideLoad(dto, builder);
-    }
-
 	@Transactional
 	@RequestMapping(value = "/{uuid}/boxes")
 	public EmberModel getNestedBoxes(@CurrentUser User currentUser,

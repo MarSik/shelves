@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.EmberIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.FootprintIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
@@ -29,10 +30,12 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	String vendor;
 	String vendorId;
 
+	@Sideload
     FootprintApiModel footprint;
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
 
+	@Sideload
     UserApiModel belongsTo;
 
     @Override

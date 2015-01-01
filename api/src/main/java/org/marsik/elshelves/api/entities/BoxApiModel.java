@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
@@ -28,8 +29,12 @@ public class BoxApiModel extends AbstractEntityApiModel {
 
     Set<LotApiModel> lots;
 
+	@Sideload
     UserApiModel belongsTo;
+
+	@Sideload
     BoxApiModel parent;
+
     Set<BoxApiModel> boxes;
 
     @Override

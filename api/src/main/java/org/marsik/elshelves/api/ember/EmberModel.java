@@ -5,6 +5,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.atteo.evo.inflector.English;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,25 +26,29 @@ public final class EmberModel extends HashMap<String, Object> {
         private final String payloadName;
         private final Object payload;
 
+		// used to avoid recursion during sideloading
+		private final Set<Object> knownObjects = new THashSet<>();
+
         public Builder(final Object entity) {
             payload = entity;
             payloadName = getSingularName(entity.getClass());
-        }
 
-        public Builder(final Class<T> clazz, final Collection<T> entities) {
-            payload = entities;
-            payloadName = getPluralName(clazz);
+			knownObjects.add(entity);
+			implicitSideloader(entity);
         }
 
 		public Builder(final Class<T> clazz, final Iterable<T> entities) {
 			payload = entities;
 			payloadName = getPluralName(clazz);
-		}
 
-		public Builder(final String rootName, final Collection<?> entities) {
-            payload = entities;
-            payloadName = English.plural(rootName);
-        }
+			for (T entity: entities) {
+				knownObjects.add(entity);
+			}
+
+			for (T entity: entities) {
+				implicitSideloader(entity);
+			}
+		}
 
         public Builder<T> addMeta(final String key, final Object value) {
             metaData.put(key, value);
@@ -70,27 +75,71 @@ public final class EmberModel extends HashMap<String, Object> {
 
         public Builder<T> sideLoad(final Object entity) {
             if (entity != null) {
-                Collection<Object> bucket = getSideLoadingBucket(entity.getClass());
+				if (knownObjects.contains(entity)) {
+					return this;
+				}
+
+				Collection<Object> bucket = getSideLoadingBucket(entity.getClass());
                 bucket.add(entity);
+				knownObjects.add(entity);
+				implicitSideloader(entity);
             }
             return this;
         }
 
-        public <K> Builder<T> sideLoad(final Class<K> clazz, final Collection<K> entities) {
-            if (entities != null) {
-                Collection<Object> bucket = getSideLoadingBucket(clazz);
-                bucket.addAll(entities);
-            }
-            return this;
-        }
+		public <K> Builder<T> sideLoad(final Class<K> clazz, final Iterable<K> entities) {
+			if (entities != null) {
+				Collection<Object> bucket = getSideLoadingBucket(clazz);
+				for (K item: entities) {
+					if (knownObjects.contains(item)) {
+						continue;
+					}
 
-        public Builder<T> sideLoad(final String rootName, final Collection<?> entities) {
+					bucket.add(item);
+					knownObjects.add(item);
+					implicitSideloader(item);
+				}
+			}
+			return this;
+		}
+
+        public <K> Builder<T> sideLoad(final String rootName, final Iterable<K> entities) {
             if (entities != null) {
                 Collection<Object> bucket = getSideLoadingBucket(rootName);
-                bucket.addAll(entities);
+				for (K item: entities) {
+					if (knownObjects.contains(item)) {
+						continue;
+					}
+
+					bucket.add(item);
+					knownObjects.add(item);
+					implicitSideloader(item);
+				}
             }
             return this;
         }
+
+		public void implicitSideloader(Object entity) {
+			for (Field f: entity.getClass().getDeclaredFields()) {
+				Sideload sideload = f.getAnnotation(Sideload.class);
+				if (sideload != null) {
+					if (!sideload.asType().equals(None.class)
+							&& Iterable.class.isAssignableFrom(f.getType())) {
+						try {
+							sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)f.get(entity));
+						} catch (IllegalAccessException ex) {
+							ex.printStackTrace();
+						}
+					} else {
+						try {
+							sideLoad(f.get(entity));
+						} catch (IllegalAccessException ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 
         private String getSingularName(final Class<?> clazz) {
             if (clazz.isAnnotationPresent(EmberModelName.class)) {

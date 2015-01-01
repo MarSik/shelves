@@ -19,12 +19,4 @@ public class TransactionController extends AbstractRestController<Transaction, T
 	public TransactionController(TransactionService service) {
 		super(TransactionApiModel.class, service);
 	}
-
-	@Override
-	protected void sideLoad(TransactionApiModel dto, EmberModel.Builder<TransactionApiModel> builder) {
-		builder.sideLoad(PurchaseApiModel.class, dto.getItems());
-		builder.sideLoad(dto.getBelongsTo());
-		builder.sideLoad(dto.getSource());
-		super.sideLoad(dto, builder);
-	}
 }

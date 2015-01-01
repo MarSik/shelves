@@ -12,6 +12,7 @@ export default DS.Model.extend({
   boxes: hasMany("box", {async: true, inverse: "parent"}),
   code: belongsTo("code", {async: true}),
   belongsTo: belongsTo("user", {async: true}),
+
   children: function() {
       return this.get('boxes');
   }.property('boxes'),

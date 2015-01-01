@@ -11,7 +11,7 @@ export default DS.Model.extend({
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
     groups: hasMany("group", {inverse: "parent", async: true}),
-    belongsTo: belongsTo("user", {async: true}),
+    belongsTo: belongsTo("user"),
 
     children: function() {
         return this.get('groups');

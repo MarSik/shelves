@@ -2,13 +2,13 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
@@ -18,7 +18,6 @@ import org.marsik.elshelves.api.entities.fields.LotAction;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -38,16 +37,23 @@ public class LotApiModel extends AbstractEntityApiModel {
 	@Min(1)
     Long count;
 
+	@Sideload
     PartTypeApiModel type;
+
+	@Sideload
     BoxApiModel location;
 
+	@Sideload
 	@NotNull
     LotApiModel previous;
     Set<LotApiModel> next;
 
+	@Sideload
     UserApiModel belongsTo;
 
 	LotAction action;
+
+	@Sideload
 	UserApiModel performedBy;
 
     @Override

@@ -13,7 +13,7 @@ export default DS.Model.extend({
 
   previous: belongsTo("lot", {inverse: "next", async: true}),
   next: hasMany("lot", {inverse: "previous", async: true}),
-  belongsTo: belongsTo("user", {async: true}),
+  belongsTo: belongsTo("user"),
 
   action: attr(),
   performedBy: belongsTo('user', {inverse: null})

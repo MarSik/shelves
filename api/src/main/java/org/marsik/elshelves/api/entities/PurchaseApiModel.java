@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.TransactionIdDeserializer;
 
@@ -23,6 +24,7 @@ public class PurchaseApiModel extends LotApiModel {
     Double vat;
     Boolean vatIncluded;
 
+	@Sideload
 	TransactionApiModel transaction;
 
     public Double getSinglePrice() {

@@ -28,12 +28,6 @@ public class GroupController extends AbstractRestController<Group, PartGroupApiM
 		super(PartGroupApiModel.class, service);
 	}
 
-	@Override
-	protected void sideLoad(PartGroupApiModel dto, EmberModel.Builder<PartGroupApiModel> builder) {
-		super.sideLoad(dto, builder);
-		builder.sideLoad(dto.getBelongsTo());
-	}
-
 	@RequestMapping("{uuid}/types")
 	@ResponseBody
 	@Transactional
