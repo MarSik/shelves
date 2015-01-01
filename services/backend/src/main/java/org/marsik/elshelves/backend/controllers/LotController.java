@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.controllers;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import net.glxn.qrgen.core.image.ImageType;
+import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -68,7 +74,7 @@ public class LotController {
 	public EmberModel getNext(@CurrentUser User currentUser,
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		Iterable<LotApiModel> lots = lotService.getNext(id, currentUser);
-		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(lots);
+		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, lots);
 		for (LotApiModel l: lots) {
 			sideload(modelBuilder, l);
 		}
@@ -84,5 +90,27 @@ public class LotController {
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
 		sideload(modelBuilder, result.getRemainder());
 		return modelBuilder.build();
+	}
+
+	@Transactional
+	@RequestMapping(value = "/{uuid}/qr", produces = "image/png")
+	public void generateQr(HttpServletResponse response,
+						   @CurrentUser User currentUser,
+						   @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
+		LotApiModel lot = lotService.get(uuid, currentUser);
+
+		response.setContentType("image/jpg");
+		response.setHeader("Content-Disposition", "attachment; filename=" + lot.getType().getName() + "-" + lot.getId().toString() + ".png");
+
+		ByteArrayOutputStream os = QRCode
+				.from("shv://lots/" + uuid.toString())
+				.withSize(250, 250)
+				.withErrorCorrection(ErrorCorrectionLevel.M)
+				.to(ImageType.PNG)
+				.withCharset("utf-8")
+				.stream();
+
+		response.getOutputStream().write(os.toByteArray());
+		response.flushBuffer();
 	}
 }

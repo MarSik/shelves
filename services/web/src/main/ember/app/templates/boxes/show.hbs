@@ -1,0 +1,12 @@
+<h3>{{fullName}}</h3>
+
+<table>
+{{#each lot in lots}}
+    <tr {{action 'showQr' 'lots' lot on='mouseEnter'}}>
+        <td>{{lot.type.name}}</td>
+        <td>{{lot.type.vendor}}</td>
+        <td>{{lot.type.footprint.name}}</td>
+        <td>{{lot.count}}</td>
+    </tr>
+{{/each}}
+</table>

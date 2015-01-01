@@ -37,11 +37,19 @@ export default Ember.ArrayController.extend({
         },
         selectBox: function(box) {
             this.set('selectedBox', box);
+            return true;
         },
         hoverBox: function(box) {
             this.set('selectedBox', box);
         }
     },
     sortProperties: ['name'],
-    sortAscending: true
+    sortAscending: true,
+    updateQr: function() {
+        if (!Ember.isEmpty(this.get('selectedBox'))) {
+            this.send('showQr', 'boxes', this.get('selectedBox'));
+        } else {
+            this.send('hideQr');
+        }
+    }.observes('selectedBox')
 });

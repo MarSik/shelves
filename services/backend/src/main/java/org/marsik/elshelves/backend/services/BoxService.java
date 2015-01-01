@@ -29,7 +29,7 @@ public class BoxService extends AbstractRestService<BoxRepository, Box, BoxApiMo
 
 	@Override
 	protected int conversionDepth() {
-		return 2;
+		return 3;
 	}
 
 	@Override

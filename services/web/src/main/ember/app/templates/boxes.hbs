@@ -2,8 +2,8 @@
 
 <button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}}</button>
 
-{{#if selectedBox}}
-<nav class="qr">{{view 'entity-qr' models='boxes' entity=selectedBox size=200}}</nav>
+{{#if qrEntity}}
+<nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
 {{/if}}
 
 <ul>

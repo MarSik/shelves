@@ -44,6 +44,12 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
 
         if (dto.getLots() != null) {
             builder.sideLoad(LotApiModel.class, dto.getLots());
+
+			for (LotApiModel lot: dto.getLots()) {
+				if (lot.getType() != null) {
+					builder.sideLoad(lot.getType());
+				}
+			}
         }
 
         if (dto.getParent() != null) {
@@ -53,6 +59,8 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
         if (dto.getBelongsTo() != null) {
             builder.sideLoad(dto.getBelongsTo());
         }
+
+		super.sideLoad(dto, builder);
     }
 
 	@Transactional
@@ -104,6 +112,7 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
 			builder.sideLoad(t.getLocation());
 			builder.sideLoad(t.getPerformedBy());
 			builder.sideLoad(t.getPrevious());
+			builder.sideLoad(t.getType());
 		}
 
 		return builder.build();
