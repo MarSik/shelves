@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
+import org.marsik.elshelves.api.entities.deserializers.DocumentIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
+import java.util.Set;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -24,6 +26,9 @@ public class FootprintApiModel extends AbstractEntityApiModel {
 
 	@Sideload
 	UserApiModel belongsTo;
+
+	@Sideload
+	Set<DocumentApiModel> describedBy;
 
     public String getName() {
         return name;
@@ -74,5 +79,16 @@ public class FootprintApiModel extends AbstractEntityApiModel {
 	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public Set<DocumentApiModel> getDescribedBy() {
+		return describedBy;
+	}
+
+	@JsonSetter
+	@JsonDeserialize(contentUsing = DocumentIdDeserializer.class)
+	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
+		this.describedBy = describedBy;
 	}
 }

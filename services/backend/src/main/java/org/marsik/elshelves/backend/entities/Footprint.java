@@ -5,6 +5,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
@@ -32,6 +33,10 @@ public class Footprint implements OwnedEntity {
 	 * Number of non-plated holes
 	 */
 	Integer npth;
+
+
+	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
+	Set<Document> describedBy;
 
 	@Override
 	public UUID getUuid() {
@@ -91,5 +96,13 @@ public class Footprint implements OwnedEntity {
 
 	public void setNpth(Integer npth) {
 		this.npth = npth;
+	}
+
+	public Set<Document> getDescribedBy() {
+		return describedBy;
+	}
+
+	public void setDescribedBy(Set<Document> describedBy) {
+		this.describedBy = describedBy;
 	}
 }

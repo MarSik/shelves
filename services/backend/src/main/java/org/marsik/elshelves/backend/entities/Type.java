@@ -31,6 +31,9 @@ public class Type implements OwnedEntity {
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
 	Set<Lot> lots;
 
+	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
+	Set<Document> describedBy;
+
 	@Override
 	public UUID getUuid() {
 		return uuid;
@@ -105,5 +108,13 @@ public class Type implements OwnedEntity {
 
 	public void setLots(Set<Lot> lots) {
 		this.lots = lots;
+	}
+
+	public Set<Document> getDescribedBy() {
+		return describedBy;
+	}
+
+	public void setDescribedBy(Set<Document> describedBy) {
+		this.describedBy = describedBy;
 	}
 }

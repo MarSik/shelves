@@ -5,5 +5,8 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
     name: attr('string'),
+    contentType: attr('string'),
+    size: attr('number'),
+    created: attr('date'),
     belongsTo: belongsTo('user')
 });

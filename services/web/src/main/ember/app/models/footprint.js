@@ -12,5 +12,6 @@ export default DS.Model.extend({
   holes: attr("number"),
   npth: attr("number", {defaultValue: 0}),
   pitch: attr(),
+  describedBy: hasMany("document"),
   belongsTo: belongsTo('user')
 });

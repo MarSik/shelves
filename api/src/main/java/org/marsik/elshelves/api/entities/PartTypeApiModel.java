@@ -10,6 +10,7 @@ import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
+import org.marsik.elshelves.api.entities.deserializers.DocumentIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.EmberIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.FootprintIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
@@ -37,6 +38,9 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 
 	@Sideload
     UserApiModel belongsTo;
+
+	@Sideload
+	Set<DocumentApiModel> describedBy;
 
     @Override
     @EmberIgnore
@@ -121,5 +125,16 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public Set<DocumentApiModel> getDescribedBy() {
+		return describedBy;
+	}
+
+	@JsonSetter
+	@JsonDeserialize(contentUsing = DocumentIdDeserializer.class)
+	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
+		this.describedBy = describedBy;
 	}
 }
