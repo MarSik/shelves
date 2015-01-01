@@ -5,10 +5,16 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.atteo.evo.inflector.English;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -120,22 +126,49 @@ public final class EmberModel extends HashMap<String, Object> {
         }
 
 		public void implicitSideloader(Object entity) {
-			for (Field f: entity.getClass().getDeclaredFields()) {
-				Sideload sideload = f.getAnnotation(Sideload.class);
-				if (sideload != null) {
-					if (!sideload.asType().equals(None.class)
-							&& Iterable.class.isAssignableFrom(f.getType())) {
-						try {
-							sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)f.get(entity));
-						} catch (IllegalAccessException ex) {
-							ex.printStackTrace();
-						}
-					} else {
-						try {
-							sideLoad(f.get(entity));
-						} catch (IllegalAccessException ex) {
-							ex.printStackTrace();
-						}
+			PropertyDescriptor[] properties;
+			try {
+				properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
+			} catch (IntrospectionException ex) {
+				ex.printStackTrace();
+				return;
+			}
+
+			for (PropertyDescriptor f: properties) {
+				Method getter = f.getReadMethod();
+				if (getter == null) {
+					continue;
+				}
+
+				// check the getter annotation
+				Sideload sideload = getter.getAnnotation(Sideload.class);
+
+				// and the field annotation as a fallback
+				if (sideload == null) {
+					try {
+						sideload = entity.getClass().getDeclaredField(f.getName()).getAnnotation(Sideload.class);
+					} catch (NoSuchFieldException ex) {
+						// Ignore, can happen for getter only elements
+					}
+				}
+
+				// Ignore fields without Sideload annotation
+				if (sideload == null) {
+					continue;
+				}
+
+				if (!sideload.asType().equals(None.class)
+						&& Iterable.class.isAssignableFrom(f.getPropertyType())) {
+					try {
+						sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)getter.invoke(entity));
+					} catch (IllegalAccessException|InvocationTargetException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					try {
+						sideLoad(getter.invoke(entity));
+					} catch (IllegalAccessException|InvocationTargetException ex) {
+						ex.printStackTrace();
 					}
 				}
 			}
