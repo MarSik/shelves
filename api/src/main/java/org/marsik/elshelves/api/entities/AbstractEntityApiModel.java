@@ -32,13 +32,13 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
 
         AbstractEntityApiModel that = (AbstractEntityApiModel) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id == null || that.id == null) return false;
 
-        return true;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return id != null ? id.hashCode() : System.identityHashCode(this);
     }
 }

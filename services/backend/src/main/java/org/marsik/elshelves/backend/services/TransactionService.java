@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Box;
+import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
@@ -73,6 +74,6 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 	@Override
 	protected int conversionDepth() {
-		return 2;
+		return 3;
 	}
 }
