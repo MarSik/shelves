@@ -1,0 +1,58 @@
+<section class="purchase">
+    <h2>Purchase</h2>
+
+    <label for="source">
+        Source:
+    </label>
+    <div>
+        {{model.source.name}}
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th colspan="4">Box</th>
+        </tr>
+        <tr>
+            <th>SKU</th>
+            <th>Cnt.</th>
+            <th>Price</th>
+            <th>w/</th>
+            <th>Vat %</th>
+        </tr>
+        </thead>
+        {{#each purchase in model.items}}
+        <tbody>
+        <tr>
+            <td>
+                {{purchase.type.name}}
+            </td>
+            <td colspan="4">
+                {{purchase.location.fullName}}
+            </td>
+        </tr>
+        <tr>
+            <td class="sku">
+                {{purchase.sku}}
+            </td>
+            <td class="count">
+                {{purchase.count}}
+            </td>
+            <td class="price">
+                {{purchase.singlePrice}}
+            </td>
+            <td class="vat-included">
+                {{purchase.vatIncluded}}
+            </td>
+            <td class="vat">
+                {{purchase.vat}}
+            </td>
+        </tr>
+        </tbody>
+        {{/each}}
+    </table>
+
+</section>
+
+{{outlet}}
