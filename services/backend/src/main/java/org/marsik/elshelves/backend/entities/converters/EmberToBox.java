@@ -13,6 +13,9 @@ public class EmberToBox implements CachingConverter<BoxApiModel, Box, UUID> {
     @Autowired
     EmberToUser emberToUser;
 
+	@Autowired
+	EmberToNamedObject emberToNamedObject;
+
     @Override
     public Box convert(BoxApiModel object, int nested, Map<UUID, Object> cache) {
         if (object == null) {
@@ -35,10 +38,8 @@ public class EmberToBox implements CachingConverter<BoxApiModel, Box, UUID> {
 
 	@Override
 	public Box convert(BoxApiModel object, Box box, int nested, Map<UUID, Object> cache) {
-		box.setName(object.getName());
-		box.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
+		emberToNamedObject.convert(object, box, nested, cache);
 		box.setParent(convert(object.getParent(), 1, cache));
-		box.setUuid(object.getId());
 
 		return box;
 	}

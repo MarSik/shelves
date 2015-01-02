@@ -52,19 +52,4 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 
 		return super.updateEntity(entity, dto);
 	}
-
-	@Override
-	protected Purchase relink(Purchase entity) {
-		if (entity.getTransaction() != null) {
-			Transaction transaction = transactionRepository.getTransactionByUuid(entity.getTransaction().getUuid());
-			entity.setTransaction(transaction);
-		}
-
-		if (entity.getType() != null) {
-			Type type = typeRepository.getTypeByUuid(entity.getType().getUuid());
-			entity.setType(type);
-		}
-
-		return super.relink(entity);
-	}
 }

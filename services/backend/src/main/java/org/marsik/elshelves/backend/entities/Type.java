@@ -9,14 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Type implements OwnedEntity {
-	@Indexed
-	UUID uuid;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
-
-	String name;
+public class Type extends NamedObject {
 	String description;
 
 	String vendor;
@@ -30,37 +23,6 @@ public class Type implements OwnedEntity {
 
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
 	Set<Lot> lots;
-
-	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
-	Set<Document> describedBy;
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getDescription() {
 		return description;
@@ -108,13 +70,5 @@ public class Type implements OwnedEntity {
 
 	public void setLots(Set<Lot> lots) {
 		this.lots = lots;
-	}
-
-	public Set<Document> getDescribedBy() {
-		return describedBy;
-	}
-
-	public void setDescribedBy(Set<Document> describedBy) {
-		this.describedBy = describedBy;
 	}
 }

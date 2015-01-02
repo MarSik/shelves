@@ -19,9 +19,6 @@ import java.util.UUID;
 @Service
 public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUID> {
 	@Autowired
-	UserToEmber userToEmber;
-
-	@Autowired
 	GroupToEmber groupToEmber;
 
 	@Autowired
@@ -31,7 +28,7 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 	LotToEmber lotToEmber;
 
 	@Autowired
-	DocumentToEmber documentToEmber;
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Override
 	public PartTypeApiModel convert(Type object, int nested, Map<UUID, Object> cache) {
@@ -53,8 +50,7 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 
 	@Override
 	public PartTypeApiModel convert(Type object, PartTypeApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setName(object.getName());
-		model.setId(object.getUuid());
+		namedObjectToEmber.convert(object, model, nested, cache);
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
@@ -63,7 +59,6 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 			return model;
 		}
 
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 		model.setFootprint(footprintToEmber.convert(object.getFootprint(), nested - 1, cache));
 
 		if (object.getGroups() != null) {
@@ -77,13 +72,6 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 			model.setLots(new THashSet<LotApiModel>());
 			for (Lot l: object.getLots()) {
 				model.getLots().add(lotToEmber.convert(l, nested - 1, cache));
-			}
-		}
-
-		if (object.getDescribedBy() != null) {
-			model.setDescribedBy(new THashSet<DocumentApiModel>());
-			for (Document d : object.getDescribedBy()) {
-				model.getDescribedBy().add(documentToEmber.convert(d, nested - 1, cache));
 			}
 		}
 

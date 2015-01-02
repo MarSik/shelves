@@ -14,10 +14,7 @@ import java.util.UUID;
 @Service
 public class EmberToFootprint implements CachingConverter<FootprintApiModel, Footprint, UUID> {
 	@Autowired
-	EmberToUser emberToUser;
-
-	@Autowired
-	EmberToDocument emberToDocument;
+	EmberToNamedObject emberToNamedObject;
 
 	@Override
 	public Footprint convert(FootprintApiModel object, int nested, Map<UUID, Object> cache) {
@@ -41,20 +38,12 @@ public class EmberToFootprint implements CachingConverter<FootprintApiModel, Foo
 
 	@Override
 	public Footprint convert(FootprintApiModel object, Footprint model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
-		model.setName(object.getName());
+		emberToNamedObject.convert(object, model, nested, cache);
+
 		model.setHoles(object.getHoles());
 		model.setNpth(object.getNpth());
 		model.setPads(object.getPads());
 		model.setKicad(object.getKicad());
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
-
-		if (object.getDescribedBy() != null) {
-			model.setDescribedBy(new THashSet<Document>());
-			for (DocumentApiModel d : object.getDescribedBy()) {
-				model.getDescribedBy().add(emberToDocument.convert(d, 1, cache));
-			}
-		}
 
 		return model;
 	}

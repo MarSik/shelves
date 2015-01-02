@@ -2,19 +2,25 @@ package org.marsik.elshelves.backend.entities;
 
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by msivak on 1/1/15.
- */
+@NodeEntity
 public class NamedObject implements OwnedEntity {
 	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
 	User owner;
+
 	@Indexed
 	UUID uuid;
+
+	@Indexed
 	String name;
+
+	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
+	Set<Document> describedBy;
 
 	@Override
 	public User getOwner() {
@@ -42,5 +48,13 @@ public class NamedObject implements OwnedEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Set<Document> getDescribedBy() {
+		return describedBy;
+	}
+
+	public void setDescribedBy(Set<Document> describedBy) {
+		this.describedBy = describedBy;
 	}
 }

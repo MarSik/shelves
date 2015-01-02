@@ -14,10 +14,7 @@ import java.util.UUID;
 @Service
 public class FootprintToEmber implements CachingConverter<Footprint, FootprintApiModel, UUID> {
 	@Autowired
-	UserToEmber userToEmber;
-
-	@Autowired
-	DocumentToEmber documentToEmber;
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Override
 	public FootprintApiModel convert(Footprint object, int nested, Map<UUID, Object> cache) {
@@ -39,26 +36,11 @@ public class FootprintToEmber implements CachingConverter<Footprint, FootprintAp
 
 	@Override
 	public FootprintApiModel convert(Footprint object, FootprintApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setName(object.getName());
-		model.setId(object.getUuid());
+		namedObjectToEmber.convert(object, model, nested, cache);
 		model.setHoles(object.getHoles());
 		model.setPads(object.getPads());
 		model.setNpth(object.getNpth());
 		model.setKicad(object.getKicad());
-
-		if (nested == 0) {
-			return model;
-		}
-
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
-
-
-		if (object.getDescribedBy() != null) {
-			model.setDescribedBy(new THashSet<DocumentApiModel>());
-			for (Document d : object.getDescribedBy()) {
-				model.getDescribedBy().add(documentToEmber.convert(d, nested - 1, cache));
-			}
-		}
 
 		return model;
 	}

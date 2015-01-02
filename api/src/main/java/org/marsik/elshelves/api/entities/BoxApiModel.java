@@ -22,15 +22,10 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("box")
-public class BoxApiModel extends AbstractEntityApiModel {
-    @NotNull
-    String name;
+public class BoxApiModel extends AbstractNamedEntityApiModel {
     CodeApiModel code;
 
     Set<LotApiModel> lots;
-
-	@Sideload
-    UserApiModel belongsTo;
 
 	@Sideload
     BoxApiModel parent;
@@ -40,18 +35,10 @@ public class BoxApiModel extends AbstractEntityApiModel {
     @Override
     @EmberIgnore
     public Map<String, String> getLinks() {
-        Map<String, String> links = new THashMap<String, String>();
+        Map<String, String> links = super.getLinks();
         links.put("lots", "lots");
 		links.put("boxes", "boxes");
         return links;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -103,14 +90,4 @@ public class BoxApiModel extends AbstractEntityApiModel {
         this.code.setId(code);
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public UserApiModel getBelongsTo() {
-        return belongsTo;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-    public void setBelongsTo(UserApiModel belongsTo) {
-        this.belongsTo = belongsTo;
-    }
 }

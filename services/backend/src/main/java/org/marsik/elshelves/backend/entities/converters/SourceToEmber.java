@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class SourceToEmber implements CachingConverter<Source, SourceApiModel, UUID> {
 	@Autowired
-	UserToEmber userToEmber;
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Override
 	public SourceApiModel convert(Source object, int nested, Map<UUID, Object> cache) {
@@ -33,15 +33,8 @@ public class SourceToEmber implements CachingConverter<Source, SourceApiModel, U
 
 	@Override
 	public SourceApiModel convert(Source object, SourceApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setName(object.getName());
+		namedObjectToEmber.convert(object, model, nested, cache);
 		model.setUrl(object.getUrl());
-		model.setId(object.getUuid());
-
-		if (nested == 0) {
-			return model;
-		}
-
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		return model;
 	}

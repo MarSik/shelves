@@ -11,20 +11,8 @@ import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("source")
-public class SourceApiModel extends AbstractEntityApiModel {
-	String name;
+public class SourceApiModel extends AbstractNamedEntityApiModel {
 	String url;
-
-	@Sideload
-	UserApiModel belongsTo;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getUrl() {
 		return url;
@@ -32,16 +20,5 @@ public class SourceApiModel extends AbstractEntityApiModel {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
-	}
-
-	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-	public void setBelongsTo(UserApiModel belongsTo) {
-		this.belongsTo = belongsTo;
 	}
 }

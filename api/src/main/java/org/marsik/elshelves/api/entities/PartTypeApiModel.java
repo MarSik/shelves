@@ -24,8 +24,7 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("type")
-public class PartTypeApiModel extends AbstractEntityApiModel {
-    String name;
+public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     String description;
 
 	String vendor;
@@ -36,27 +35,13 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
 
-	@Sideload
-    UserApiModel belongsTo;
-
-	@Sideload
-	Set<DocumentApiModel> describedBy;
-
     @Override
     @EmberIgnore
     public Map<String, String> getLinks() {
-        Map<String, String> links = new THashMap<String, String>();
+        Map<String, String> links = super.getLinks();
         links.put("groups", "groups");
 		links.put("lots", "lots");
         return links;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -80,17 +65,6 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	public void setGroups(Set<PartGroupApiModel> groups) {
 		this.groups = groups;
 	}
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public UserApiModel getBelongsTo() {
-        return belongsTo;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-    public void setBelongsTo(UserApiModel belongsTo) {
-        this.belongsTo = belongsTo;
-    }
 
     public String getDescription() {
         return description;
@@ -125,16 +99,5 @@ public class PartTypeApiModel extends AbstractEntityApiModel {
 	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<DocumentApiModel> getDescribedBy() {
-		return describedBy;
-	}
-
-	@JsonSetter
-	@JsonDeserialize(contentUsing = DocumentIdDeserializer.class)
-	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
-		this.describedBy = describedBy;
 	}
 }

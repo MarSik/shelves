@@ -34,31 +34,6 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 	}
 
 	@Override
-	protected Type relink(Type entity) {
-		if (entity.getFootprint() != null) {
-			Footprint fp = footprintRepository.getFootprintByUuid(entity.getFootprint().getUuid());
-			entity.setFootprint(fp);
-		}
-
-		if (entity.getGroups() != null) {
-			Set<Group> groups = new THashSet<>();
-			for (Group g: entity.getGroups()) {
-				if (g.getUuid() == null) {
-					groups.add(g);
-					continue;
-				}
-				Group ng = groupRepository.getGroupByUuid(g.getUuid());
-				groups.add(ng);
-			}
-
-			entity.getGroups().clear();
-			entity.getGroups().addAll(groups);
-		}
-
-		return super.relink(entity);
-	}
-
-	@Override
 	protected int conversionDepth() {
 		return 2;
 	}

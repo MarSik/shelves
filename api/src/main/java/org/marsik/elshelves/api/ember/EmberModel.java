@@ -146,7 +146,7 @@ public final class EmberModel extends HashMap<String, Object> {
 				// and the field annotation as a fallback
 				if (sideload == null) {
 					try {
-						sideload = entity.getClass().getDeclaredField(f.getName()).getAnnotation(Sideload.class);
+						sideload = getter.getDeclaringClass().getDeclaredField(f.getName()).getAnnotation(Sideload.class);
 					} catch (NoSuchFieldException ex) {
 						// Ignore, can happen for getter only elements
 					}

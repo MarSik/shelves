@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, UUID> {
 	@Autowired
-	UserToEmber userToEmber;
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Autowired
 	TypeToEmber typeToEmber;
@@ -41,14 +41,12 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 
 	@Override
 	public PartGroupApiModel convert(Group object, PartGroupApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setName(object.getName());
-		model.setId(object.getUuid());
+		namedObjectToEmber.convert(object, model, nested, cache);
 
 		if (nested == 0) {
 			return model;
 		}
 
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 		model.setParent(convert(object.getParent(), nested - 1, cache));
 
 		if (object.getGroups() != null) {

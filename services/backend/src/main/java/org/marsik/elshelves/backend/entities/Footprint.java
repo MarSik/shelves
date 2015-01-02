@@ -9,14 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Footprint implements OwnedEntity {
-	@Indexed
-	UUID uuid;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
-
-	String name;
+public class Footprint extends NamedObject {
 	String kicad;
 
 	/**
@@ -33,38 +26,6 @@ public class Footprint implements OwnedEntity {
 	 * Number of non-plated holes
 	 */
 	Integer npth;
-
-
-	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
-	Set<Document> describedBy;
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getKicad() {
 		return kicad;
@@ -96,13 +57,5 @@ public class Footprint implements OwnedEntity {
 
 	public void setNpth(Integer npth) {
 		this.npth = npth;
-	}
-
-	public Set<Document> getDescribedBy() {
-		return describedBy;
-	}
-
-	public void setDescribedBy(Set<Document> describedBy) {
-		this.describedBy = describedBy;
 	}
 }

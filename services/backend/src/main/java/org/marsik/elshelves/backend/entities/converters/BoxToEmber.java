@@ -22,17 +22,18 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 	@Autowired
 	LotToEmber lotToEmber;
 
+	@Autowired
+	NamedObjectToEmber namedObjectToEmber;
+
 	@Override
 	public BoxApiModel convert(Box box, BoxApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(box.getUuid());
-		model.setName(box.getName());
+		namedObjectToEmber.convert(box, model, nested, cache);
 
 		if (nested == 0) {
 			return model;
 		}
 
 		model.setParent(convert(box.getParent(), nested - 1, cache));
-		model.setBelongsTo(userToEmber.convert(box.getOwner(), nested - 1, cache));
 
 		if (box.getContains() != null) {
 			Set<BoxApiModel> boxes = new THashSet<>();

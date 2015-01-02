@@ -16,27 +16,12 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("footprint")
-public class FootprintApiModel extends AbstractEntityApiModel {
-    String name;
+public class FootprintApiModel extends AbstractNamedEntityApiModel {
     String kicad;
 
     Integer pads;
     Integer holes;
     Integer npth;
-
-	@Sideload
-	UserApiModel belongsTo;
-
-	@Sideload
-	Set<DocumentApiModel> describedBy;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getKicad() {
         return kicad;
@@ -69,26 +54,4 @@ public class FootprintApiModel extends AbstractEntityApiModel {
     public void setNpth(Integer npth) {
         this.npth = npth;
     }
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
-	}
-
-	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-	public void setBelongsTo(UserApiModel belongsTo) {
-		this.belongsTo = belongsTo;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<DocumentApiModel> getDescribedBy() {
-		return describedBy;
-	}
-
-	@JsonSetter
-	@JsonDeserialize(contentUsing = DocumentIdDeserializer.class)
-	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
-		this.describedBy = describedBy;
-	}
 }

@@ -13,16 +13,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Transaction implements OwnedEntity {
-	@Indexed
-	UUID uuid;
-
-	@Indexed
-	String name;
+public class Transaction extends NamedObject {
 	Date date;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
 
 	@RelatedTo(type = "IN_TRANSACTION", direction = Direction.INCOMING)
 	Set<Purchase> items;
@@ -30,40 +22,12 @@ public class Transaction implements OwnedEntity {
 	@RelatedTo(type = "PURCHASED_FROM")
 	Source source;
 
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Date getDate() {
 		return date;
 	}
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
 	}
 
 	public Source getSource() {

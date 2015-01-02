@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, UUID> {
 	@Autowired
-	EmberToUser emberToUser;
+	EmberToNamedObject emberToNamedObject;
 
 	@Override
 	public Group convert(PartGroupApiModel object, int nested, Map<UUID, Object> cache) {
@@ -34,9 +34,7 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
 
 	@Override
 	public Group convert(PartGroupApiModel object, Group model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
-		model.setName(object.getName());
+		emberToNamedObject.convert(object, model, nested, cache);
 		model.setParent(convert(object.getParent(), 1, cache));
 		return model;
 	}

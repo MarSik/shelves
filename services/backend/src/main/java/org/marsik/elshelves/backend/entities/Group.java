@@ -9,15 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Group implements OwnedEntity {
-	@Indexed
-	UUID uuid;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
-
-	String name;
-
+public class Group extends NamedObject {
 	@RelatedTo(type = "PARENT_OF", direction = Direction.INCOMING)
 	Group parent;
 
@@ -26,34 +18,6 @@ public class Group implements OwnedEntity {
 
 	@RelatedTo(type = "CONTAINS")
 	Set<Type> types;
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Group getParent() {
 		return parent;

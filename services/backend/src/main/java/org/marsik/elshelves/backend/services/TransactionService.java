@@ -75,43 +75,4 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 	protected int conversionDepth() {
 		return 2;
 	}
-
-	@Override
-	protected Transaction relink(Transaction entity) {
-		if (entity.getSource() != null) {
-			Source source = sourceRepository.getSourceByUuid(entity.getSource().getUuid());
-			entity.setSource(source);
-		}
-
-		if (entity.getItems() != null) {
-			Collection<Purchase> items = new ArrayList<>();
-			for (Purchase p: entity.getItems()) {
-				if (p.getUuid() == null) {
-					items.add(p);
-					continue;
-				}
-				Purchase linked = purchaseRepository.getPurchaseByUuid(p.getUuid());
-				items.add(linked);
-			}
-
-			entity.getItems().clear();
-			entity.getItems().addAll(items);
-
-			for (Purchase p: entity.getItems()) {
-				if (p.getLocation() != null
-						&& p.getLocation().getUuid() != null) {
-					Box b = boxRepository.getBoxByUuid(p.getLocation().getUuid());
-					p.setLocation(b);
-				}
-
-				if (p.getType() != null
-						&& p.getType().getUuid() != null) {
-					Type t = typeRepository.getTypeByUuid(p.getType().getUuid());
-					p.setType(t);
-				}
-			}
-		}
-
-		return super.relink(entity);
-	}
 }

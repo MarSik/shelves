@@ -21,17 +21,12 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("group")
-public class PartGroupApiModel extends AbstractEntityApiModel {
-    String name;
-
+public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     Set<PartGroupApiModel> groups;
 	@Sideload
     PartGroupApiModel parent;
 
     Set<PartTypeApiModel> types;
-
-	@Sideload
-    UserApiModel belongsTo;
 
     @Override
     @EmberIgnore
@@ -47,15 +42,7 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
 
     public PartGroupApiModel(UUID id, String name) {
         this.id = id;
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        setName(name);
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -88,16 +75,5 @@ public class PartGroupApiModel extends AbstractEntityApiModel {
 	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
     public void setTypes(Set<PartTypeApiModel> types) {
         this.types = types;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public UserApiModel getBelongsTo() {
-        return belongsTo;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-    public void setBelongsTo(UserApiModel belongsTo) {
-        this.belongsTo = belongsTo;
     }
 }

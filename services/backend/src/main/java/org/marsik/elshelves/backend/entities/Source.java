@@ -10,14 +10,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.UUID;
 
 @NodeEntity
-public class Source implements OwnedEntity {
-	@Indexed
-	UUID uuid;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
-
-	String name;
+public class Source extends NamedObject {
 	String url;
 
 	SourceDownloader sourceDownloader;
@@ -25,34 +18,6 @@ public class Source implements OwnedEntity {
 
 	@RelatedTo(type = "PURCHASED_FROM", direction = Direction.INCOMING)
 	Iterable<Purchase> purchases;
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getUrl() {
 		return url;

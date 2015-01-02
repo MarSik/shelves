@@ -29,13 +29,4 @@ public class GroupService extends AbstractRestService<GroupRepository, Group, Pa
 	protected int conversionDepth() {
 		return 2;
 	}
-
-	@Override
-	protected Group relink(Group entity) {
-		if (entity.getParent() != null) {
-			Group b = getRepository().getGroupByUuid(entity.getParent().getUuid());
-			entity.setParent(b);
-		}
-		return super.relink(entity);
-	}
 }

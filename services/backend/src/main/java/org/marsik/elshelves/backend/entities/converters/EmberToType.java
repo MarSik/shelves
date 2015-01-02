@@ -18,9 +18,6 @@ import java.util.UUID;
 @Service
 public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUID> {
 	@Autowired
-	EmberToUser emberToUser;
-
-	@Autowired
 	EmberToFootprint emberToFootprint;
 
 	@Autowired
@@ -30,7 +27,7 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 	EmberToLot emberToLot;
 
 	@Autowired
-	EmberToDocument emberToDocument;
+	EmberToNamedObject emberToNamedObject;
 
 	@Override
 	public Type convert(PartTypeApiModel object, int nested, Map<UUID, Object> cache) {
@@ -52,8 +49,7 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 
 	@Override
 	public Type convert(PartTypeApiModel object, Type model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
-		model.setName(object.getName());
+		emberToNamedObject.convert(object, model, nested, cache);
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
@@ -63,7 +59,6 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		}
 
 		model.setFootprint(emberToFootprint.convert(object.getFootprint(), nested - 1, cache));
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
 
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<Group>());
@@ -76,13 +71,6 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 			model.setLots(new THashSet<Lot>());
 			for (LotApiModel l: object.getLots()) {
 				model.getLots().add(emberToLot.convert(l, nested - 1, cache));
-			}
-		}
-
-		if (object.getDescribedBy() != null) {
-			model.setDescribedBy(new THashSet<Document>());
-			for (DocumentApiModel d : object.getDescribedBy()) {
-				model.getDescribedBy().add(emberToDocument.convert(d, 1, cache));
 			}
 		}
 
