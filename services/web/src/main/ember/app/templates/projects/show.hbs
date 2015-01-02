@@ -1,0 +1,26 @@
+<h3>{{name}}</h3>
+
+<table>
+{{#each r in requires}}
+    <tr>
+        <td>{{r.type.name}}</td>
+        <td>{{r.count}}</td>
+    </tr>
+{{/each}}
+</table>
+
+<h3>Add requirement</h3>
+<form {{action 'addRequirement' model requiredType requiredCount on='submit'}}>
+{{ember-selectize
+content=sortedTypes
+optionValuePath="content.id"
+optionLabelPath="content.fullName"
+selection=requiredType
+sort="content.fullName"
+placeholder="Select a type" }}
+
+{{input type='text' value=requiredCount}}
+<button type="submit">Add</button>
+</form>
+
+{{outlet}}
