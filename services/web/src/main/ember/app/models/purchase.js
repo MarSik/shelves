@@ -1,15 +1,46 @@
 import DS from 'ember-data';
-import Lot from './lot';
+import LotBase from './lotbase';
 
 var attr = DS.attr,
     hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
-export default Lot.extend({
+export default LotBase.extend({
+  type: belongsTo('type', {inverse: null}),
   singlePrice: attr("number"),
   totalPrice: attr("number"),
   vat: attr("number"),
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction"),
-  belongsTo: belongsTo('user')
+  next: hasMany("lot", {inverse: null, async: true}),
+
+    priceWithVat: function () {
+      if (this.get('vatIncluded')) {
+          return this.get('singlePrice');
+      } else {
+          return (100.0 + this.get('vat')) * this.get('singlePrice') / 100.0;
+      }
+  }.property('vatIncluded', 'singlePrice', 'vat'),
+
+  priceWithoutVat: function () {
+      if (!this.get('vatIncluded')) {
+          return this.get('singlePrice');
+      } else {
+          return this.get('singlePrice') / ((100.0 + this.get('vat')) / 100.0);
+      }
+  }.property('vatIncluded', 'singlePrice', 'vat'),
+
+  delivered: function () {
+      var count = 0;
+
+      this.get('next').forEach(function (lot) {
+          count += lot.get('count');
+      });
+
+      return count;
+  }.property('next.@each.count'),
+
+  fullyDelivered: function() {
+      return this.get('delivered') >= this.get('count');
+  }.property('count', 'delivered')
 });

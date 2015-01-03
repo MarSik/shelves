@@ -2,6 +2,7 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,6 +13,7 @@ import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.PurchaseIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 
@@ -32,63 +34,29 @@ import java.util.UUID;
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("lot")
-public class LotApiModel extends AbstractEntityApiModel {
-    Date created;
-	@Min(1)
-    Long count;
-
-	@Sideload
-    PartTypeApiModel type;
+public class LotApiModel extends LotBaseApiModel {
 
 	@Sideload
     BoxApiModel location;
 
 	@Sideload
-	@NotNull
     LotApiModel previous;
-    Set<LotApiModel> next;
-
-	@Sideload
-    UserApiModel belongsTo;
 
 	LotAction action;
 
 	@Sideload
-	UserApiModel performedBy;
+	PurchaseApiModel purchase;
 
     @Override
     @EmberIgnore
     public Map<String, String> getLinks() {
         Map<String, String> links = new THashMap<String, String>();
         links.put("next", "next");
+		links.put("purchase", "purchase");
         return links;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Long getCount() {
-        return count;
-    }
-
-    public void setCount(Long count) {
-        this.count = count;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
+	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
         return location;
     }
@@ -99,18 +67,7 @@ public class LotApiModel extends AbstractEntityApiModel {
         this.location = location;
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public PartTypeApiModel getType() {
-        return type;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(using = PartTypeIdDeserializer.class)
-    public void setType(PartTypeApiModel type) {
-        this.type = type;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
+	@JsonIdentityReference(alwaysAsId = true)
     public LotApiModel getPrevious() {
         return previous;
     }
@@ -119,28 +76,6 @@ public class LotApiModel extends AbstractEntityApiModel {
 	@JsonDeserialize(using = LotIdDeserializer.class)
     public void setPrevious(LotApiModel previous) {
         this.previous = previous;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<LotApiModel> getNext() {
-        return next;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
-    public void setNext(Set<LotApiModel> next) {
-        this.next = next;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public UserApiModel getBelongsTo() {
-        return belongsTo;
-    }
-
-    @JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-    public void setBelongsTo(UserApiModel belongsTo) {
-        this.belongsTo = belongsTo;
     }
 
 	public LotAction getAction() {
@@ -152,13 +87,18 @@ public class LotApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getPerformedBy() {
-		return performedBy;
+	public PurchaseApiModel getPurchase() {
+		return purchase;
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
-	public void setPerformedBy(UserApiModel performedBy) {
-		this.performedBy = performedBy;
+	@JsonDeserialize(using = PurchaseIdDeserializer.class)
+	public void setPurchase(PurchaseApiModel purchase) {
+		this.purchase = purchase;
+	}
+
+	@JsonIgnore
+	public PartTypeApiModel getType() {
+		return getPurchase().getType();
 	}
 }

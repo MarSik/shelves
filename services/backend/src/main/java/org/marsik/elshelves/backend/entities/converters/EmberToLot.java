@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,16 @@ import java.util.UUID;
 @Service
 public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 	@Autowired
-	EmberToUser emberToUser;
-
-	@Autowired
-	EmberToType emberToType;
+	EmberToLotBase emberToLotBase;
 
 	@Autowired
 	EmberToBox emberToBox;
+
+	@Autowired
+	EmberToPurchase emberToPurchase;
+
+	@Autowired
+	EmberToUser emberToUser;
 
 	@Override
 	public Lot convert(LotApiModel object, int nested, Map<UUID, Object> cache) {
@@ -39,14 +43,14 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 
 	@Override
 	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
-		model.setUuid(object.getId());
-		model.setCount(object.getCount());
-		model.setCreated(object.getCreated());
-		model.setType(emberToType.convert(object.getType(), 1, cache));
+		emberToLotBase.convert(object, model, nested, cache);
+
 		model.setAction(object.getAction());
-		model.setPerformedBy(emberToUser.convert(object.getPerformedBy(), 1, cache));
 		model.setLocation(emberToBox.convert(object.getLocation(), 1, cache));
+		model.setPurchase(emberToPurchase.convert(object.getPurchase(), 1, cache));
+		model.setPrevious(convert(object.getPrevious(), 1, cache));
+		model.setPerformedBy(emberToUser.convert(object.getPerformedBy(), 1, cache));
+
 		return model;
 	}
 }

@@ -1,0 +1,23 @@
+{{#if isDelivering}}
+<div class="row collapse">
+    <div class="small-11 columns">
+        {{ember-selectize
+        content=sortedBoxes
+        optionValuePath="content.id"
+        optionLabelPath="content.fullName"
+        selection=location
+        sort="content.fullName"
+        placeholder="Select a location" }}
+    </div>
+    <div class="small-1 columns">
+        <button {{action 'delivered'}} class='postfix' {{bind-attr disabled=buttonDisabled}}>{{fa-icon 'truck'}}</button>
+    </div>
+</div>
+{{/if}}
+{{#if canDeliver}}
+<button {{action 'startDelivery'}}>Delivered</button>
+{{/if}}
+{{#if fullyDelivered}}
+{{fa-icon 'check-square-o'}} {{purchase.delivered}}
+{{/if}}
+

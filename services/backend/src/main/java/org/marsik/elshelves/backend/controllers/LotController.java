@@ -5,7 +5,9 @@ import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
@@ -64,13 +66,37 @@ public class LotController {
 		return modelBuilder.build();
 	}
 
+	@RequestMapping("/{uuid}/purchase")
+	@ResponseBody
+	@Transactional
+	public EmberModel getPurchase(@CurrentUser User currentUser,
+							  @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
+		LotApiModel lot = lotService.get(id, currentUser);
+		EmberModel.Builder<PurchaseApiModel> modelBuilder = new EmberModel.Builder<PurchaseApiModel>(lot.getPurchase());
+		return modelBuilder.build();
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
-	public EmberModel split(@CurrentUser User currentUser,
-							@RequestBody @Validated LotApiModel lot) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
-		LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser);
-		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
+	public EmberModel splitOrDeliver(@CurrentUser User currentUser,
+							@RequestBody @Validated LotApiModel lot) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+		EmberModel.Builder<LotApiModel> modelBuilder;
+
+		if (lot.getPrevious() != null
+				&& lot.getPurchase() == null) {
+			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser);
+			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
+		} else if (lot.getPrevious() == null
+				&& lot.getPurchase() != null
+				&& lot.getLocation() != null
+				&& lot.getCount() > 0) {
+			LotApiModel result = lotService.delivery(lot, currentUser);
+			modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+		} else {
+			throw new InvalidRequest();
+		}
+
 		return modelBuilder.build();
 	}
 

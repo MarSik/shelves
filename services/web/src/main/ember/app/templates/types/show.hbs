@@ -1,1 +1,46 @@
 <h3>{{name}}</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Source</th>
+        <th colspan="4">Box</th>
+    </tr>
+    <tr>
+        <th>SKU</th>
+        <th>Cnt.</th>
+        <th>Price</th>
+        <th>w/ Vat</th>
+        <th>Vat %</th>
+    </tr>
+    </thead>
+    {{#each lot in lots}}
+    <tbody>
+    <tr>
+        <td>
+            {{lot.purchase.transaction.source.name}}
+        </td>
+        <td colspan="4">
+            {{lot.location.fullName}}
+        </td>
+    </tr>
+    <tr>
+        <td class="sku">
+            {{lot.purchase.sku}}
+        </td>
+        <td class="count">
+            {{lot.count}}
+        </td>
+        <td class="price">
+            {{lot.purchase.priceWithoutVat}}
+        </td>
+        <td class="vat-included">
+            {{lot.purchase.priceWithVat}}
+        </td>
+        <td class="vat">
+            {{lot.purchase.vat}}
+        </td>
+    </tr>
+    </tbody>
+    {{/each}}
+</table>

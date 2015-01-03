@@ -39,12 +39,8 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 		model.setId(object.getUuid());
 		model.setCount(object.getCount());
 
-		if (nested == 0) {
-			return model;
-		}
-
-		model.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
-		model.setProject(projectToEmber.convert(object.getProject(), nested - 1, cache));
+		model.setType(typeToEmber.convert(object.getType(), nested, cache));
+		model.setProject(projectToEmber.convert(object.getProject(), nested, cache));
 
 		return model;
 	}

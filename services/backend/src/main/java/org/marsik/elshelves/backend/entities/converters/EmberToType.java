@@ -67,13 +67,6 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 			}
 		}
 
-		if (object.getLots() != null) {
-			model.setLots(new THashSet<Lot>());
-			for (LotApiModel l: object.getLots()) {
-				model.getLots().add(emberToLot.convert(l, nested - 1, cache));
-			}
-		}
-
 		return model;
 	}
 }

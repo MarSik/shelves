@@ -12,8 +12,7 @@ export default Ember.Controller.extend({
     },
 
     selectedSource: null,
-    boxSorting: ['fullName'],
-    sortedBoxes: Ember.computed.sort('boxes', 'boxSorting'),
+
     typeSorting: ['name'],
     sortedTypes: Ember.computed.sort('types', 'typeSorting'),
     sourceSorting: ['name'],

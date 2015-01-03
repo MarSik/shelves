@@ -23,8 +23,7 @@
     <table>
         <thead>
         <tr>
-            <th>Type</th>
-            <th colspan="4">Box</th>
+            <th colspan="5">Type</th>
         </tr>
         <tr>
             <th>SKU</th>
@@ -37,7 +36,7 @@
         {{#each purchase in model.items}}
         <tbody>
         <tr>
-            <td>
+            <td colspan="5">
                 <div class="row collapse">
                     <div class="small-11 columns">
                         {{ember-selectize
@@ -50,22 +49,6 @@
                     </div>
                     <div class="small-1 columns">
                         <button {{action 'manageTypes' purchase}} class='postfix'>{{fa-icon 'gear'}}</button>
-                    </div>
-                </div>
-            </td>
-            <td colspan="4">
-                <div class="row collapse">
-                    <div class="small-11 columns">
-                        {{ember-selectize
-                        content=sortedBoxes
-                        optionValuePath="content.id"
-                        optionLabelPath="content.fullName"
-                        selection=purchase.location
-                        sort="content.fullName"
-                        placeholder="Select a location" }}
-                    </div>
-                    <div class="small-1 columns">
-                        <button {{action 'manageBoxes' purchase}} class='postfix'>{{fa-icon 'gear'}}</button>
                     </div>
                 </div>
             </td>

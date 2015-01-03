@@ -11,10 +11,13 @@ import java.util.UUID;
 @Service
 public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purchase, UUID> {
 	@Autowired
-	EmberToLot emberToLot;
+	EmberToTransaction emberToTransaction;
 
 	@Autowired
-	EmberToTransaction emberToTransaction;
+	EmberToLotBase emberToLotBase;
+
+	@Autowired
+	EmberToType emberToType;
 
 	@Override
 	public Purchase convert(PurchaseApiModel object, int nested, Map<UUID, Object> cache) {
@@ -36,12 +39,14 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 
 	@Override
 	public Purchase convert(PurchaseApiModel object, Purchase model, int nested, Map<UUID, Object> cache) {
-		emberToLot.convert(object, model, 1, cache);
+		emberToLotBase.convert(object, model, 1, cache);
 		model.setSinglePrice(object.getSinglePrice());
 		model.setTotalPrice(object.getTotalPrice());
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
 		model.setTransaction(emberToTransaction.convert(object.getTransaction(), 1, cache));
+		model.setType(emberToType.convert(object.getType(), 1, cache));
+
 		return model;
 	}
 }

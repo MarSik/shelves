@@ -18,7 +18,7 @@
             <th>SKU</th>
             <th>Cnt.</th>
             <th>Price</th>
-            <th>w/</th>
+            <th>w/ Vat</th>
             <th>Vat %</th>
         </tr>
         </thead>
@@ -29,7 +29,7 @@
                 {{purchase.type.fullName}}
             </td>
             <td colspan="4">
-                {{purchase.location.fullName}}
+                {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location}}
             </td>
         </tr>
         <tr>
@@ -40,10 +40,10 @@
                 {{purchase.count}}
             </td>
             <td class="price">
-                {{purchase.singlePrice}}
+                {{purchase.priceWithoutVat}}
             </td>
             <td class="vat-included">
-                {{purchase.vatIncluded}}
+                {{purchase.priceWithVat}}
             </td>
             <td class="vat">
                 {{purchase.vat}}

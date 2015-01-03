@@ -2,15 +2,20 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
+import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
+import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
+import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +28,17 @@ import java.util.UUID;
 @Service
 public class LotService {
 	LotRepository lotRepository;
+	PurchaseRepository purchaseRepository;
+	BoxRepository boxRepository;
 	LotToEmber lotToEmber;
 	EmberToLot emberToLot;
 	UuidGenerator uuidGenerator;
 
 	@Autowired
-	public LotService(LotRepository lotRepository, LotToEmber lotToEmber, EmberToLot emberToLot, UuidGenerator uuidGenerator) {
+	public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository, LotToEmber lotToEmber, EmberToLot emberToLot, UuidGenerator uuidGenerator) {
 		this.lotRepository = lotRepository;
+		this.purchaseRepository = purchaseRepository;
+		this.boxRepository = boxRepository;
 		this.lotToEmber = lotToEmber;
 		this.emberToLot = emberToLot;
 		this.uuidGenerator = uuidGenerator;
@@ -78,6 +87,30 @@ public class LotService {
 		}
 
 		return lots;
+	}
+
+	public LotApiModel delivery(LotApiModel newLot0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+		Purchase purchase = purchaseRepository.getPurchaseByUuid(newLot0.getPurchase().getId());
+		Box location = boxRepository.getBoxByUuid(newLot0.getLocation().getId());
+
+		if (purchase == null || location == null) {
+			throw new EntityNotFound();
+		}
+
+		if (!purchase.getOwner().equals(currentUser)) {
+			throw new PermissionDenied();
+		}
+
+		if (!location.getOwner().equals(currentUser)) {
+			throw new PermissionDenied();
+		}
+
+		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, currentUser);
+		lotRepository.save(lot);
+
+		purchase.getNext().add(lot);
+
+		return lotToEmber.convert(lot, 2, new THashMap<UUID, Object>());
 	}
 
 	public LotSplitResult split(UUID source, Long count, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {

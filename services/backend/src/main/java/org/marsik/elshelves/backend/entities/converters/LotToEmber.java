@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,33 +22,29 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 	@Autowired
 	TypeToEmber typeToEmber;
 
+	@Autowired
+	PurchaseToEmber purchaseToEmber;
+
+	@Autowired
+	LotBaseToEmber lotBaseToEmber;
+
 	protected LotApiModel createEntity() {
 		return new LotApiModel();
 	}
 
 	public LotApiModel convert(Lot object, LotApiModel entity, int nested, Map<UUID, Object> cache) {
-		entity.setId(object.getUuid());
-		entity.setCount(object.getCount());
-		entity.setCreated(object.getCreated());
+		lotBaseToEmber.convert(object, entity, nested, cache);
 		entity.setAction(object.getAction());
+		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested, cache));
+		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested, cache));
 
 		if (nested == 0) {
 			return entity;
 		}
 
-		entity.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
+
 		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
-		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));
 		entity.setPrevious(convert(object.getPrevious(), nested - 1, cache));
-		entity.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
-
-		entity.setNext(new THashSet<LotApiModel>());
-
-		if (object.getNext() != null) {
-			for (Lot l : object.getNext()) {
-				entity.getNext().add(convert(l, nested - 1, cache));
-			}
-		}
 
 		return entity;
 	}

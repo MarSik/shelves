@@ -3,8 +3,11 @@ package org.marsik.elshelves.backend.entities;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,7 +25,7 @@ public class Type extends NamedObject {
 	Set<Group> groups;
 
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
-	Set<Lot> lots;
+	Set<Purchase> purchases;
 
 	public String getDescription() {
 		return description;
@@ -64,11 +67,22 @@ public class Type extends NamedObject {
 		this.groups = groups;
 	}
 
-	public Set<Lot> getLots() {
+	public Iterable<Lot> getLots() {
+		List<Lot> lots = new ArrayList<>();
+		for (Purchase p: getPurchases()) {
+			for (Lot l: p.getLots()) {
+				lots.add(l);
+			}
+		}
+
 		return lots;
 	}
 
-	public void setLots(Set<Lot> lots) {
-		this.lots = lots;
+	public Set<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(Set<Purchase> purchases) {
+		this.purchases = purchases;
 	}
 }

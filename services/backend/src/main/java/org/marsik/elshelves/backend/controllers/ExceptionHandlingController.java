@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,12 @@ public class ExceptionHandlingController {
 	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(OperationNotPermitted.class)
 	public void operationNotPermitted() {
+
+	}
+
+	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+	@ExceptionHandler(InvalidRequest.class)
+	public void operationNotValid() {
 
 	}
 }

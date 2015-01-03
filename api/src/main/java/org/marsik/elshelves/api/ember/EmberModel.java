@@ -94,13 +94,17 @@ public final class EmberModel extends HashMap<String, Object> {
         }
 
 		public <K> Builder<T> sideLoad(final Class<K> clazz, final Iterable<K> entities) {
+			return sideLoad(clazz, entities, false);
+		}
+
+		public <K> Builder<T> sideLoad(final Class<K> clazz, final Iterable<? extends K> entities, boolean polymorphic) {
 			if (entities != null) {
-				Collection<Object> bucket = getSideLoadingBucket(clazz);
 				for (K item: entities) {
 					if (knownObjects.contains(item)) {
 						continue;
 					}
 
+					Collection<Object> bucket = getSideLoadingBucket(polymorphic ? item.getClass() : clazz);
 					bucket.add(item);
 					knownObjects.add(item);
 					implicitSideloader(item);
@@ -160,7 +164,7 @@ public final class EmberModel extends HashMap<String, Object> {
 				if (!sideload.asType().equals(None.class)
 						&& Iterable.class.isAssignableFrom(f.getPropertyType())) {
 					try {
-						sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)getter.invoke(entity));
+						sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)getter.invoke(entity), sideload.polymorphic());
 					} catch (IllegalAccessException|InvocationTargetException ex) {
 						ex.printStackTrace();
 					}

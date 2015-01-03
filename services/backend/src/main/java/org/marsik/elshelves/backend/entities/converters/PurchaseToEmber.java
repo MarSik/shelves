@@ -1,6 +1,9 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +14,13 @@ import java.util.UUID;
 @Service
 public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiModel, UUID> {
 	@Autowired
+	LotBaseToEmber lotBaseToEmber;
+
+	@Autowired
 	LotToEmber lotToEmber;
+
+	@Autowired
+	TypeToEmber typeToEmber;
 
 	@Autowired
 	TransactionToEmber transactionToEmber;
@@ -36,17 +45,25 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 
 	@Override
 	public PurchaseApiModel convert(Purchase object, PurchaseApiModel model, int nested, Map<UUID, Object> cache) {
-		lotToEmber.convert(object, model, nested, cache);
+		lotBaseToEmber.convert(object, model, nested, cache);
 		model.setSinglePrice(object.getSinglePrice());
 		model.setTotalPrice(object.getTotalPrice());
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
+		model.setType(typeToEmber.convert(object.getType(), nested, cache));
+		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested, cache));
 
 		if (nested == 0) {
 			return model;
 		}
 
-		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
+		if (object.getLots() != null) {
+			model.setLots(new THashSet<LotApiModel>());
+			for (Lot l: object.getLots()) {
+				model.getLots().add(lotToEmber.convert(l, nested - 1, cache));
+			}
+		}
+
 		return model;
 	}
 }

@@ -38,11 +38,6 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
-
-		if (nested == 0) {
-			return model;
-		}
-
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
 
 		return model;

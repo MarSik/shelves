@@ -9,109 +9,71 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Lot implements OwnedEntity {
+public class Lot extends LotBase {
 	public Lot() {
 	}
 
+	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, User performedBy) {
+		Lot l = new Lot();
+		l.setOwner(purchase.getOwner());
+		l.setAction(LotAction.DELIVERY);
+		l.setUuid(uuid);
+		l.setLocation(location);
+		l.setCount(count);
+		l.setPurchase(purchase);
+		l.setCreated(new Date());
+		l.setPerformedBy(performedBy);
+		return l;
+	}
+
 	protected Lot(UUID uuid, User performedBy, Long count, Lot previous) {
-		this.uuid = uuid;
-		this.performedBy = performedBy;
-		this.count = count;
-		this.previous = previous;
-		this.owner = previous.getOwner();
-		this.created = new Date();
-		this.type = previous.getType();
-		this.next = new ArrayList<>();
-		this.action = LotAction.SPLIT;
+		setUuid(uuid);
+		setPerformedBy(performedBy);
+		setCount(count);
+		setPrevious(previous);
+		setOwner(previous.getOwner());
+		setCreated(new Date());
+		setNext(new ArrayList<Lot>());
+		setAction(LotAction.SPLIT);
 	}
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
-		this.action = action;
-		this.previous = previous;
-		this.performedBy = performedBy;
-		this.uuid = uuid;
-		this.count = previous.count;
-		this.owner = previous.getOwner();
-		this.created = new Date();
-		this.type = previous.getType();
-		this.next = new ArrayList<>();
+		setAction(action);
+		setPrevious(previous);
+		setPerformedBy(performedBy);
+		setUuid(uuid);
+		setCount(previous.count);
+		setOwner(previous.getOwner());
+		setCreated(new Date());
+		setNext(new ArrayList<Lot>());
 	}
 
-	@Indexed
-	UUID uuid;
-
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	User owner;
-
-	Date created;
-	Long count;
-
-	@RelatedTo(type = "OF_TYPE")
-	Type type;
-
-	@RelatedTo(type = "TAKEN_FROM")
+	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
 	Lot previous;
 
-	@RelatedTo(type = "TAKEN_FROM", direction = Direction.INCOMING)
+	@RelatedTo(type = "TAKEN_FROM", direction = Direction.INCOMING, enforceTargetType = true)
 	Iterable<Lot> next;
 
-	LotAction action;
-
-	@RelatedTo(type = "PERFORMED_BY")
+	@RelatedTo(type = "PERFORMED_BY", enforceTargetType = true)
 	User performedBy;
+
+	@NotNull
+	@RelatedTo(type = "PURCHASED_AS")
+	Purchase purchase;
+
+	@NotNull
+	LotAction action;
 
 	@RelatedTo(type = "LOCATED_AT")
 	Box location;
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Long getCount() {
-		return count;
-	}
-
-	public void setCount(Long count) {
-		this.count = count;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
 
 	public Lot getPrevious() {
 		return previous;
@@ -119,14 +81,6 @@ public class Lot implements OwnedEntity {
 
 	public void setPrevious(Lot previous) {
 		this.previous = previous;
-	}
-
-	public Iterable<Lot> getNext() {
-		return next;
-	}
-
-	public void setNext(Iterable<Lot> next) {
-		this.next = next;
 	}
 
 	public LotAction getAction() {
@@ -137,28 +91,12 @@ public class Lot implements OwnedEntity {
 		this.action = action;
 	}
 
-	public User getPerformedBy() {
-		return performedBy;
-	}
-
-	public void setPerformedBy(User performedBy) {
-		this.performedBy = performedBy;
-	}
-
 	public Box getLocation() {
 		return location;
 	}
 
 	public void setLocation(Box location) {
 		this.location = location;
-	}
-
-	public boolean canBeDeleted() {
-		return false;
-	}
-
-	public boolean canBeUpdated() {
-		return false;
 	}
 
 	public class SplitResult {
@@ -186,7 +124,7 @@ public class Lot implements OwnedEntity {
 		}
 
 		// Not available for split
-		if (!EnumSet.of(LotAction.SPLIT, LotAction.PURCHASE).contains(getAction())) {
+		if (!EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction())) {
 			return null;
 		}
 
@@ -213,4 +151,35 @@ public class Lot implements OwnedEntity {
 	public Lot destroy(User performedBy, UuidGenerator uuidGenerator) {
 		return new Lot(uuidGenerator.generate(), performedBy, LotAction.DESTROYED, this);
 	}
+
+	public Purchase getPurchase() {
+		return purchase;
+	}
+
+	public void setPurchase(Purchase purchase) {
+		this.purchase = purchase;
+	}
+
+	@Override
+	public Type getType() {
+		return getPurchase().getType();
+	}
+
+
+	public Iterable<Lot> getNext() {
+		return next;
+	}
+
+	public void setNext(Iterable<Lot> next) {
+		this.next = next;
+	}
+
+	public User getPerformedBy() {
+		return performedBy;
+	}
+
+	public void setPerformedBy(User performedBy) {
+		this.performedBy = performedBy;
+	}
+
 }
