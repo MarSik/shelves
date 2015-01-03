@@ -2,11 +2,13 @@
 <section class="columns small-4">
     <h2>Types</h2>
 
-<ul>
-{{#each type in this}}
-<li>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</li>
-{{/each}}
-</ul>
+    <button {{action 'createType'}}>{{fa-icon 'plus'}} Create type</button>
+
+    <ul>
+        {{#each type in this}}
+        <li>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} ({{type.available}})</li>
+        {{/each}}
+    </ul>
 </section>
 
     <section class="columns small-8">
