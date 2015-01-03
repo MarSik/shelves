@@ -1,4 +1,4 @@
-<h2>{{name}}</h2>
+<h2>{{model.name}}</h2>
 
 <h3>Required parts</h3>
 <table>
@@ -7,7 +7,8 @@
     <tr>
         <td>{{r.count}} of</td>
         <td colspan="3"></td>
-        <td><button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
+        <td>{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
+            <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
     </tr>
     {{#each type in r.type}}
     <tr>

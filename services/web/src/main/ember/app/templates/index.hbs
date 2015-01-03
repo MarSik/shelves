@@ -1,4 +1,4 @@
-<h2>Empty content</h2>
+<h2>Electronic part and project management</h2>
 
 {{#if session.isAuthenticated}}
     <a {{ action 'invalidateSession' }}>Logout</a> |
@@ -6,7 +6,8 @@
     {{#link-to 'boxes.index'}}Boxes{{/link-to}} |
     {{#link-to 'groups.show' 'de305d54-75b4-431b-adb2-eb6b9e546013'}}Group de305d54-75b4-431b-adb2-eb6b9e546013{{/link-to}} |
 {{else}}
-    <section id="login-form">
+<div class="row">
+    <section class="small-12 large-6 columns" id="login-form">
     <h2>Login</h2>
     <form {{action 'authenticate' on='submit'}}>
         <label for="identification">Email address</label>
@@ -17,7 +18,7 @@
     </form>
     </section>
 
-    <section id="registration-form">
+    <section class="small-12 large-6 columns" id="registration-form">
         <h2>Register</h2>
         <form {{action 'register' on='submit'}}>
             <label for="name">Name:</label>
@@ -27,5 +28,6 @@
             <button type="submit">Register</button>
         </form>
     </section>
+</div>
 {{/if}}
 

@@ -2,7 +2,7 @@
 
 <h3>Footprint</h3>
 
-{{footprint.name}}
+{{#link-to 'footprints.show' footprint}}{{footprint.name}}{{/link-to}}
 
 <h3>Available lots</h3>
 <table>
@@ -23,10 +23,10 @@
     <tbody>
     <tr>
         <td>
-            {{lot.purchase.transaction.source.name}}
+            {{#link-to 'purchase.show' lot.purchase.transaction}}{{lot.purchase.transaction.source.name}}{{/link-to}}
         </td>
         <td colspan="4">
-            {{lot.location.fullName}}
+            {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
         </td>
     </tr>
     <tr>

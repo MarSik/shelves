@@ -13,6 +13,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             req.get('type').removeObject(type);
             req.save();
         },
+        removeRequirement: function (req) {
+            req.destroyRecord();
+        },
         projectSelected: function (project) {
             this.transitionTo('projects.show', project);
         },

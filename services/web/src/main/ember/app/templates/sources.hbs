@@ -1,1 +1,18 @@
+<div class="row">
+<section class="columns small-4">
+    <button {{action 'createSource'}}>Create source</button>
+
+<ul>
+    {{#each source in this}}
+    <li>
+        {{#link-to 'sources.show' source}}{{source.name}}{{/link-to}}<br/>
+        {{source.url}} {{#if source.url}}<a {{bind-attr href=source.url}}>{{fa-icon 'fa-paper-plane-o'}}</a>{{/if}}
+    </li>
+    {{/each}}
+</ul>
+</section>
+
+    <section class="columns small-8">
 {{outlet}}
+    </section>
+</div>

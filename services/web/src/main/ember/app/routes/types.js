@@ -9,5 +9,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         deleteType: function (type) {
             type.destroyRecord();
         }
+    },
+    model: function () {
+        return this.store.filter('type', {}, function (type) {
+            return !type.get('isNew');
+        });
     }
 });

@@ -1,16 +1,3 @@
-<table>
-    <tr>
-        <th>Name</th>
-        <th>URL</th>
-    </tr>
-    {{#each source in this}}
-    <tr>
-        <td>{{source.name}}</td>
-        <td><a {{bind-attr href=source.url}}>{{source.url}}</a></td>
-    </tr>
-    {{/each}}
-</table>
 
-<button {{action 'createSource'}}>Create source</button>
 
 {{outlet}}

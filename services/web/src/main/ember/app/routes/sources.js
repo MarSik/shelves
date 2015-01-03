@@ -14,5 +14,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 self.growl.error(reason);
             });
         }
+    },
+    model: function() {
+        return this.store.filter('source', {}, function (s) {
+            return !s.get('isNew');
+        });
     }
 });

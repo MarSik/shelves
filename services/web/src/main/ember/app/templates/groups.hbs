@@ -1,4 +1,6 @@
-<h3>Groups</h3>
+<div class="row">
+    <section class="columns large-4">
+        <h2>Groups</h2>
 
 <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}}</button>
 
@@ -7,8 +9,10 @@
     {{item-tree item=group count='item.count' class='group-entity' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
     {{/each}}
 </ul>
+    </section>
 
 {{outlet}}
+</div>
 
 <div id="createGroup" class="reveal-modal" data-reveal>
     <h2>Create group</h2>
