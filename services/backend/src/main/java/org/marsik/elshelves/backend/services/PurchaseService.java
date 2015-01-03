@@ -58,12 +58,12 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 	}
 
 	@Override
-	protected Purchase updateEntity(Purchase entity, PurchaseApiModel dto) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
+	protected Purchase updateEntity(Purchase entity, Purchase update) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
 		if (!entity.canBeUpdated()) {
 			throw new OperationNotPermitted();
 		}
 
-		return super.updateEntity(entity, dto);
+		return super.updateEntity(entity, update);
 	}
 
 	public Iterable<LotApiModel> getNext(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {

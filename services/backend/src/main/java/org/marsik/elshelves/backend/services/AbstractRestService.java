@@ -163,10 +163,55 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 		repository.delete(entity);
 	}
 
-    protected T updateEntity(T entity, E dto) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
-        BeanUtils.copyProperties(entity, dto);
-		entity = relink(entity);
-        return entity;
+    protected T updateEntity(T entity, T update) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
+		update = relink(update);
+
+		PropertyDescriptor[] properties;
+		try {
+			properties = Introspector.getBeanInfo(update.getClass()).getPropertyDescriptors();
+		} catch (IntrospectionException ex) {
+			ex.printStackTrace();
+			return entity;
+		}
+
+		// For all update properties with getter..
+		for (PropertyDescriptor f: properties) {
+			Method getter = f.getReadMethod();
+			if (getter == null) {
+				continue;
+			}
+
+			// Update all writable collections in entity using
+			// entity.clear(); entity.addAll(items) so the aspected
+			// neo4j relationships are maintained properly
+			if (Collection.class.isAssignableFrom(f.getPropertyType())) {
+				try {
+					Collection<Object> items = (Collection<Object>)getter.invoke(update);
+					((Collection<Object>)getter.invoke(entity)).clear();
+					((Collection<Object>)getter.invoke(entity)).addAll(items);
+				} catch (InvocationTargetException | IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
+
+			// Skip read-only collections
+			} else if (Iterable.class.isAssignableFrom(f.getPropertyType())) {
+				continue;
+
+			// Update all scalar properties
+			} else {
+				try {
+					Object value = getter.invoke(entity);
+					Method setter = f.getWriteMethod();
+					if (setter != null) {
+						setter.invoke(entity, value);
+					}
+				} catch (InvocationTargetException | IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+        return update;
     }
 
     public Collection<E> getAllItems(User currentUser) {
@@ -225,7 +270,8 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
         }
 
         try {
-            updateEntity(one, dto);
+			T update = restToDb.convert(dto, 2, new THashMap<UUID, Object>());
+            one = updateEntity(one, update);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }
