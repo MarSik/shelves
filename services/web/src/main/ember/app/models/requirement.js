@@ -6,6 +6,6 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
     count: attr('number'),
-    type: belongsTo('type', {inverse: null}),
+    type: hasMany('type', {inverse: null}),
     project: belongsTo('project')
 });

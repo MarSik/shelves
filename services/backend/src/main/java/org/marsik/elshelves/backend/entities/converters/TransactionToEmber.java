@@ -33,7 +33,7 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 		}
 
 		TransactionApiModel entity = new TransactionApiModel();
-		if (nested > 0) {
+		if (object.getUuid() != null) {
 			cache.put(object.getUuid(), entity);
 		}
 

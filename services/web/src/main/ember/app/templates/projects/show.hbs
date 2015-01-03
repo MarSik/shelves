@@ -1,11 +1,23 @@
-<h3>{{name}}</h3>
+<h2>{{name}}</h2>
 
+<h3>Required parts</h3>
 <table>
-{{#each r in requires}}
+{{#each r in model.requires}}
+    <tbody>
     <tr>
-        <td>{{r.type.name}}</td>
-        <td>{{r.count}}</td>
+        <td>{{r.count}} of</td>
+        <td colspan="2"></td>
+        <td><button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
     </tr>
+    {{#each type in r.type}}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{type.name}}</td>
+        <td>{{type.vendor}}</td>
+        <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
+    </tr>
+    {{/each}}
+    </tbody>
 {{/each}}
 </table>
 
@@ -24,3 +36,21 @@ placeholder="Select a type" }}
 </form>
 
 {{outlet}}
+
+<div id="addAlternative" class="reveal-modal" data-reveal>
+    <h2>Add alternative</h2>
+    <form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>
+
+    {{ember-selectize
+    content=sortedTypes
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=alternativeType
+    sort="content.fullName"
+    placeholder="Select a type" }}
+
+    <button type="submit">{{fa-icon 'plus'}} Add</button>
+    </form>
+
+    <a class="close-reveal-modal">&#215;</a>
+</div>

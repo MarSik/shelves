@@ -10,14 +10,16 @@ import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.ProjectIdDeserializer;
 
+import java.util.Set;
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("requirement")
 public class RequirementApiModel extends AbstractEntityApiModel {
 	@Sideload
 	ProjectApiModel project;
 
-	@Sideload
-	PartTypeApiModel type;
+	@Sideload(asType = PartTypeApiModel.class)
+	Set<PartTypeApiModel> type;
 
 	Long count;
 
@@ -32,13 +34,13 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public PartTypeApiModel getType() {
+	public Set<PartTypeApiModel> getType() {
 		return type;
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = PartTypeIdDeserializer.class)
-	public void setType(PartTypeApiModel type) {
+	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
+	public void setType(Set<PartTypeApiModel> type) {
 		this.type = type;
 	}
 

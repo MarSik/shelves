@@ -3,6 +3,11 @@ import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixi
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     actions: {
+        addAlternativePart: function (req, type) {
+            console.log("Adding alternative");
+            req.get('type').pushObject(type);
+            req.save();
+        },
         projectSelected: function (project) {
             this.transitionTo('projects.show', project);
         },
@@ -21,10 +26,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         addRequirement: function (project, type, count) {
             var requirement = this.store.createRecord('requirement', {
                 project: project,
-                type: type,
                 count: count
             });
 
+            requirement.get('type').pushObject(type);
             requirement.save()
         }
     },

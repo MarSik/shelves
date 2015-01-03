@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
@@ -20,7 +21,7 @@ public class Requirement implements OwnedEntity {
 
 	@NotNull
 	@RelatedTo(type = "REQUIRED_TYPE")
-	Type type;
+	Set<Type> type;
 
 	@Min(1)
 	Long count;
@@ -41,11 +42,11 @@ public class Requirement implements OwnedEntity {
 		this.project = project;
 	}
 
-	public Type getType() {
+	public Set<Type> getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(Set<Type> type) {
 		this.type = type;
 	}
 

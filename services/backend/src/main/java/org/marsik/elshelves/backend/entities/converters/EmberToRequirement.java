@@ -1,10 +1,13 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.BoxApiModel;
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.EmberToProject;
 import org.marsik.elshelves.backend.entities.Requirement;
+import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +47,13 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 		model.setUuid(object.getId());
 		model.setCount(object.getCount());
 
-		model.setType(emberToType.convert(object.getType(), nested, cache));
+		if (object.getType() != null) {
+			model.setType(new THashSet<Type>());
+			for (PartTypeApiModel p: object.getType()) {
+				model.getType().add(emberToType.convert(p, nested, cache));
+			}
+		}
+
 		model.setProject(emberToProject.convert(object.getProject(), nested, cache));
 
 		return model;
