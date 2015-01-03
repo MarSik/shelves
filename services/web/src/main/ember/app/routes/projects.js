@@ -8,6 +8,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             req.get('type').pushObject(type);
             req.save();
         },
+        removeAlternativePart: function (req, type) {
+            console.log("Removing alternative");
+            req.get('type').removeObject(type);
+            req.save();
+        },
         projectSelected: function (project) {
             this.transitionTo('projects.show', project);
         },

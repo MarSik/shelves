@@ -6,7 +6,7 @@
     <tbody>
     <tr>
         <td>{{r.count}} of</td>
-        <td colspan="2"></td>
+        <td colspan="3"></td>
         <td><button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
     </tr>
     {{#each type in r.type}}
@@ -15,6 +15,7 @@
         <td>{{type.name}}</td>
         <td>{{type.vendor}}</td>
         <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
+        <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
     </tbody>
