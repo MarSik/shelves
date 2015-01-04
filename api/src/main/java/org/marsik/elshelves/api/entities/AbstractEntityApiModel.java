@@ -8,7 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 
 public abstract class AbstractEntityApiModel implements EmberEntity {
-    @Override
+	protected AbstractEntityApiModel(UUID id) {
+		this.id = id;
+	}
+
+	protected AbstractEntityApiModel() {
+	}
+
+	@Override
     @EmberIgnore
     public Map<String, String> getLinks() {
         return new THashMap<String, String>(0);

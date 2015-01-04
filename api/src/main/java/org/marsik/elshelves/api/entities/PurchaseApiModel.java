@@ -2,18 +2,12 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.TransactionIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.PurchaseIdResolver;
 
 import java.util.Map;
 import java.util.Set;
@@ -22,10 +16,17 @@ import java.util.UUID;
 /**
  * The initial lot created when parts are purchased
  */
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = PurchaseIdResolver.class)
 @EmberModelName("purchase")
 public class PurchaseApiModel extends LotBaseApiModel {
-    Double singlePrice;
+	public PurchaseApiModel(UUID id) {
+		super(id);
+	}
+
+	public PurchaseApiModel() {
+	}
+
+	Double singlePrice;
     Double totalPrice;
     Double vat;
     Boolean vatIncluded;
@@ -85,7 +86,6 @@ public class PurchaseApiModel extends LotBaseApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = TransactionIdDeserializer.class)
 	public void setTransaction(TransactionApiModel transaction) {
 		this.transaction = transaction;
 	}
@@ -96,7 +96,6 @@ public class PurchaseApiModel extends LotBaseApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = PartTypeIdDeserializer.class)
 	public void setType(PartTypeApiModel type) {
 		this.type = type;
 	}
@@ -107,7 +106,6 @@ public class PurchaseApiModel extends LotBaseApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = LotIdDeserializer.class)
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}

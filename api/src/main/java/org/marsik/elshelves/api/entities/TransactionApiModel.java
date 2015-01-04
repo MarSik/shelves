@@ -4,20 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.PurchaseIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.SourceIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.TransactionIdResolver;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = TransactionIdResolver.class)
 @EmberModelName("transaction")
 public class TransactionApiModel extends AbstractEntityApiModel {
+	public TransactionApiModel(UUID id) {
+		super(id);
+	}
+
+	public TransactionApiModel() {
+	}
+
 	String name;
 	Date date;
 
@@ -52,7 +56,6 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = PurchaseIdDeserializer.class)
 	public void setItems(Set<PurchaseApiModel> items) {
 		this.items = items;
 	}
@@ -63,7 +66,6 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
 	}
@@ -74,7 +76,6 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = SourceIdDeserializer.class)
 	public void setSource(SourceApiModel source) {
 		this.source = source;
 	}

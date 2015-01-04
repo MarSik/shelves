@@ -2,27 +2,26 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.PartGroupIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.PartGroupIdResolver;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = PartGroupIdResolver.class)
 @EmberModelName("group")
 public class PartGroupApiModel extends AbstractNamedEntityApiModel {
-    Set<PartGroupApiModel> groups;
+	public PartGroupApiModel(UUID id) {
+		super(id);
+	}
+
+	Set<PartGroupApiModel> groups;
 	@Sideload
     PartGroupApiModel parent;
 
@@ -61,7 +60,6 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(using = PartGroupIdDeserializer.class)
     public void setParent(PartGroupApiModel parent) {
         this.parent = parent;
     }
@@ -72,7 +70,6 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
     public void setTypes(Set<PartTypeApiModel> types) {
         this.types = types;
     }

@@ -5,24 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PurchaseIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.RequirementIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -33,9 +23,15 @@ import java.util.UUID;
  * objects need to be created to represent the
  * resulting two new Lots.
  */
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = LotIdResolver.class)
 @EmberModelName("lot")
 public class LotApiModel extends LotBaseApiModel {
+	public LotApiModel(UUID id) {
+		super(id);
+	}
+
+	public LotApiModel() {
+	}
 
 	@Sideload
     BoxApiModel location;
@@ -66,7 +62,6 @@ public class LotApiModel extends LotBaseApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(using = BoxIdDeserializer.class)
     public void setLocation(BoxApiModel location) {
         this.location = location;
     }
@@ -77,7 +72,6 @@ public class LotApiModel extends LotBaseApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(using = LotIdDeserializer.class)
     public void setPrevious(LotApiModel previous) {
         this.previous = previous;
     }
@@ -96,7 +90,6 @@ public class LotApiModel extends LotBaseApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = PurchaseIdDeserializer.class)
 	public void setPurchase(PurchaseApiModel purchase) {
 		this.purchase = purchase;
 	}
@@ -112,7 +105,6 @@ public class LotApiModel extends LotBaseApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = RequirementIdDeserializer.class)
 	public void setUsedBy(RequirementApiModel usedBy) {
 		this.usedBy = usedBy;
 	}

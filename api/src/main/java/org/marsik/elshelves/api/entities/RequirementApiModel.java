@@ -4,18 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.ProjectIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.RequirementIdResolver;
 
 import java.util.Set;
+import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = RequirementIdResolver.class)
 @EmberModelName("requirement")
 public class RequirementApiModel extends AbstractEntityApiModel {
+	public RequirementApiModel(UUID id) {
+		super(id);
+	}
+
+	public RequirementApiModel() {
+	}
+
 	@Sideload
 	ProjectApiModel project;
 
@@ -32,7 +37,6 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 		return project;
 	}
 
-	@JsonDeserialize(using = ProjectIdDeserializer.class)
 	public void setProject(ProjectApiModel project) {
 		this.project = project;
 	}
@@ -43,7 +47,6 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = PartTypeIdDeserializer.class)
 	public void setType(Set<PartTypeApiModel> type) {
 		this.type = type;
 	}
@@ -62,7 +65,6 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}

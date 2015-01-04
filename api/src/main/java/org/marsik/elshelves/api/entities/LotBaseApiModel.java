@@ -2,11 +2,7 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import javax.validation.constraints.Min;
 import java.util.Date;
@@ -14,6 +10,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LotBaseApiModel extends AbstractEntityApiModel {
+	public LotBaseApiModel(UUID id) {
+		super(id);
+	}
+
+	public LotBaseApiModel() {
+	}
+
 	Date created;
 	@Min(1)
 	Long count;
@@ -56,7 +59,6 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
 	public void setNext(Set<LotApiModel> next) {
 		this.next = next;
 	}
@@ -67,7 +69,6 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
 	}
@@ -78,7 +79,6 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setPerformedBy(UserApiModel performedBy) {
 		this.performedBy = performedBy;
 	}

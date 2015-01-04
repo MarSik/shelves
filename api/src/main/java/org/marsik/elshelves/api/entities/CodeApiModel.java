@@ -12,7 +12,14 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EmberModelName("code")
 public class CodeApiModel extends AbstractEntityApiModel {
-    String code;
+	public CodeApiModel(UUID id) {
+		super(id);
+	}
+
+	public CodeApiModel() {
+	}
+
+	String code;
 
     BoxApiModel box;
 

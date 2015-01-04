@@ -5,25 +5,26 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.BoxIdResolver;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = BoxIdResolver.class)
 @EmberModelName("box")
 public class BoxApiModel extends AbstractNamedEntityApiModel {
-    CodeApiModel code;
+	public BoxApiModel(UUID id) {
+		super(id);
+	}
+
+	public BoxApiModel() {
+	}
+
+	CodeApiModel code;
 
     Set<LotApiModel> lots;
 
@@ -47,7 +48,6 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
     public void setLots(Set<LotApiModel> lots) {
         this.lots = lots;
     }
@@ -58,7 +58,6 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(using = BoxIdDeserializer.class)
     public void setParent(BoxApiModel parent) {
         this.parent = parent;
     }
@@ -69,7 +68,6 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(contentUsing = BoxIdDeserializer.class)
     public void setBoxes(Set<BoxApiModel> boxes) {
         this.boxes = boxes;
     }

@@ -4,13 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.DocumentIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.UUID;
 
 public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
+	public AbstractNamedEntityApiModel(UUID id) {
+		super(id);
+	}
+
+	public AbstractNamedEntityApiModel() {
+	}
+
 	@NotNull
 	String name;
 	String summary;
@@ -52,7 +58,6 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
 	}
@@ -63,7 +68,6 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = DocumentIdDeserializer.class)
 	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
 		this.describedBy = describedBy;
 	}

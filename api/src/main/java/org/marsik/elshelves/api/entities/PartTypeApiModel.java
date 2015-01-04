@@ -2,30 +2,28 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.DocumentIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.EmberIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.FootprintIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.PartGroupIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.PartTypeIdResolver;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = PartTypeIdResolver.class)
 @EmberModelName("type")
 public class PartTypeApiModel extends AbstractNamedEntityApiModel {
-    String description;
+	public PartTypeApiModel(UUID id) {
+		super(id);
+	}
+
+	public PartTypeApiModel() {
+	}
+
+	String description;
 
 	String vendor;
 	String vendorId;
@@ -50,7 +48,6 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSetter
-	@JsonDeserialize(using = FootprintIdDeserializer.class)
     public void setFootprint(FootprintApiModel footprint) {
         this.footprint = footprint;
     }
@@ -61,7 +58,6 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     }
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = PartGroupIdDeserializer.class)
 	public void setGroups(Set<PartGroupApiModel> groups) {
 		this.groups = groups;
 	}
@@ -96,7 +92,6 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}

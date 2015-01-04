@@ -4,16 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.DocumentIdResolver;
 
 import java.util.Date;
+import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = DocumentIdResolver.class)
 @EmberModelName("document")
 public class DocumentApiModel extends AbstractEntityApiModel {
+	public DocumentApiModel(UUID id) {
+		super(id);
+	}
+
+	public DocumentApiModel() {
+	}
+
 	String name;
 	String contentType;
 	Long size;
@@ -60,7 +67,6 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(using = UserIdDeserializer.class)
 	public void setBelongsTo(UserApiModel belongsTo) {
 		this.belongsTo = belongsTo;
 	}

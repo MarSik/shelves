@@ -4,17 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
-import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
-import org.marsik.elshelves.api.entities.deserializers.RequirementIdDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.ProjectIdResolver;
 
 import java.util.Set;
+import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ProjectIdResolver.class)
 @EmberModelName("project")
 public class ProjectApiModel extends AbstractNamedEntityApiModel {
+	public ProjectApiModel(UUID id) {
+		super(id);
+	}
+
+	public ProjectApiModel() {
+	}
+
 	String description;
 
 	@Sideload(asType = RequirementApiModel.class)
@@ -34,7 +40,6 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	@JsonSetter
-	@JsonDeserialize(contentUsing = RequirementIdDeserializer.class)
 	public void setRequires(Set<RequirementApiModel> requires) {
 		this.requires = requires;
 	}

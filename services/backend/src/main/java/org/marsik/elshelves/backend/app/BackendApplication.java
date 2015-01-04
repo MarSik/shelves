@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.app;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.spi.container.WebApplication;
 import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.FailureMode;
@@ -7,7 +8,6 @@ import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
 import org.marsik.elshelves.backend.app.WebFormSupportFilter;
-import org.marsik.elshelves.backend.app.spring.EmberAwareObjectMapper;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.Filter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -71,14 +73,10 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    EmberAwareObjectMapper emberAwareObjectMapper() {
-        return new EmberAwareObjectMapper();
-    }
-
-    @Bean
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(emberAwareObjectMapper());
+		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")).indentOutput(true);
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         return converter;
     }
 
