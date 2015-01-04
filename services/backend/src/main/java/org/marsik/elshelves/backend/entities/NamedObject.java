@@ -19,6 +19,12 @@ public class NamedObject implements OwnedEntity {
 	@Indexed
 	String name;
 
+	@Indexed
+	String summary;
+
+	@Indexed
+	String description;
+
 	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
 	Set<Document> describedBy;
 
@@ -48,6 +54,22 @@ public class NamedObject implements OwnedEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Set<Document> getDescribedBy() {

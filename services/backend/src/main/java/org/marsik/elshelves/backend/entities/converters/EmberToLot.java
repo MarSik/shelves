@@ -23,6 +23,9 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 	@Autowired
 	EmberToUser emberToUser;
 
+	@Autowired
+	EmberToRequirement emberToRequirement;
+
 	@Override
 	public Lot convert(LotApiModel object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
@@ -50,6 +53,7 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 		model.setPurchase(emberToPurchase.convert(object.getPurchase(), 1, cache));
 		model.setPrevious(convert(object.getPrevious(), 1, cache));
 		model.setPerformedBy(emberToUser.convert(object.getPerformedBy(), 1, cache));
+		model.setUsedBy(emberToRequirement.convert(object.getUsedBy(), 1, cache));
 
 		return model;
 	}

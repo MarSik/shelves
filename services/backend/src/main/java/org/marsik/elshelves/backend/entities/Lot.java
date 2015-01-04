@@ -43,6 +43,7 @@ public class Lot extends LotBase {
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
 		setAction(LotAction.SPLIT);
+		setUsedBy(previous.getUsedBy());
 	}
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
@@ -54,6 +55,24 @@ public class Lot extends LotBase {
 		setOwner(previous.getOwner());
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
+		setUsedBy(previous.getUsedBy());
+	}
+
+	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
+		setPrevious(previous);
+		setPerformedBy(performedBy);
+		setUuid(uuid);
+		setCount(previous.count);
+		setOwner(previous.getOwner());
+		setCreated(new Date());
+		setNext(new ArrayList<Lot>());
+		setUsedBy(requirement);
+
+		if (requirement == null) {
+			setAction(LotAction.UNSOLDERED);
+		} else {
+			setAction(LotAction.SOLDERED);
+		}
 	}
 
 	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
@@ -74,6 +93,9 @@ public class Lot extends LotBase {
 
 	@RelatedTo(type = "LOCATED_AT")
 	Box location;
+
+	@RelatedTo(type = "USES", direction = Direction.INCOMING)
+	Requirement usedBy;
 
 	public Lot getPrevious() {
 		return previous;
@@ -152,6 +174,14 @@ public class Lot extends LotBase {
 		return new Lot(uuidGenerator.generate(), performedBy, LotAction.DESTROYED, this);
 	}
 
+	public Lot solder(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
+		return new Lot(uuidGenerator.generate(), performedBy, where, this);
+	}
+
+	public Lot unsolder(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
+		return new Lot(uuidGenerator.generate(), performedBy, (Requirement)null, this);
+	}
+
 	public Purchase getPurchase() {
 		return purchase;
 	}
@@ -182,4 +212,11 @@ public class Lot extends LotBase {
 		this.performedBy = performedBy;
 	}
 
+	public Requirement getUsedBy() {
+		return usedBy;
+	}
+
+	public void setUsedBy(Requirement usedBy) {
+		this.usedBy = usedBy;
+	}
 }

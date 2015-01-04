@@ -33,6 +33,9 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
     final UuidGenerator uuidGenerator;
 
 	@Autowired
+	RelinkService relinkService;
+
+	@Autowired
 	Neo4jTemplate neo4jTemplate;
 
     public AbstractRestService(R repository,
@@ -69,83 +72,6 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
         return repository.findBySchemaPropertyValue("uuid", uuid);
     }
 
-	protected <E extends OwnedEntity> E getRelinked(E value) {
-		return (E)neo4jTemplate.findByIndexedValue(value.getClass(), "uuid", value.getUuid()).single();
-	}
-
-	/**
-	 * This method is used to realign entities coming from external sources
-	 * like REST based web application with the entities stored in the database.
-	 *
-	 * The linking is done using the uuid property values.
-	 *
-	 * Modus operandi:
-	 *
-	 * Find all relationship properties and make sure they reference existing
-	 * database entities by querying the uuid index.
-	 * If the property does not contain uuid (happens with
-	 * nested rest fields), call relink on the the property contents to relink
-	 * the nested properties.
-	 *
-	 * @param entity Entity to relink with the daatabase
-	 * @return
-	 */
-	protected <E extends OwnedEntity> E relink(E entity) {
-		PropertyDescriptor[] properties;
-		try {
-			properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
-		} catch (IntrospectionException ex) {
-			ex.printStackTrace();
-			return entity;
-		}
-
-		for (PropertyDescriptor f: properties) {
-			Method getter = f.getReadMethod();
-			if (getter == null) {
-				continue;
-			}
-
-			if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
-				try {
-					OwnedEntity value = (OwnedEntity) getter.invoke(entity);
-					Method setter = f.getWriteMethod();
-
-					if (value != null && setter != null) {
-						if (value.getUuid() != null) {
-							OwnedEntity v = getRelinked(value);
-							assert v != null && v.getClass().equals(value.getClass());
-							setter.invoke(entity, v);
-						} else {
-							relink(value);
-						}
-					}
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-			} else if (Collection.class.isAssignableFrom(f.getPropertyType())) {
-				try {
-					Collection<OwnedEntity> newItems = new ArrayList<OwnedEntity>();
-					Collection<OwnedEntity> items = (Collection<OwnedEntity>)getter.invoke(entity);
-					for (OwnedEntity item: items) {
-						if (item.getUuid() == null) {
-							newItems.add(item);
-							relink(item);
-						} else {
-							OwnedEntity v = getRelinked(item);
-							assert v != null && v.getClass().equals(item.getClass());
-							newItems.add(v);
-						}
-					}
-					items.clear();
-					items.addAll(newItems);
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-		return entity;
-	}
 
 	protected int conversionDepth() {
 		return 1;
@@ -153,7 +79,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 
     protected T createEntity(E dto, User currentUser) {
         T created = restToDb.convert(dto, conversionDepth(), new THashMap<UUID, Object>());
-		created = relink(created);
+		created = relinkService.relink(created);
         created.setUuid(uuidGenerator.generate());
         created.setOwner(currentUser);
         return created;
@@ -164,7 +90,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 	}
 
     protected T updateEntity(T entity, T update) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
-		update = relink(update);
+		update = relinkService.relink(update);
 
 		PropertyDescriptor[] properties;
 		try {

@@ -23,6 +23,9 @@ public class Requirement implements OwnedEntity {
 	@RelatedTo(type = "REQUIRED_TYPE")
 	Set<Type> type;
 
+	@RelatedTo(type = "USES")
+	Set<Lot> lots;
+
 	@Min(1)
 	Long count;
 
@@ -66,5 +69,13 @@ public class Requirement implements OwnedEntity {
 	@Override
 	public void setOwner(User user) {
 		// NOP
+	}
+
+	public Set<Lot> getLots() {
+		return lots;
+	}
+
+	public void setLots(Set<Lot> lots) {
+		this.lots = lots;
 	}
 }

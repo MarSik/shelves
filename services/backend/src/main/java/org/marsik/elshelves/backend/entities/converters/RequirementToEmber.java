@@ -1,8 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 
 	@Autowired
 	ProjectToEmber projectToEmber;
+
+	@Autowired
+	LotToEmber lotToEmber;
 
 	@Override
 	public RequirementApiModel convert(Requirement object, int nested, Map<UUID, Object> cache) {
@@ -46,6 +51,11 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 			model.getType().add(typeToEmber.convert(t, nested, cache));
 		}
 		model.setProject(projectToEmber.convert(object.getProject(), nested, cache));
+
+		model.setLots(new THashSet<LotApiModel>());
+		for (Lot l: object.getLots()) {
+			model.getLots().add(lotToEmber.convert(l, nested, cache));
+		}
 
 		return model;
 	}

@@ -4,5 +4,6 @@ public enum LotAction {
 	DELIVERY,
 	SPLIT,
 	SOLDERED,
+	UNSOLDERED,
 	DESTROYED
 }

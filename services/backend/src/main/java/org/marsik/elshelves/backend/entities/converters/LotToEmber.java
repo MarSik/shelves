@@ -28,6 +28,9 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 	@Autowired
 	LotBaseToEmber lotBaseToEmber;
 
+	@Autowired
+	RequirementToEmber requirementToEmber;
+
 	protected LotApiModel createEntity() {
 		return new LotApiModel();
 	}
@@ -37,6 +40,7 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setAction(object.getAction());
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested, cache));
 		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested, cache));
+		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested, cache));
 
 		if (nested == 0) {
 			return entity;

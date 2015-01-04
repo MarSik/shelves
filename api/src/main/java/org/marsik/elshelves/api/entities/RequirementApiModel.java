@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.ember.Sideload;
+import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.ProjectIdDeserializer;
 
@@ -22,6 +23,9 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	Set<PartTypeApiModel> type;
 
 	Long count;
+
+	@Sideload(asType = LotApiModel.class)
+	Set<LotApiModel> lots;
 
 	@JsonIdentityReference(alwaysAsId = true)
 	public ProjectApiModel getProject() {
@@ -50,5 +54,16 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 
 	public void setCount(Long count) {
 		this.count = count;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public Set<LotApiModel> getLots() {
+		return lots;
+	}
+
+	@JsonSetter
+	@JsonDeserialize(contentUsing = LotIdDeserializer.class)
+	public void setLots(Set<LotApiModel> lots) {
+		this.lots = lots;
 	}
 }

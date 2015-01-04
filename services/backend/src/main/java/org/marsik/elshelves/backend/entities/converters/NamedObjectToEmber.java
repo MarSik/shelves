@@ -22,6 +22,8 @@ public class NamedObjectToEmber {
 	public AbstractNamedEntityApiModel convert(NamedObject object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
 		model.setName(object.getName());
+		model.setSummary(object.getSummary());
+		model.setDescription(object.getDescription());
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
 
 		if (object.getDescribedBy() != null) {

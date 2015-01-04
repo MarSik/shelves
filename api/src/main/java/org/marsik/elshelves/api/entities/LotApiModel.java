@@ -14,6 +14,7 @@ import org.marsik.elshelves.api.entities.deserializers.BoxIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.LotIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.PartTypeIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.PurchaseIdDeserializer;
+import org.marsik.elshelves.api.entities.deserializers.RequirementIdDeserializer;
 import org.marsik.elshelves.api.entities.deserializers.UserIdDeserializer;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 
@@ -46,6 +47,9 @@ public class LotApiModel extends LotBaseApiModel {
 
 	@Sideload
 	PurchaseApiModel purchase;
+
+	@Sideload
+	RequirementApiModel usedBy;
 
     @Override
     @EmberIgnore
@@ -100,5 +104,16 @@ public class LotApiModel extends LotBaseApiModel {
 	@JsonIgnore
 	public PartTypeApiModel getType() {
 		return getPurchase().getType();
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public RequirementApiModel getUsedBy() {
+		return usedBy;
+	}
+
+	@JsonSetter
+	@JsonDeserialize(using = RequirementIdDeserializer.class)
+	public void setUsedBy(RequirementApiModel usedBy) {
+		this.usedBy = usedBy;
 	}
 }

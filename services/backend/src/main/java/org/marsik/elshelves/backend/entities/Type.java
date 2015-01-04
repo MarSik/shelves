@@ -13,8 +13,6 @@ import java.util.UUID;
 
 @NodeEntity
 public class Type extends NamedObject {
-	String description;
-
 	String vendor;
 	String vendorId;
 
@@ -26,14 +24,6 @@ public class Type extends NamedObject {
 
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
 	Set<Purchase> purchases;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public String getVendor() {
 		return vendor;

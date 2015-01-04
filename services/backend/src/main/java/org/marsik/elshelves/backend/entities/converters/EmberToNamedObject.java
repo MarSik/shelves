@@ -23,6 +23,8 @@ public class EmberToNamedObject {
 	public NamedObject convert(AbstractNamedEntityApiModel object, NamedObject model, int nested, Map<UUID, Object> cache) {
 		model.setUuid(object.getId());
 		model.setName(object.getName());
+		model.setSummary(object.getSummary());
+		model.setDescription(object.getDescription());
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
 
 		if (object.getDescribedBy() != null) {

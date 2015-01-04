@@ -1,11 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.marsik.elshelves.api.entities.BoxApiModel;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
-import org.marsik.elshelves.backend.entities.Box;
-import org.marsik.elshelves.backend.entities.EmberToProject;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,9 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 
 	@Autowired
 	EmberToProject emberToProject;
+
+	@Autowired
+	EmberToLot emberToLot;
 
     @Override
     public Requirement convert(RequirementApiModel object, int nested, Map<UUID, Object> cache) {
@@ -51,6 +53,13 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 			model.setType(new THashSet<Type>());
 			for (PartTypeApiModel p: object.getType()) {
 				model.getType().add(emberToType.convert(p, nested, cache));
+			}
+		}
+
+		if (object.getLots() != null) {
+			model.setLots(new THashSet<Lot>());
+			for (LotApiModel l: object.getLots()) {
+				model.getLots().add(emberToLot.convert(l, nested, cache));
 			}
 		}
 
