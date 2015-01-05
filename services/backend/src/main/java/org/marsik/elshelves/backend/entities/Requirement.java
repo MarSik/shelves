@@ -63,7 +63,7 @@ public class Requirement implements OwnedEntity {
 
 	@Override
 	public User getOwner() {
-		return getProject().getOwner();
+		return getProject() != null ? getProject().getOwner() : null;
 	}
 
 	@Override

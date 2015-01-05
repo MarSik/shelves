@@ -94,10 +94,10 @@ public class BackupService {
 		restore(backup.getTypes(), emberToType, currentUser, cache);
 		restore(backup.getProjects(), emberToProject, currentUser, cache);
 		restore(backup.getSources(), emberToSource, currentUser, cache);
+        restore(backup.getTransactions(), emberToTransaction, currentUser, cache);
+        restore(backup.getPurchases(), emberToPurchase, currentUser, cache);
 		restore(backup.getLots(), emberToLot, currentUser, cache);
 		restore(backup.getRequirements(), emberToRequirement, currentUser, cache);
-		restore(backup.getTransactions(), emberToTransaction, currentUser, cache);
-		restore(backup.getPurchases(), emberToPurchase, currentUser, cache);
 
 		return true;
 	}

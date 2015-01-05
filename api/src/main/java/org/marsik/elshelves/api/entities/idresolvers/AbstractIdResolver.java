@@ -49,6 +49,7 @@ public abstract class AbstractIdResolver implements ObjectIdResolver {
 
 	@Override
 	public ObjectIdResolver newForDeserialization(Object context) {
+        this._items.clear();
 		return this;
 	}
 }
