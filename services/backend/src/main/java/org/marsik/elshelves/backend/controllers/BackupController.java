@@ -5,6 +5,7 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BackupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,7 @@ public class BackupController {
 	 * @param currentUser
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
+	@Transactional
 	public void restoreBackup(@RequestBody BackupApiModel backup,
 							  @CurrentUser User currentUser) {
 		backupService.restoreFromBackup(backup, currentUser);

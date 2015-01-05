@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class RelinkService {
 	 * @return
 	 */
 	protected <E extends OwnedEntity> E relink(E entity) {
+		return relink(entity, null);
+	}
+
+	protected <E extends OwnedEntity> E relink(E entity, User user) {
 		PropertyDescriptor[] properties;
 		try {
 			properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
@@ -60,12 +65,12 @@ public class RelinkService {
 					Method setter = f.getWriteMethod();
 
 					if (value != null && setter != null) {
-						if (value.getUuid() != null) {
+						if (value.getUuid() != null && value.getNodeId() == null) {
 							OwnedEntity v = getRelinked(value);
 							assert v != null && v.getClass().equals(value.getClass());
 							setter.invoke(entity, v);
 						} else {
-							relink(value);
+							relink(value, user);
 						}
 					}
 				} catch (InvocationTargetException | IllegalAccessException ex) {
@@ -78,7 +83,9 @@ public class RelinkService {
 					for (OwnedEntity item: items) {
 						if (item.getUuid() == null) {
 							newItems.add(item);
-							relink(item);
+							relink(item, user);
+						} else if(item.getNodeId() != null) {
+							newItems.add(item);
 						} else {
 							OwnedEntity v = getRelinked(item);
 							assert v != null && v.getClass().equals(item.getClass());
@@ -91,6 +98,10 @@ public class RelinkService {
 					ex.printStackTrace();
 				}
 			}
+		}
+
+		if (entity.getOwner() == null && user != null) {
+			entity.setOwner(user);
 		}
 
 		return entity;
