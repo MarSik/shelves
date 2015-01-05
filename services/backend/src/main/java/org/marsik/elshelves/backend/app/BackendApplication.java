@@ -75,7 +75,7 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     @Bean
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")).indentOutput(true);
+		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")).indentOutput(true);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         return converter;
     }

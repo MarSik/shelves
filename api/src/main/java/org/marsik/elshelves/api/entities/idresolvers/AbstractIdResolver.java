@@ -23,7 +23,7 @@ public abstract class AbstractIdResolver implements ObjectIdResolver {
 
 	@Override
 	public Object resolveId(ObjectIdGenerator.IdKey id) {
-		Object obj = _items.get(id.key);
+		Object obj = _items.get(id);
 		if (obj == null) {
 			obj = create(id);
 		}
