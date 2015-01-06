@@ -54,6 +54,11 @@ public abstract class AbstractIdResolver implements ObjectIdResolver {
 	@Override
 	public ObjectIdResolver newForDeserialization(Object c) {
 		DeserializationContext context = (DeserializationContext)c;
-		return this;
-	}
+        try {
+            return this.getClass().newInstance();
+        } catch (InstantiationException|IllegalAccessException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }
