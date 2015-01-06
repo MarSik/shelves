@@ -9,7 +9,7 @@ export default DS.Model.extend({
     description: attr('string'),
 
     belongsTo: belongsTo('user'),
-    describedBy: hasMany("document"),
+    describedBy: hasMany("document", {async: true}),
 
-    requires: hasMany('requirement')
+    requires: hasMany('requirement', {async: true})
 });

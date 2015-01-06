@@ -6,13 +6,13 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default LotBase.extend({
-  location: belongsTo("box"),
-  previous: belongsTo("lot", {inverse: "next"}),
+  location: belongsTo("box", {async: true}),
+  previous: belongsTo("lot", {inverse: "next", async: true}),
   next: hasMany("lot", {inverse: "previous", async: true}),
   action: attr(),
   purchase: belongsTo('purchase', {inverse: null, async: true}),
 
-  performedBy: belongsTo('user', {inverse: null}),
+  performedBy: belongsTo('user', {inverse: null, async: true}),
 
   type: function () {
       return this.get('purchase.type')

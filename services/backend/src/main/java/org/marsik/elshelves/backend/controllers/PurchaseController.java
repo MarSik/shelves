@@ -28,25 +28,4 @@ public class PurchaseController extends AbstractRestController<Purchase, Purchas
 	public PurchaseController(PurchaseService service) {
 		super(PurchaseApiModel.class, service);
 	}
-
-	@RequestMapping("/{uuid}/next")
-	@ResponseBody
-	@Transactional
-	public EmberModel getNext(@CurrentUser User currentUser,
-							  @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
-		Iterable<LotApiModel> lots = ((PurchaseService)getService()).getNext(id, currentUser);
-		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, lots);
-		return modelBuilder.build();
-	}
-
-	@RequestMapping("{uuid}/lots")
-	@ResponseBody
-	@Transactional
-	public EmberModel getLots(@PathVariable("uuid") UUID uuid,
-							  @CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		PurchaseApiModel g = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<LotApiModel> builder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, g.getLots());
-		return builder.build();
-	}
 }

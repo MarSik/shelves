@@ -1,18 +1,23 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
 public class Document extends NamedObject {
+	@NotEmpty
 	String contentType;
+	@NotNull
 	Long size;
 
+	@NotNull
 	Date created;
 
 	@RelatedTo(type = "DESCRIBES")

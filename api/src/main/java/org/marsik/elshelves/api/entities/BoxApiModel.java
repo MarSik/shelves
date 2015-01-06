@@ -28,19 +28,9 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
 
     Set<LotApiModel> lots;
 
-	@Sideload
     BoxApiModel parent;
 
     Set<BoxApiModel> boxes;
-
-    @Override
-    @EmberIgnore
-    public Map<String, String> getLinks() {
-        Map<String, String> links = super.getLinks();
-        links.put("lots", "lots");
-		links.put("boxes", "boxes");
-        return links;
-    }
 
     @JsonIdentityReference(alwaysAsId = true)
     public Set<LotApiModel> getLots() {

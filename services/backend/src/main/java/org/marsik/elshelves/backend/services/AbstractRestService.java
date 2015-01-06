@@ -72,7 +72,6 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
         return repository.findBySchemaPropertyValue("uuid", uuid);
     }
 
-
 	protected int conversionDepth() {
 		return 1;
 	}

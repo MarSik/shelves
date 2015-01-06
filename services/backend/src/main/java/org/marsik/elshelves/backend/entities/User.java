@@ -13,6 +13,7 @@ import java.util.UUID;
 @NodeEntity
 public class User {
     @Indexed
+	@NotNull
     UUID uuid;
 
     @NotNull

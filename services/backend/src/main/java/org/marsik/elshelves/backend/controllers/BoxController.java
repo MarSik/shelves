@@ -36,18 +36,6 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
         this.boxService = boxService;
     }
 
-	@Transactional
-	@RequestMapping(value = "/{uuid}/boxes")
-	public EmberModel getNestedBoxes(@CurrentUser User currentUser,
-									 @PathVariable("uuid") UUID uuid) throws PermissionDenied, EntityNotFound {
-		Iterable<BoxApiModel> boxes = boxService.getNestedBoxes(uuid, currentUser);
-		EmberModel.Builder<BoxApiModel> modelBuilder = new EmberModel.Builder<BoxApiModel>(BoxApiModel.class, boxes);
-		for (BoxApiModel b: boxes) {
-			sideLoad(b, modelBuilder);
-		}
-		return modelBuilder.build();
-	}
-
     @Transactional
     @RequestMapping(value = "/{uuid}/qr", produces = "image/png")
     public void generateQr(HttpServletResponse response,
@@ -69,25 +57,4 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel> {
         response.getOutputStream().write(os.toByteArray());
         response.flushBuffer();
     }
-
-	@RequestMapping("{uuid}/lots")
-	@ResponseBody
-	@Transactional
-	public EmberModel getLots(@PathVariable("uuid") UUID uuid,
-							  @CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		BoxApiModel box = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<LotApiModel> builder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, box.getLots());
-		builder.sideLoad(box.getBelongsTo());
-		builder.sideLoad(box);
-
-		for (LotApiModel t: box.getLots()) {
-			builder.sideLoad(t.getLocation());
-			builder.sideLoad(t.getPerformedBy());
-			builder.sideLoad(t.getPrevious());
-			builder.sideLoad(t.getType());
-		}
-
-		return builder.build();
-	}
 }

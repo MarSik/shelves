@@ -21,15 +21,12 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	public RequirementApiModel() {
 	}
 
-	@Sideload
 	ProjectApiModel project;
 
-	@Sideload(asType = PartTypeApiModel.class)
 	Set<PartTypeApiModel> type;
 
 	Long count;
 
-	@Sideload(asType = LotApiModel.class)
 	Set<LotApiModel> lots;
 
 	@JsonIdentityReference(alwaysAsId = true)

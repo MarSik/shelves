@@ -33,28 +33,15 @@ public class LotApiModel extends LotBaseApiModel {
 	public LotApiModel() {
 	}
 
-	@Sideload
     BoxApiModel location;
 
-	@Sideload
     LotApiModel previous;
 
 	LotAction action;
 
-	@Sideload
 	PurchaseApiModel purchase;
 
-	@Sideload
 	RequirementApiModel usedBy;
-
-    @Override
-    @EmberIgnore
-    public Map<String, String> getLinks() {
-        Map<String, String> links = new THashMap<String, String>();
-        links.put("next", "next");
-		links.put("purchase", "purchase");
-        return links;
-    }
 
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {

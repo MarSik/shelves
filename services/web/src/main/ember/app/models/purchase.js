@@ -6,12 +6,12 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default LotBase.extend({
-  type: belongsTo('type', {inverse: null}),
+  type: belongsTo('type', {inverse: null, async: true}),
   singlePrice: attr("number"),
   totalPrice: attr("number"),
   vat: attr("number"),
   vatIncluded: attr("boolean"),
-  transaction: belongsTo("transaction"),
+  transaction: belongsTo("transaction", {async: true}),
   next: hasMany("lot", {inverse: null, async: true}),
 
     priceWithVat: function () {

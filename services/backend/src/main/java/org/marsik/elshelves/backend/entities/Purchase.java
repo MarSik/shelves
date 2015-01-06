@@ -5,11 +5,13 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
 public class Purchase extends LotBase {
+	@NotNull
 	@RelatedTo(type = "OF_TYPE")
 	Type type;
 
@@ -18,6 +20,7 @@ public class Purchase extends LotBase {
 	Double vat;
 	Boolean vatIncluded;
 
+	@NotNull
 	@RelatedTo(type = "IN_TRANSACTION")
 	Transaction transaction;
 

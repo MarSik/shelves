@@ -12,7 +12,7 @@ export default DS.Model.extend({
   footprint: belongsTo("footprint", {async: true}),
   lots: hasMany("lot", {async: true, inverse: null}),
   belongsTo: belongsTo("user", {async: true}),
-  describedBy: hasMany("document"),
+  describedBy: hasMany("document", {async: true}),
 
   fullName: function () {
       return this.get('name') + ' | ' + this.get('footprint.name') + ' | ' + this.get('vendor');

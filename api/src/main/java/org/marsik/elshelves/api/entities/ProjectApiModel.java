@@ -23,7 +23,6 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 
 	String description;
 
-	@Sideload(asType = RequirementApiModel.class)
 	Set<RequirementApiModel> requires;
 
 	public String getDescription() {

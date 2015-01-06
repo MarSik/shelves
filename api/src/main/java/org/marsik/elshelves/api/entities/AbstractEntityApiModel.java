@@ -1,5 +1,6 @@
 package org.marsik.elshelves.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gnu.trove.map.hash.THashMap;
 import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberEntity;
@@ -16,6 +17,7 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
 	}
 
 	@Override
+	@JsonIgnore
     @EmberIgnore
     public Map<String, String> getLinks() {
         return new THashMap<String, String>(0);

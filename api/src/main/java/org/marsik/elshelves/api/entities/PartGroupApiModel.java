@@ -22,19 +22,9 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	Set<PartGroupApiModel> groups;
-	@Sideload
     PartGroupApiModel parent;
 
     Set<PartTypeApiModel> types;
-
-    @Override
-    @EmberIgnore
-    public Map<String, String> getLinks() {
-        Map<String, String> links = new THashMap<String, String>();
-        links.put("groups", "groups");
-        links.put("types", "types");
-        return links;
-    }
 
     public PartGroupApiModel() {
     }

@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import gnu.trove.set.hash.THashSet;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.ember.EmberModel;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,10 +41,20 @@ public class LotController {
 	@ResponseBody
 	@RequestMapping
 	@Transactional
-	public EmberModel getAll(@CurrentUser User currentUser) {
-		Collection<LotApiModel> lots = lotService.getAll(currentUser);
+	public EmberModel getAll(@CurrentUser User currentUser,
+							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws PermissionDenied, EntityNotFound {
+		Collection<LotApiModel> allItems;
 
-		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(lots);
+		if (ids == null) {
+			allItems = lotService.getAll(currentUser);
+		} else {
+			allItems = new THashSet<>();
+			for (UUID id: ids) {
+				allItems.add(lotService.get(id, currentUser));
+			}
+		}
+
+		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, allItems);
 		return modelBuilder.build();
 	}
 
@@ -53,26 +65,6 @@ public class LotController {
 							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
 		LotApiModel lot = lotService.get(id, currentUser);
 		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(lot);
-		return modelBuilder.build();
-	}
-
-	@RequestMapping("/{uuid}/next")
-	@ResponseBody
-	@Transactional
-	public EmberModel getNext(@CurrentUser User currentUser,
-							 @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
-		Iterable<LotApiModel> lots = lotService.getNext(id, currentUser);
-		EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, lots);
-		return modelBuilder.build();
-	}
-
-	@RequestMapping("/{uuid}/purchase")
-	@ResponseBody
-	@Transactional
-	public EmberModel getPurchase(@CurrentUser User currentUser,
-							  @PathVariable("uuid") UUID id) throws PermissionDenied, EntityNotFound {
-		LotApiModel lot = lotService.get(id, currentUser);
-		EmberModel.Builder<PurchaseApiModel> modelBuilder = new EmberModel.Builder<PurchaseApiModel>(lot.getPurchase());
 		return modelBuilder.build();
 	}
 

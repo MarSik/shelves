@@ -25,7 +25,6 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	@Sideload
 	UserApiModel belongsTo;
 
-	@Sideload(asType = DocumentApiModel.class)
 	Set<DocumentApiModel> describedBy;
 
 	public String getName() {

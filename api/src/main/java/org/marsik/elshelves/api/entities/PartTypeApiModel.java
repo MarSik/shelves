@@ -28,19 +28,9 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	String vendor;
 	String vendorId;
 
-	@Sideload
     FootprintApiModel footprint;
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
-
-    @Override
-    @EmberIgnore
-    public Map<String, String> getLinks() {
-        Map<String, String> links = super.getLinks();
-        links.put("groups", "groups");
-		links.put("lots", "lots");
-        return links;
-    }
 
     @JsonIdentityReference(alwaysAsId = true)
     public FootprintApiModel getFootprint() {

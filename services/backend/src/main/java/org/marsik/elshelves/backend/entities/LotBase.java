@@ -5,6 +5,8 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -12,12 +14,18 @@ import java.util.UUID;
 @NodeEntity
 public class LotBase implements OwnedEntity {
 	@Indexed
+	@NotNull
 	UUID uuid;
 
+	@NotNull
 	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
 	User owner;
 
+	@NotNull
 	Date created;
+
+	@NotNull
+	@Min(1)
 	Long count;
 
 	@Override

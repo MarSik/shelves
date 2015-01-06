@@ -20,7 +20,7 @@ public class EmberToLotBase  {
 	EmberToLot emberTolot;
 
 	public LotBase convert(LotBaseApiModel object, LotBase model, int nested, Map<UUID, Object> cache) {
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), 1, cache));
+		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
 		model.setUuid(object.getId());
 		model.setCount(object.getCount());
 		model.setCreated(object.getCreated());

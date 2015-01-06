@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
@@ -14,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,8 +27,12 @@ public class RelinkService {
     @Autowired
     UuidGenerator uuidGenerator;
 
-	protected <E extends OwnedEntity> E getRelinked(E value) {
-		return (E)neo4jTemplate.findByIndexedValue(value.getClass(), "uuid", value.getUuid().toString()).singleOrNull();
+	protected <E extends OwnedEntity> E getRelinked(E value, Map<UUID, Object> cache)  {
+		if (cache.containsKey(value.getUuid())) {
+			return (E)cache.get(value.getUuid());
+		}
+		E entity = (E)neo4jTemplate.findByIndexedValue(value.getClass(), "uuid", value.getUuid().toString()).singleOrNull();
+		return entity;
 	}
 
 	/**
@@ -48,21 +54,21 @@ public class RelinkService {
 	 */
 
 	protected <E extends OwnedEntity> E relink(E entity) {
-		return relink(entity, null, new THashSet<UUID>());
+		return relink(entity, null, new THashMap<UUID, Object>());
 	}
 
     protected <E extends OwnedEntity> E relink(E entity, User user) {
-        return relink(entity, user, new THashSet<UUID>());
+        return relink(entity, user, new THashMap<UUID, Object>());
     }
 
-    protected <E extends OwnedEntity> E relink(E entity, User user, Set<UUID> known) {
+    protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, Object> known) {
         if (entity.getUuid() != null
-                && known.contains(entity.getUuid())) {
+                && known.containsKey(entity.getUuid())) {
             return entity;
         }
 
         if (entity.getUuid() != null) {
-            known.add(entity.getUuid());
+            known.put(entity.getUuid(), entity);
         }
 
 		PropertyDescriptor[] properties;
@@ -88,11 +94,12 @@ public class RelinkService {
 					if (value != null && setter != null) {
                         // Potentially existing UUID but unconnected entity
 						if (value.getUuid() != null && value.getNodeId() == null) {
-							OwnedEntity v = getRelinked(value);
+							OwnedEntity v = getRelinked(value, known);
                             // Entity does exist in DB, replace the reference with
                             // the connected entity
 							if (v != null) {
                                 setter.invoke(entity, v);
+								known.put(v.getUuid(), v);
                             // New entity
                             } else {
                                 relink(value, user, known);
@@ -123,10 +130,11 @@ public class RelinkService {
 							newItems.add(item);
                         // Disconnected potentially existing entity
 						} else {
-							OwnedEntity v = getRelinked(item);
+							OwnedEntity v = getRelinked(item, known);
                             // Entity known in the database, add the connected version to the list
                             if (v != null) {
                                 newItems.add(v);
+								known.put(v.getUuid(), v);
                             // New entity
                             } else {
                                 newItems.add(item);

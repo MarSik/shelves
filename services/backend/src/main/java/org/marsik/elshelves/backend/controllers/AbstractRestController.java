@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
@@ -41,8 +43,19 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @RequestMapping
     @ResponseBody
     @Transactional
-    public EmberModel getAll(@CurrentUser User currentUser) {
-        Collection<E> allItems = service.getAllItems(currentUser);
+    public EmberModel getAll(@CurrentUser User currentUser,
+							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws EntityNotFound, PermissionDenied {
+		Collection<E> allItems;
+
+		if (ids == null) {
+			allItems = service.getAllItems(currentUser);
+		} else {
+			allItems = new THashSet<>();
+			for (UUID id: ids) {
+				allItems.add(service.get(id, currentUser));
+			}
+		}
+
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dtoClazz, allItems);
 
         for (E entity: allItems) {

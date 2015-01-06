@@ -25,13 +25,11 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	String name;
 	Date date;
 
-	@Sideload(asType = PurchaseApiModel.class)
 	Set<PurchaseApiModel> items;
 
 	@Sideload
 	UserApiModel belongsTo;
 
-	@Sideload
 	SourceApiModel source;
 
 	public String getName() {

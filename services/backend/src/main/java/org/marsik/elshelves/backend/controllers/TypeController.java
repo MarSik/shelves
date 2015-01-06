@@ -34,43 +34,4 @@ public class TypeController extends AbstractRestController<Type, PartTypeApiMode
 		builder.sideLoad(dto.getFootprint());
 		super.sideLoad(dto, builder);
 	}
-
-	@RequestMapping("{uuid}/groups")
-	@ResponseBody
-	@Transactional
-	public EmberModel getGroups(@PathVariable("uuid") UUID uuid,
-							    @CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		PartTypeApiModel g = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<PartGroupApiModel> builder = new EmberModel.Builder<PartGroupApiModel>(PartGroupApiModel.class, g.getGroups());
-		builder.sideLoad(g.getBelongsTo());
-
-		for (PartGroupApiModel t: g.getGroups()) {
-			builder.sideLoad(PartGroupApiModel.class, t.getGroups());
-			builder.sideLoad(t.getParent());
-			builder.sideLoad(t.getBelongsTo());
-		}
-
-		return builder.build();
-	}
-
-	@RequestMapping("{uuid}/lots")
-	@ResponseBody
-	@Transactional
-	public EmberModel getLots(@PathVariable("uuid") UUID uuid,
-								@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		PartTypeApiModel g = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<LotApiModel> builder = new EmberModel.Builder<LotApiModel>(LotApiModel.class, g.getLots());
-		builder.sideLoad(g.getBelongsTo());
-		builder.sideLoad(g);
-
-		for (LotApiModel t: g.getLots()) {
-			builder.sideLoad(t.getLocation());
-			builder.sideLoad(t.getPerformedBy());
-			builder.sideLoad(t.getPrevious());
-		}
-
-		return builder.build();
-	}
 }

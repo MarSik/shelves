@@ -6,8 +6,8 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
     count: attr('number'),
-    type: hasMany('type', {inverse: null}),
-    project: belongsTo('project'),
+    type: hasMany('type', {inverse: null, async: true}),
+    project: belongsTo('project', {async: true}),
 
     typeCanBeRemoved: function () {
         return this.get('type.length') > 1

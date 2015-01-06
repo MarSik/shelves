@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @NodeEntity
 public class Requirement implements OwnedEntity {
+	@NotNull
 	@Indexed
 	UUID uuid;
 

@@ -31,10 +31,8 @@ public class PurchaseApiModel extends LotBaseApiModel {
     Double vat;
     Boolean vatIncluded;
 
-	@Sideload
 	TransactionApiModel transaction;
 
-	@Sideload
 	PartTypeApiModel type;
 
 	Set<LotApiModel> lots;

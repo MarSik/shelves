@@ -27,41 +27,4 @@ public class GroupController extends AbstractRestController<Group, PartGroupApiM
 	public GroupController(GroupService service) {
 		super(PartGroupApiModel.class, service);
 	}
-
-	@RequestMapping("{uuid}/types")
-	@ResponseBody
-	@Transactional
-	public EmberModel getTypes(@PathVariable("uuid") UUID uuid,
-							   @CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		PartGroupApiModel g = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<PartTypeApiModel> builder = new EmberModel.Builder<PartTypeApiModel>(PartTypeApiModel.class, g.getTypes());
-		builder.sideLoad(g.getBelongsTo());
-
-		for (PartTypeApiModel t: g.getTypes()) {
-			builder.sideLoad(t.getFootprint());
-			builder.sideLoad(t.getBelongsTo());
-		}
-
-		return builder.build();
-	}
-
-	@RequestMapping("{uuid}/groups")
-	@ResponseBody
-	@Transactional
-	public EmberModel getGroups(@PathVariable("uuid") UUID uuid,
-								@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-		PartGroupApiModel g = getService().get(uuid, currentUser);
-
-		EmberModel.Builder<PartGroupApiModel> builder = new EmberModel.Builder<PartGroupApiModel>(PartGroupApiModel.class, g.getGroups());
-		builder.sideLoad(g.getBelongsTo());
-
-		for (PartGroupApiModel t: g.getGroups()) {
-			builder.sideLoad(PartGroupApiModel.class, t.getGroups());
-			builder.sideLoad(t.getParent());
-			builder.sideLoad(t.getBelongsTo());
-		}
-
-		return builder.build();
-	}
 }
