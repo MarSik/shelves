@@ -5,24 +5,34 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     actions: {
         search: function() {
             var self = this;
+        },
+        sessionAuthenticationSucceeded: function () {
+            var controller = this.get('controller');
+            this.get('preloadData')(this, controller);
+            this._super();
         }
     },
     setupController: function(controller, model) {
         controller.set('model', model);
-        controller.set('availableFootprints', this.store.filter("footprint", {}, function (i) {
-            return !i.get('isNew');
-        }));
-        controller.set('availableGroups', this.store.filter('group', {}, function (i) {
-            return !i.get('isNew');
-        }));
-        controller.set('availableTypes', this.store.filter('type', {}, function (i) {
-            return !i.get('isNew');
-        }));
-        controller.set('availableLocations', this.store.filter('box', {}, function (i) {
-            return !i.get('isNew');
-        }));
-        controller.set('availableSources', this.store.filter('source', {}, function (i) {
-            return !i.get('isNew');
-        }));
+        this.get('preloadData')(this, controller);
+    },
+    preloadData: function (self, controller) {
+        if (self.get('session.isAuthenticated')) {
+            controller.set('availableFootprints', self.store.filter("footprint", {}, function (i) {
+                return !i.get('isNew');
+            }));
+            controller.set('availableGroups', self.store.filter('group', {}, function (i) {
+                return !i.get('isNew');
+            }));
+            controller.set('availableTypes', self.store.filter('type', {}, function (i) {
+                return !i.get('isNew');
+            }));
+            controller.set('availableLocations', self.store.filter('box', {}, function (i) {
+                return !i.get('isNew');
+            }));
+            controller.set('availableSources', self.store.filter('source', {}, function (i) {
+                return !i.get('isNew');
+            }));
+        }
     }
 });

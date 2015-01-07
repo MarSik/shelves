@@ -23,7 +23,8 @@ module.exports = function(environment) {
     authorizer: 'simple-auth-authorizer:oauth2-bearer',
     store: 'simple-auth-session-store:cookie',
     'client-id': 'elshelves.js',
-    'client-secret': 'public'
+    'client-secret': 'public',
+    authenticationRoute: 'index'
   };
 
   if (environment === 'development') {
