@@ -7,6 +7,10 @@ var app = new EmberApp({
         'modernizr': true,
         'fastclick': true,
         'foundationJs': 'all'
+    },
+    gzip: {
+        extensions: ['js', 'css', 'woff', 'ttf', 'svg', 'eot', 'otf'],
+        keepUncompressed: true
     }
 });
 

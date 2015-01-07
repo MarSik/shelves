@@ -56,8 +56,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-      ENV.APP.API_SERVER = 'http://api.elshelves.net';
-      ENV.APP.API_NAMESPACE = 'api/1';
+      ENV.APP.API_SERVER = 'http://api.shelves.cz';
 
       ENV['simple-auth-oauth2'] = {
           serverTokenEndpoint: ENV.APP.API_SERVER + '/' + ENV.APP.API_NAMESPACE + '/oauth/token',
