@@ -21,16 +21,22 @@ public class NamedObjectToEmber {
 
 	public AbstractNamedEntityApiModel convert(NamedObject object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
+
+		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		if (object.getDescribedBy() != null) {
 			model.setDescribedBy(new THashSet<DocumentApiModel>());
 
 			for (Document d: object.getDescribedBy()) {
-				model.getDescribedBy().add(documentToEmber.convert(d, nested, cache));
+				model.getDescribedBy().add(documentToEmber.convert(d, nested - 1, cache));
 			}
 		}
 

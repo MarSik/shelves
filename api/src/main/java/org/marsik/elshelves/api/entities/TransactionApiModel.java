@@ -27,7 +27,6 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 
 	Set<PurchaseApiModel> items;
 
-	@Sideload
 	UserApiModel belongsTo;
 
 	SourceApiModel source;

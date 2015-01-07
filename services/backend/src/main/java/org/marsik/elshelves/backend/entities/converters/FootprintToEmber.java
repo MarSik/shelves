@@ -37,6 +37,11 @@ public class FootprintToEmber implements CachingConverter<Footprint, FootprintAp
 	@Override
 	public FootprintApiModel convert(Footprint object, FootprintApiModel model, int nested, Map<UUID, Object> cache) {
 		namedObjectToEmber.convert(object, model, nested, cache);
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setHoles(object.getHoles());
 		model.setPads(object.getPads());
 		model.setNpth(object.getNpth());

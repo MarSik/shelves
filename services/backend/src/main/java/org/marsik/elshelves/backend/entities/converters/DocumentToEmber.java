@@ -34,11 +34,17 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 	@Override
 	public DocumentApiModel convert(Document object, DocumentApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
+
+		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		return model;
 	}

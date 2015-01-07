@@ -23,10 +23,8 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 
 	Set<LotApiModel> next;
 
-	@Sideload
     UserApiModel belongsTo;
 
-	@Sideload
 	UserApiModel performedBy;
 
 	public UUID getId() {

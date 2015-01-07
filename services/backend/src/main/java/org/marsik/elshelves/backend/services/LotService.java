@@ -68,27 +68,6 @@ public class LotService {
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
-	public Iterable<LotApiModel> getNext(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.getLotByUuid(id);
-
-		if (lot == null) {
-			throw new EntityNotFound();
-		}
-
-		if (!lot.getOwner().equals(currentUser)) {
-			throw new PermissionDenied();
-		}
-
-		Map<UUID, Object> cache = new THashMap<>();
-
-		List<LotApiModel> lots = new ArrayList<>();
-		for (Lot l: lot.getNext()) {
-			lots.add(lotToEmber.convert(l, 1, cache));
-		}
-
-		return lots;
-	}
-
 	public LotApiModel delivery(LotApiModel newLot0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.getPurchaseByUuid(newLot0.getPurchase().getId());
 		Box location = boxRepository.getBoxByUuid(newLot0.getLocation().getId());
@@ -110,7 +89,7 @@ public class LotService {
 
 		purchase.getNext().add(lot);
 
-		return lotToEmber.convert(lot, 2, new THashMap<UUID, Object>());
+		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
 	public LotSplitResult split(UUID source, Long count, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {

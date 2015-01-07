@@ -86,9 +86,4 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 
 		return lots;
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 2;
-	}
 }

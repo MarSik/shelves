@@ -46,16 +46,18 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 	@Override
 	public PurchaseApiModel convert(Purchase object, PurchaseApiModel model, int nested, Map<UUID, Object> cache) {
 		lotBaseToEmber.convert(object, model, nested, cache);
-		model.setSinglePrice(object.getSinglePrice());
-		model.setTotalPrice(object.getTotalPrice());
-		model.setVat(object.getVat());
-		model.setVatIncluded(object.getVatIncluded());
-		model.setType(typeToEmber.convert(object.getType(), nested, cache));
-		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested, cache));
 
 		if (nested == 0) {
 			return model;
 		}
+
+		model.setSinglePrice(object.getSinglePrice());
+		model.setTotalPrice(object.getTotalPrice());
+		model.setVat(object.getVat());
+		model.setVatIncluded(object.getVatIncluded());
+
+		model.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
+		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
 
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<LotApiModel>());

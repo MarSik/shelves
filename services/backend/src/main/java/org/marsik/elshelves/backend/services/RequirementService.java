@@ -31,9 +31,4 @@ public class RequirementService extends AbstractRestService<RequirementRepositor
 
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 2;
-	}
 }

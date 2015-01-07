@@ -31,6 +31,11 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
 	@Override
 	public UserApiModel convert(User entity, UserApiModel user, int nested, Map<UUID, Object> cache) {
 		user.setId(entity.getUuid());
+
+		if (nested == 0) {
+			return user;
+		}
+
 		user.setEmail(entity.getEmail());
 		user.setName(entity.getName());
 		return user;

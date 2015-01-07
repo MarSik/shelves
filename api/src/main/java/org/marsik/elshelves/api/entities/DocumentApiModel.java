@@ -26,7 +26,6 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 	Long size;
 	Date created;
 
-	@Sideload
 	UserApiModel belongsTo;
 
 	public String getName() {

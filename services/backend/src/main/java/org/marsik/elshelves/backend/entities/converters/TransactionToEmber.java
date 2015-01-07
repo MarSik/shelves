@@ -33,7 +33,8 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 		}
 
 		TransactionApiModel entity = new TransactionApiModel();
-		if (object.getUuid() != null) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), entity);
 		}
 
@@ -43,16 +44,21 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 	@Override
 	public TransactionApiModel convert(Transaction object, TransactionApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setName(object.getName());
 		model.setDate(object.getDate());
 
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
-		model.setSource(sourceToEmber.convert(object.getSource(), nested, cache));
+		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+		model.setSource(sourceToEmber.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<PurchaseApiModel>());
 			for (Purchase p : object.getItems()) {
-				model.getItems().add(purchaseToEmber.convert(p, nested, cache));
+				model.getItems().add(purchaseToEmber.convert(p, nested - 1, cache));
 			}
 		}
 

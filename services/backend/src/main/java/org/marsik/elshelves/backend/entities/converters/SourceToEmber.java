@@ -24,7 +24,8 @@ public class SourceToEmber implements CachingConverter<Source, SourceApiModel, U
 		}
 
 		SourceApiModel model = new SourceApiModel();
-		if (object.getUuid() != null) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);
@@ -33,6 +34,11 @@ public class SourceToEmber implements CachingConverter<Source, SourceApiModel, U
 	@Override
 	public SourceApiModel convert(Source object, SourceApiModel model, int nested, Map<UUID, Object> cache) {
 		namedObjectToEmber.convert(object, model, nested, cache);
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setUrl(object.getUrl());
 
 		return model;

@@ -36,8 +36,7 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 		}
 
 		Purchase entity = new Purchase();
-		if (nested > 0
-				&& object.getId() != null) {
+		if (object.getId() != null) {
 			cache.put(object.getId(), entity);
 		}
 		return convert(object, entity, nested, cache);
@@ -45,18 +44,18 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 
 	@Override
 	public Purchase convert(PurchaseApiModel object, Purchase model, int nested, Map<UUID, Object> cache) {
-		emberToLotBase.convert(object, model, 1, cache);
+		emberToLotBase.convert(object, model, nested, cache);
 		model.setSinglePrice(object.getSinglePrice());
 		model.setTotalPrice(object.getTotalPrice());
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
-		model.setTransaction(emberToTransaction.convert(object.getTransaction(), 1, cache));
-		model.setType(emberToType.convert(object.getType(), 1, cache));
+		model.setTransaction(emberToTransaction.convert(object.getTransaction(), nested, cache));
+		model.setType(emberToType.convert(object.getType(), nested, cache));
 
 		if (object.getNext() != null) {
 			model.setNext(new THashSet<Lot>());
 			for (LotApiModel l: object.getNext()) {
-				model.getNext().add(emberToLot.convert(l, nested - 1, cache));
+				model.getNext().add(emberToLot.convert(l, nested, cache));
 			}
 		}
 

@@ -28,11 +28,6 @@ public class BoxService extends AbstractRestService<BoxRepository, Box, BoxApiMo
     }
 
 	@Override
-	protected int conversionDepth() {
-		return 3;
-	}
-
-	@Override
     protected Iterable<Box> getAllEntities(User currentUser) {
         return currentUser.getBoxes();
     }

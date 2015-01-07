@@ -32,9 +32,4 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 					   UuidGenerator uuidGenerator) {
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 2;
-	}
 }

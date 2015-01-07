@@ -37,15 +37,15 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 
 	public LotApiModel convert(Lot object, LotApiModel entity, int nested, Map<UUID, Object> cache) {
 		lotBaseToEmber.convert(object, entity, nested, cache);
-		entity.setAction(object.getAction());
-		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested, cache));
-		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested, cache));
-		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested, cache));
 
 		if (nested == 0) {
 			return entity;
 		}
 
+		entity.setAction(object.getAction());
+		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
+		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));
+		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested - 1, cache));
 
 		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
 		entity.setPrevious(convert(object.getPrevious(), nested - 1, cache));

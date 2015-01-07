@@ -22,7 +22,6 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	String summary;
 	String description;
 
-	@Sideload
 	UserApiModel belongsTo;
 
 	Set<DocumentApiModel> describedBy;

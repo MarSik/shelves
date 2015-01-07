@@ -30,7 +30,8 @@ public class ProjectToEmber implements CachingConverter<Project, ProjectApiModel
 		}
 
 		ProjectApiModel model = new ProjectApiModel();
-		if (object.getUuid() != null) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);
@@ -39,12 +40,15 @@ public class ProjectToEmber implements CachingConverter<Project, ProjectApiModel
 	@Override
 	public ProjectApiModel convert(Project object, ProjectApiModel model, int nested, Map<UUID, Object> cache) {
 		namedObjectToEmber.convert(object, model, nested, cache);
-		model.setDescription(object.getDescription());
+
+		if (nested == 0) {
+			return model;
+		}
 
 		if (object.getRequires() != null) {
 			model.setRequires(new THashSet<RequirementApiModel>());
 			for (Requirement r: object.getRequires()) {
-				model.getRequires().add(requirementToEmber.convert(r, nested, cache));
+				model.getRequires().add(requirementToEmber.convert(r, nested - 1, cache));
 			}
 		}
 

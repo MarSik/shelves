@@ -17,9 +17,4 @@ public class ProjectService extends AbstractRestService<ProjectRepository, Proje
 						  UuidGenerator uuidGenerator) {
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 2;
-	}
 }

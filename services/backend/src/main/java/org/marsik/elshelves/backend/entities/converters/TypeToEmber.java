@@ -51,13 +51,14 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 	@Override
 	public PartTypeApiModel convert(Type object, PartTypeApiModel model, int nested, Map<UUID, Object> cache) {
 		namedObjectToEmber.convert(object, model, nested, cache);
-		model.setDescription(object.getDescription());
-		model.setVendor(object.getVendor());
-		model.setVendorId(object.getVendorId());
 
 		if (nested == 0) {
 			return model;
 		}
+
+		model.setDescription(object.getDescription());
+		model.setVendor(object.getVendor());
+		model.setVendorId(object.getVendorId());
 
 		model.setFootprint(footprintToEmber.convert(object.getFootprint(), nested - 1, cache));
 

@@ -35,7 +35,8 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 		}
 
 		RequirementApiModel model = new RequirementApiModel();
-		if (object.getUuid() != null) {
+		if (nested > 0
+				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
 		}
 		return convert(object, model, nested, cache);
@@ -44,6 +45,11 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 	@Override
 	public RequirementApiModel convert(Requirement object, RequirementApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
+
+		if (nested == 0) {
+			return model;
+		}
+
 		model.setCount(object.getCount());
 
 		model.setType(new THashSet<PartTypeApiModel>());

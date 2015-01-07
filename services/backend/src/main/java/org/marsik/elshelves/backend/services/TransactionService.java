@@ -71,9 +71,4 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 		super.deleteEntity(entity);
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 3;
-	}
 }

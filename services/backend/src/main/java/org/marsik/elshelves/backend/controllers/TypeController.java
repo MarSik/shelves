@@ -28,10 +28,4 @@ public class TypeController extends AbstractRestController<Type, PartTypeApiMode
 	public TypeController(TypeService service) {
 		super(PartTypeApiModel.class, service);
 	}
-
-	@Override
-	protected void sideLoad(PartTypeApiModel dto, EmberModel.Builder<PartTypeApiModel> builder) {
-		builder.sideLoad(dto.getFootprint());
-		super.sideLoad(dto, builder);
-	}
 }

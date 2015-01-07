@@ -24,9 +24,4 @@ public class GroupService extends AbstractRestService<GroupRepository, Group, Pa
 						UuidGenerator uuidGenerator) {
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
-
-	@Override
-	protected int conversionDepth() {
-		return 2;
-	}
 }

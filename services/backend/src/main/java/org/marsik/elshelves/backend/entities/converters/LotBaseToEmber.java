@@ -21,13 +21,15 @@ public class LotBaseToEmber  {
 
 	public LotBaseApiModel convert(LotBase object, LotBaseApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
-		model.setCount(object.getCount());
-		model.setCreated(object.getCreated());
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested, cache));
 
 		if (nested == 0) {
 			return model;
 		}
+
+		model.setCount(object.getCount());
+		model.setCreated(object.getCreated());
+
+		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		if (object.getNext() != null) {
 			model.setNext(new THashSet<LotApiModel>());
