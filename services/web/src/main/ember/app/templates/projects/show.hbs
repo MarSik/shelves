@@ -5,9 +5,9 @@
 {{#each r in model.requires}}
     <tbody>
     <tr>
-        <td>{{r.count}} of</td>
-        <td colspan="3"></td>
-        <td>{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
+        <td colspan="2">{{r.count}} of</td>
+        <td></td>
+        <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
             <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
     </tr>
     {{#each type in r.type}}
