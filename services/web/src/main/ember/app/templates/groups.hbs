@@ -6,7 +6,7 @@
 
 <ul>
     {{#each group in model}}
-    {{item-tree item=group count='item.count' class='group-entity' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
+    {{item-tree item=group count='item.count' class='group-entity' moveItem='moveItem' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
     {{/each}}
 </ul>
     </section>

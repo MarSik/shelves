@@ -4,7 +4,7 @@
 <table>
 {{#each type in types}}
     <tr>
-        <td>{{type.name}}</td>
+        <td>{{#draggable-item content=type.id}}{{type.name}}{{/draggable-item}}</td>
         <td>{{type.vendor}}</td>
         <td>{{type.footprint.name}}</td>
         <td>{{type.available}}</td>

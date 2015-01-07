@@ -20,7 +20,7 @@
 </div>
 </form>
 {{else}}
-<a {{action 'selectItem'}}>{{item.name}} ({{auxInfo}})</a>
+{{#draggable-dropzone zone=item.id dropped='dropped'}}<a {{action 'selectItem'}}>{{item.name}} ({{auxInfo}})</a>{{/draggable-dropzone}}
 {{/if}}
 
 <nav>
@@ -41,7 +41,8 @@
     {{#each i in sorted}}
         {{item-tree item=i class=class count=count action='nestedSelectItem'
                    hoverAction='nestedHoverItem' deleteAction='nestedDeleteItem'
-                   editAction='nestedEditItem' createAction='nestedCreateItem'}}
+                   editAction='nestedEditItem' createAction='nestedCreateItem'
+                   moveItem='nestedMove'}}
     {{/each}}
 </ul>
 {{/if}}

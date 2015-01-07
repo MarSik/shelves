@@ -47,6 +47,13 @@ export default Ember.Component.extend({
         },
         toggleExpand: function() {
             this.toggleProperty('isExpanded');
+        },
+        dropped: function (zoneId, itemId) {
+            console.log('drop noticed');
+            this.sendAction('moveItem', itemId, zoneId);
+        },
+        nestedMove: function (itemId, zoneId) {
+            this.sendAction('moveItem', itemId, zoneId);
         }
     },
     mouseEnter: function() {

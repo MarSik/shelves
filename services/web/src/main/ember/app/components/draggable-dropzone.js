@@ -20,6 +20,7 @@ export default Ember.Component.extend({
         this.set('dragClass', 'deactivated');
         var data = event.dataTransfer.getData('text/data');
         // default drop action - change with {{draggable-dropzone dropped=xyz}}
-        this.sendAction('dropped', data);
+        console.log('dropped');
+        this.sendAction('dropped', this.get('zone'), data);
     }
 });
