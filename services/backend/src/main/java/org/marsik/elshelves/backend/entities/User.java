@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class User {
+public class User implements OwnedEntity {
     @Indexed
 	@NotNull
     UUID uuid;
@@ -85,4 +85,14 @@ public class User {
     public void setBoxes(Set<Box> boxes) {
         this.boxes = boxes;
     }
+
+	@Override
+	public User getOwner() {
+		return this;
+	}
+
+	@Override
+	public void setOwner(User user) {
+	    // NOP
+	}
 }

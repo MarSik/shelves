@@ -148,7 +148,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
         return dtos;
     }
 
-    public E create(E dto, User currentUser) {
+    public E create(E dto, User currentUser) throws OperationNotPermitted {
         T created = createEntity(dto, currentUser);
         repository.save(created);
         return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());

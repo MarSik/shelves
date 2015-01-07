@@ -38,19 +38,7 @@ import java.util.UUID;
 @RestController
 public class TestController {
     @Autowired
-    UuidGenerator uuidGenerator;
-
-    @Autowired
-    ElshelvesUserDetailsService userDetailsService;
-
-    @Autowired
-    MailgunService mailgunService;
-
-    @Autowired
     StickerService stickerService;
-
-    @Autowired
-    UserToEmber userToEmber;
 
     @Autowired
     EmberSchemaService emberSchemaService;
@@ -59,26 +47,6 @@ public class TestController {
     @ResponseBody
     public EmberSchema getEmberSchema() {
         return emberSchemaService.getEmberSchema();
-    }
-
-    @Transactional
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public EmberModel registerUser(@RequestBody @Valid UserApiModel user) throws UserExists {
-        if (userDetailsService.getUser(user.getEmail()) != null) {
-            throw new UserExists();
-        }
-
-        String verificationCode = userDetailsService.createUser(user);
-        mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
-
-        return new EmberModel.Builder<UserApiModel>(user).build();
-    }
-
-    @Transactional
-    @RequestMapping(value = "/users/verify/{code}", method = RequestMethod.POST)
-    public EmberModel verifyUser(@PathVariable("code") String code) {
-        String password = userDetailsService.verifyUser(code);
-        return new EmberModel.Builder<String>(password).build();
     }
 
     @RequestMapping(value = "/test/stickers", produces = "application/pdf")
@@ -121,11 +89,5 @@ public class TestController {
 
         response.getOutputStream().write(os.toByteArray());
         response.flushBuffer();
-    }
-
-    @Transactional
-    @RequestMapping("/users/whoami")
-    public EmberModel getCurrentUser(@CurrentUser User currentUser) {
-        return new EmberModel.Builder<UserApiModel>(userToEmber.convert(currentUser, 1, new THashMap<UUID, Object>())).build();
     }
 }

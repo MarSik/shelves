@@ -80,7 +80,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
     @ResponseBody
     @Transactional
     public EmberModel create(@CurrentUser User currentUser,
-                             @Valid @RequestBody E item) {
+                             @Valid @RequestBody E item) throws OperationNotPermitted {
         E entity = service.create(item, currentUser);
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
