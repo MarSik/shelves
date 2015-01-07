@@ -6,6 +6,7 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
   name: attr("string"),
+  summary: attr("string"),
   description: attr("string"),
   vendor: attr("string"),
   groups: hasMany("group", {async: true}),
@@ -15,8 +16,18 @@ export default DS.Model.extend({
   describedBy: hasMany("document", {async: true}),
 
   fullName: function () {
-      return this.get('name') + ' | ' + this.get('footprint.name') + ' | ' + this.get('vendor');
-  }.property('name', 'footprint.name', 'vendor'),
+      var n = this.get('name') + ' | ' + this.get('footprint.name');
+      if (this.get('vendor')) {
+          n += ' | ' + this.get('vendor');
+      }
+      if (this.get('vendor')) {
+          n += ' | ' + this.get('summary');
+      }
+
+      n += " (" + this.get('available') + ")";
+
+      return n;
+  }.property('name', 'footprint.name', 'vendor', 'summary', 'available'),
 
   available: function () {
       var sum = 0;

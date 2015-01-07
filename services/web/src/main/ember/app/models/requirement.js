@@ -8,8 +8,9 @@ export default DS.Model.extend({
     count: attr('number'),
     type: hasMany('type', {inverse: null, async: true}),
     project: belongsTo('project', {async: true}),
+    lots: hasMany('lot', {async: true}),
 
     typeCanBeRemoved: function () {
-        return this.get('type.length') > 1
+        return this.get('type.length') > 1;
     }.property('type')
 });

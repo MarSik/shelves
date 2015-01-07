@@ -11,7 +11,7 @@
             {{ember-selectize
             content=sortedSources
             optionValuePath="content.id"
-            optionLabelPath="content.name"
+            optionLabelPath="content.nameWithDesc"
             selection=model.source
             placeholder="Select a source" }}
         </div>
@@ -79,10 +79,7 @@
     </table>
 
 
-
-
-
-    <button type="submit">Purchase</button>
+    <button type="submit" {{bind-attr disabled=submitDisabled}}>Purchase</button>
     </form>
 </section>
 

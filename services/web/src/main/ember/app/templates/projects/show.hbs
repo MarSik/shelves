@@ -51,7 +51,7 @@ placeholder="Select a type" }}
     sort="content.fullName"
     placeholder="Select a type" }}
 
-    <button type="submit">{{fa-icon 'plus'}} Add</button>
+    <button type="submit" {{bind-attr disabled=submitDisabled}}>{{fa-icon 'plus'}} Add</button>
     </form>
 
     <a class="close-reveal-modal">&#215;</a>

@@ -8,7 +8,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
     },
     model: function () {
-        return this.store.filter('footprint', {}, function (fp) {
+        return this.store.filter('footprint', function (fp) {
             return !fp.get('isNew');
         });
     }

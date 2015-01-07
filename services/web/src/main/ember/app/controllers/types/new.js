@@ -1,8 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+    needs: "application",
     footprintSorting: ['name'],
-    sortedFootprints: Ember.computed.sort('availableFootprints', 'footprintSorting'),
+    sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'footprintSorting'),
     groupSorting: ['fullName'],
-    sortedGroups: Ember.computed.sort('availableGroups', 'groupSorting')
+    sortedGroups: Ember.computed.sort('controllers.application.availableGroups', 'groupSorting')
 });

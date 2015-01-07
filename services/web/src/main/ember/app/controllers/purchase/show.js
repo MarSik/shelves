@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+    needs: "application",
     actions: {
         delivered: function () {
             console.log("delivering ..");
@@ -8,6 +9,6 @@ export default Ember.Controller.extend({
         }
     },
     boxSorting: ['fullName'],
-    sortedBoxes: Ember.computed.sort('boxes', 'boxSorting'),
+    sortedBoxes: Ember.computed.sort('controllers.application.availableLocations', 'boxSorting'),
     location: null
 });

@@ -16,7 +16,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
     },
     model: function() {
-        return this.store.filter('box', {}, function (box) {
+        return this.store.filter('box', function (box) {
             // return only top level boxes
             return !box.get('hasParent');
         });

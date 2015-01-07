@@ -13,8 +13,9 @@ export default LotBase.extend({
   purchase: belongsTo('purchase', {inverse: null, async: true}),
 
   performedBy: belongsTo('user', {inverse: null, async: true}),
+  usedBy: belongsTo('requirement'),
 
   type: function () {
-      return this.get('purchase.type')
+      return this.get('purchase.type');
   }.property('purchase.type')
 });

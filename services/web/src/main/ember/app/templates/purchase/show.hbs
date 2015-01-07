@@ -1,12 +1,15 @@
 <section class="purchase">
     <h2>Purchase</h2>
 
-    <label for="source">
-        Source:
-    </label>
-    <div>
-        {{model.source.name}}
-    </div>
+    <dl>
+        <dt>Source</dt>
+        <dd>{{model.source.name}}</dd>
+    </dl>
+
+    <dl>
+        <dt>Purchase date</dt>
+        <dd>{{model.date}}</dd>
+    </dl>
 
     <table>
         <thead>

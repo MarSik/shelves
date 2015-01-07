@@ -19,10 +19,5 @@ export default Ember.Route.extend({
             name: "New type"
         });
         return fp;
-    },
-    setupController: function(controller, model) {
-        controller.set('model', model);
-        controller.set('availableFootprints', this.store.find('footprint'));
-        controller.set('availableGroups', this.store.find('group'));
     }
 });
