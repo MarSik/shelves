@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
@@ -43,9 +44,13 @@ public class UserController extends AbstractRestController<User, UserApiModel> {
 
     @Transactional
     @RequestMapping(value = "/verify/{code}", method = RequestMethod.POST)
-    public EmberModel verifyUser(@PathVariable("code") String code) {
-        String password = userDetailsService.verifyUser(code);
-        return new EmberModel.Builder<String>(password).build();
+    public EmberModel verifyUser(@PathVariable("code") String code) throws InvalidRequest, PermissionDenied {
+		if (code == null) {
+			throw new InvalidRequest();
+		}
+
+        UserApiModel user = userDetailsService.verifyUser(code);
+        return new EmberModel.Builder<UserApiModel>(user).build();
     }
 
     @Transactional
@@ -58,10 +63,6 @@ public class UserController extends AbstractRestController<User, UserApiModel> {
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
     public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user) throws OperationNotPermitted {
-        if (userDetailsService.getUser(user.getEmail()) != null) {
-            throw new OperationNotPermitted();
-        }
-
         String verificationCode = userDetailsService.createUser(user);
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 

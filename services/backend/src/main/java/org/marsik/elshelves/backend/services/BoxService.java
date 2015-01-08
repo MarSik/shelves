@@ -26,35 +26,4 @@ public class BoxService extends AbstractRestService<BoxRepository, Box, BoxApiMo
                       UuidGenerator uuidGenerator) {
         super(boxRepository, boxToEmber, emberToBox, uuidGenerator);
     }
-
-	@Override
-    protected Iterable<Box> getAllEntities(User currentUser) {
-        return currentUser.getBoxes();
-    }
-
-    @Override
-    protected Box getSingleEntity(UUID uuid) {
-        return getRepository().getBoxByUuid(uuid);
-    }
-
-	public Iterable<BoxApiModel> getNestedBoxes(UUID parent, User currentUser) throws EntityNotFound, PermissionDenied {
-		Box box = getSingleEntity(parent);
-
-		if (box == null) {
-			throw new EntityNotFound();
-		}
-
-		if (!box.getOwner().equals(currentUser)) {
-			throw new PermissionDenied();
-		}
-
-		Map<UUID, Object> cache = new THashMap<>();
-		List<BoxApiModel> boxes = new ArrayList<>();
-
-		for (Box b: box.getContains()) {
-			boxes.add(getDbToRest().convert(b, 2, cache));
-		}
-
-		return boxes;
-	}
 }

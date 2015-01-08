@@ -5,6 +5,5 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.UUID;
 
-public interface SourceRepository extends GraphRepository<Source> {
-	Source getSourceByUuid(UUID uuid);
+public interface SourceRepository extends OwnedRepository<Source> {
 }

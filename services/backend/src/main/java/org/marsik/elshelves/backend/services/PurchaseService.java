@@ -67,7 +67,7 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 	}
 
 	public Iterable<LotApiModel> getNext(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {
-		Purchase purchase = getRepository().getPurchaseByUuid(id);
+		Purchase purchase = getRepository().findByUuid(id);
 
 		if (purchase == null) {
 			throw new EntityNotFound();

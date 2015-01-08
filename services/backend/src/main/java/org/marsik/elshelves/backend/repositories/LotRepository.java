@@ -5,6 +5,5 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.UUID;
 
-public interface LotRepository extends GraphRepository<Lot> {
-	Lot getLotByUuid(UUID uuid);
+public interface LotRepository extends OwnedRepository<Lot> {
 }

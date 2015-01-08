@@ -55,7 +55,7 @@ public class LotService {
 	}
 
 	public LotApiModel get(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.getLotByUuid(id);
+		Lot lot = lotRepository.findByUuid(id);
 
 		if (lot == null) {
 			throw new EntityNotFound();
@@ -69,8 +69,8 @@ public class LotService {
 	}
 
 	public LotApiModel delivery(LotApiModel newLot0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
-		Purchase purchase = purchaseRepository.getPurchaseByUuid(newLot0.getPurchase().getId());
-		Box location = boxRepository.getBoxByUuid(newLot0.getLocation().getId());
+		Purchase purchase = purchaseRepository.findByUuid(newLot0.getPurchase().getId());
+		Box location = boxRepository.findByUuid(newLot0.getLocation().getId());
 
 		if (purchase == null || location == null) {
 			throw new EntityNotFound();
@@ -93,7 +93,7 @@ public class LotService {
 	}
 
 	public LotSplitResult split(UUID source, Long count, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
-		Lot lot = lotRepository.getLotByUuid(source);
+		Lot lot = lotRepository.findByUuid(source);
 
 		if (lot == null) {
 			throw new EntityNotFound();
@@ -120,7 +120,7 @@ public class LotService {
 	}
 
 	public LotApiModel destroy(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.getLotByUuid(source);
+		Lot lot = lotRepository.findByUuid(source);
 
 		if (lot == null) {
 			throw new EntityNotFound();
@@ -139,7 +139,7 @@ public class LotService {
 	}
 
 	public LotApiModel solder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.getLotByUuid(source);
+		Lot lot = lotRepository.findByUuid(source);
 
 		if (lot == null) {
 			throw new EntityNotFound();

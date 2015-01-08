@@ -5,6 +5,5 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.UUID;
 
-public interface FootprintRepository extends GraphRepository<Footprint> {
-	Footprint getFootprintByUuid(UUID uuid);
+public interface FootprintRepository extends OwnedRepository<Footprint> {
 }

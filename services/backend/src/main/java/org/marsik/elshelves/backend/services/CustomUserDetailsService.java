@@ -3,8 +3,11 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
+import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToUser;
+import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +36,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     @Autowired
     EmberToUser emberToUser;
 
+	@Autowired
+	UserToEmber userToEmber;
+
     @Transactional(readOnly = true)
     public User getUser(String email) {
         return userRepository.getUserByEmail(email);
@@ -46,6 +52,10 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User does not exist.");
         }
+
+		if (user.getPassword() == null) {
+			throw new UsernameNotFoundException("User does not exist.");
+		}
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new GrantedAuthority() {
@@ -62,10 +72,14 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
-    public String createUser(UserApiModel userInfo) {
+    public String createUser(UserApiModel userInfo) throws OperationNotPermitted {
+		if (userRepository.getUserByEmail(userInfo.getEmail()) != null) {
+			throw new OperationNotPermitted();
+		}
+
         User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
         user.setUuid(uuidGenerator.generate());
-        user.setPassword(passwordEncoder.encode("password"));
+		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
 
         userRepository.save(user);
 
@@ -73,14 +87,21 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
-    public String verifyUser(String code) {
+    public UserApiModel verifyUser(String code) throws PermissionDenied {
         User u = userRepository.getUserByVerificationCode(code);
+
+		if (u == null) {
+			throw new PermissionDenied();
+		}
 
         String password = RandomStringUtils.randomAlphanumeric(10);
         u.setPassword(passwordEncoder.encode(password));
         u.setVerificationCode(null);
         userRepository.save(u);
 
-        return password;
+		UserApiModel response = userToEmber.convert(u, 1, new THashMap<UUID, Object>());
+		response.setPassword(password);
+
+        return response;
     }
 }

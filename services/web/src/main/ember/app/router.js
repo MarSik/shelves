@@ -58,8 +58,11 @@ Router.map(function() {
     this.route("new");
   });
 
-  this.route("footprints/new");
-  this.route("types/new");
+  this.resource("verify", function() {
+    this.route("show", {
+        path: "/:token"
+    });
+  });
 });
 
 export default Router;

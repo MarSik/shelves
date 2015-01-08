@@ -1,11 +1,13 @@
 package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
+import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface ElshelvesUserDetailsService extends UserDetailsService {
-    String createUser(UserApiModel userInfo);
-    String verifyUser(String code);
+    String createUser(UserApiModel userInfo) throws OperationNotPermitted;
+    UserApiModel verifyUser(String code) throws PermissionDenied;
     User getUser(String email);
 }
