@@ -1,17 +1,15 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
-public class Document extends NamedObject {
+public class Document extends NamedEntity {
 	@NotEmpty
 	String contentType;
 	@NotNull
@@ -21,7 +19,7 @@ public class Document extends NamedObject {
 	Date created;
 
 	@RelatedTo(type = "DESCRIBES")
-	Set<NamedObject> describes;
+	Set<NamedEntity> describes;
 
 	public String getContentType() {
 		return contentType;

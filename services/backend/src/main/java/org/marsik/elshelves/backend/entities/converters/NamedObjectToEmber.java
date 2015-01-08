@@ -4,7 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.Document;
-import org.marsik.elshelves.backend.entities.NamedObject;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class NamedObjectToEmber {
 	@Autowired
 	DocumentToEmber documentToEmber;
 
-	public AbstractNamedEntityApiModel convert(NamedObject object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
+	public AbstractNamedEntityApiModel convert(NamedEntity object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
 
 		if (nested == 0) {

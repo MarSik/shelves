@@ -1,19 +1,14 @@
 package org.marsik.elshelves.backend.entities;
 
-import org.marsik.elshelves.backend.entities.OwnedEntity;
-import org.marsik.elshelves.backend.entities.Purchase;
-import org.marsik.elshelves.backend.entities.User;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
-public class Transaction extends NamedObject {
+public class Transaction extends NamedEntity {
 	Date date;
 
 	@RelatedTo(type = "IN_TRANSACTION", direction = Direction.INCOMING)

@@ -1,19 +1,16 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
-public class Type extends NamedObject {
+public class Type extends NamedEntity {
 	String vendor;
 	String vendorId;
 

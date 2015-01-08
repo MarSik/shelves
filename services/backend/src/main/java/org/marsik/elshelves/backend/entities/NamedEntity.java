@@ -11,15 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class NamedObject implements OwnedEntity {
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
-	@NotNull
-	User owner;
-
-	@NotNull
-	@Indexed
-	UUID uuid;
-
+public abstract class NamedEntity extends OwnedEntity {
 	@Indexed
 	@NotEmpty
 	@NotNull
@@ -33,26 +25,6 @@ public class NamedObject implements OwnedEntity {
 
 	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
 	Set<Document> describedBy;
-
-	@Override
-	public User getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	@Override
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	@Override
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
 
 	public String getName() {
 		return name;

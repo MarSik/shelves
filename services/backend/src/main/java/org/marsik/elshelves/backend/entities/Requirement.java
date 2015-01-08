@@ -11,11 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class Requirement implements OwnedEntity {
-	@NotNull
-	@Indexed
-	UUID uuid;
-
+public class Requirement extends OwnedEntity {
 	@NotNull
 	@RelatedTo(type = "REQUIRES", direction = Direction.INCOMING)
 	Project project;
@@ -29,14 +25,6 @@ public class Requirement implements OwnedEntity {
 
 	@Min(1)
 	Long count;
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
 
 	public Project getProject() {
 		return project;

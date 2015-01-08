@@ -11,11 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class User implements OwnedEntity {
-    @Indexed
-	@NotNull
-    UUID uuid;
-
+public class User extends OwnedEntity {
     @NotNull
     String name;
 

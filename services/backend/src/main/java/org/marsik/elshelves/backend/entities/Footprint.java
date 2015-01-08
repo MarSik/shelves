@@ -1,16 +1,9 @@
 package org.marsik.elshelves.backend.entities;
 
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
-
-import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
-public class Footprint extends NamedObject {
+public class Footprint extends NamedEntity {
 	String kicad;
 
 	/**

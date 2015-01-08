@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.Set;
 
 @NodeEntity
-public class Project extends NamedObject {
+public class Project extends NamedEntity {
 	@RelatedTo(type = "REQUIRES")
 	Set<Requirement> requires;
 

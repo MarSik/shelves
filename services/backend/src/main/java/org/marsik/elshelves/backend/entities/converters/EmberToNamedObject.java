@@ -4,7 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.Document;
-import org.marsik.elshelves.backend.entities.NamedObject;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class EmberToNamedObject {
 	@Autowired
 	EmberToDocument emberToDocument;
 
-	public NamedObject convert(AbstractNamedEntityApiModel object, NamedObject model, int nested, Map<UUID, Object> cache) {
+	public NamedEntity convert(AbstractNamedEntityApiModel object, NamedEntity model, int nested, Map<UUID, Object> cache) {
 		model.setUuid(object.getId());
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());

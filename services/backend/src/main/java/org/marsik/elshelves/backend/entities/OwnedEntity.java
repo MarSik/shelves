@@ -1,14 +1,39 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-public interface OwnedEntity {
+@NodeEntity
+public abstract class OwnedEntity {
+	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
+	@NotNull
+	User owner;
+
+	@NotNull
+	@Indexed
+	UUID uuid;
+
 	// Provided by AspectJ-ized NodeEntity
-	Long getNodeId();
+	// public abstract Long getNodeId();
 
-    UUID getUuid();
-    void setUuid(UUID uuid);
+	public User getOwner() {
+		return owner;
+	}
 
-    User getOwner();
-    void setOwner(User user);
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 }
