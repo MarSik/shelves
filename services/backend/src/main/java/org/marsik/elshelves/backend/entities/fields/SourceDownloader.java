@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.entities.fields;
 
 import gnu.trove.map.hash.THashMap;
-import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.services.StorageManager;
 
 import java.util.Map;

@@ -1,11 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
-import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -13,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity

@@ -5,12 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import nl.marcus.ember.EmberIgnore;
 import org.marsik.elshelves.api.ember.EmberModelName;
-import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.idresolvers.BoxIdResolver;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 

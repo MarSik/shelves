@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.api.ember.EmberModelName;
-import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.idresolvers.RequirementIdResolver;
 
 import java.util.Set;

@@ -2,8 +2,6 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.marsik.elshelves.api.ember.Sideload;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;

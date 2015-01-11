@@ -1,13 +1,11 @@
 package org.marsik.elshelves.backend.entities;
 
-import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
 public class Purchase extends LotBase {

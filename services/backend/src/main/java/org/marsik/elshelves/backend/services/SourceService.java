@@ -3,14 +3,12 @@ package org.marsik.elshelves.backend.services;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Source;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
+import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class SourceService extends AbstractRestService<SourceRepository, Source, SourceApiModel> {
@@ -30,4 +28,9 @@ public class SourceService extends AbstractRestService<SourceRepository, Source,
 
 		super.deleteEntity(entity);
 	}
+
+    @Override
+    protected Iterable<Source> getAllEntities(User currentUser) {
+        return getRepository().findByOwner(currentUser);
+    }
 }

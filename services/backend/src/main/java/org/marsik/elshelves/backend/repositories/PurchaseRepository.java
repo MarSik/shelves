@@ -7,8 +7,8 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.UUID;
 
-public interface PurchaseRepository extends OwnedRepository<Purchase> {
+public interface PurchaseRepository extends GraphRepository<Purchase> {
 	@Query("START u=node({0}) MATCH u -[:OWNS]-> (l:Lot) -- (p:Purchase) RETURN DISTINCT p")
-	@Override
 	Iterable<Purchase> findByOwner(User owner);
+    Purchase findByUuid(UUID uuid);
 }

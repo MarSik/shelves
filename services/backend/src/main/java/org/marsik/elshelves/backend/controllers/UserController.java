@@ -1,23 +1,17 @@
 package org.marsik.elshelves.backend.controllers;
 
-import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
-import org.marsik.elshelves.backend.services.AbstractRestService;
-import org.marsik.elshelves.backend.services.CustomUserDetailsService;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")

@@ -1,39 +1,23 @@
 package org.marsik.elshelves.backend.controllers;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import gnu.trove.map.hash.THashMap;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import nl.marcus.ember.EmberSchema;
-import org.marsik.elshelves.api.ember.EmberModel;
-import org.marsik.elshelves.api.entities.UserApiModel;
-import org.marsik.elshelves.backend.controllers.exceptions.UserExists;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
-import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.UserToEmber;
-import org.marsik.elshelves.backend.security.CurrentUser;
-import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.EmberSchemaService;
-import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.StickerService;
-import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class TestController {

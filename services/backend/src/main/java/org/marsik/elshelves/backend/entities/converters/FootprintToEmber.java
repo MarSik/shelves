@@ -1,9 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
-import gnu.trove.set.hash.THashSet;
-import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
-import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

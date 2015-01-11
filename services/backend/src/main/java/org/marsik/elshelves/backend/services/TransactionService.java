@@ -2,14 +2,9 @@ package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
-import org.marsik.elshelves.backend.entities.Box;
-import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
-import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
-import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EmberToTransaction;
 import org.marsik.elshelves.backend.entities.converters.TransactionToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
@@ -19,10 +14,6 @@ import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
 
 @Service
 public class TransactionService extends AbstractRestService<TransactionRepository, Transaction, TransactionApiModel> {
@@ -71,4 +62,9 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 		super.deleteEntity(entity);
 	}
+
+    @Override
+    protected Iterable<Transaction> getAllEntities(User currentUser) {
+        return getRepository().findByOwner(currentUser);
+    }
 }

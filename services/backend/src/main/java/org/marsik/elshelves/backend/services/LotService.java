@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,10 +42,14 @@ public class LotService {
 		this.uuidGenerator = uuidGenerator;
 	}
 
+    protected Iterable<Lot> getAllEntities(User currentUser) {
+        return lotRepository.findByOwner(currentUser);
+    }
+
 	public Collection<LotApiModel> getAll(User currentUser) {
 		Collection<LotApiModel> lots = new ArrayList<>();
 		Map<UUID, Object> cache = new THashMap<>();
-		for (Lot l: lotRepository.findAll()) {
+		for (Lot l: getAllEntities(currentUser)) {
 			lots.add(lotToEmber.convert(l, 1, cache));
 		}
 

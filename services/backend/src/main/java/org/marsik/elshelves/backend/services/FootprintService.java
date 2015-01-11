@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
+import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.FootprintToEmber;
 import org.marsik.elshelves.backend.repositories.FootprintRepository;
@@ -17,4 +18,9 @@ public class FootprintService extends AbstractRestService<FootprintRepository, F
 							UuidGenerator uuidGenerator) {
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
+
+    @Override
+    protected Iterable<Footprint> getAllEntities(User currentUser) {
+        return getRepository().findByOwner(currentUser);
+    }
 }

@@ -1,0 +1,25 @@
+Before build do the following:
+
+pushd services/web
+npm install && bower install
+popd
+
+git clone https://github.com/MarSik/jackson-annotations.git
+git clone https://github.com/MarSik/jackson-databind.git
+git clone https://github.com/MarSik/jackson-core.git
+
+pushd jackson-annotations
+git checkout 2.4
+mvn clean install
+popd
+
+pushd jackson-databind
+git checkout 2.4
+mvn clean install
+popd
+
+pushd jackson-core
+git checkout 2.4
+mvn clean install
+popd
+

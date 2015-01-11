@@ -1,15 +1,12 @@
 package org.marsik.elshelves.backend.app;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sun.jersey.spi.container.WebApplication;
 import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
-import org.marsik.elshelves.backend.app.WebFormSupportFilter;
-import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
+import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,7 +31,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.Filter;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;

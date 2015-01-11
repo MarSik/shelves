@@ -1,14 +1,12 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
 public class Requirement extends OwnedEntity {

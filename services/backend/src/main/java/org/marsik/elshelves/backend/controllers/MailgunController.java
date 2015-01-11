@@ -1,14 +1,10 @@
 package org.marsik.elshelves.backend.controllers;
 
-import gnu.trove.set.hash.THashSet;
-import org.apache.commons.codec.binary.Hex;
-import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
 import org.marsik.elshelves.backend.dtos.MailgunEmailReceived;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,16 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/mail")

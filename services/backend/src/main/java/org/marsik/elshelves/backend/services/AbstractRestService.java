@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
-import org.apache.commons.beanutils.BeanUtils;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -10,14 +9,6 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
-import org.marsik.elshelves.backend.repositories.OwnedRepository;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.DynamicRelationshipType;
-import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluator;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
@@ -27,14 +18,12 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends OwnedRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
+public abstract class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
     final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;
@@ -72,13 +61,10 @@ public abstract class AbstractRestService<R extends OwnedRepository<T>, T extend
 		return uuidGenerator;
 	}
 
-	protected Iterable<T> getAllEntities(User currentUser) {
-        Iterable<T> result = repository.findByOwner(currentUser);
-		return result;
-    }
+	protected abstract Iterable<T> getAllEntities(User currentUser);
 
     protected T getSingleEntity(UUID uuid) {
-        return repository.findByUuid(uuid);
+        return repository.findBySchemaPropertyValue("uuid", uuid);
     }
 
 	protected int conversionDepth() {

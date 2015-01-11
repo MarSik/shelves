@@ -8,7 +8,6 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
-import java.util.UUID;
 
 @NodeEntity
 public abstract class NamedEntity extends OwnedEntity {

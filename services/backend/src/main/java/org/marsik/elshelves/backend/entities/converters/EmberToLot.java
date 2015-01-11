@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
-import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

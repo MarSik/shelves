@@ -5,10 +5,6 @@ import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Project;
 import org.marsik.elshelves.backend.entities.Requirement;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
-import org.marsik.elshelves.backend.entities.converters.EmberToNamedObject;
-import org.marsik.elshelves.backend.entities.converters.EmberToRequirement;
-import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
