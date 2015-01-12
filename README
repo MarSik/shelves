@@ -23,3 +23,7 @@ git checkout 2.4
 mvn clean install
 popd
 
+git clone https://github.com/pauloubuntu/identicon.git
+pushd identicon
+mvn clean install
+popd

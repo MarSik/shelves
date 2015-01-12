@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
+import org.marsik.elshelves.backend.security.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

@@ -342,6 +342,13 @@
             <artifactId>image4j</artifactId>
             <version>0.7</version>
         </dependency>
+
+        <!-- identicon support //-->
+        <dependency>
+            <groupId>com.github.donpark.identicon</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
