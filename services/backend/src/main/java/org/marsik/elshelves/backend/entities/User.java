@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.Email;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -16,10 +17,13 @@ public class User extends OwnedEntity {
 
     @NotNull
     @Email
+	@Indexed
     String email;
     String password;
 
+	@Indexed
     String verificationCode;
+	Date verificationStartTime;
     Date registrationDate;
 
     @RelatedTo(type = "OWNS", enforceTargetType = true)
@@ -80,6 +84,14 @@ public class User extends OwnedEntity {
     public void setBoxes(Set<Box> boxes) {
         this.boxes = boxes;
     }
+
+	public Date getVerificationStartTime() {
+		return verificationStartTime;
+	}
+
+	public void setVerificationStartTime(Date verificationStartTime) {
+		this.verificationStartTime = verificationStartTime;
+	}
 
 	@Override
 	public User getOwner() {

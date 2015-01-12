@@ -44,6 +44,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
 
                     // Verification of registration emails is open
                     .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
+				    .antMatchers(HttpMethod.POST, "/users/reverify/**").permitAll()
 
                     // OPTIONS calls must be open for CORS to work properly
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

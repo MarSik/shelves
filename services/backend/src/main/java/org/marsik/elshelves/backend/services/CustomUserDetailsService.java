@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,11 +83,34 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
         user.setUuid(uuidGenerator.generate());
 		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
+		user.setVerificationStartTime(new Date());
+		user.setRegistrationDate(new Date());
 
         userRepository.save(user);
 
         return user.getVerificationCode();
     }
+
+	@Override
+	public String startNewVerification(String email) {
+		User u = userRepository.getUserByEmail(email);
+		if (u == null) {
+			return null;
+		}
+
+		Calendar timeLimit = new GregorianCalendar();
+		timeLimit.add(Calendar.MINUTE, -15);
+
+		/* One verification per 15 minutes */
+		if (u.getVerificationStartTime() != null
+				&& u.getVerificationStartTime().after(timeLimit.getTime())) {
+			return null;
+		}
+
+		u.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
+		u.setVerificationStartTime(new Date());
+		return u.getVerificationCode();
+	}
 
     @Override
     public UserApiModel verifyUser(String code) throws PermissionDenied {
@@ -97,6 +123,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         String password = RandomStringUtils.randomAlphanumeric(10);
         u.setPassword(passwordEncoder.encode(password));
         u.setVerificationCode(null);
+		u.setVerificationStartTime(null);
         userRepository.save(u);
 
 		UserApiModel response = userToEmber.convert(u, 1, new THashMap<UUID, Object>());

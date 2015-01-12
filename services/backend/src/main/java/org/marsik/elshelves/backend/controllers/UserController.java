@@ -12,11 +12,13 @@ import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -45,6 +47,16 @@ public class UserController extends AbstractRestController<User, UserApiModel> {
         UserApiModel user = userDetailsService.verifyUser(code);
         return new EmberModel.Builder<UserApiModel>(user).build();
     }
+
+	@Transactional
+	@RequestMapping(value = "/reverify/{email:.+}", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public void reverify(@PathVariable("email") String email) {
+		String verificationCode = userDetailsService.startNewVerification(email);
+		if (verificationCode == null) return;
+
+		mailgunService.sendVerificationCode(email, verificationCode);
+	}
 
     @Transactional
     @RequestMapping("/whoami")
