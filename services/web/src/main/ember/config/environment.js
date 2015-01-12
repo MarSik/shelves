@@ -56,14 +56,15 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-      ENV.APP.API_SERVER = 'http://api.shelves.cz';
+      ENV.APP.API_SERVER = 'https://api.shelves.cz';
 
       ENV['simple-auth-oauth2'] = {
-          serverTokenEndpoint: ENV.APP.API_SERVER + '/' + ENV.APP.API_NAMESPACE + '/oauth/token',
+          serverTokenEndpoint: ENV.APP.API_SERVER + '/oauth/token',
           clientId: 'elshelves.js'
       }
   }
 
+  ENV.APP.API_ENDPOINT = ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '');
   ENV['simple-auth'].crossOriginWhitelist = [ENV.APP.API_SERVER];
 
   return ENV;

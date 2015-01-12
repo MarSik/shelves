@@ -30,7 +30,7 @@ export default Ember.Controller.extend(LoginControllerMixin, {
                 return;
             }
 
-            var url = ENV.APP.API_SERVER + '/' + ENV.APP.API_NAMESPACE + '/users/reverify/' + email;
+            var url = ENV.APP.API_ENDPOINT + '/users/reverify/' + email;
             var self = this;
             $.ajax({
                 url: url,

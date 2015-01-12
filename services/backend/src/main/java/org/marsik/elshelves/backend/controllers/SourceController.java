@@ -56,7 +56,9 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 
         BufferedImage imgToSend = null;
 
-        if (size == null) {
+        if (size == null
+                || size > 256
+                || size < 16) {
             size = 32;
         }
 

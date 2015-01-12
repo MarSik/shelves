@@ -81,7 +81,7 @@ public class MailgunService {
 
 		String message = "Thanks for registering. Your verification code is: \n\n" + code + "\n\n"
 				+ "You can confirm the account by clicking on the following link: \n\n"
-				+ "https://www.shelves.cz/verification/" + code + "\n\n"
+				+ "https://a.shelves.cz/verify/" + code + "\n\n"
 				+ "or by replying to this email.\n\n"
 				+ "Regards\n\nShelves team\nadmin@shelves.cz";
 

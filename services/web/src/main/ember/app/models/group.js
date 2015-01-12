@@ -33,5 +33,5 @@ export default DS.Model.extend({
 
     count: function () {
         return this.get('types.length');
-    }.property('types')
+    }.property('types', 'types.length')
 });

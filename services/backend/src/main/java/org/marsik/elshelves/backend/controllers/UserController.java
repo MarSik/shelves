@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -72,5 +74,21 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 
         return new EmberModel.Builder<UserApiModel>(user).build();
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET)
+    public EmberModel getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws EntityNotFound, PermissionDenied {
+        if (ids == null) {
+            throw new PermissionDenied();
+        }
+
+        for (UUID id: ids) {
+            if (!id.equals(currentUser.getUuid())) {
+                throw new PermissionDenied();
+            }
+        }
+        
+        return super.getAll(currentUser, ids);
     }
 }
