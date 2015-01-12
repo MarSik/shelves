@@ -19,6 +19,7 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	String name;
 	String summary;
 	String description;
+	boolean hasIcon = false;
 
 	UserApiModel belongsTo;
 
@@ -66,5 +67,13 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	@JsonSetter
 	public void setDescribedBy(Set<DocumentApiModel> describedBy) {
 		this.describedBy = describedBy;
+	}
+
+	public boolean isHasIcon() {
+		return hasIcon;
+	}
+
+	public void setHasIcon(boolean hasIcon) {
+		this.hasIcon = hasIcon;
 	}
 }

@@ -2,6 +2,8 @@ package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -20,18 +22,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel> {
+public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends GraphRepository<T>, T, E>> {
 
     final Class<E> dtoClazz;
-    final AbstractRestService<? extends GraphRepository<T>, T, E> service;
+    final S service;
 
-    public AbstractRestController(Class<E> dtoClazz, AbstractRestService<? extends GraphRepository<T>, T, E> service) {
+    public AbstractRestController(Class<E> dtoClazz, S service) {
         this.dtoClazz = dtoClazz;
         this.service = service;
     }
@@ -108,7 +113,14 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
         return new THashMap<>();
     }
 
-	protected AbstractRestService<? extends GraphRepository<T>, T, E> getService() {
+	protected S getService() {
 		return service;
+	}
+
+	protected HttpServletResponse sendFile(HttpServletResponse response, String contentType, File f) throws IOException {
+		response.setContentType(contentType);
+		response.setHeader("Content-Length", Long.toString(f.length()));
+		FileUtils.copyFile(f, response.getOutputStream());
+		return response;
 	}
 }

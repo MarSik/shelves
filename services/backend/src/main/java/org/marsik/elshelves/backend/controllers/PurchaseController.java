@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/purchases")
-public class PurchaseController extends AbstractRestController<Purchase, PurchaseApiModel> {
+public class PurchaseController extends AbstractRestController<Purchase, PurchaseApiModel, PurchaseService> {
 	@Autowired
 	public PurchaseController(PurchaseService service) {
 		super(PurchaseApiModel.class, service);

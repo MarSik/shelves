@@ -336,6 +336,12 @@
             <version>4.3.6</version>
         </dependency>
 
+        <!-- favicon ICO format support //-->
+        <dependency>
+            <groupId>org.jclarion</groupId>
+            <artifactId>image4j</artifactId>
+            <version>0.7</version>
+        </dependency>
     </dependencies>
 
     <build>

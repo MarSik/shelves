@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/projects")
-public class ProjectController extends AbstractRestController<Project, ProjectApiModel> {
+public class ProjectController extends AbstractRestController<Project, ProjectApiModel, ProjectService> {
 	@Autowired
 	public ProjectController(ProjectService service) {
 		super(ProjectApiModel.class, service);

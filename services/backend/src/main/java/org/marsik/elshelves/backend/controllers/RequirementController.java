@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/requirements")
-public class RequirementController extends AbstractRestController<Requirement, RequirementApiModel> {
+public class RequirementController extends AbstractRestController<Requirement, RequirementApiModel, RequirementService> {
 	@Autowired
 	public RequirementController(RequirementService service) {
 		super(RequirementApiModel.class, service);

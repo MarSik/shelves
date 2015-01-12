@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupController extends AbstractRestController<Group, PartGroupApiModel> {
+public class GroupController extends AbstractRestController<Group, PartGroupApiModel, GroupService> {
 	@Autowired
 	public GroupController(GroupService service) {
 		super(PartGroupApiModel.class, service);

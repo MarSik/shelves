@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/boxes")
-public class BoxController extends AbstractRestController<Box, BoxApiModel> {
+public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxService> {
     BoxService boxService;
 
     @Autowired

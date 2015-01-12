@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/footprints")
-public class FootprintController extends AbstractRestController<Footprint, FootprintApiModel> {
+public class FootprintController extends AbstractRestController<Footprint, FootprintApiModel, FootprintService> {
 	@Autowired
 	public FootprintController(FootprintService service) {
 		super(FootprintApiModel.class, service);

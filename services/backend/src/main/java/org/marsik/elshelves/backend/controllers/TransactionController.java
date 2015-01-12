@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/transactions")
-public class TransactionController extends AbstractRestController<Transaction, TransactionApiModel> {
+public class TransactionController extends AbstractRestController<Transaction, TransactionApiModel, TransactionService> {
 	@Autowired
 	public TransactionController(TransactionService service) {
 		super(TransactionApiModel.class, service);
