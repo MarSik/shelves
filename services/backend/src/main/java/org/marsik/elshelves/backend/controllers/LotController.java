@@ -7,6 +7,7 @@ import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -15,6 +16,7 @@ import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.LotService;
+import org.marsik.elshelves.backend.services.PurchaseService;
 import org.marsik.elshelves.backend.services.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,9 @@ import java.util.UUID;
 public class LotController {
 	@Autowired
 	LotService lotService;
+
+	@Autowired
+	PurchaseService purchaseService;
 
 	@Autowired
 	TypeService typeService;
@@ -104,7 +109,8 @@ public class LotController {
 						   @CurrentUser User currentUser,
 						   @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
 		LotApiModel lot = lotService.get(uuid, currentUser);
-		PartTypeApiModel type = typeService.get(lot.getType().getId(), currentUser);
+		PurchaseApiModel purchase = purchaseService.get(lot.getPurchase().getId(), currentUser);
+		PartTypeApiModel type = typeService.get(purchase.getType().getId(), currentUser);
 
 		response.setContentType("image/jpg");
 		response.setHeader("Content-Disposition", "attachment; filename=" + type.getName() + "-" + lot.getId().toString() + ".png");
