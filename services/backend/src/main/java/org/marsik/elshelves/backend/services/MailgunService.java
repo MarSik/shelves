@@ -97,7 +97,7 @@ public class MailgunService {
 
 		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
 
-		rest.postForObject("https://api.mailgun.net/v2/shelves.cz/messages",
+		rest.postForObject(configuration.getUrl(),
 				request, MailgunResponse.class);
 
         return true;

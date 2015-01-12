@@ -22,7 +22,9 @@ public class ApplicationSecurity extends
         WebSecurityConfigurerAdapter {
     @Bean
     public MailgunConfiguration getMailgunConfiguration() {
-        return new MailgunConfiguration();
+        MailgunConfiguration conf = new MailgunConfiguration();
+		conf.load();
+		return conf;
     }
 
     @Autowired
