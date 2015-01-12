@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import com.docuverse.identicon.NineBlockIdenticonRenderer;
 import net.sf.image4j.codec.ico.ICODecoder;
 import org.apache.http.HttpStatus;
 import org.marsik.elshelves.api.ember.EmberModel;
@@ -13,6 +14,7 @@ import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.SourceService;
 import org.marsik.elshelves.backend.services.StorageManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,19 +47,21 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 	}
 
 	@RequestMapping(value = "/{uuid}/icon")
+    @Transactional(readOnly = true)
 	public void getIcon(@CurrentUser User currentUser,
 						@PathVariable("uuid") UUID uuid,
 						@RequestParam(value = "size", required = false) Integer size,
 						HttpServletResponse response) throws PermissionDenied, EntityNotFound, IOException {
 		SourceApiModel s = getService().get(uuid, currentUser);
 
-		if (s.isHasIcon()) {
-			BufferedImage imgToSend = null;
-			List<BufferedImage> images = ICODecoder.read(storageManager.get(uuid));
+        BufferedImage imgToSend = null;
 
-			if (size == null) {
-				size = 32;
-			}
+        if (size == null) {
+            size = 32;
+        }
+
+		if (s.isHasIcon()) {
+			List<BufferedImage> images = ICODecoder.read(storageManager.get(uuid));
 
 			for (BufferedImage img: images) {
 				if (imgToSend == null) {
@@ -69,14 +73,8 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 				}
 			}
 
-			if (imgToSend == null) {
-				response.setStatus(HttpStatus.SC_NOT_FOUND);
-				return;
-			}
-
-
 			// Resize to the proper size
-			if (imgToSend.getHeight() != size) {
+			if (imgToSend != null && imgToSend.getHeight() != size) {
 				BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 				Graphics2D g = dest.createGraphics();
 				AffineTransform at = AffineTransform.getScaleInstance(size.floatValue() / imgToSend.getWidth(),
@@ -84,12 +82,14 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 				g.drawRenderedImage(imgToSend, at);
 				imgToSend = dest;
 			}
-
-			response.setContentType("image/x-icon");
-			ImageIO.write(imgToSend, "png", response.getOutputStream());
-			response.setStatus(HttpStatus.SC_OK);
-		} else {
-			response.setStatus(HttpStatus.SC_NOT_FOUND);
 		}
+
+        if (imgToSend == null) {
+            imgToSend = new NineBlockIdenticonRenderer().render(uuid.hashCode(), size);
+        }
+
+        response.setContentType("image/x-icon");
+        ImageIO.write(imgToSend, "png", response.getOutputStream());
+        response.setStatus(HttpStatus.SC_OK);
 	}
 }

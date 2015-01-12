@@ -47,7 +47,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
 
     @RequestMapping
     @ResponseBody
-    @Transactional
+    @Transactional(readOnly = true)
     public EmberModel getAll(@CurrentUser User currentUser,
 							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws EntityNotFound, PermissionDenied {
 		Collection<E> allItems;
@@ -72,7 +72,7 @@ public class AbstractRestController<T extends OwnedEntity, E extends AbstractEnt
 
     @RequestMapping("/{id}")
     @ResponseBody
-    @Transactional
+    @Transactional(readOnly = true)
     public EmberModel getOne(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid) throws PermissionDenied, EntityNotFound {
         E entity = service.get(uuid, currentUser);
