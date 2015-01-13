@@ -16,6 +16,7 @@ public class Source extends NamedEntity {
 	@RelatedTo(type = "PURCHASED_FROM", direction = Direction.INCOMING)
 	Iterable<Purchase> purchases;
 
+	@PartOfUpdate
 	public String getUrl() {
 		return url;
 	}

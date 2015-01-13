@@ -28,6 +28,7 @@ public class Purchase extends LotBase {
 	@Query("START p=node({self}) MATCH (p) -[:DELIVERED_AS]-> () -[:NEXT*0..]-> (l:Lot) WHERE NOT (l) -[:NEXT]-> () RETURN l")
 	Iterable<Lot> lots;
 
+	@PartOfUpdate
 	public Double getSinglePrice() {
 		return singlePrice;
 	}
@@ -36,6 +37,7 @@ public class Purchase extends LotBase {
 		this.singlePrice = singlePrice;
 	}
 
+	@PartOfUpdate
 	public Double getTotalPrice() {
 		return totalPrice;
 	}
@@ -44,6 +46,7 @@ public class Purchase extends LotBase {
 		this.totalPrice = totalPrice;
 	}
 
+	@PartOfUpdate
 	public Double getVat() {
 		return vat;
 	}
@@ -52,6 +55,7 @@ public class Purchase extends LotBase {
 		this.vat = vat;
 	}
 
+	@PartOfUpdate
 	public Boolean getVatIncluded() {
 		return vatIncluded;
 	}
@@ -65,6 +69,7 @@ public class Purchase extends LotBase {
 		return (transaction1 == null) ? null : transaction1.getSource();
 	}
 
+	@PartOfUpdate
 	public Transaction getTransaction() {
 		return transaction;
 	}
@@ -73,6 +78,7 @@ public class Purchase extends LotBase {
 		this.transaction = transaction;
 	}
 
+	@PartOfUpdate
 	public Type getType() {
 		return type;
 	}
@@ -93,6 +99,7 @@ public class Purchase extends LotBase {
 		return canBeDeleted();
 	}
 
+	@PartOfUpdate
 	@Override
 	public Set<Lot> getNext() {
 		return next;

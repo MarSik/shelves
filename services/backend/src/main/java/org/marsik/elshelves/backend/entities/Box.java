@@ -18,6 +18,7 @@ public class Box extends NamedEntity {
 	@RelatedTo(type = "LOCATED_AT", direction = Direction.INCOMING)
 	Set<Lot> lots;
 
+	@PartOfUpdate
 	public Set<Box> getContains() {
         return contains;
     }
@@ -26,6 +27,7 @@ public class Box extends NamedEntity {
         this.contains = contains;
     }
 
+	@PartOfUpdate
     public Box getParent() {
         return parent;
     }
@@ -34,6 +36,7 @@ public class Box extends NamedEntity {
         this.parent = parent;
     }
 
+	@PartOfUpdate
 	public Set<Lot> getLots() {
 		return lots;
 	}

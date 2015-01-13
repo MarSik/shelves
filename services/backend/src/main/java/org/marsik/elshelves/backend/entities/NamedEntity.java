@@ -25,6 +25,7 @@ public abstract class NamedEntity extends OwnedEntity {
 	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
 	Set<Document> describedBy;
 
+	@PartOfUpdate
 	public String getName() {
 		return name;
 	}
@@ -33,6 +34,7 @@ public abstract class NamedEntity extends OwnedEntity {
 		this.name = name;
 	}
 
+	@PartOfUpdate
 	public String getSummary() {
 		return summary;
 	}
@@ -41,6 +43,7 @@ public abstract class NamedEntity extends OwnedEntity {
 		this.summary = summary;
 	}
 
+	@PartOfUpdate
 	public String getDescription() {
 		return description;
 	}
@@ -49,6 +52,7 @@ public abstract class NamedEntity extends OwnedEntity {
 		this.description = description;
 	}
 
+	@PartOfUpdate
 	public Set<Document> getDescribedBy() {
 		return describedBy;
 	}

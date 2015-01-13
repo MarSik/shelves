@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @NodeEntity
 public abstract class OwnedEntity {
+	@PartOfUpdate
 	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
 	@NotNull
 	User owner;
@@ -21,6 +22,7 @@ public abstract class OwnedEntity {
 	// Provided by AspectJ-ized NodeEntity
 	// public abstract Long getNodeId();
 
+	@PartOfUpdate
 	public User getOwner() {
 		return owner;
 	}

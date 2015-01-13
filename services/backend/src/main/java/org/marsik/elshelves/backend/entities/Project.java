@@ -10,6 +10,7 @@ public class Project extends NamedEntity {
 	@RelatedTo(type = "REQUIRES")
 	Set<Requirement> requires;
 
+	@PartOfUpdate
 	public Set<Requirement> getRequires() {
 		return requires;
 	}

@@ -7,6 +7,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,10 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 				continue;
 			}
 
+			if (getter.getAnnotation(PartOfUpdate.class) == null) {
+				continue;
+			}
+
 			// Update all writable collections in entity using
 			// entity.clear(); entity.addAll(items) so the aspected
 			// neo4j relationships are maintained properly
@@ -120,7 +125,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 			// Update all scalar properties
 			} else {
 				try {
-					Object value = getter.invoke(entity);
+					Object value = getter.invoke(update);
 					Method setter = f.getWriteMethod();
 					if (setter != null) {
 						setter.invoke(entity, value);
@@ -131,7 +136,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 			}
 		}
 
-        return update;
+        return entity;
     }
 
     public Collection<E> getAllItems(User currentUser) {
@@ -191,6 +196,9 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 
         try {
 			T update = restToDb.convert(dto, 2, new THashMap<UUID, Object>());
+			// The REST entity does not contain id during PUT, because that is
+			// provided by the URL
+			update.setUuid(uuid);
             one = updateEntity(one, update);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();

@@ -24,6 +24,7 @@ public class Type extends NamedEntity {
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
 	Set<Purchase> purchases;
 
+	@PartOfUpdate
 	public String getVendor() {
 		return vendor;
 	}
@@ -32,6 +33,7 @@ public class Type extends NamedEntity {
 		this.vendor = vendor;
 	}
 
+	@PartOfUpdate
 	public String getVendorId() {
 		return vendorId;
 	}
@@ -40,6 +42,7 @@ public class Type extends NamedEntity {
 		this.vendorId = vendorId;
 	}
 
+	@PartOfUpdate
 	public Footprint getFootprint() {
 		return footprint;
 	}
@@ -48,6 +51,7 @@ public class Type extends NamedEntity {
 		this.footprint = footprint;
 	}
 
+	@PartOfUpdate
 	public Set<Group> getGroups() {
 		return groups;
 	}

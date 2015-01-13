@@ -24,6 +24,7 @@ public class Requirement extends OwnedEntity {
 	@Min(1)
 	Long count;
 
+	@PartOfUpdate
 	public Project getProject() {
 		return project;
 	}
@@ -32,6 +33,7 @@ public class Requirement extends OwnedEntity {
 		this.project = project;
 	}
 
+	@PartOfUpdate
 	public Set<Type> getType() {
 		return type;
 	}
@@ -40,6 +42,7 @@ public class Requirement extends OwnedEntity {
 		this.type = type;
 	}
 
+	@PartOfUpdate
 	public Long getCount() {
 		return count;
 	}
@@ -58,6 +61,7 @@ public class Requirement extends OwnedEntity {
 		// NOP
 	}
 
+	@PartOfUpdate
 	public Set<Lot> getLots() {
 		return lots;
 	}

@@ -17,6 +17,7 @@ public class Group extends NamedEntity {
 	@RelatedTo(type = "CONTAINS")
 	Set<Type> types;
 
+	@PartOfUpdate
 	public Group getParent() {
 		return parent;
 	}
@@ -25,6 +26,7 @@ public class Group extends NamedEntity {
 		this.parent = parent;
 	}
 
+	@PartOfUpdate
 	public Set<Group> getGroups() {
 		return groups;
 	}
@@ -33,6 +35,7 @@ public class Group extends NamedEntity {
 		this.groups = groups;
 	}
 
+	@PartOfUpdate
 	public Set<Type> getTypes() {
 		return types;
 	}

@@ -21,6 +21,7 @@ public class Footprint extends NamedEntity {
 	 */
 	Integer npth;
 
+	@PartOfUpdate
 	public String getKicad() {
 		return kicad;
 	}
@@ -29,6 +30,7 @@ public class Footprint extends NamedEntity {
 		this.kicad = kicad;
 	}
 
+	@PartOfUpdate
 	public Integer getPads() {
 		return pads;
 	}
@@ -37,6 +39,7 @@ public class Footprint extends NamedEntity {
 		this.pads = pads;
 	}
 
+	@PartOfUpdate
 	public Integer getHoles() {
 		return holes;
 	}
@@ -45,6 +48,7 @@ public class Footprint extends NamedEntity {
 		this.holes = holes;
 	}
 
+	@PartOfUpdate
 	public Integer getNpth() {
 		return npth;
 	}

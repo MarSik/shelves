@@ -21,6 +21,7 @@ public class Document extends NamedEntity {
 	@RelatedTo(type = "DESCRIBES")
 	Set<NamedEntity> describes;
 
+	@PartOfUpdate
 	public String getContentType() {
 		return contentType;
 	}
@@ -29,6 +30,7 @@ public class Document extends NamedEntity {
 		this.contentType = contentType;
 	}
 
+	@PartOfUpdate
 	public Long getSize() {
 		return size;
 	}
@@ -37,6 +39,7 @@ public class Document extends NamedEntity {
 		this.size = size;
 	}
 
+	@PartOfUpdate
 	public Date getCreated() {
 		return created;
 	}

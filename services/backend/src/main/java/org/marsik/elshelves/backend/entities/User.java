@@ -37,6 +37,7 @@ public class User extends OwnedEntity {
         this.uuid = uuid;
     }
 
+	@PartOfUpdate
     public String getName() {
         return name;
     }
@@ -45,6 +46,7 @@ public class User extends OwnedEntity {
         this.name = name;
     }
 
+	@PartOfUpdate
     public String getEmail() {
         return email;
     }
