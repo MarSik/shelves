@@ -12,5 +12,5 @@ export default DS.Model.extend({
     belongsTo: belongsTo('user', {async: true}),
     describedBy: hasMany("document", {async: true}),
 
-    requires: hasMany('requirement', {async: true})
+    requirements: hasMany('requirement', {async: true})
 });

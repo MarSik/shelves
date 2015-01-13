@@ -44,9 +44,9 @@ public class EmberToProject implements CachingConverter<ProjectApiModel, Project
 		emberToNamedObject.convert(object, project, nested, cache);
 		project.setDescription(object.getDescription());
 
-		if (object.getRequires() != null) {
+		if (object.getRequirements() != null) {
 			project.setRequires(new THashSet<Requirement>());
-			for (RequirementApiModel r: object.getRequires()) {
+			for (RequirementApiModel r: object.getRequirements()) {
 				project.getRequires().add(emberToRequirement.convert(r, nested, cache));
 			}
 		}

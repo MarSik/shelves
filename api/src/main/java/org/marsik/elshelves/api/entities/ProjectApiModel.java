@@ -22,7 +22,7 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 
 	String description;
 
-	Set<RequirementApiModel> requires;
+	Set<RequirementApiModel> requirements;
 
 	public String getDescription() {
 		return description;
@@ -33,12 +33,12 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
-	public Set<RequirementApiModel> getRequires() {
-		return requires;
+	public Set<RequirementApiModel> getRequirements() {
+		return requirements;
 	}
 
 	@JsonSetter
-	public void setRequires(Set<RequirementApiModel> requires) {
-		this.requires = requires;
+	public void setRequirements(Set<RequirementApiModel> requirements) {
+		this.requirements = requirements;
 	}
 }

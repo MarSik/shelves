@@ -46,9 +46,9 @@ public class ProjectToEmber implements CachingConverter<Project, ProjectApiModel
 		}
 
 		if (object.getRequires() != null) {
-			model.setRequires(new THashSet<RequirementApiModel>());
+			model.setRequirements(new THashSet<RequirementApiModel>());
 			for (Requirement r: object.getRequires()) {
-				model.getRequires().add(requirementToEmber.convert(r, nested - 1, cache));
+				model.getRequirements().add(requirementToEmber.convert(r, nested - 1, cache));
 			}
 		}
 
