@@ -3,12 +3,17 @@
 
 <table>
 {{#each type in types}}
+    <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{type.name}}{{/draggable-item}}</td>
         <td>{{type.vendor}}</td>
         <td>{{type.footprint.name}}</td>
         <td>{{type.available}}</td>
     </tr>
+    <tr>
+        <td colspan="4">{{type.summary}}</td>
+    </tr>
+    </tbody>
 {{/each}}
 </table>
 </div>
