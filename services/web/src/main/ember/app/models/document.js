@@ -5,8 +5,10 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
     name: attr('string'),
+    summary: attr(),
+    description: attr(),
     contentType: attr('string'),
     size: attr('number'),
     created: attr('date'),
-    belongsTo: belongsTo('user')
+    belongsTo: belongsTo('user', {async: true})
 });

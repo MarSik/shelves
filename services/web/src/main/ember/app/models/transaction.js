@@ -9,6 +9,6 @@ export default DS.Model.extend({
     name: attr('string'),
     date: attr('date'),
     items: hasMany("purchase", {async: true}),
-    belongsTo: belongsTo("user"),
+    belongsTo: belongsTo("user", {async: true}),
     source: belongsTo("source", {async: true})
 });

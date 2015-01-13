@@ -6,12 +6,14 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
     name: attr(),
+    summary: attr(),
+    description: attr(),
 
     types: hasMany("type", {async: true}),
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
     groups: hasMany("group", {inverse: "parent", async: true}),
-    belongsTo: belongsTo("user"),
+    belongsTo: belongsTo("user", {async: true}),
 
     children: function() {
         return this.get('groups');

@@ -6,6 +6,8 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
   name: attr(),
+  summary: attr(),
+  description: attr(),
   kicad: attr(),
 
   pads: attr("number"),
@@ -13,5 +15,5 @@ export default DS.Model.extend({
   npth: attr("number", {defaultValue: 0}),
   pitch: attr(),
   describedBy: hasMany("document", {async: true}),
-  belongsTo: belongsTo('user')
+  belongsTo: belongsTo('user', {async: true})
 });

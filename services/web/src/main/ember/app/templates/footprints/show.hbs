@@ -1,10 +1,26 @@
-<h3>{{name}}</h3>
+<h2>{{#click-to-edit content=model field='content.name'}}{{name}}{{/click-to-edit}}</h2>
 
-<form {{action 'save' model on='submit'}}>
-    {{input type='text' value=pads placeholder='pads'}}
-    {{input type='text' value=holes placeholder='holes'}}
-    {{input type='text' value=npth placeholder='npth'}}
-    {{input type='text' value=pitch placeholder='pitch'}}
+<p>{{#click-to-editarea content=model field='content.summary'}}{{summary}}{{/click-to-editarea}}</p>
 
-    <button type="submit">Save</button>
-</form>
+<h3>Description</h3>
+
+{{#click-to-editarea content=model field='content.description'}}{{description}}{{/click-to-editarea}}
+
+<div class="footprint-summary">
+    <dl>
+        <dt>{{fa-icon 'fa-square'}} Pads</dt>
+        <dd>{{#click-to-edit content=model field='content.pads'}}{{pads}}{{/click-to-edit}}</dd>
+    </dl>
+    <dl>
+        <dt>{{fa-icon 'fa-circle-o'}} Holes</dt>
+        <dd>{{#click-to-edit content=model field='content.holes'}}{{holes}}{{/click-to-edit}}</dd>
+    </dl>
+    <dl>
+        <dt>{{fa-icon 'fa-circle'}} NPTH</dt>
+        <dt>{{#click-to-edit content=model field='content.npth'}}{{npth}}{{/click-to-edit}}</dt>
+    </dl>
+    <dl>
+        <dt>{{fa-icon 'fa-bars'}} Pitch</dt>
+        <dt>{{#click-to-edit content=model field='content.pitch'}}{{pitch}}{{/click-to-edit}}</dt>
+    </dl>
+</div>

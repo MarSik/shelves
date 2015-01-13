@@ -1,4 +1,4 @@
-<h2>{{model.name}}</h2>
+<h2>{{#click-to-edit content=model field='content.name'}}{{model.name}}{{/click-to-edit}}</h2>
 
 <h3>URL</h3>
 {{#click-to-edit content=model field='content.url'}}<a {{bind-attr href=model.url}}>{{model.url}}</a>{{/click-to-edit}}

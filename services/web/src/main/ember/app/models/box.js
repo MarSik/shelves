@@ -7,6 +7,8 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
   name: attr(),
+  summary: attr(),
+  description: attr(),
   lots: hasMany("lot", {async: true}),
   parent: belongsTo("box", {async: true, inverse: "boxes"}),
   boxes: hasMany("box", {async: true, inverse: "parent"}),

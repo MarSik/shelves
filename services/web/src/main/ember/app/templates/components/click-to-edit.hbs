@@ -2,8 +2,8 @@
 <form {{action 'saveEdit' on='submit'}} class="inline">
     {{input type='text' value=value}}
     <button type="submit">save</button>
-    <button class="button secondary" {{action 'cancelEdit'}}>save</button>
+    <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
 </form>
 {{else}}
-{{yield}} <button class="button primary" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>
+{{yield}} <button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>
 {{/if}}
