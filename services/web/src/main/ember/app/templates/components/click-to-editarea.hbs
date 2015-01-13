@@ -1,0 +1,10 @@
+{{#if editing}}
+<form {{action 'saveEdit' on='submit'}} class="inline">
+{{text-area type='text' value=value}}
+<button type="submit">save</button>
+<button class="button secondary" {{action 'cancelEdit'}}>save</button>
+</form>
+{{else}}
+{{yield}} <button class="button primary" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>
+{{/if}}
+

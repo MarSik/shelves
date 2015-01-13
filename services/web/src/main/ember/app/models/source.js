@@ -8,7 +8,7 @@ export default DS.Model.extend({
     summary: DS.attr('string'),
     description: DS.attr('string'),
     url: DS.attr('string'),
-    belongsTo: belongsTo('user'),
+    belongsTo: belongsTo('user', {async: true}),
     nameWithDesc: function () {
         var n = this.get('name');
         if (this.get('summary')) {
