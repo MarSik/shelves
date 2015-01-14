@@ -99,7 +99,6 @@ public class Purchase extends LotBase {
 		return canBeDeleted();
 	}
 
-	@PartOfUpdate
 	@Override
 	public Set<Lot> getNext() {
 		return next;

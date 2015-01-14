@@ -61,7 +61,6 @@ public class Requirement extends OwnedEntity {
 		// NOP
 	}
 
-	@PartOfUpdate
 	public Set<Lot> getLots() {
 		return lots;
 	}

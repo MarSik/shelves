@@ -26,7 +26,6 @@ public class Group extends NamedEntity {
 		this.parent = parent;
 	}
 
-	@PartOfUpdate
 	public Set<Group> getGroups() {
 		return groups;
 	}
