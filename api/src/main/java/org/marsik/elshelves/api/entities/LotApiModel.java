@@ -39,6 +39,11 @@ public class LotApiModel extends LotBaseApiModel {
 
 	RequirementApiModel usedBy;
 
+	boolean canBeSoldered;
+	boolean canBeUnsoldered;
+	boolean canBeAssigned;
+	boolean canBeUnassigned;
+
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
         return location;
@@ -90,5 +95,37 @@ public class LotApiModel extends LotBaseApiModel {
 	@JsonSetter
 	public void setUsedBy(RequirementApiModel usedBy) {
 		this.usedBy = usedBy;
+	}
+
+	public boolean isCanBeSoldered() {
+		return canBeSoldered;
+	}
+
+	public void setCanBeSoldered(boolean canBeSoldered) {
+		this.canBeSoldered = canBeSoldered;
+	}
+
+	public boolean isCanBeUnsoldered() {
+		return canBeUnsoldered;
+	}
+
+	public void setCanBeUnsoldered(boolean canBeUnsoldered) {
+		this.canBeUnsoldered = canBeUnsoldered;
+	}
+
+	public boolean isCanBeAssigned() {
+		return canBeAssigned;
+	}
+
+	public void setCanBeAssigned(boolean canBeAssigned) {
+		this.canBeAssigned = canBeAssigned;
+	}
+
+	public boolean isCanBeUnassigned() {
+		return canBeUnassigned;
+	}
+
+	public void setCanBeUnassigned(boolean canBeUnassigned) {
+		this.canBeUnassigned = canBeUnassigned;
 	}
 }

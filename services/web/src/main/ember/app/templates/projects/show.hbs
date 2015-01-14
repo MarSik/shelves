@@ -11,18 +11,31 @@
 {{#each r in model.requirements}}
     <tbody>
     <tr>
-        <td colspan="2">{{r.count}} of</td>
+        <td colspan="2">{{#click-to-edit content=r field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
         <td></td>
         <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
             <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button></td>
     </tr>
     {{#each type in r.type}}
     <tr>
-        <td>&nbsp;</td>
+        <td>{{fa-icon 'plus'}}</td>
         <td>{{type.name}}</td>
         <td>{{type.vendor}}</td>
         <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
+    </tr>
+    {{/each}}
+    {{#each lot in r.lots}}
+    <tr>
+        <td>{{lot.count}}</td>
+        <td>{{lot.type.name}}</td>
+        <td>{{lot.type.vendor}}</td>
+        <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+        <td>
+            {{#if lot.canBeSoldered}}<button class="button tiny alert">Solder</button>{{/if}}
+            {{#if lot.canBeUnassigned}}<button class="button tiny secondary">Unassign</button>{{/if}}
+            {{#if lot.canBeUnsoldered}}<button class="button tiny alert">Unsolder</button>{{/if}}
+        </td>
     </tr>
     {{/each}}
     </tbody>

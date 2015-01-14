@@ -68,4 +68,8 @@ public class Requirement extends OwnedEntity {
 	public void setLots(Set<Lot> lots) {
 		this.lots = lots;
 	}
+
+	public boolean canBeDeleted() {
+		return getLots().isEmpty();
+	}
 }

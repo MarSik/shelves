@@ -47,4 +47,9 @@ public class Document extends NamedEntity {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return true;
+	}
 }

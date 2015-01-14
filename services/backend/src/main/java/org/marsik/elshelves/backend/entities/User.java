@@ -104,4 +104,10 @@ public class User extends OwnedEntity {
 	public void setOwner(User user) {
 	    // NOP
 	}
+
+	// Special logic handles user removal
+	@Override
+	public boolean canBeDeleted() {
+		return false;
+	}
 }

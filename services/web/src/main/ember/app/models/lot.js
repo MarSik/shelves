@@ -17,5 +17,10 @@ export default LotBase.extend({
 
   type: function () {
       return this.get('purchase.type');
-  }.property('purchase.type')
+  }.property('purchase.type'),
+
+  canBeAssigned: attr(),
+  canBeSoldered: attr(),
+  canBeUnSoldered: attr(),
+  canBeUnassigned: attr()
 });

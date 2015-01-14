@@ -215,4 +215,23 @@ public class Lot extends LotBase {
 	public void setUsedBy(Requirement usedBy) {
 		this.usedBy = usedBy;
 	}
+
+	public boolean isCanBeSoldered() {
+		return getUsedBy() != null
+				&& !getAction().equals(LotAction.DESTROYED)
+				&& !getAction().equals(LotAction.SOLDERED);
+	}
+
+	public boolean isCanBeUnsoldered() {
+		return getAction().equals(LotAction.SOLDERED);
+	}
+
+	public boolean isCanBeAssigned() {
+		return getUsedBy() == null
+				&& !getAction().equals(LotAction.DESTROYED);
+	}
+
+	public boolean isCanBeUnassigned() {
+		return isCanBeSoldered();
+	}
 }

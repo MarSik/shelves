@@ -38,4 +38,6 @@ public abstract class OwnedEntity {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
+
+	public abstract boolean canBeDeleted();
 }

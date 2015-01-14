@@ -17,4 +17,13 @@ public class Project extends NamedEntity {
 	public void setRequires(Set<Requirement> requires) {
 		this.requires = requires;
 	}
+
+	public boolean canBeDeleted() {
+		for (Requirement r: getRequires()) {
+			if (!r.canBeDeleted()) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -179,6 +179,10 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
             throw new PermissionDenied();
         }
 
+		if (!one.canBeDeleted()) {
+			throw new OperationNotPermitted();
+		}
+
         deleteEntity(one);
         return true;
     }

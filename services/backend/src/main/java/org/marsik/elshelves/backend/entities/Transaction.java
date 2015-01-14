@@ -40,4 +40,15 @@ public class Transaction extends NamedEntity {
 	public void setItems(Set<Purchase> items) {
 		this.items = items;
 	}
+
+	@Override
+	public boolean canBeDeleted() {
+		for (Purchase p: getItems()) {
+			if (!p.canBeDeleted()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

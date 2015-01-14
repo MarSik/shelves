@@ -22,7 +22,10 @@ public class Type extends NamedEntity {
 	Set<Group> groups;
 
 	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
-	Set<Purchase> purchases;
+	Iterable<Purchase> purchases;
+
+	@RelatedTo(type = "REQUIRED_TYPE", direction = Direction.INCOMING)
+	Iterable<Requirement> usedIn;
 
 	@PartOfUpdate
 	public String getVendor() {
@@ -71,11 +74,16 @@ public class Type extends NamedEntity {
 		return lots;
 	}
 
-	public Set<Purchase> getPurchases() {
+	public Iterable<Purchase> getPurchases() {
 		return purchases;
 	}
 
-	public void setPurchases(Set<Purchase> purchases) {
-		this.purchases = purchases;
+	public Iterable<Requirement> getUsedIn() {
+		return usedIn;
+	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return !(getPurchases().iterator().hasNext() && getUsedIn().iterator().hasNext());
 	}
 }

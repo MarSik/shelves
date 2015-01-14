@@ -42,4 +42,9 @@ public class Group extends NamedEntity {
 	public void setTypes(Set<Type> types) {
 		this.types = types;
 	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return true;
+	}
 }

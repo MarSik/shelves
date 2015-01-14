@@ -1,6 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 @NodeEntity
 public class Footprint extends NamedEntity {
@@ -20,6 +22,9 @@ public class Footprint extends NamedEntity {
 	 * Number of non-plated holes
 	 */
 	Integer npth;
+
+	@RelatedTo(type = "HAS_FOOTPRINT", direction = Direction.INCOMING)
+	Iterable<Type> types;
 
 	@PartOfUpdate
 	public String getKicad() {
@@ -55,5 +60,14 @@ public class Footprint extends NamedEntity {
 
 	public void setNpth(Integer npth) {
 		this.npth = npth;
+	}
+
+	public Iterable<Type> getTypes() {
+		return types;
+	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return !getTypes().iterator().hasNext();
 	}
 }

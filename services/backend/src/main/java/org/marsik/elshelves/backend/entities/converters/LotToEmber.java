@@ -47,6 +47,11 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
 		entity.setPrevious(convert(object.getPrevious(), nested - 1, cache));
 
+		entity.setCanBeAssigned(object.isCanBeAssigned());
+		entity.setCanBeUnassigned(object.isCanBeUnassigned());
+		entity.setCanBeSoldered(object.isCanBeSoldered());
+		entity.setCanBeUnsoldered(object.isCanBeUnsoldered());
+
 		return entity;
 	}
 

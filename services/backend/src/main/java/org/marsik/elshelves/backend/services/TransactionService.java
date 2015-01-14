@@ -30,6 +30,9 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 	TypeRepository typeRepository;
 
 	@Autowired
+	PurchaseService purchaseService;
+
+	@Autowired
 	public TransactionService(TransactionRepository repository,
 							  TransactionToEmber dbToRest,
 							  EmberToTransaction restToDb,
@@ -56,8 +59,8 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 	@Override
 	protected void deleteEntity(Transaction entity) throws OperationNotPermitted {
-		if (!entity.getItems().isEmpty()) {
-			throw new OperationNotPermitted();
+		for (Purchase p: entity.getItems()) {
+			purchaseService.deleteEntity(p);
 		}
 
 		super.deleteEntity(entity);

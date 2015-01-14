@@ -42,4 +42,9 @@ public class Box extends NamedEntity {
 	public void setLots(Set<Lot> lots) {
 		this.lots = lots;
 	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return true;
+	}
 }

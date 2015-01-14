@@ -114,6 +114,8 @@ nav.qr {
 }
 
 button .edit, .button.edit {
+  display: inline;
+
   @include button(
       rem-calc(1), //padding
       rgba(1.0, 1.0, 1.0, 0.00), // transparent
