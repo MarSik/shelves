@@ -43,6 +43,7 @@ public class LotApiModel extends LotBaseApiModel {
 	boolean canBeUnsoldered;
 	boolean canBeAssigned;
 	boolean canBeUnassigned;
+    boolean canBeSplit;
 
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
@@ -128,4 +129,12 @@ public class LotApiModel extends LotBaseApiModel {
 	public void setCanBeUnassigned(boolean canBeUnassigned) {
 		this.canBeUnassigned = canBeUnassigned;
 	}
+
+    public boolean isCanBeSplit() {
+        return canBeSplit;
+    }
+
+    public void setCanBeSplit(boolean canBeSplit) {
+        this.canBeSplit = canBeSplit;
+    }
 }

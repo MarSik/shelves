@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Type;
+import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,12 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
+
+        PartCount count = object.getAvailable();
+
+        model.setFree(count.free);
+        model.setAvailable(count.available);
+        model.setTotal(count.total);
 
 		model.setFootprint(footprintToEmber.convert(object.getFootprint(), nested - 1, cache));
 

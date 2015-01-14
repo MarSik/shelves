@@ -29,6 +29,13 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
 
+    // Parts in store
+    Long available;
+    // Parts in store and unassigned
+    Long free;
+    // Parts in store and on boards
+    Long total;
+
     @JsonIdentityReference(alwaysAsId = true)
     public FootprintApiModel getFootprint() {
         return footprint;
@@ -82,4 +89,28 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}
+
+    public Long getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Long available) {
+        this.available = available;
+    }
+
+    public Long getFree() {
+        return free;
+    }
+
+    public void setFree(Long free) {
+        this.free = free;
+    }
+
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
+    }
 }

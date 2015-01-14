@@ -117,6 +117,18 @@ public class Lot extends LotBase {
 		this.location = location;
 	}
 
+    public Long usedCount() {
+        long count = 0;
+        for (Lot l: getNext()) {
+            count += l.getCount();
+        }
+        return count;
+    }
+
+    public Long freeCount() {
+        return getCount() - usedCount();
+    }
+
 	public class SplitResult {
 		final Lot requested;
 		final Lot remainder;
@@ -142,7 +154,7 @@ public class Lot extends LotBase {
 		}
 
 		// Not available for split
-		if (!EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction())) {
+		if (!isCanBeSplit()) {
 			return null;
 		}
 
@@ -166,15 +178,19 @@ public class Lot extends LotBase {
 		return new Lot(uuidGenerator.generate(), performedBy, LotAction.SOLDERED, this);
 	}
 
+    public Lot unsolder(User performedBy, UuidGenerator uuidGenerator) {
+        return new Lot(uuidGenerator.generate(), performedBy, LotAction.UNSOLDERED, this);
+    }
+
 	public Lot destroy(User performedBy, UuidGenerator uuidGenerator) {
 		return new Lot(uuidGenerator.generate(), performedBy, LotAction.DESTROYED, this);
 	}
 
-	public Lot solder(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
+	public Lot assign(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
 		return new Lot(uuidGenerator.generate(), performedBy, where, this);
 	}
 
-	public Lot unsolder(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
+	public Lot unassign(User performedBy, UuidGenerator uuidGenerator) {
 		return new Lot(uuidGenerator.generate(), performedBy, (Requirement)null, this);
 	}
 
@@ -234,4 +250,8 @@ public class Lot extends LotBase {
 	public boolean isCanBeUnassigned() {
 		return isCanBeSoldered();
 	}
+
+    public boolean isCanBeSplit() {
+        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
+    }
 }

@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
+import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
@@ -140,22 +141,95 @@ public class LotService {
 		return lotToEmber.convert(updated, 1, cache);
 	}
 
-	public LotApiModel solder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.findByUuid(source);
+    public LotApiModel solder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+        Lot lot = lotRepository.findByUuid(source);
 
-		if (lot == null) {
-			throw new EntityNotFound();
-		}
+        if (lot == null) {
+            throw new EntityNotFound();
+        }
 
-		if (!lot.getOwner().equals(currentUser)) {
-			throw new PermissionDenied();
-		}
+        if (!lot.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
 
-		Map<UUID, Object> cache = new THashMap<>();
+        if (!lot.isCanBeSoldered()) {
+            throw new OperationNotPermitted();
+        }
 
-		Lot updated = lot.solder(currentUser, uuidGenerator);
-		lotRepository.save(updated);
+        Map<UUID, Object> cache = new THashMap<>();
 
-		return lotToEmber.convert(updated, 1, cache);
-	}
+        Lot updated = lot.solder(currentUser, uuidGenerator);
+        lotRepository.save(updated);
+
+        return lotToEmber.convert(updated, 1, cache);
+    }
+
+    public LotApiModel unsolder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+        Lot lot = lotRepository.findByUuid(source);
+
+        if (lot == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!lot.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!lot.isCanBeUnsoldered()) {
+            throw new OperationNotPermitted();
+        }
+
+        Map<UUID, Object> cache = new THashMap<>();
+
+        Lot updated = lot.unsolder(currentUser, uuidGenerator);
+        lotRepository.save(updated);
+
+        return lotToEmber.convert(updated, 1, cache);
+    }
+
+    public LotApiModel assign(UUID source, User currentUser, Requirement requirement) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+        Lot lot = lotRepository.findByUuid(source);
+
+        if (lot == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!lot.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!lot.isCanBeAssigned()) {
+            throw new OperationNotPermitted();
+        }
+
+        Map<UUID, Object> cache = new THashMap<>();
+
+        Lot updated = lot.assign(currentUser, uuidGenerator, requirement);
+        lotRepository.save(updated);
+
+        return lotToEmber.convert(updated, 1, cache);
+    }
+
+    public LotApiModel unassign(UUID source, User currentUser, Requirement requirement) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+        Lot lot = lotRepository.findByUuid(source);
+
+        if (lot == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!lot.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!lot.isCanBeUnassigned()) {
+            throw new OperationNotPermitted();
+        }
+
+        Map<UUID, Object> cache = new THashMap<>();
+
+        Lot updated = lot.unassign(currentUser, uuidGenerator);
+        lotRepository.save(updated);
+
+        return lotToEmber.convert(updated, 1, cache);
+    }
 }

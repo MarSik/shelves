@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -86,4 +87,22 @@ public class Type extends NamedEntity {
 	public boolean canBeDeleted() {
 		return !(getPurchases().iterator().hasNext() && getUsedIn().iterator().hasNext());
 	}
+
+    public PartCount getAvailable() {
+        PartCount count = new PartCount();
+        for (Lot l: getLots()) {
+            if (l.isCanBeAssigned()) {
+                count.available += l.getCount();
+                count.free += l.getCount();
+                count.total += l.getCount();
+            } else if (l.isCanBeSoldered()) {
+                count.available += l.getCount();
+                count.total += l.getCount();
+            } else if (l.isCanBeUnsoldered()) {
+                count.total += l.getCount();
+            }
+        }
+
+        return count;
+    }
 }
