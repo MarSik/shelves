@@ -13,7 +13,7 @@ export default LotBase.extend({
   purchase: belongsTo('purchase', {inverse: null, async: true}),
 
   performedBy: belongsTo('user', {inverse: null, async: true}),
-  usedBy: belongsTo('requirement'),
+  usedBy: belongsTo('requirement', {async: true}),
 
   type: function () {
       return this.get('purchase.type');
@@ -21,7 +21,7 @@ export default LotBase.extend({
 
   canBeAssigned: attr(),
   canBeSoldered: attr(),
-  canBeUnSoldered: attr(),
+  canBeUnsoldered: attr(),
   canBeUnassigned: attr(),
   canBeSplit: attr()
 });

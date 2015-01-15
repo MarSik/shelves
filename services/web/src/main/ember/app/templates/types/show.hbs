@@ -15,7 +15,7 @@
     <thead>
     <tr>
         <th>Source</th>
-        <th colspan="4">Box</th>
+        <th colspan="4">Box / Project</th>
     </tr>
     <tr>
         <th>SKU</th>
@@ -32,7 +32,15 @@
             {{#link-to 'purchase.show' lot.purchase.transaction}}{{lot.purchase.transaction.source.name}}{{/link-to}}
         </td>
         <td colspan="4">
-            {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
+            {{#if lot.canBeAssigned}}
+            {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeSoldered}}
+            {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeUnsoldered}}
+            {{fa-icon 'download-alt'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
+            {{/if}}
         </td>
     </tr>
     <tr>
