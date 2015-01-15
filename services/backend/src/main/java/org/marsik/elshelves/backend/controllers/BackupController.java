@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+
 @RestController
 @RequestMapping("/backup")
 public class BackupController {
@@ -33,4 +36,14 @@ public class BackupController {
 							  @CurrentUser User currentUser) {
 		backupService.restoreFromBackup(backup, currentUser);
 	}
+
+    @RequestMapping
+    @Transactional(readOnly = true)
+    public BackupApiModel getBackup(@CurrentUser User currentUser,
+                                    HttpServletResponse response) {
+        String name = currentUser.getEmail() + "-" + (new Date().toGMTString()) + ".json";
+        response.setContentType("application/json");
+        response.setHeader("Content-Disposition", "attachment; filename=" + name);
+        return backupService.doBackup(currentUser);
+    }
 }

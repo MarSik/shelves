@@ -20,7 +20,7 @@ public class Lot extends LotBase {
 	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, User performedBy) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
-		l.setAction(LotAction.DELIVERED);
+		l.setAction(LotAction.DELIVERY);
 		l.setUuid(uuid);
 		l.setLocation(location);
 		l.setCount(count);
@@ -314,7 +314,7 @@ public class Lot extends LotBase {
 	}
 
     public boolean isCanBeSplit() {
-        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERED).contains(getAction());
+        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
     }
 
     public boolean isCanBeMoved() {
