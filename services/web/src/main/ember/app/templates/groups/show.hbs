@@ -1,14 +1,14 @@
 <div class="group-detail columns small-12 large-8">
 <h2>{{#click-to-edit content=model field='content.name'}}{{name}}{{/click-to-edit}}</h2>
 
-<table>
+<table style="width: 100%;">
 {{#each type in types}}
     <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{type.name}}{{/draggable-item}}</td>
         <td>{{type.vendor}}</td>
-        <td>{{type.footprint.name}}</td>
-        <td>{{type.available}}</td>
+        <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
+        <td>{{#link-to 'types.show' type}}{{type.available}}{{/link-to}}</td>
     </tr>
     <tr>
         <td colspan="4">{{type.summary}}</td>

@@ -1,13 +1,13 @@
 <section class="columns large-8">
 <h2>{{#click-to-edit content=model field='content.name'}}{{fullName}}{{/click-to-edit}}</h2>
 
-<table>
+<table style="width: 100%;">
 {{#each lot in lots}}
     <tr {{action 'showQr' 'lots' lot on='mouseEnter'}}>
-        <td>{{lot.type.name}}</td>
+        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
-        <td>{{lot.type.footprint.name}}</td>
-        <td>{{lot.count}}</td>
+        <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+        <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.count}}{{/link-to}}</td>
     </tr>
     <tr>
         <td colspan="4">{{lot.type.summary}}</td>
