@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -19,7 +20,7 @@ public class Requirement extends OwnedEntity {
 	Set<Type> type;
 
 	@RelatedTo(type = "USES")
-	Set<Lot> lots;
+	Set<Lot> rawLots;
 
 	@Min(1)
 	Long count;
@@ -61,13 +62,28 @@ public class Requirement extends OwnedEntity {
 		// NOP
 	}
 
-	public Set<Lot> getLots() {
-		return lots;
+	public Set<Lot> getRawLots() {
+		return rawLots;
 	}
 
-	public void setLots(Set<Lot> lots) {
-		this.lots = lots;
+	public void setRawLots(Set<Lot> lots) {
+		this.rawLots = lots;
 	}
+
+    /**
+     * Return all active lots that are assigned to this
+     * requirement.
+     */
+    public Set<Lot> getLots() {
+        Set<Lot> assigned = new THashSet<>();
+        for (Lot l: getRawLots()) {
+            if (l.isValid()) {
+                assigned.add(l);
+            }
+        }
+
+        return assigned;
+    }
 
 	public boolean canBeDeleted() {
 		return getLots().isEmpty();

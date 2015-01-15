@@ -1,8 +1,11 @@
 package org.marsik.elshelves.api.entities.fields;
 
 public enum LotAction {
-	DELIVERY,
+    DELIVERED,
 	SPLIT,
+    MOVED,
+    ASSIGNED,
+    UNASSIGNED,
 	SOLDERED,
 	UNSOLDERED,
 	DESTROYED

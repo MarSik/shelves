@@ -8,6 +8,7 @@ import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -84,18 +85,45 @@ public class LotController {
 							@RequestBody @Validated LotApiModel lot) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
 		EmberModel.Builder<LotApiModel> modelBuilder;
 
-		// Previous lot specified - SPLIT operation
+		// Previous lot specified alone - SPLIT operation
 		if (lot.getPrevious() != null
-				&& lot.getPurchase() == null) {
-			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser);
+				&& lot.getPurchase() == null
+                && lot.getLocation() == null
+                && lot.getCount() > 0) {
+			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser, lot.getUsedBy());
 			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
 		// Purchase specified - DELIVER operation
 		} else if (lot.getPrevious() == null
 				&& lot.getPurchase() != null
 				&& lot.getLocation() != null
 				&& lot.getCount() > 0) {
-			LotApiModel result = lotService.delivery(lot, currentUser);
-			modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+            LotApiModel result = lotService.delivery(lot, currentUser);
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Location and previous specified, but no purchase - MOVE operation
+        } else if (lot.getLocation() != null) {
+            LotApiModel result = lotService.move(lot.getPrevious(), lot.getLocation(), currentUser);
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Unassigned
+        } else if (lot.getPrevious() != null
+                && lot.getAction().equals(LotAction.UNASSIGNED)) {
+            LotApiModel result = lotService.unassign(lot.getId(), currentUser);
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Unsolder
+        } else if (lot.getPrevious() != null
+                && lot.getAction().equals(LotAction.UNSOLDERED)) {
+            LotApiModel result = lotService.unsolder(lot.getId(), currentUser);
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Solder and possibly assign as well
+        } else if (lot.getPrevious() != null
+                && lot.getAction().equals(LotAction.SOLDERED)) {
+            LotApiModel result = lotService.solder(lot.getId(), currentUser, lot.getUsedBy());
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Assign
+        } else if (lot.getPrevious() != null
+                && lot.getUsedBy() != null) {
+            LotApiModel result = lotService.assign(lot.getId(), currentUser, lot.getUsedBy());
+            modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+        // Invalid combination of arguments
 		} else {
 			throw new InvalidRequest();
 		}

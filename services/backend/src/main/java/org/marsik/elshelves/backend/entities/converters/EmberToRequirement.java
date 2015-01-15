@@ -56,13 +56,6 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 			}
 		}
 
-		if (object.getLots() != null) {
-			model.setLots(new THashSet<Lot>());
-			for (LotApiModel l: object.getLots()) {
-				model.getLots().add(emberToLot.convert(l, nested, cache));
-			}
-		}
-
 		model.setProject(emberToProject.convert(object.getProject(), nested, cache));
 
 		return model;

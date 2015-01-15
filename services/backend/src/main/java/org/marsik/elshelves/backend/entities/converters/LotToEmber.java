@@ -52,6 +52,8 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setCanBeSoldered(object.isCanBeSoldered());
 		entity.setCanBeUnsoldered(object.isCanBeUnsoldered());
         entity.setCanBeSplit(object.isCanBeSplit());
+        entity.setCanBeMoved(object.isCanBeMoved());
+        entity.setValid(object.isValid());
 
 		return entity;
 	}

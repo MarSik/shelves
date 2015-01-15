@@ -44,6 +44,8 @@ public class LotApiModel extends LotBaseApiModel {
 	boolean canBeAssigned;
 	boolean canBeUnassigned;
     boolean canBeSplit;
+    boolean canBeMoved;
+    boolean valid;
 
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
@@ -136,5 +138,21 @@ public class LotApiModel extends LotBaseApiModel {
 
     public void setCanBeSplit(boolean canBeSplit) {
         this.canBeSplit = canBeSplit;
+    }
+
+    public boolean isCanBeMoved() {
+        return canBeMoved;
+    }
+
+    public void setCanBeMoved(boolean canBeMoved) {
+        this.canBeMoved = canBeMoved;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

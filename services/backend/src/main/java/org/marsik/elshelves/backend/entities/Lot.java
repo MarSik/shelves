@@ -20,7 +20,7 @@ public class Lot extends LotBase {
 	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, User performedBy) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
-		l.setAction(LotAction.DELIVERY);
+		l.setAction(LotAction.DELIVERED);
 		l.setUuid(uuid);
 		l.setLocation(location);
 		l.setCount(count);
@@ -40,7 +40,25 @@ public class Lot extends LotBase {
 		setNext(new ArrayList<Lot>());
 		setAction(LotAction.SPLIT);
 		setUsedBy(previous.getUsedBy());
+        setLocation(previous.getLocation());
 	}
+
+    protected Lot(UUID uuid, User performedBy, Long count, Requirement requirement, Lot previous) {
+        setUuid(uuid);
+        setPerformedBy(performedBy);
+        setCount(count);
+        setPrevious(previous);
+        setOwner(previous.getOwner());
+        setCreated(new Date());
+        setNext(new ArrayList<Lot>());
+        setAction(LotAction.SPLIT);
+        if (requirement == null) {
+            setUsedBy(previous.getUsedBy());
+        } else {
+            setUsedBy(requirement);
+        }
+        setLocation(previous.getLocation());
+    }
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
 		setAction(action);
@@ -52,7 +70,25 @@ public class Lot extends LotBase {
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
 		setUsedBy(previous.getUsedBy());
+        setLocation(previous.getLocation());
 	}
+
+    protected Lot(UUID uuid, User performedBy, LotAction action, Requirement requirement, Lot previous) {
+        setAction(action);
+        setPrevious(previous);
+        setPerformedBy(performedBy);
+        setUuid(uuid);
+        setCount(previous.count);
+        setOwner(previous.getOwner());
+        setCreated(new Date());
+        setNext(new ArrayList<Lot>());
+        if (requirement == null) {
+            setUsedBy(previous.getUsedBy());
+        } else {
+            setUsedBy(requirement);
+        }
+        setLocation(previous.getLocation());
+    }
 
 	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
 		setPrevious(previous);
@@ -63,13 +99,27 @@ public class Lot extends LotBase {
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
 		setUsedBy(requirement);
+        setLocation(previous.getLocation());
 
 		if (requirement == null) {
-			setAction(LotAction.UNSOLDERED);
+			setAction(LotAction.UNASSIGNED);
 		} else {
-			setAction(LotAction.SOLDERED);
+			setAction(LotAction.ASSIGNED);
 		}
 	}
+
+    protected Lot(UUID uuid, User performedBy, Box location, Lot previous) {
+        setPrevious(previous);
+        setPerformedBy(performedBy);
+        setUuid(uuid);
+        setCount(previous.count);
+        setOwner(previous.getOwner());
+        setCreated(new Date());
+        setNext(new ArrayList<Lot>());
+        setUsedBy(previous.getUsedBy());
+        setAction(LotAction.MOVED);
+        setLocation(location);
+    }
 
 	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
 	Lot previous;
@@ -147,7 +197,7 @@ public class Lot extends LotBase {
 		}
 	}
 
-	public SplitResult split(Long count, User performedBy, UuidGenerator uuidGenerator) {
+	public SplitResult split(Long count, User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
 		// Already used
 		if (getNext().iterator().hasNext()) {
 			return null;
@@ -158,24 +208,36 @@ public class Lot extends LotBase {
 			return null;
 		}
 
-		// Not enough elements
-		if (getCount() < count) {
-			return null;
-		}
-
+        // No assignment required
+		// Not enough elements, use all
 		// No split needed, the exact amount is available
-		if (getCount().equals(count)) {
+		if (requirement == null && getCount() <= count) {
 			return new SplitResult(this, null);
 		}
 
-		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, this);
-		Lot remainder = new Lot(uuidGenerator.generate(), performedBy, getCount() - count, this);
+        // Assignment required, use the exact amount or all if
+        // not enough available
+        if (getCount() <= count) {
+            count = getCount();
+        }
 
+		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, this);
+
+        // No remainder..
+        if (getCount() == count) {
+            return new SplitResult(requested, null);
+        }
+
+		Lot remainder = new Lot(uuidGenerator.generate(), performedBy, getCount() - count, this);
 		return new SplitResult(requested, remainder);
 	}
 
-	public Lot solder(User performedBy, UuidGenerator uuidGenerator) {
-		return new Lot(uuidGenerator.generate(), performedBy, LotAction.SOLDERED, this);
+    public Lot move(User performedBy, UuidGenerator uuidGenerator, Box location) {
+        return new Lot(uuidGenerator.generate(), performedBy, location, this);
+    }
+
+	public Lot solder(User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
+		return new Lot(uuidGenerator.generate(), performedBy, LotAction.SOLDERED, requirement, this);
 	}
 
     public Lot unsolder(User performedBy, UuidGenerator uuidGenerator) {
@@ -252,6 +314,19 @@ public class Lot extends LotBase {
 	}
 
     public boolean isCanBeSplit() {
-        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
+        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERED).contains(getAction());
+    }
+
+    public boolean isCanBeMoved() {
+        return isCanBeSoldered();
+    }
+
+    /**
+     * Return true if this Lot record is currently a valid Lot.
+     * Return false if the Lot represents a destroyed part and also when this record
+     * represents a historical state only.
+     */
+    public boolean isValid() {
+        return !getNext().iterator().hasNext() && !getAction().equals(LotAction.DESTROYED);
     }
 }

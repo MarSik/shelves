@@ -23,5 +23,7 @@ export default LotBase.extend({
   canBeSoldered: attr(),
   canBeUnsoldered: attr(),
   canBeUnassigned: attr(),
-  canBeSplit: attr()
+  canBeSplit: attr(),
+  canBeMoved: attr(),
+  valid: attr()
 });

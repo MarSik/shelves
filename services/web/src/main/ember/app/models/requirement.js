@@ -12,5 +12,13 @@ export default DS.Model.extend({
 
     typeCanBeRemoved: function () {
         return this.get('type.length') > 1;
-    }.property('type')
+    }.property('type'),
+
+    missing: function () {
+        var assigned = 0;
+        this.get('lots').forEach(function (lot) {
+            assigned += lot.get('count');
+        });
+        return this.get('count') - assigned;
+    }.property('lots.@each.count', 'count')
 });

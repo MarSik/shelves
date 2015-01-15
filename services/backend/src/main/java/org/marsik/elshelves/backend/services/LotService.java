@@ -1,7 +1,9 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -16,6 +18,8 @@ import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
+import org.marsik.elshelves.backend.repositories.RequirementRepository;
+import org.mozilla.javascript.commonjs.module.Require;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,16 +36,18 @@ public class LotService {
 	LotToEmber lotToEmber;
 	EmberToLot emberToLot;
 	UuidGenerator uuidGenerator;
+    RequirementRepository requirementRepository;
 
-	@Autowired
-	public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository, LotToEmber lotToEmber, EmberToLot emberToLot, UuidGenerator uuidGenerator) {
-		this.lotRepository = lotRepository;
-		this.purchaseRepository = purchaseRepository;
-		this.boxRepository = boxRepository;
-		this.lotToEmber = lotToEmber;
-		this.emberToLot = emberToLot;
-		this.uuidGenerator = uuidGenerator;
-	}
+    @Autowired
+    public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository, LotToEmber lotToEmber, EmberToLot emberToLot, UuidGenerator uuidGenerator, RequirementRepository requirementRepository) {
+        this.lotRepository = lotRepository;
+        this.purchaseRepository = purchaseRepository;
+        this.boxRepository = boxRepository;
+        this.lotToEmber = lotToEmber;
+        this.emberToLot = emberToLot;
+        this.uuidGenerator = uuidGenerator;
+        this.requirementRepository = requirementRepository;
+    }
 
     protected Iterable<Lot> getAllEntities(User currentUser) {
         return lotRepository.findByOwner(currentUser);
@@ -95,20 +101,55 @@ public class LotService {
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
-	public LotSplitResult split(UUID source, Long count, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+    public LotApiModel move(LotApiModel previous, BoxApiModel location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+        Box location = boxRepository.findByUuid(location0.getId());
+        Lot lot0 = lotRepository.findByUuid(previous.getId());
+
+        if (lot0 == null || location == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!lot0.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!location.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        Lot lot = lot0.move(currentUser, uuidGenerator, location);
+        lotRepository.save(lot);
+
+        return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
+    }
+
+	public LotSplitResult split(UUID source, Long count, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
 		Lot lot = lotRepository.findByUuid(source);
+        Requirement requirement = null;
 
-		if (lot == null) {
-			throw new EntityNotFound();
-		}
+        if (requirement0 != null) {
+            requirement = requirementRepository.findByUuid(requirement0.getId());
+        }
 
-		if (!lot.getOwner().equals(currentUser)) {
-			throw new PermissionDenied();
-		}
+        if (lot == null
+                || (requirement0 != null && requirement == null)) {
+            throw new EntityNotFound();
+        }
+
+        if (!lot.getOwner().equals(currentUser)
+                || (requirement != null && !requirement.getOwner().equals(currentUser))) {
+            throw new PermissionDenied();
+        }
+
+        if (!lot.isCanBeSplit()
+                || (requirement != null && !lot.isCanBeAssigned())) {
+            throw new OperationNotPermitted();
+        }
+
 
 		Map<UUID, Object> cache = new THashMap<>();
 
-		Lot.SplitResult result = lot.split(count, currentUser, uuidGenerator);
+		Lot.SplitResult result = lot.split(count, currentUser, uuidGenerator, requirement);
 		if (result == null) {
 			throw new OperationNotPermitted();
 		}
@@ -141,24 +182,32 @@ public class LotService {
 		return lotToEmber.convert(updated, 1, cache);
 	}
 
-    public LotApiModel solder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+    public LotApiModel solder(UUID source, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
         Lot lot = lotRepository.findByUuid(source);
+        Requirement requirement = null;
 
-        if (lot == null) {
+        if (requirement0 != null) {
+            requirement = requirementRepository.findByUuid(requirement0.getId());
+        }
+
+        if (lot == null
+                || (requirement0 != null && requirement == null)) {
             throw new EntityNotFound();
         }
 
-        if (!lot.getOwner().equals(currentUser)) {
+        if (!lot.getOwner().equals(currentUser)
+                || (requirement != null && !requirement.getOwner().equals(currentUser))) {
             throw new PermissionDenied();
         }
 
-        if (!lot.isCanBeSoldered()) {
+        if (!lot.isCanBeSoldered()
+                || (requirement != null && !lot.isCanBeMoved())) {
             throw new OperationNotPermitted();
         }
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Lot updated = lot.solder(currentUser, uuidGenerator);
+        Lot updated = lot.solder(currentUser, uuidGenerator, requirement);
         lotRepository.save(updated);
 
         return lotToEmber.convert(updated, 1, cache);
@@ -187,14 +236,20 @@ public class LotService {
         return lotToEmber.convert(updated, 1, cache);
     }
 
-    public LotApiModel assign(UUID source, User currentUser, Requirement requirement) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    public LotApiModel assign(UUID source, User currentUser, RequirementApiModel requirement0) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
         Lot lot = lotRepository.findByUuid(source);
+        Requirement requirement = requirementRepository.findByUuid(requirement0.getId());
 
-        if (lot == null) {
+        if (lot == null
+                || requirement == null) {
             throw new EntityNotFound();
         }
 
         if (!lot.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!requirement.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
         }
 
@@ -210,7 +265,7 @@ public class LotService {
         return lotToEmber.convert(updated, 1, cache);
     }
 
-    public LotApiModel unassign(UUID source, User currentUser, Requirement requirement) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    public LotApiModel unassign(UUID source, User currentUser) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
         Lot lot = lotRepository.findByUuid(source);
 
         if (lot == null) {
