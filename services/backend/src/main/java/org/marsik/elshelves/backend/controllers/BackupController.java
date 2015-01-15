@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -41,7 +43,8 @@ public class BackupController {
     @Transactional(readOnly = true)
     public BackupApiModel getBackup(@CurrentUser User currentUser,
                                     HttpServletResponse response) {
-        String name = currentUser.getEmail() + "-" + (new Date().toGMTString()) + ".json";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+        String name = currentUser.getEmail() + "-" + df.format(new Date()) + ".json";
         response.setContentType("application/json");
         response.setHeader("Content-Disposition", "attachment; filename=" + name);
         return backupService.doBackup(currentUser);

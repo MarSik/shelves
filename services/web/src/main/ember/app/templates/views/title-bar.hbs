@@ -20,12 +20,17 @@
                     </form>
                 </li>
                 <li class="has-dropdown">
-                    <a href="#">{{fa-icon "user"}}</a>
-                    <ul class="dropdown">
-                        <li class="active">{{#link-to 'account'}}Account info{{/link-to}}</li>
-                        <li>{{#view 'backup-link'}}Download backup{{/view}}</li>
-                        <li><a href="#">Logout</a></li>
-                    </ul>
+                    {{#if session.isAuthenticated}}
+                        <a href="#">{{fa-icon "user"}}</a>
+
+                        <ul class="dropdown">
+                            <li class="active">{{#link-to 'account'}}Account info{{/link-to}}</li>
+                            <li>{{#view 'backup-link'}}Download backup{{/view}}</li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    {{else}}
+                        <a href="#"><span style="color: gray;">{{fa-icon "user"}}</span></a>
+                    {{/if}}
                 </li>
             </ul>
 
