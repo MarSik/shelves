@@ -47,4 +47,16 @@ public class Group extends NamedEntity {
 	public boolean canBeDeleted() {
 		return true;
 	}
+
+	public Long getCount() {
+		return Long.valueOf(getTypes().size());
+	}
+
+	public Long getNestedCount() {
+		Long count = getCount();
+		for (Group t: getGroups()) {
+			count += t.getCount();
+		}
+		return count;
+	}
 }

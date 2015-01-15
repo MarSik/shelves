@@ -22,6 +22,9 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
 
     Set<PartTypeApiModel> types;
 
+	Long directCount;
+	Long nestedCount;
+
     public PartGroupApiModel() {
     }
 
@@ -59,4 +62,20 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     public void setTypes(Set<PartTypeApiModel> types) {
         this.types = types;
     }
+
+	public Long getDirectCount() {
+		return directCount;
+	}
+
+	public void setDirectCount(Long directCount) {
+		this.directCount = directCount;
+	}
+
+	public Long getNestedCount() {
+		return nestedCount;
+	}
+
+	public void setNestedCount(Long nestedCount) {
+		this.nestedCount = nestedCount;
+	}
 }

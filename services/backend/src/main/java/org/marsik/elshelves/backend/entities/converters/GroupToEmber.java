@@ -46,6 +46,9 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 			return model;
 		}
 
+		model.setDirectCount(object.getCount());
+		model.setNestedCount(object.getNestedCount());
+
 		model.setParent(convert(object.getParent(), nested - 1, cache));
 
 		if (object.getGroups() != null) {

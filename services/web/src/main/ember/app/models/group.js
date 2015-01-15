@@ -10,6 +10,8 @@ export default DS.Model.extend({
     description: attr(),
 
     types: hasMany("type", {async: true}),
+    directCount: attr(),
+    nestedCount: attr(),
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
     groups: hasMany("group", {inverse: "parent", async: true}),
@@ -34,6 +36,10 @@ export default DS.Model.extend({
     }.property('parent.content', 'parent.content.fullName', 'name'),
 
     count: function () {
-        return this.get('types.length');
-    }.property('types', 'types.length')
+        var c = this.get('nestedCount');
+        if (this.get('hasChildren')) {
+            c = this.get('directCount') + ' / ' + c;
+        }
+        return c;
+    }.property('nestedCount', 'hasChildren', 'directCount')
 });
