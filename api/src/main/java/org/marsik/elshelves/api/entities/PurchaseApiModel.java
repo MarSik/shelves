@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.ember.Sideload;
 import org.marsik.elshelves.api.entities.idresolvers.PurchaseIdResolver;
 
 import java.util.Set;
@@ -28,6 +29,7 @@ public class PurchaseApiModel extends LotBaseApiModel {
     Double vat;
     Boolean vatIncluded;
 
+	@Sideload
 	TransactionApiModel transaction;
 
 	PartTypeApiModel type;

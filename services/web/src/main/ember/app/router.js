@@ -42,7 +42,7 @@ Router.map(function() {
     this.route("new");
   });
 
-  this.resource("purchase", function() {
+  this.resource("transactions", function() {
     this.route("show", {
       path: "/:transaction_id"
     });

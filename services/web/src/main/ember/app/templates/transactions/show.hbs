@@ -29,7 +29,7 @@
         <tbody>
         <tr>
             <td>
-                {{purchase.type.fullName}}
+                {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
             <td colspan="4">
                 {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location}}

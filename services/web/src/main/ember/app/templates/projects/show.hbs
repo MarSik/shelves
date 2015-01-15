@@ -19,7 +19,7 @@
     {{#each type in r.type}}
     <tr>
         <td>{{fa-icon 'plus'}}</td>
-        <td>{{type.name}}</td>
+        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</td>
         <td>{{type.vendor}}</td>
         <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
@@ -27,8 +27,8 @@
     {{/each}}
     {{#each lot in r.lots}}
     <tr>
-        <td>{{lot.count}}</td>
-        <td>{{lot.type.name}}</td>
+        <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.count}}{{/link-to}}</td>
+        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
         <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
         <td>
