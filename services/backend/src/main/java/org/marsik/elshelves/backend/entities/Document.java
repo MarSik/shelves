@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 @NodeEntity
-public class Document extends NamedEntity {
+public class Document extends NamedEntity implements StickerCapable {
 	@NotEmpty
 	String contentType;
 	@NotNull
@@ -51,5 +52,10 @@ public class Document extends NamedEntity {
 	@Override
 	public boolean canBeDeleted() {
 		return true;
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "/documents";
 	}
 }

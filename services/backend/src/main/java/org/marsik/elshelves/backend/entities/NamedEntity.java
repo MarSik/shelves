@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;

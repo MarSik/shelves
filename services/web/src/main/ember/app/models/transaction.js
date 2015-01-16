@@ -10,5 +10,14 @@ export default DS.Model.extend({
     date: attr('date'),
     items: hasMany("purchase", {async: true}),
     belongsTo: belongsTo("user", {async: true}),
-    source: belongsTo("source", {async: true})
+    source: belongsTo("source", {async: true}),
+
+    // needed for sticker test
+    types: function() {
+        var types = [];
+        this.get('items').forEach(function (p) {
+            types.pushObject(p.get('type'));
+        });
+        return types;
+    }.property('items.@each.type')
 });

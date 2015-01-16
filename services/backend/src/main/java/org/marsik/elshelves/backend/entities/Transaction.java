@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 @NodeEntity
-public class Transaction extends NamedEntity {
+public class Transaction extends NamedEntity implements StickerCapable {
 	Date date;
 
 	@RelatedTo(type = "IN_TRANSACTION", direction = Direction.INCOMING)
@@ -50,5 +51,10 @@ public class Transaction extends NamedEntity {
 		}
 
 		return true;
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "transactions";
 	}
 }

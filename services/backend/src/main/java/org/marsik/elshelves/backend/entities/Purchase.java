@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;

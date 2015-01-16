@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.Email;
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -11,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @NodeEntity
-public class User extends OwnedEntity {
+public class User extends OwnedEntity implements StickerCapable {
     @NotNull
     String name;
 
@@ -109,5 +110,16 @@ public class User extends OwnedEntity {
 	@Override
 	public boolean canBeDeleted() {
 		return false;
+	}
+
+	// Sticker info
+	@Override
+	public String getSummary() {
+		return getEmail();
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "users";
 	}
 }

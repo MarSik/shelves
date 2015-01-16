@@ -11,7 +11,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 transaction.get('items').filterBy('isNew', true).forEach(function (item) {
                     item.destroyRecord();
                 });
-                self.transitionTo('purchase.show', transaction);
+                self.transitionTo('transactions.show', transaction);
             }).catch(function (reason) {
                 console.log(reason);
             });

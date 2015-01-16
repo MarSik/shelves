@@ -1,12 +1,13 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
 
 @NodeEntity
-public class Project extends NamedEntity {
+public class Project extends NamedEntity implements StickerCapable {
 	@RelatedTo(type = "REQUIRES")
 	Set<Requirement> requires;
 
@@ -25,5 +26,10 @@ public class Project extends NamedEntity {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "projects";
 	}
 }

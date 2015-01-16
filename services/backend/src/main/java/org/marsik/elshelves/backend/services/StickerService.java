@@ -136,8 +136,13 @@ public class StickerService {
               by adding the image height to the top-left coordinates.
              */
             contentStream.drawImage(img, leftCoord, pageHeight - (topCoord + codeEdgeSize));
-            contentStream.drawPolygon(new float[] {},
-                    new float[] {});
+			contentStream.beginText();
+            contentStream.drawString(object.getName());
+			contentStream.endText();
+
+			contentStream.beginText();
+			contentStream.drawString(object.getSummary());
+			contentStream.endText();
         }
 
         if (contentStream != null) {
@@ -149,7 +154,7 @@ public class StickerService {
 
     private PDJpeg getQRImage(PDDocument document, StickerCapable object, Float size) throws IOException {
         ByteArrayOutputStream os = QRCode
-                .from("Hello World")
+                .from("shv://" + object.getBaseUrl() + "/" + object.getUuid())
                 .withSize(size.intValue(), size.intValue())
                 .to(ImageType.JPG)
                 .withErrorCorrection(ErrorCorrectionLevel.M)

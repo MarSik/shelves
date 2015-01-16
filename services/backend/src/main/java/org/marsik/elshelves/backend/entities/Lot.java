@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -13,7 +14,7 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 @NodeEntity
-public class Lot extends LotBase {
+public class Lot extends LotBase implements StickerCapable {
 	public Lot() {
 	}
 
@@ -329,4 +330,19 @@ public class Lot extends LotBase {
     public boolean isValid() {
         return !getNext().iterator().hasNext() && !getAction().equals(LotAction.DESTROYED);
     }
+
+	@Override
+	public String getName() {
+		return getType().getName();
+	}
+
+	@Override
+	public String getSummary() {
+		return getPurchase().getTransaction().getName();
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "lots";
+	}
 }

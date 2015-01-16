@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.marsik.elshelves.backend.entities.fields.PartCount;
+import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @NodeEntity
-public class Type extends NamedEntity {
+public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
 	String vendorId;
 
@@ -105,4 +106,9 @@ public class Type extends NamedEntity {
 
         return count;
     }
+
+	@Override
+	public String getBaseUrl() {
+		return "types";
+	}
 }

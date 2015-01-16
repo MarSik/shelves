@@ -33,31 +33,6 @@ public class TestController {
         return emberSchemaService.getEmberSchema();
     }
 
-    @RequestMapping(value = "/test/stickers", produces = "application/pdf")
-    public void generateStickers(HttpServletResponse response) throws IOException {
-        List<StickerCapable> stickers = new ArrayList<>();
-        for (int i=0; i<50; i++) {
-            stickers.add(new StickerCapable() {
-            });
-        }
-
-        StickerSettings stickerSettings = new StickerSettings()
-                .setPage(StickerSettings.PageSize.A4)
-                .setStickerHeightMm(37f)
-                .setStickerWidthMm(70f)
-                .setStickerVerticalCount(8)
-                .setStickerHorizontalCount(3);
-
-        StickerService.Result pdf = stickerService.generateStickers(stickerSettings, stickers);
-
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=somefile.pdf");
-
-        pdf.save(response.getOutputStream());
-        pdf.close();
-        response.flushBuffer();
-    }
-
     @RequestMapping(value = "/test/qr", produces = "image/jpg")
     public void generateQr(HttpServletResponse response) throws IOException {
         response.setContentType("image/jpg");
