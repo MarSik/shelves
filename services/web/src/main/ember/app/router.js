@@ -60,9 +60,11 @@ Router.map(function() {
 
   this.resource("verify", function() {
     this.route("show", {
-        path: "/:token"
+      path: "/:token"
     });
   });
+
+  this.route("stickers");
 });
 
 export default Router;

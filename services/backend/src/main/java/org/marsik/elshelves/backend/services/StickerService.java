@@ -8,6 +8,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
 import org.springframework.stereotype.Service;
@@ -85,6 +87,10 @@ public class StickerService {
         }
     }
 
+    private float getFontHeight(PDFont font, int fontSize) {
+        return (font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000) * fontSize;
+    }
+
     public Result generateStickers(StickerSettings settings, List<StickerCapable> objects) throws IOException {
         PDDocument document = new PDDocument();
         // Coordinates = millimeters * PDPage.MM_TO_UNITS
@@ -100,6 +106,10 @@ public class StickerService {
                 settings.getStickerWidthMm()) - 2*settings.getStickerLeftMarginMm();
 
         PDPageContentStream contentStream = null;
+
+        // Create new font objects selecting from of the PDF base fonts
+        PDFont titleFont = PDType1Font.HELVETICA_BOLD;
+        PDFont summaryFont = PDType1Font.HELVETICA;
 
         for (StickerCapable object: objects) {
             stickerCount++;
@@ -136,13 +146,23 @@ public class StickerService {
               by adding the image height to the top-left coordinates.
              */
             contentStream.drawImage(img, leftCoord, pageHeight - (topCoord + codeEdgeSize));
-			contentStream.beginText();
-            contentStream.drawString(object.getName());
-			contentStream.endText();
 
-			contentStream.beginText();
-			contentStream.drawString(object.getSummary());
-			contentStream.endText();
+            if (object.getName() != null) {
+                contentStream.beginText();
+                contentStream.setFont(titleFont, 12);
+                contentStream.moveTextPositionByAmount(leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, 12)));
+                contentStream.drawString(object.getName());
+                contentStream.endText();
+            }
+
+            if (object.getSummary() != null) {
+                contentStream.beginText();
+                contentStream.setFont(summaryFont, 10);
+                contentStream.moveTextPositionByAmount(leftCoord + codeEdgeSize, pageHeight - (topCoord
+                        + 1.4f * getFontHeight(titleFont, 12) + getFontHeight(summaryFont, 10)));
+                contentStream.drawString(object.getSummary());
+                contentStream.endText();
+            }
         }
 
         if (contentStream != null) {

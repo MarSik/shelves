@@ -1,0 +1,11 @@
+<h2>Stickers</h2>
+
+<ul>
+    {{#each obj in this}}
+        <li>{{obj.id}}</li>
+    {{/each}}
+</ul>
+
+{{#view 'sticker-link' items=this}}Download stickers{{/view}}
+
+{{outlet}}

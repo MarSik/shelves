@@ -10,6 +10,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             var controller = this.get('controller');
             this.get('preloadData')(this, controller);
             this._super();
+        },
+        addSticker: function (obj) {
+            this.controllerFor('application').get('stickers').pushObject(obj);
         }
     },
     setupController: function(controller, model) {
