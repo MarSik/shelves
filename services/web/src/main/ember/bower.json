@@ -16,8 +16,7 @@
     "foundation": "~5.4.7",
     "ember-simple-auth": "0.7.2",
     "selectize": "~0.11.2",
-    "ember-uploader": "0.3.0",
-    "ember-droplet": "~0.9.1"
+    "ember-uploader": "0.3.0"
   },
   "resolutions": {
     "handlebars": "2.0.0",

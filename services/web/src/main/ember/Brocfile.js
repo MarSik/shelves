@@ -9,7 +9,7 @@ var app = new EmberApp({
         'foundationJs': 'all'
     },
     gzip: {
-        extensions: ['js', 'css', 'woff', 'ttf', 'svg', 'eot', 'otf'],
+        extensions: ['js', 'css', 'svg'],
         keepUncompressed: true
     }
 });
@@ -26,8 +26,5 @@ var app = new EmberApp({
 // modules that you would like to import into your application
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
-
-// Import Ember droplet for html5 uploads
-app.import('bower_components/ember-droplet/dist/ember-droplet.min.js');
 
 module.exports = app.toTree();
