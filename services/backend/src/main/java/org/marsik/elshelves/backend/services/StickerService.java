@@ -3,17 +3,20 @@ package org.marsik.elshelves.backend.services;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
-import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.marsik.elshelves.backend.dtos.StickerSettings;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,7 +35,7 @@ public class StickerService {
         public void save(OutputStream os) {
             try {
                 document.save(os);
-            } catch (COSVisitorException|IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
@@ -54,10 +57,10 @@ public class StickerService {
     }
 
     private static enum PageMapping {
-        A4(PDPage.PAGE_SIZE_A4),
-        A4R(PDPage.PAGE_SIZE_A4, Rotation.LANDSCAPE),
-        LETTER(PDPage.PAGE_SIZE_LETTER),
-        LETTERR(PDPage.PAGE_SIZE_LETTER, Rotation.LANDSCAPE);
+        A4(PDRectangle.A4),
+        A4R(PDRectangle.A4, Rotation.LANDSCAPE),
+        LETTER(PDRectangle.LETTER),
+        LETTERR(PDRectangle.LETTER, Rotation.LANDSCAPE);
 
         final PDRectangle pageFormat;
         final Rotation rotation;
@@ -107,9 +110,9 @@ public class StickerService {
 
         PDPageContentStream contentStream = null;
 
-        // Create new font objects selecting from of the PDF base fonts
-        PDFont titleFont = PDType1Font.HELVETICA_BOLD;
-        PDFont summaryFont = PDType1Font.HELVETICA;
+        // Load unicode fonts
+        PDFont titleFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans-Bold.ttf"));
+        PDFont summaryFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans.ttf"));
 
         for (StickerCapable object: objects) {
             stickerCount++;
@@ -128,7 +131,7 @@ public class StickerService {
                 pageMapping.updateContentStream(page, contentStream);
             }
 
-            PDJpeg img = getQRImage(document, object, codeEdgeSize);
+            PDImageXObject img = getQRImage(document, object, codeEdgeSize);
 
             int noInPage = ((stickerCount - 1) % (settings.getStickerHorizontalCount() * settings.getStickerVerticalCount()));
             int row = noInPage / settings.getStickerHorizontalCount();
@@ -150,17 +153,17 @@ public class StickerService {
             if (object.getName() != null) {
                 contentStream.beginText();
                 contentStream.setFont(titleFont, 12);
-                contentStream.moveTextPositionByAmount(leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, 12)));
-                contentStream.drawString(object.getName());
+                contentStream.newLineAtOffset(leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, 12)));
+                contentStream.showText(object.getName());
                 contentStream.endText();
             }
 
             if (object.getSummary() != null) {
                 contentStream.beginText();
                 contentStream.setFont(summaryFont, 10);
-                contentStream.moveTextPositionByAmount(leftCoord + codeEdgeSize, pageHeight - (topCoord
+                contentStream.newLineAtOffset(leftCoord + codeEdgeSize, pageHeight - (topCoord
                         + 1.4f * getFontHeight(titleFont, 12) + getFontHeight(summaryFont, 10)));
-                contentStream.drawString(object.getSummary());
+                contentStream.showText(object.getSummary());
                 contentStream.endText();
             }
         }
@@ -172,16 +175,16 @@ public class StickerService {
         return new Result(document);
     }
 
-    private PDJpeg getQRImage(PDDocument document, StickerCapable object, Float size) throws IOException {
+    protected static PDImageXObject getQRImage(PDDocument document, StickerCapable object, Float size) throws IOException {
         ByteArrayOutputStream os = QRCode
                 .from("shv://" + object.getBaseUrl() + "/" + object.getUuid())
                 .withSize(size.intValue(), size.intValue())
-                .to(ImageType.JPG)
+                .to(ImageType.PNG)
                 .withErrorCorrection(ErrorCorrectionLevel.M)
                 .withCharset("utf-8")
                 .stream();
         ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-        PDJpeg img = new PDJpeg(document, is);
+        PDImageXObject img = LosslessFactory.createFromImage(document, ImageIO.read(is));
         return img;
     }
 }
