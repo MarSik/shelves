@@ -38,6 +38,7 @@ public class EmberToDocument implements CachingConverter<DocumentApiModel, Docum
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
+        model.setUrl(object.getUrl());
 
 		if (nested == 0) {
 			return model;

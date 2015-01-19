@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
+import java.net.URL;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ public class Document extends NamedEntity implements StickerCapable {
 
 	@NotNull
 	Date created;
+
+    URL url;
 
 	@RelatedTo(type = "DESCRIBES")
 	Set<NamedEntity> describes;
@@ -58,4 +61,13 @@ public class Document extends NamedEntity implements StickerCapable {
 	public String getBaseUrl() {
 		return "/documents";
 	}
+
+    @PartOfUpdate
+    public URL getUrl() {
+        return url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
 }

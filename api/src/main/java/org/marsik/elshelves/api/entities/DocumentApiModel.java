@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.DocumentIdResolver;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 	String contentType;
 	Long size;
 	Date created;
+    URL url;
 
 	UserApiModel belongsTo;
 
@@ -59,7 +61,15 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 		this.created = created;
 	}
 
-	@JsonIdentityReference(alwaysAsId = true)
+    public URL getUrl() {
+        return url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
 	public UserApiModel getBelongsTo() {
 		return belongsTo;
 	}
