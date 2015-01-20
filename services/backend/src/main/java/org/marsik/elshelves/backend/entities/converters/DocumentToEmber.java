@@ -1,7 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,9 @@ import java.util.UUID;
 public class DocumentToEmber implements CachingConverter<Document, DocumentApiModel, UUID> {
 	@Autowired
 	UserToEmber userToEmber;
+
+	@Autowired
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Override
 	public DocumentApiModel convert(Document object, int nested, Map<UUID, Object> cache) {
@@ -46,6 +52,16 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
         model.setUrl(object.getUrl());
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+
+		if (object.getDescribes() != null) {
+			model.setDescribes(new THashSet<DocumentApiModel.PolymorphicRecord>());
+			for (final NamedEntity n: object.getDescribes()) {
+				DocumentApiModel.PolymorphicRecord r = new DocumentApiModel.PolymorphicRecord();
+				r.setId(n.getUuid());
+				r.setType("type");
+				model.getDescribes().add(r);
+			}
+		}
 
 		return model;
 	}

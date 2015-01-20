@@ -13,6 +13,21 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         },
         addSticker: function (obj) {
             this.controllerFor('application').get('stickers').pushObject(obj);
+        },
+        download: function (entity, url) {
+            var newDoc = this.store.createRecord('document', {
+                url: url
+            });
+            newDoc.get('describes').pushObject(entity);
+
+            var self = this;
+
+            newDoc.save().then(function (e) {
+                self.growl.info('Document saved, downloading..');
+            }).catch(function (e) {
+                newDoc.rollback();
+                self.growl.error('Download request failed: '+e);
+            })
         }
     },
     setupController: function(controller, model) {

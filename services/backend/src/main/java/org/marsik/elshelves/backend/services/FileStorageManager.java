@@ -2,9 +2,15 @@ package org.marsik.elshelves.backend.services;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.marsik.elshelves.backend.configuration.StorageConfiguration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,9 +21,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
-public class FileStorageManager implements StorageManager {
+public class FileStorageManager implements StorageManager, StorageMaintenance {
     final StorageConfiguration storageConfiguration;
 
     final Object hashStoreLock = new Object();
@@ -48,16 +55,37 @@ public class FileStorageManager implements StorageManager {
     @Override
     public OutputStream store(UUID uuid) throws IOException {
         File f = new File(getPath(uuid));
+		f.getParentFile().mkdirs();
         f.createNewFile();
         return new FileOutputStream(f);
     }
 
-    public void notifyStored(UUID uuid) {
+	@Async
+    public void notifyStored(UUID uuid, FileAnalysisDoneHandler finishedHandler) throws IOException {
         performHardlinking(uuid);
+
+		if (finishedHandler != null) {
+			Path path = get(uuid).toPath();
+			String contentType = Files.probeContentType(path);
+			Long size = path.toFile().length();
+			Metadata metadata;
+
+			try (InputStream stream = new FileInputStream(path.toFile())) {
+				AutoDetectParser parser = new AutoDetectParser();
+				ContentHandler contentHandler = new BodyContentHandler();
+				metadata = new Metadata();
+				parser.parse(stream, contentHandler, metadata);
+			} catch (SAXException | TikaException ex) {
+				ex.printStackTrace();
+				metadata = null;
+			}
+
+			finishedHandler.downloadFinished(uuid, path, size, contentType, metadata);
+		}
     }
 
 	@Override
-	public void download(UUID uuid, URL url) throws IOException {
+	public void download(UUID uuid, URL url, FileAnalysisDoneHandler finishedHandler) throws IOException {
         File downloadTarget = new File(getPath(uuid) + ".download");
 
         try {
@@ -68,7 +96,7 @@ public class FileStorageManager implements StorageManager {
             return;
         }
 
-        notifyStored(uuid);
+        notifyStored(uuid, finishedHandler);
 	}
 
 	@Override
@@ -101,16 +129,15 @@ public class FileStorageManager implements StorageManager {
     }
 
     @Scheduled(cron = "* 15 4 * * *")
-    private void performHardLinkMaintenance() {
+    public void performHardLinkMaintenance() {
         // Traverse checksum store and delete unused hardlinks
     }
 
     @Scheduled(cron = "* 15 3 * * *")
-    private void performDownloadMaintenance() {
+    public void performDownloadMaintenance() {
         // Traverse files and delete stale (more than a day old) downloads
     }
 
-    @Async
     private void performHardlinking(UUID uuid) {
         // Compute file checksum
         String hash;

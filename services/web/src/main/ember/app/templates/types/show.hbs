@@ -10,6 +10,17 @@
 
 {{#click-to-editarea content=model field='content.description'}}{{model.description}}{{/click-to-editarea}}
 
+<h3>Attachments</h3>
+
+<ul>
+    {{#each doc in describedBy}}
+    <li>{{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}</li>
+    {{/each}}
+</ul>
+
+{{save-from-web action='download' entity=model}}
+{{upload-attachments entity=model}}
+
 <h3>Available lots</h3>
 <table>
     <thead>

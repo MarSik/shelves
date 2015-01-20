@@ -1,14 +1,11 @@
 import DS from 'ember-data';
+import NamedBase from './namedbase';
 
 var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
-    name: DS.attr('string'),
-    summary: DS.attr('string'),
-    description: DS.attr('string'),
+export default NamedBase.extend({
     url: DS.attr('string'),
-    belongsTo: belongsTo('user', {async: true}),
     nameWithDesc: function () {
         var n = this.get('name');
         if (this.get('summary')) {

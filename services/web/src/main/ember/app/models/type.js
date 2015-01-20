@@ -1,13 +1,11 @@
 import DS from 'ember-data';
+import NamedBase from './namedbase';
 
 var attr = DS.attr,
     hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
-  name: attr("string"),
-  summary: attr("string"),
-  description: attr("string"),
+export default NamedBase.extend({
   vendor: attr("string"),
 
   free: attr(),
@@ -17,8 +15,6 @@ export default DS.Model.extend({
   groups: hasMany("group", {async: true}),
   footprint: belongsTo("footprint", {async: true}),
   lots: hasMany("lot", {async: true, inverse: null}),
-  belongsTo: belongsTo("user", {async: true}),
-  describedBy: hasMany("document", {async: true}),
 
   fullName: function () {
       var n = this.get('name') + ' | ' + this.get('footprint.name');

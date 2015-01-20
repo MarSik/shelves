@@ -82,7 +82,7 @@ public class SourceService extends AbstractRestService<SourceRepository, Source,
 		}
 
 		try {
-			storageManager.download(uuid, faviconUrl);
+			storageManager.download(uuid, faviconUrl, null);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

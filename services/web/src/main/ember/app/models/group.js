@@ -1,21 +1,17 @@
 import DS from 'ember-data';
+import NamedBase from './namedbase';
 
 var attr = DS.attr,
     hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
-    name: attr(),
-    summary: attr(),
-    description: attr(),
-
+export default NamedBase.extend({
     types: hasMany("type", {async: true}),
     directCount: attr(),
     nestedCount: attr(),
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
     groups: hasMany("group", {inverse: "parent", async: true}),
-    belongsTo: belongsTo("user", {async: true}),
 
     children: function() {
         return this.get('groups');

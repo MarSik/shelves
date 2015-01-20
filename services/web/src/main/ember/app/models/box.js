@@ -1,19 +1,16 @@
 import DS from 'ember-data';
 import Ember from 'ember';
+import NamedBase from './namedbase';
 
 var attr = DS.attr,
     hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
-  name: attr(),
-  summary: attr(),
-  description: attr(),
+export default NamedBase.extend({
   lots: hasMany("lot", {async: true}),
   parent: belongsTo("box", {async: true, inverse: "boxes"}),
   boxes: hasMany("box", {async: true, inverse: "parent"}),
   code: belongsTo("code", {async: true}),
-  belongsTo: belongsTo("user", {async: true}),
 
   children: function() {
       return this.get('boxes');

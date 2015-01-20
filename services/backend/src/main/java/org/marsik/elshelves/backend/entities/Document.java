@@ -70,4 +70,12 @@ public class Document extends NamedEntity implements StickerCapable {
     public void setUrl(URL url) {
         this.url = url;
     }
+
+	public Set<NamedEntity> getDescribes() {
+		return describes;
+	}
+
+	public void setDescribes(Set<NamedEntity> describes) {
+		this.describes = describes;
+	}
 }

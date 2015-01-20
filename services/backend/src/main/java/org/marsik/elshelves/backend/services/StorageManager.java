@@ -13,7 +13,9 @@ public interface StorageManager {
 
     OutputStream store(UUID uuid) throws IOException;
 
-	void download(UUID uuid, URL url) throws IOException;
+	void download(UUID uuid, URL url, FileAnalysisDoneHandler finishedHandler) throws IOException;
+
+	void notifyStored(UUID uuid, FileAnalysisDoneHandler finishedHandler) throws IOException;
 
 	boolean exists(UUID uuid) throws IOException;
 

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @NodeEntity
-public abstract class NamedEntity extends OwnedEntity {
+public class NamedEntity extends OwnedEntity {
 	@Indexed
 	@NotEmpty
 	@NotNull
@@ -60,5 +60,10 @@ public abstract class NamedEntity extends OwnedEntity {
 
 	public void setDescribedBy(Set<Document> describedBy) {
 		this.describedBy = describedBy;
+	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return false;
 	}
 }
