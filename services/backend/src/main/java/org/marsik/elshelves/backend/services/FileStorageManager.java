@@ -103,7 +103,9 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
     @Override
     public void upload(UUID uuid, MultipartFile file, FileAnalysisDoneHandler finishedHandler) throws IOException {
         try {
-            file.transferTo(get(uuid));
+            File destination = get(uuid);
+            destination.getParentFile().mkdirs();
+            file.transferTo(destination);
         } catch (IOException ex) {
             return;
         }

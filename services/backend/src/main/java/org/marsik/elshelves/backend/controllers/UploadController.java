@@ -48,12 +48,12 @@ public class UploadController {
 	@ResponseStatus(HttpStatus.OK)
 	public EmberModel upload(@CurrentUser User currentUser,
 					   @RequestParam("files[]") MultipartFile[] files,
-					   @RequestParam(value = "entity", required = false) UUID entity,
+					   @RequestParam("entity") UUID entity,
                        HttpServletRequest request) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
 		NamedEntity e = null;
 
 		if (entity != null) {
-			e = neo4jTemplate.findByIndexedValue(NamedEntity.class, "uuid", entity).singleOrNull();
+			e = neo4jTemplate.findByIndexedValue(NamedEntity.class, "uuid", entity.toString()).singleOrNull();
 			if (e == null) {
 				throw new EntityNotFound();
 			}

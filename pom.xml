@@ -43,6 +43,7 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
         <jackson.version>2.4.4-MarSik</jackson.version>
+        <tika.version>1.7</tika.version>
 
         <!-- computer vision libs //-->
 

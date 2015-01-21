@@ -15,7 +15,7 @@
 </ul>
 
 {{save-from-web action='download' entity=model}}
-{{upload-attachments entity=model}}
+{{upload-attachments entity=model uploadFinished='uploadFinished'}}
 
 <h3>URL</h3>
 {{#click-to-edit content=model field='content.url'}}<a {{bind-attr href=model.url}}>{{model.url}}</a>{{/click-to-edit}}

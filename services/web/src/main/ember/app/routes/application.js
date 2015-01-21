@@ -28,6 +28,10 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 newDoc.rollback();
                 self.growl.error('Download request failed: '+e);
             })
+        },
+        uploadFinished: function(response) {
+            this.growl.info('Files uploaded');
+            this.get('store').pushPayload(response);
         }
     },
     setupController: function(controller, model) {
