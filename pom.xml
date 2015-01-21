@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.9.RELEASE</version>
+        <version>1.2.1.RELEASE</version>
     </parent>
 
     <properties>
@@ -29,9 +29,9 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.android.target>1.7</maven.android.target>
-        <spring.version>4.1.2.RELEASE</spring.version>
+        <spring.version>4.1.4.RELEASE</spring.version>
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
-        <spring.security.oauth.version>2.0.4.RELEASE</spring.security.oauth.version>
+        <spring.security.oauth.version>2.0.5.RELEASE</spring.security.oauth.version>
         <spring.data.neo4j.version>3.2.1.RELEASE</spring.data.neo4j.version>
         <freemarker.version>2.3.21</freemarker.version>
         <hibernate.version>5.1.3.Final</hibernate.version>
@@ -39,7 +39,7 @@
         <glxn.version>2.0</glxn.version>
         <neo4j.version>2.1.6</neo4j.version>
         <aspect.version>1.8.4</aspect.version>
-        <jetty.version>9.2.5.v20141112</jetty.version>
+        <jetty.version>9.2.7.v20150116</jetty.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
         <jackson.version>2.4.4-MarSik</jackson.version>

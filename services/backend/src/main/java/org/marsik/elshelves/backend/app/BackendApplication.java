@@ -83,13 +83,6 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(1000000);
-        return resolver;
-    }
-
-    @Bean
     MemcachedClient getMemcachedClientFactory() {
         MemcachedClientFactoryBean memcached = new MemcachedClientFactoryBean();
         memcached.setServers("127.0.0.1:11211");

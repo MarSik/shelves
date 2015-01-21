@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -102,13 +103,11 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
 
     @Override
     public void upload(UUID uuid, MultipartFile file, FileAnalysisDoneHandler finishedHandler) throws IOException {
-        try {
-            File destination = get(uuid);
-            destination.getParentFile().mkdirs();
-            file.transferTo(destination);
-        } catch (IOException ex) {
-            return;
-        }
+        File destination = get(uuid);
+        destination.getParentFile().mkdirs();
+        IOUtils.copy(file.getInputStream(), new FileOutputStream(destination));
+        // Can't be used because Jetty does not obey absolute paths..
+        // file.transferTo(destination.getAbsoluteFile());
 
         notifyStored(uuid, finishedHandler);
     }
