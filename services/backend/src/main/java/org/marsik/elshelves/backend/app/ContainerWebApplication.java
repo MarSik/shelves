@@ -11,6 +11,12 @@ public class ContainerWebApplication extends SpringBootServletInitializer {
                 ApplicationData.class,
                 ApplicationMessaging.class,
                 WebSocketConfig.class,
-                ApplicationTimers.class);
+                ApplicationTimers.class,
+                ApplicationEventBus.class,
+                ApplicationHttpClients.class,
+                ApplicationOauth2Authorization.class,
+                ApplicationOauth2Resources.class,
+                CorsConfiguration.class,
+                WebFormSupportFilter.class);
     }
 }
