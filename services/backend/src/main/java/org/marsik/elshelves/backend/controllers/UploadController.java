@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.set.hash.THashSet;
-import org.apache.commons.io.IOUtils;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -24,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,8 +47,9 @@ public class UploadController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public EmberModel upload(@CurrentUser User currentUser,
-					   @RequestParam("files[]") MultipartFile[] f,
-					   @RequestParam(value = "entity", required = false) UUID entity) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
+					   @RequestParam("files[]") MultipartFile[] files,
+					   @RequestParam(value = "entity", required = false) UUID entity,
+                       HttpServletRequest request) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
 		NamedEntity e = null;
 
 		if (entity != null) {
@@ -68,7 +68,7 @@ public class UploadController {
 		DocumentApiModel.PolymorphicRecord describesRecord = new DocumentApiModel.PolymorphicRecord();
 		describesRecord.setId(entity);
 
-		for (MultipartFile file: f) {
+		for (MultipartFile file: files) {
 			DocumentApiModel d = new DocumentApiModel();
 			d.setName(file.getOriginalFilename());
 			d.setSize(file.getSize());
@@ -82,15 +82,14 @@ public class UploadController {
 			}
 
 			try {
-				OutputStream os = storageManager.store(d.getId());
-				IOUtils.copy(file.getInputStream(), os);
+				storageManager.upload(d.getId(), file, documentAnalysisDoneService);
 			} catch (IOException ex) {
 				ex.printStackTrace();
-				throw ex;
+				documentService.delete(d.getId(), currentUser);
+                continue;
 			}
 
 			documents.add(d);
-			storageManager.notifyStored(d.getId(), documentAnalysisDoneService);
 		}
 
 		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(DocumentApiModel.class, documents);

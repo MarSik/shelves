@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,9 +15,11 @@ public interface StorageManager {
 
     OutputStream store(UUID uuid) throws IOException;
 
+    void notifyStored(UUID uuid, FileAnalysisDoneHandler finishedHandler) throws IOException;
+
 	void download(UUID uuid, URL url, FileAnalysisDoneHandler finishedHandler) throws IOException;
 
-	void notifyStored(UUID uuid, FileAnalysisDoneHandler finishedHandler) throws IOException;
+    void upload(UUID uuid, MultipartFile f, FileAnalysisDoneHandler finishedHandler) throws IOException;
 
 	boolean exists(UUID uuid) throws IOException;
 

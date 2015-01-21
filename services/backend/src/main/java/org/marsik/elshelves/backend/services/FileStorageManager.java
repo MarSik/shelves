@@ -9,6 +9,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.marsik.elshelves.backend.configuration.StorageConfiguration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -98,6 +99,17 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
 
         notifyStored(uuid, finishedHandler);
 	}
+
+    @Override
+    public void upload(UUID uuid, MultipartFile file, FileAnalysisDoneHandler finishedHandler) throws IOException {
+        try {
+            file.transferTo(get(uuid));
+        } catch (IOException ex) {
+            return;
+        }
+
+        notifyStored(uuid, finishedHandler);
+    }
 
 	@Override
 	public boolean exists(UUID uuid) throws IOException {
