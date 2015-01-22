@@ -1,21 +1,4 @@
-<h2>{{#click-to-edit content=model field='content.name'}}{{model.name}}{{/click-to-edit}}</h2>
-
-<p>{{#click-to-editarea content=model field='content.summary'}}{{model.summary}}{{/click-to-editarea}}</p>
-
-<h3>Description</h3>
-
-{{#click-to-editarea content=model field='content.description'}}{{model.description}}{{/click-to-editarea}}
-
-<h3>Attachments</h3>
-
-<ul>
-    {{#each doc in describedBy}}
-    <li>{{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}</li>
-    {{/each}}
-</ul>
-
-{{save-from-web action='download' entity=model}}
-{{upload-attachments entity=model uploadFinished='uploadFinished'}}
+{{partial '_itemheader'}}
 
 <h3>Required parts</h3>
 <table>

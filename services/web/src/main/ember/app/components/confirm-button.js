@@ -16,7 +16,7 @@ export default Ember.Component.extend({
 
         var c = this.get('confirming');
         if (c) {
-            this.sendAction('action', this.get('param'));
+            this.sendAction('action', this.get('param'), this.get('param2'));
             this.set('done', true);
             this.set('confirming', false);
         } else {

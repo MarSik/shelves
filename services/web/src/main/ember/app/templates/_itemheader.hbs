@@ -1,0 +1,21 @@
+<h2>{{#click-to-edit content=model field='content.name'}}{{model.name}}{{/click-to-edit}}</h2>
+
+<p>{{#click-to-editarea content=model field='content.summary'}}{{model.summary}}{{/click-to-editarea}}</p>
+
+<h3>Description</h3>
+
+{{#click-to-editarea content=model field='content.description'}}{{model.description}}{{/click-to-editarea}}
+
+<h3>Attachments</h3>
+
+<ul>
+    {{#each doc in model.describedBy}}
+    <li>
+        {{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}
+        {{#confirm-button action='deleteDocument' param=doc class='tiny button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}
+    </li>
+    {{/each}}
+</ul>
+
+{{save-from-web action='download' entity=model}}
+{{upload-attachments entity=model uploadFinished='uploadFinished'}}
