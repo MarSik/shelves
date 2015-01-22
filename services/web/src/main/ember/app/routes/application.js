@@ -31,7 +31,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         },
         uploadFinished: function (response) {
             this.growl.info('Files uploaded');
-            this.get('store').pushPayload(response);
+            this.get('store').pushPayload('document', response);
         },
         deleteDocument: function (document) {
             document.destroyRecord();
