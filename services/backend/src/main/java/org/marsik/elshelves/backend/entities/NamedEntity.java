@@ -3,9 +3,11 @@ package org.marsik.elshelves.backend.entities;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -25,6 +27,9 @@ public class NamedEntity extends OwnedEntity {
 
 	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
 	Set<Document> describedBy;
+
+    @RelatedToVia(type = "HAS_PROPERTY")
+    Iterable<NumericPropertyValue> properties;
 
 	@PartOfUpdate
 	public String getName() {
@@ -66,4 +71,12 @@ public class NamedEntity extends OwnedEntity {
 	public boolean canBeDeleted() {
 		return false;
 	}
+
+    public Iterable<NumericPropertyValue> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<NumericPropertyValue> properties) {
+        this.properties = properties;
+    }
 }

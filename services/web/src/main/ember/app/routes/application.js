@@ -58,6 +58,12 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             controller.set('availableSources', self.store.filter('source', {}, function (i) {
                 return !i.get('isNew');
             }));
+            controller.set('availableIsoPrefixes', self.store.filter('isoprefix', {}, function (i) {
+                return !i.get('isNew');
+            }));
+            controller.set('availableProperties', self.store.filter('property', {}, function (i) {
+                return !i.get('isNew');
+            }));
         }
     }
 });

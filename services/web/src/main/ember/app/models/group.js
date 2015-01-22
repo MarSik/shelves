@@ -12,6 +12,7 @@ export default NamedBase.extend({
 
     parent: belongsTo("group", {inverse: "groups", async: true}),
     groups: hasMany("group", {inverse: "parent", async: true}),
+    showProperty: hasMany('property', {async: true}),
 
     children: function() {
         return this.get('groups');

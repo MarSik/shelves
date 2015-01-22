@@ -1,5 +1,10 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.marsik.elshelves.api.ember.EmberModelName;
+
+@EmberModelName("isoprefix")
 public enum IsoSizePrefix {
 	ATTO("a", -18),
 	FEMTO("f", -15),
@@ -39,4 +44,16 @@ public enum IsoSizePrefix {
 		this.prefix = prefix;
 		this.power10 = power10;
 	}
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public int getPower10() {
+        return power10;
+    }
+
+    public String getId() {
+        return name();
+    }
 }

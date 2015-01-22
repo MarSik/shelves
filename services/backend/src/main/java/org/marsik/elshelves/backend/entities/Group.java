@@ -20,6 +20,9 @@ public class Group extends NamedEntity {
 	@RelatedTo(type = "CONTAINS")
 	Set<Type> types;
 
+    @RelatedTo(type = "SHOW_PROPERTY")
+    Set<NumericProperty> showProperties;
+
 	@PartOfUpdate
 	public Group getParent() {
 		return parent;
@@ -51,7 +54,15 @@ public class Group extends NamedEntity {
 		return true;
 	}
 
-	public Long getCount() {
+    public Set<NumericProperty> getShowProperties() {
+        return showProperties;
+    }
+
+    public void setShowProperties(Set<NumericProperty> showProperties) {
+        this.showProperties = showProperties;
+    }
+
+    public Long getCount() {
 		return Long.valueOf(getTypes().size());
 	}
 

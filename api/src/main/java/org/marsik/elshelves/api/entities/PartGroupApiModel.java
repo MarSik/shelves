@@ -21,6 +21,7 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     PartGroupApiModel parent;
 
     Set<PartTypeApiModel> types;
+    Set<NumericPropertyApiModel> showProperties;
 
 	Long directCount;
 	Long nestedCount;
@@ -63,7 +64,17 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
         this.types = types;
     }
 
-	public Long getDirectCount() {
+    @JsonIdentityReference(alwaysAsId = true)
+    public Set<NumericPropertyApiModel> getShowProperties() {
+        return showProperties;
+    }
+
+    @JsonSetter
+    public void setShowProperties(Set<NumericPropertyApiModel> showProperties) {
+        this.showProperties = showProperties;
+    }
+
+    public Long getDirectCount() {
 		return directCount;
 	}
 
