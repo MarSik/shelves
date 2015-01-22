@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.api.entities.PartGroupApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -7,6 +9,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.Set;
 
 @NodeEntity
+@DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
 	@RelatedTo(type = "PARENT_OF", direction = Direction.INCOMING)
 	Group parent;

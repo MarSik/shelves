@@ -1,10 +1,12 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +60,19 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 			for (final NamedEntity n: object.getDescribes()) {
 				DocumentApiModel.PolymorphicRecord r = new DocumentApiModel.PolymorphicRecord();
 				r.setId(n.getUuid());
-				r.setType("type");
+
+                String type = "unknown";
+
+                DefaultEmberModel emberModelAnnotation = n.getClass().getAnnotation(DefaultEmberModel.class);
+                if (emberModelAnnotation != null) {
+                    Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
+                    EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
+                    if (emberModelName != null) {
+                        type = emberModelName.value();
+                    }
+                }
+
+				r.setType(type);
 				model.getDescribes().add(r);
 			}
 		}

@@ -1,10 +1,13 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.api.entities.FootprintApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 @NodeEntity
+@DefaultEmberModel(FootprintApiModel.class)
 public class Footprint extends NamedEntity {
 	String kicad;
 

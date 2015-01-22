@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.api.entities.BoxApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -8,6 +10,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.Set;
 
 @NodeEntity
+@DefaultEmberModel(BoxApiModel.class)
 public class Box extends NamedEntity implements StickerCapable {
 
 	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)

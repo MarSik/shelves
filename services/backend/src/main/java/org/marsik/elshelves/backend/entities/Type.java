@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @NodeEntity
+@DefaultEmberModel(PartTypeApiModel.class)
 public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
 	String vendorId;
