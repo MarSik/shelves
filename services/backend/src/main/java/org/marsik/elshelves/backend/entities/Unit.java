@@ -20,7 +20,7 @@ public class Unit extends NamedEntity {
 	IsoSizePrefix[] prefixes;
 
     @RelatedTo(type = "OF_UNIT", direction = Direction.INCOMING)
-    Iterable<NumericProperty> properties;
+    Iterable<NumericProperty> unitUses;
 
 	public String getSymbol() {
 		return symbol;
@@ -40,8 +40,12 @@ public class Unit extends NamedEntity {
 		this.prefixes = prefixes;
 	}
 
+    public Iterable<NumericProperty> getUnitUses() {
+        return unitUses;
+    }
+
     @Override
     public boolean canBeDeleted() {
-        return !properties.iterator().hasNext();
+        return !getUnitUses().iterator().hasNext();
     }
 }

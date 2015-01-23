@@ -28,7 +28,7 @@ public class NamedEntity extends OwnedEntity {
 	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
 	Set<Document> describedBy;
 
-    @RelatedToVia(type = "HAS_PROPERTY")
+    @RelatedToVia(type = "HAS_PROPERTY", elementClass = NumericPropertyValue.class)
     Iterable<NumericPropertyValue> properties;
 
 	@PartOfUpdate
@@ -74,9 +74,5 @@ public class NamedEntity extends OwnedEntity {
 
     public Iterable<NumericPropertyValue> getProperties() {
         return properties;
-    }
-
-    public void setProperties(Set<NumericPropertyValue> properties) {
-        this.properties = properties;
     }
 }

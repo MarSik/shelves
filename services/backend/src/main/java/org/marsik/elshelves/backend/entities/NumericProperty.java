@@ -41,13 +41,8 @@ public class NumericProperty extends NamedEntity {
     public void setBase(IsoSizePrefix base) {
         this.base = base;
     }
-
     public Iterable<NumericPropertyValue> getPropertyUses() {
         return propertyUses;
-    }
-
-    public void setPropertyUses(Iterable<NumericPropertyValue> propertyUses) {
-        this.propertyUses = propertyUses;
     }
 
     @Override

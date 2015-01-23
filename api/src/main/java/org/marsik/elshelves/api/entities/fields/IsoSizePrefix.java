@@ -1,16 +1,18 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
+@JsonFormat(shape= JsonFormat.Shape.OBJECT)
 @EmberModelName("isoprefix")
 public enum IsoSizePrefix {
 	ATTO("a", -18),
 	FEMTO("f", -15),
 	PICO("p", -12),
 	NANO("n", -9),
-	MICRO("u", -6),
+	MICRO("µ", -6),
 	MILLI("m", -3),
 	NONE("", 0),
 	DECA("da", 1),
