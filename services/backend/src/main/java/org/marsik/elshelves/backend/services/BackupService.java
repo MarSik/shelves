@@ -13,33 +13,39 @@ import org.marsik.elshelves.backend.entities.converters.EmberToBox;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
+import org.marsik.elshelves.backend.entities.converters.EmberToNumericProperty;
 import org.marsik.elshelves.backend.entities.converters.EmberToProject;
 import org.marsik.elshelves.backend.entities.converters.EmberToPurchase;
 import org.marsik.elshelves.backend.entities.converters.EmberToRequirement;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.backend.entities.converters.EmberToTransaction;
 import org.marsik.elshelves.backend.entities.converters.EmberToType;
+import org.marsik.elshelves.backend.entities.converters.EmberToUnit;
 import org.marsik.elshelves.backend.entities.converters.FootprintToEmber;
 import org.marsik.elshelves.backend.entities.converters.GroupToEmber;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
+import org.marsik.elshelves.backend.entities.converters.NumericPropertyToEmber;
 import org.marsik.elshelves.backend.entities.converters.ProjectToEmber;
 import org.marsik.elshelves.backend.entities.converters.PurchaseToEmber;
 import org.marsik.elshelves.backend.entities.converters.RequirementToEmber;
 import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
 import org.marsik.elshelves.backend.entities.converters.TransactionToEmber;
 import org.marsik.elshelves.backend.entities.converters.TypeToEmber;
+import org.marsik.elshelves.backend.entities.converters.UnitToEmber;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.DocumentRepository;
 import org.marsik.elshelves.backend.repositories.FootprintRepository;
 import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
+import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
 import org.marsik.elshelves.backend.repositories.ProjectRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
 import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
+import org.marsik.elshelves.backend.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
@@ -87,6 +93,12 @@ public class BackupService {
 	@Autowired
 	EmberToProject emberToProject;
 
+    @Autowired
+    EmberToUnit emberToUnit;
+
+    @Autowired
+    EmberToNumericProperty emberToNumericProperty;
+
 
     @Autowired
     BoxToEmber boxToEmber;
@@ -124,6 +136,12 @@ public class BackupService {
     @Autowired
     UserToEmber userToEmber;
 
+    @Autowired
+    NumericPropertyToEmber numericPropertyToEmber;
+
+    @Autowired
+    UnitToEmber unitToEmber;
+
 
     @Autowired
     BoxRepository boxRepository;
@@ -158,6 +176,12 @@ public class BackupService {
     @Autowired
     TypeRepository typeRepository;
 
+    @Autowired
+    UnitRepository unitRepository;
+
+    @Autowired
+    NumericPropertyRepository numericPropertyRepository;
+
 
 	protected <T, F extends OwnedEntity>  void restore(Iterable<T> items,
 								   CachingConverter<T, F, UUID> converter,
@@ -181,6 +205,8 @@ public class BackupService {
 		Map<UUID, Object> conversionCache = new THashMap<>();
         Map<UUID, Object> relinkCache = new THashMap<>();
 
+        restore(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache);
+        restore(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache);
 		restore(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache);
 		restore(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache);
 		restore(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache);
@@ -210,6 +236,8 @@ public class BackupService {
         BackupApiModel backup = new BackupApiModel();
         Map<UUID, Object> cache = new THashMap<>();
 
+        backup.setUnits(backup(unitRepository.findByOwner(currentUser), unitToEmber, cache));
+        backup.setProperties(backup(numericPropertyRepository.findByOwner(currentUser), numericPropertyToEmber, cache));
         backup.setBoxes(backup(boxRepository.findByOwner(currentUser), boxToEmber, cache));
         backup.setGroups(backup(groupRepository.findByOwner(currentUser), groupToEmber, cache));
         backup.setFootprints(backup(footprintRepository.findByOwner(currentUser), footprintToEmber, cache));

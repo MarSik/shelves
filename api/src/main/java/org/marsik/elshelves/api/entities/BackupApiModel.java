@@ -13,6 +13,8 @@ public class BackupApiModel {
 	Set<RequirementApiModel> requirements;
 	Set<TransactionApiModel> transactions;
 	Set<PurchaseApiModel> purchases;
+    Set<UnitApiModel> units;
+    Set<NumericPropertyApiModel> properties;
 	UserApiModel user;
 
 	public Set<FootprintApiModel> getFootprints() {
@@ -95,7 +97,23 @@ public class BackupApiModel {
 		this.purchases = purchases;
 	}
 
-	public UserApiModel getUser() {
+    public Set<UnitApiModel> getUnits() {
+        return units;
+    }
+
+    public void setUnits(Set<UnitApiModel> units) {
+        this.units = units;
+    }
+
+    public Set<NumericPropertyApiModel> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<NumericPropertyApiModel> properties) {
+        this.properties = properties;
+    }
+
+    public UserApiModel getUser() {
 		return user;
 	}
 
