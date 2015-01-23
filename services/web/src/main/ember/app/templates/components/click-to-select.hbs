@@ -1,0 +1,14 @@
+{{#if editing}}
+<form {{action 'saveEdit' on='submit'}} class="inline">
+{{ember-selectize
+content=options
+optionValuePath="content.id"
+optionLabelPath=label
+selection=value
+placeholder=placeholder }}
+<button type="submit">save</button>
+<button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
+</form>
+{{else}}
+{{yield}} <button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>
+{{/if}}

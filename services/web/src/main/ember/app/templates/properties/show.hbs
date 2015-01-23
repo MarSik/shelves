@@ -1,21 +1,15 @@
 {{partial '_itemheader'}}
 
+<h3>Symbol</h3>
+
+{{#click-to-edit content=model field='content.symbol'}}{{model.symbol}}{{/click-to-edit}}
+
 <h3>Unit</h3>
 
-{{ember-selectize
-content=sortedUnits
-optionValuePath="content.id"
-optionLabelPath="content.niceName"
-selection=model.unit
-placeholder="Select an unit" }}
+{{#click-to-select content=model field='content.unit' label='content.niceName' options=sortedUnits}}{{model.unit.niceName}}{{/click-to-select}}
 
 <h3>Precision</h3>
 
-{{ember-selectize
-content=sortedPrefixes
-optionValuePath="content.id"
-optionLabelPath="content.niceName"
-selection=model.base
-placeholder="Select an unit" }}
+{{#click-to-select content=model field='content.base' label='content.niceName' options=sortedPrefixes}}{{model.base.niceName}}{{/click-to-select}}
 
 {{outlet}}

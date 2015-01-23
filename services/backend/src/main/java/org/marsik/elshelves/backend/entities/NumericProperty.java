@@ -56,6 +56,7 @@ public class NumericProperty extends NamedEntity {
         return !propertyUses.iterator().hasNext();
     }
 
+    @PartOfUpdate
     public String getSymbol() {
         return symbol;
     }
