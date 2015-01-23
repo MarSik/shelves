@@ -12,5 +12,11 @@ export default DS.Model.extend({
     belongsTo: belongsTo('user', {async: true}),
     describedBy: hasMany("document", {async: true}),
 
-    values: hasMany('propertyvalue', {inverse: null})
+    values: attr('object'),
+    properties: hasMany('property', {async: true}),
+
+    value: function(property) {
+        var id = property.get('id');
+        return values.get(id);
+    }
 });

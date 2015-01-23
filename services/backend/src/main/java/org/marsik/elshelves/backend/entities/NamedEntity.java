@@ -29,7 +29,7 @@ public class NamedEntity extends OwnedEntity {
 	Set<Document> describedBy;
 
     @RelatedToVia(type = "HAS_PROPERTY", elementClass = NumericPropertyValue.class)
-    Iterable<NumericPropertyValue> properties;
+    Set<NumericPropertyValue> properties;
 
 	@PartOfUpdate
 	public String getName() {
@@ -72,7 +72,12 @@ public class NamedEntity extends OwnedEntity {
 		return false;
 	}
 
+    @PartOfUpdate
     public Iterable<NumericPropertyValue> getProperties() {
         return properties;
+    }
+
+    public void setProperties(Set<NumericPropertyValue> properties) {
+        this.properties = properties;
     }
 }

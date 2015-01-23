@@ -2,10 +2,10 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import org.marsik.elshelves.api.entities.fields.NumericPropertyValueApiModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,7 +26,9 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	UserApiModel belongsTo;
 
 	Set<DocumentApiModel> describedBy;
-    List<NumericPropertyValueApiModel> values;
+
+    Map<UUID, Long> values;
+    Set<NumericPropertyApiModel> properties;
 
 	public String getName() {
 		return name;
@@ -80,11 +82,20 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 		this.hasIcon = hasIcon;
 	}
 
-    public List<NumericPropertyValueApiModel> getValues() {
+    public Map<UUID, Long> getValues() {
         return values;
     }
 
-    public void setValues(List<NumericPropertyValueApiModel> values) {
+    public void setValues(Map<UUID, Long> values) {
         this.values = values;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public Set<NumericPropertyApiModel> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Set<NumericPropertyApiModel> properties) {
+        this.properties = properties;
     }
 }

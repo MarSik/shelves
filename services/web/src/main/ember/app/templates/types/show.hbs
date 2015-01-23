@@ -1,5 +1,24 @@
 {{partial '_itemheader'}}
 
+<h3>Additional properties</h3>
+
+<ul class="small-block-grid-2 large-block-grid-6">
+    {{#each property in model.properties itemController='types/property'}}
+    <li>{{#confirm-button action='removeProperty' param=model param2=property.model}}{{property.model.niceName}}: {{property.value}}{{/confirm-button}}</li>
+    {{/each}}
+</ul>
+
+{{ember-selectize
+content=sortedProperties
+optionValuePath="content.id"
+optionLabelPath="content.niceName"
+selection=propertyToAdd
+placeholder="Select a property" }}
+
+{{input type='text' value=propertyValueToAdd}}
+
+<button {{action 'addProperty' model propertyToAdd propertyValueToAdd}}>{{fa-icon 'plus'}} Add</button>
+
 <h3>Available lots</h3>
 <table>
     <thead>
