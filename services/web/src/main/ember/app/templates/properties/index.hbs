@@ -1,20 +1,45 @@
 <section>
-    <h2>Create property</h2>
-    <form {{action 'createProperty' propertyName on='submit'}}>
-    {{input type='text' value=propertyName placeholder='project name'}}
-    <button type="submit">Create</button>
-    </form>
-
     <h2>Properties</h2>
 
     <ul class="small-block-grid-2 large-block-grid-4">
         {{#each property in this}}
         <li>
-            <aside>{{property.unit.symbol}}</aside>
             {{#link-to 'properties.show' property}}{{property.name}}{{/link-to}}<br/>
+            <aside>{{property.symbol}} [ {{#link-to 'units.show' property.unit}}{{property.unit.symbol}}{{/link-to}} ]</aside>
+            <p>{{property.summary}}</p>
         </li>
         {{/each}}
     </ul>
+
+    <button {{action 'showCreateProperty'}}>{{fa-icon 'plus'}} Create property</button>
 </section>
+
+<div id="createProperty" class="reveal-modal" data-reveal>
+    <h2>Create property</h2>
+    <form {{action 'createProperty' propertyName propertyUnit propertyBase on='submit'}}>
+    <label for="name">Name:</label>
+    {{input id='name' placeholder='Enter property name' value=propertyName required='required'}}
+
+    <label for="unit">Unit:</label>
+    {{ember-selectize
+    content=sortedUnits
+    optionValuePath="content.id"
+    optionLabelPath="content.niceName"
+    selection=propertyUnit
+    placeholder="Select an unit" }}
+
+    <label for="precision">Precision:</label>
+    {{ember-selectize
+    content=sortedPrefixes
+    optionValuePath="content.id"
+    optionLabelPath="content.niceName"
+    selection=propertyBase
+    placeholder="Select an unit" }}
+
+    <button type="submit">Create property</button>
+    </form>
+
+    <a class="close-reveal-modal">&#215;</a>
+</div>
 
 {{outlet}}

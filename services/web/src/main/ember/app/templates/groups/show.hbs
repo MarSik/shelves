@@ -1,6 +1,22 @@
 <div class="group-detail columns small-12 large-8">
     {{partial '_itemheader'}}
 
+<h3>Additional properties to display</h3>
+
+<ul class="small-block-grid-2 large-block-grid-6">
+    {{#each property in model.showProperties}}
+    <li>{{#confirm-button action='removeProperty' param=model param2=property}}{{property.niceName}}{{/confirm-button}}</li>
+    {{/each}}
+</ul>
+
+{{ember-selectize
+content=sortedProperties
+optionValuePath="content.id"
+optionLabelPath="content.niceName"
+selection=propertyToAdd
+placeholder="Select a property" }}
+<button {{action 'addProperty' model propertyToAdd}}>{{fa-icon 'plus'}} Add</button>
+
 <h3>Types</h3>
 
 <table style="width: 100%;">

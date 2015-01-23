@@ -54,6 +54,7 @@ public class Group extends NamedEntity {
 		return true;
 	}
 
+    @PartOfUpdate
     public Set<NumericProperty> getShowProperties() {
         return showProperties;
     }

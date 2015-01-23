@@ -28,6 +28,7 @@ public class NumericPropertyToEmber extends AbstractEntityToEmber<NumericPropert
             return model;
         }
 
+        model.setSymbol(object.getSymbol());
         model.setBase(object.getBase());
         model.setUnit(unitToEmber.convert(object.getUnit(), nested - 1, cache));
 

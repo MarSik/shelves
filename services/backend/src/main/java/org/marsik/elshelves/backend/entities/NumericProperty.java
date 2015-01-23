@@ -24,6 +24,8 @@ public class NumericProperty extends NamedEntity {
     @NotNull
     IsoSizePrefix base;
 
+    String symbol;
+
     @RelatedToVia(type = "HAS_PROPERTY", direction = Direction.INCOMING)
     Iterable<NumericPropertyValue> propertyUses;
 
@@ -52,5 +54,13 @@ public class NumericProperty extends NamedEntity {
     @Override
     public boolean canBeDeleted() {
         return !propertyUses.iterator().hasNext();
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }

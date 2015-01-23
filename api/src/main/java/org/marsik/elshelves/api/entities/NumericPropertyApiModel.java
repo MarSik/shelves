@@ -11,6 +11,7 @@ import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
 import org.marsik.elshelves.api.entities.idresolvers.IsoSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @EmberModelName("property")
@@ -23,7 +24,12 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     public NumericPropertyApiModel() {
     }
 
+    String symbol;
+
+    @NotNull
     UnitApiModel unit;
+
+    @NotNull
     IsoSizePrefix base;
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -43,5 +49,13 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     @JsonDeserialize(using = IsoSizePrefixDeserializer.class)
     public void setBase(IsoSizePrefix base) {
         this.base = base;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }

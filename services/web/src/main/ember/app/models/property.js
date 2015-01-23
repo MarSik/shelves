@@ -6,7 +6,12 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default NamedBase.extend({
+    symbol: attr('string'),
     base: belongsTo('isoprefix', {async: true}),
     unit: belongsTo("unit", {async: true}),
-    groups: hasMany('group', {async: true})
+
+    niceName: function () {
+        var symbol = this.get('symbol');
+        return this.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol) + " [" + this.get('unit.symbol') + ']';
+    }.property('name', 'symbol', 'unit.symbol')
 });
