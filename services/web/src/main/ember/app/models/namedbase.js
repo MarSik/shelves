@@ -10,5 +10,7 @@ export default DS.Model.extend({
     summary: attr(),
 
     belongsTo: belongsTo('user', {async: true}),
-    describedBy: hasMany("document", {async: true})
+    describedBy: hasMany("document", {async: true}),
+
+    values: hasMany('propertyvalue', {inverse: null})
 });

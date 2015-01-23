@@ -65,6 +65,20 @@ Router.map(function() {
   });
 
   this.route("stickers");
+
+  this.route("units", function() {
+    this.route("show", {
+        path: "/:unit_id"
+    });
+    this.route("new");
+  });
+
+  this.route("properties", function() {
+    this.route("show", {
+        path: "/:property_id"
+    });
+    this.route("new");
+  });
 });
 
 export default Router;

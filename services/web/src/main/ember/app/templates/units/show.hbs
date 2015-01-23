@@ -1,0 +1,22 @@
+{{partial '_itemheader'}}
+
+<h3>Unit symbol</h3>
+
+{{#click-to-edit content=model field='content.symbol'}}{{model.symbol}}{{/click-to-edit}}
+
+<h3>Enabled ISO prefixes</h3>
+
+<ul class="prefixes">
+    {{#each prefix in sortedPrefixes itemController='properties/unit'}}
+    <li>
+        {{prefix.id}} [{{prefix.prefix}}] &ndash; 10<sup>{{prefix.power10}}</sup>
+        {{#if prefix.isEnabled}}
+        <button {{action 'disablePrefix' prefix.model}} class="button tiny alert">Disable</button>
+        {{else}}
+        <button {{action 'enablePrefix' prefix.model}} class="button tiny secondary">Enable</button>
+        {{/if}}
+    </li>
+    {{/each}}
+</ul>
+
+{{outlet}}

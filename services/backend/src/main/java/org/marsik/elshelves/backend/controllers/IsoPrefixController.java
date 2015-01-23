@@ -5,6 +5,7 @@ import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +33,13 @@ public class IsoPrefixController {
         }
 
         EmberModel.Builder<IsoSizePrefix> builder = new EmberModel.Builder<IsoSizePrefix>(IsoSizePrefix.class, allItems);
+        return builder.build();
+    }
+
+    @RequestMapping("/{id}")
+    @ResponseBody
+    public EmberModel get(@PathVariable("id") IsoSizePrefix prefix) throws EntityNotFound {
+        EmberModel.Builder<IsoSizePrefix> builder = new EmberModel.Builder<IsoSizePrefix>(prefix);
         return builder.build();
     }
 }

@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
     @RelatedTo(type = "OF_UNIT")
+    @NotNull
     Unit unit;
 
     /**
@@ -26,6 +27,7 @@ public class NumericProperty extends NamedEntity {
     @RelatedToVia(type = "HAS_PROPERTY", direction = Direction.INCOMING)
     Iterable<NumericPropertyValue> propertyUses;
 
+    @PartOfUpdate
     public Unit getUnit() {
         return unit;
     }
@@ -34,6 +36,7 @@ public class NumericProperty extends NamedEntity {
         this.unit = unit;
     }
 
+    @PartOfUpdate
     public IsoSizePrefix getBase() {
         return base;
     }
@@ -41,6 +44,7 @@ public class NumericProperty extends NamedEntity {
     public void setBase(IsoSizePrefix base) {
         this.base = base;
     }
+
     public Iterable<NumericPropertyValue> getPropertyUses() {
         return propertyUses;
     }

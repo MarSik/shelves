@@ -5,7 +5,11 @@ var attr = DS.attr,
     hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
+export default NamedBase.extend({
     symbol: attr("string"),
-    prefixes: hasMany('isoprefix', {async: true})
+    prefixes: hasMany('isoprefix', {async: true}),
+
+    niceName: function () {
+        return this.get('name') + " [" + this.get('symbol') + ']';
+    }.property('name', 'symbol')
 });

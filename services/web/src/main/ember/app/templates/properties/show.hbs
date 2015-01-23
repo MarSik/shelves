@@ -1,0 +1,21 @@
+{{partial '_itemheader'}}
+
+<h3>Unit</h3>
+
+{{ember-selectize
+content=sortedUnits
+optionValuePath="content.id"
+optionLabelPath="content.niceName"
+selection=model.unit
+placeholder="Select an unit" }}
+
+<h3>Precision</h3>
+
+{{ember-selectize
+content=sortedPrefixes
+optionValuePath="content.id"
+optionLabelPath="content.niceName"
+selection=model.base
+placeholder="Select an unit" }}
+
+{{outlet}}

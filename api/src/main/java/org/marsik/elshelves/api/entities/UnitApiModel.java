@@ -9,13 +9,22 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
 import org.marsik.elshelves.api.entities.idresolvers.IsoSizePrefixDeserializer;
+import org.marsik.elshelves.api.entities.idresolvers.UnitIdResolver;
 
 import java.util.List;
+import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = UnitIdResolver.class)
 @EmberModelName("unit")
 public class UnitApiModel extends AbstractNamedEntityApiModel {
-	String symbol;
+    public UnitApiModel(UUID id) {
+        super(id);
+    }
+
+    public UnitApiModel() {
+    }
+
+    String symbol;
 	List<IsoSizePrefix> prefixes;
 
 	public String getSymbol() {

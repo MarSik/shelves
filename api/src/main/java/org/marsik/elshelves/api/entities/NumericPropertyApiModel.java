@@ -11,9 +11,18 @@ import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
 import org.marsik.elshelves.api.entities.idresolvers.IsoSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
 
+import java.util.UUID;
+
 @EmberModelName("property")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = NumericPropertyIdResolver.class)
 public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
+    public NumericPropertyApiModel(UUID id) {
+        super(id);
+    }
+
+    public NumericPropertyApiModel() {
+    }
+
     UnitApiModel unit;
     IsoSizePrefix base;
 

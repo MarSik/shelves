@@ -7,6 +7,6 @@ var attr = DS.attr,
 
 export default NamedBase.extend({
     base: belongsTo('isoprefix', {async: true}),
-    belongsTo: belongsTo("unit", {async: true}),
+    unit: belongsTo("unit", {async: true}),
     groups: hasMany('group', {async: true})
 });

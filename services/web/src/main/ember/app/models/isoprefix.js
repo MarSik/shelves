@@ -7,5 +7,8 @@ var attr = DS.attr,
 export default DS.Model.extend({
     prefix: attr('string'),
     power10: attr(),
-    units: hasMany('unit', {async: true})
+    units: hasMany('unit', {async: true}),
+    niceName: function () {
+        return this.get('id') + " [" + this.get('prefix') + "] = 10^" + this.get('power10');
+    }.property('id', 'prefix', 'power10')
 });

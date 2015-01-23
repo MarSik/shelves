@@ -1,0 +1,20 @@
+<section>
+    <h2>Create property</h2>
+    <form {{action 'createProperty' propertyName on='submit'}}>
+    {{input type='text' value=propertyName placeholder='project name'}}
+    <button type="submit">Create</button>
+    </form>
+
+    <h2>Properties</h2>
+
+    <ul class="small-block-grid-2 large-block-grid-4">
+        {{#each property in this}}
+        <li>
+            <aside>{{property.unit.symbol}}</aside>
+            {{#link-to 'properties.show' property}}{{property.name}}{{/link-to}}<br/>
+        </li>
+        {{/each}}
+    </ul>
+</section>
+
+{{outlet}}
