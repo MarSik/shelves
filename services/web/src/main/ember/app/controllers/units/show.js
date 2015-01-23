@@ -3,10 +3,20 @@ import Ember from 'ember';
 export default Ember.ObjectController.extend({
     actions: {
         enablePrefix: function (prefix) {
-            this.get('model.prefixes').pushObject(prefix);
+            var unit = this.get('model');
+            var prefixes = unit.get('prefixes');
+            prefixes.pushObject(prefix);
+            unit.save().catch(function (e) {
+                unit.rollback();
+            });
         },
         disablePrefix: function (prefix) {
-            this.get('model.prefixes').removeObject(prefix);
+            var unit = this.get('model');
+            var prefixes = unit.get('prefixes');
+            prefixes.removeObject(prefix);
+            unit.save().catch(function (e) {
+                unit.rollback();
+            });
         }
     },
     needs: "application",
