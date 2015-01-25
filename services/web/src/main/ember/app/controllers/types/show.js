@@ -31,6 +31,12 @@ export default Ember.Controller.extend({
             entity.save().catch(function (e) {
                 e.rollback();
             });
+        },
+        enableAddProperty: function () {
+            this.set('propertyAddingAllowed', true);
+        },
+        disableAddProperty: function () {
+            this.set('propertyAddingAllowed', false);
         }
     },
     needs: "application",
@@ -42,5 +48,10 @@ export default Ember.Controller.extend({
     }.property('propertyToAdd.unit.prefixes'),
 
     prefixSorting: ['power10'],
-    sortedUnitPrefixes: Ember.computed.sort('unitPrefixes', 'prefixSorting')
+    sortedUnitPrefixes: Ember.computed.sort('unitPrefixes', 'prefixSorting'),
+
+    propertyAddingAllowed: false,
+    addPropertyIncomplete: function () {
+        return Ember.isEmpty(this.get('propertyToAdd')) || Ember.isEmpty(this.get('propertyValueToAdd'));
+    }.property('propertyToAdd', 'propertyValueToAdd')
 });

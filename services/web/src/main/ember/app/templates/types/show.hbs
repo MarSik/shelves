@@ -16,6 +16,9 @@
     {{/each}}
 </table>
 
+{{#if propertyAddingAllowed}}
+<h3>Add property</h3>
+
 {{ember-selectize
 content=sortedProperties
 optionValuePath="content.id"
@@ -23,7 +26,7 @@ optionLabelPath="content.niceName"
 selection=propertyToAdd
 placeholder="Select a property" }}
 
-{{input type='text' value=propertyValueToAdd}}
+{{input type='text' value=propertyValueToAdd placeholder='Enter value'}}
 
 {{ember-selectize
 content=sortedUnitPrefixes
@@ -32,7 +35,11 @@ optionLabelPath="content.niceName"
 selection=propertyValuePrefixToAdd
 placeholder="Select an ISO prefix" }}
 
-<button {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+<button {{bind-attr disabled=addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+<button {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
+{{else}}
+    <button {{action 'enableAddProperty'}}>{{fa-icon 'plus'}} Add</button>
+{{/if}}
 
 <h3>Available lots</h3>
 <table>
@@ -49,7 +56,7 @@ placeholder="Select an ISO prefix" }}
         <th>Vat %</th>
     </tr>
     </thead>
-    {{#each lot in lots}}
+    {{#each lot in model.lots}}
     <tbody>
     <tr>
         <td>
