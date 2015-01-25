@@ -20,6 +20,17 @@ placeholder="Select a property" }}
 <h3>Types</h3>
 
 <table style="width: 100%;">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Vendor</th>
+        <th>Footprint</th>
+        <th>Available</th>
+        {{#each property in model.showProperties}}
+            <th>{{property.name}} [{{property.unit.symbol}}]</th>
+        {{/each}}
+    </tr>
+    </thead>
 {{#each type in model.types}}
     <tbody>
     <tr>
