@@ -22,5 +22,8 @@
     "handlebars": "2.0.0",
     "ember": ">= 1.8.1 < 2.0.0",
     "jquery": ">= 2.1.0"
+  },
+  "devDependencies": {
+    "webcamjs": "*"
   }
 }

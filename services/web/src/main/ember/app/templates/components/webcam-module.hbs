@@ -1,0 +1,18 @@
+<button class='small button' {{action 'startCamera'}}>{{fa-icon 'camera'}} Take picture with webcam</button>
+
+<section id="camera" {{bind-attr class=viewportClass}}>
+    {{yield}}
+
+<div id="cameraViewport" style="background-color: gray; width: 640px; height: 480px;"></div>
+
+{{#if enabled}}
+{{#if frozen}}
+    <button {{action 'unpauseCamera'}}>Unpause</button>
+    <button {{action 'cameraSnap'}}>Upload</button>
+{{else}}
+    <button {{action 'pauseCamera'}}>Pause</button>
+{{/if}}
+    <button {{action 'stopCamera'}}>Stop</button>
+{{/if}}
+
+</section>

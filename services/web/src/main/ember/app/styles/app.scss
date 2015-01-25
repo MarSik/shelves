@@ -158,3 +158,26 @@ button.qr-button {
   right: 1em;
   top: 1em;
 }
+
+#camera {
+  display: none;
+
+  &.enabled {
+    display: block;
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    width: 800px;
+    height: 600px;
+    z-index: 600;
+    background-color: white;
+
+    &:after {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 500;
+      background-color: black;
+    }
+  }
+}
