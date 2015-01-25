@@ -20,7 +20,7 @@ placeholder="Select a property" }}
 <h3>Types</h3>
 
 <table style="width: 100%;">
-{{#each type in types}}
+{{#each type in model.types}}
     <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{type.name}}{{/draggable-item}}</td>
