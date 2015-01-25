@@ -3,8 +3,10 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.NumericProperty;
+import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
 
     @Autowired
     EmberToNumericProperty emberToNumericProperty;
+
+    @Autowired
+    EmberToType emberToType;
 
 	@Override
 	public Group convert(PartGroupApiModel object, int nested, Map<UUID, Object> cache) {
@@ -47,6 +52,13 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
             model.setShowProperties(new THashSet<NumericProperty>());
             for (NumericPropertyApiModel p: object.getShowProperties()) {
                 model.getShowProperties().add(emberToNumericProperty.convert(p, 1, cache));
+            }
+        }
+
+        if (object.getTypes() != null) {
+            model.setTypes(new THashSet<Type>());
+            for (PartTypeApiModel t: object.getTypes()) {
+                model.getTypes().add(emberToType.convert(t, nested, cache));
             }
         }
 
