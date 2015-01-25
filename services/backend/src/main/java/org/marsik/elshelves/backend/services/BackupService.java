@@ -194,7 +194,7 @@ public class BackupService {
 
 		for (T i0: items) {
 			F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
-			relinkService.relink(i, currentUser, relinkCache);
+			relinkService.relink(i, currentUser, relinkCache, false);
 			i.setOwner(currentUser);
 			neo4jTemplate.save(i);
 		}

@@ -84,8 +84,8 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 		repository.delete(entity);
 	}
 
-    protected T updateEntity(T entity, T update) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
-		update = relinkService.relink(update);
+    protected T updateEntity(T entity, T update, User currentUser) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
+		update = relinkService.relink(update, currentUser, entity);
 
 		PropertyDescriptor[] properties;
 		try {
@@ -203,7 +203,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 			// The REST entity does not contain id during PUT, because that is
 			// provided by the URL
 			update.setUuid(uuid);
-            one = updateEntity(one, update);
+            one = updateEntity(one, update, currentUser);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }

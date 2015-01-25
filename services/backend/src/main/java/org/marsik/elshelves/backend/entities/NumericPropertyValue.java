@@ -7,7 +7,7 @@ import org.springframework.data.neo4j.annotation.StartNode;
 
 import javax.validation.constraints.NotNull;
 
-@RelationshipEntity
+@RelationshipEntity(type = "HAS_PROPERTY")
 public class NumericPropertyValue {
     @NotNull
     @StartNode

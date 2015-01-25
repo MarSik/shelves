@@ -52,11 +52,17 @@ public class RelinkService {
 	 */
 
 	protected <E extends OwnedEntity> E relink(E entity) {
-		return relink(entity, null, new THashMap<UUID, Object>());
+		return relink(entity, null, new THashMap<UUID, Object>(), false);
 	}
 
     protected <E extends OwnedEntity> E relink(E entity, User user) {
-        return relink(entity, user, new THashMap<UUID, Object>());
+        return relink(entity, user, new THashMap<UUID, Object>(), false);
+    }
+
+    protected <E extends OwnedEntity> E relink(E entity, User user, OwnedEntity updatedEntity) {
+        Map<UUID, Object> cache = new THashMap<>();
+        cache.put(updatedEntity.getUuid(), updatedEntity);
+        return relink(entity, user, cache, true);
     }
 
     protected <E extends Object> void relinkImpl(E entity, User user, Map<UUID, Object> known) {
@@ -91,12 +97,12 @@ public class RelinkService {
                                 known.put(v.getUuid(), v);
                                 // New entity
                             } else {
-                                relink(value, user, known);
+                                relink(value, user, known, false);
                             }
                             // Missing UUID meaning new entity
                         } else if (value.getUuid() == null) {
                             value.setUuid(uuidGenerator.generate());
-                            relink(value, user, known);
+                            relink(value, user, known, false);
                         }
                     }
                 } catch (InvocationTargetException | IllegalAccessException ex) {
@@ -117,7 +123,7 @@ public class RelinkService {
                             if (item.getUuid() == null) {
                                 newItems.add(item);
                                 item.setUuid(uuidGenerator.generate());
-                                relink(item, user, known);
+                                relink(item, user, known, false);
                                 // Connected existing entity
                             } else if (item.getNodeId() != null) {
                                 newItems.add(item);
@@ -131,7 +137,7 @@ public class RelinkService {
                                     // New entity
                                 } else {
                                     newItems.add(item);
-                                    relink(item, user, known);
+                                    relink(item, user, known, false);
                                 }
                             }
                         } else {
@@ -154,13 +160,15 @@ public class RelinkService {
         }
     }
 
-    protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, Object> known) {
-        if (entity.getUuid() != null
+    protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, Object> known, boolean ignoreCache) {
+        if (!ignoreCache
+                && entity.getUuid() != null
                 && known.containsKey(entity.getUuid())) {
             return entity;
         }
 
-        if (entity.getUuid() != null) {
+        if (!ignoreCache
+                && entity.getUuid() != null) {
             known.put(entity.getUuid(), entity);
         }
 

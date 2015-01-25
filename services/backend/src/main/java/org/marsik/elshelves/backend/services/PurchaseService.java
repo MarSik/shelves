@@ -44,12 +44,12 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 	}
 
 	@Override
-	protected Purchase updateEntity(Purchase entity, Purchase update) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
+	protected Purchase updateEntity(Purchase entity, Purchase update, User currentUser) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
 		if (!entity.canBeUpdated()) {
 			throw new OperationNotPermitted();
 		}
 
-		return super.updateEntity(entity, update);
+		return super.updateEntity(entity, update, currentUser);
 	}
 
     @Override
