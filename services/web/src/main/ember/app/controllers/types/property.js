@@ -6,6 +6,6 @@ export default Ember.ObjectController.extend({
     value: function() {
         var property = this.get('model');
         var entity = this.get('entity');
-        return entity.get('values.'+property.get('id'));
-    }.property('entity')
+        return entity.get('values.'+property.get('id')) + " " + property.get('base.prefix') + property.get('unit.symbol');
+    }.property('model.base.prefix', 'model.unit.symbol', 'entity')
 });

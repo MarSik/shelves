@@ -41,6 +41,7 @@ public class EmberToNamedObject {
 		}
 
         if (object.getProperties() != null) {
+            model.setProperties(new THashSet<NumericPropertyValue>());
             for (NumericPropertyApiModel pModel: object.getProperties()) {
                 NumericProperty p = emberToNumericProperty.convert(pModel, nested, cache);
                 NumericPropertyValue v = new NumericPropertyValue();
@@ -52,6 +53,7 @@ public class EmberToNamedObject {
                 } else {
                     v.setValue(0L);
                 }
+                model.getProperties().add(v);
             }
         }
 

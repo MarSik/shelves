@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';
 import ENV from '../config/environment';
+/* global $ */
 
 export default Ember.Controller.extend(LoginControllerMixin, {
     actions: {

@@ -59,6 +59,101 @@ public class RelinkService {
         return relink(entity, user, new THashMap<UUID, Object>());
     }
 
+    protected <E extends Object> void relinkImpl(E entity, User user, Map<UUID, Object> known) {
+        PropertyDescriptor[] properties;
+        try {
+            properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
+        } catch (IntrospectionException ex) {
+            ex.printStackTrace();
+            return;
+        }
+
+        for (PropertyDescriptor f: properties) {
+            Method getter = f.getReadMethod();
+            if (getter == null) {
+                continue;
+            }
+
+            // One-to-* relationship
+            if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
+                try {
+                    OwnedEntity value = (OwnedEntity) getter.invoke(entity);
+                    Method setter = f.getWriteMethod();
+
+                    if (value != null && setter != null) {
+                        // Potentially existing UUID but unconnected entity
+                        if (value.getUuid() != null && value.getNodeId() == null) {
+                            OwnedEntity v = getRelinked(value, known);
+                            // Entity does exist in DB, replace the reference with
+                            // the connected entity
+                            if (v != null) {
+                                setter.invoke(entity, v);
+                                known.put(v.getUuid(), v);
+                                // New entity
+                            } else {
+                                relink(value, user, known);
+                            }
+                            // Missing UUID meaning new entity
+                        } else if (value.getUuid() == null) {
+                            value.setUuid(uuidGenerator.generate());
+                            relink(value, user, known);
+                        }
+                    }
+                } catch (InvocationTargetException | IllegalAccessException ex) {
+                    ex.printStackTrace();
+                }
+
+                // Many-to-* relationship
+            } else if (Collection.class.isAssignableFrom(f.getPropertyType())) {
+                try {
+                    Collection<Object> newItems = new ArrayList<Object>();
+                    Collection<Object> items = (Collection<Object>)getter.invoke(entity);
+                    for (Object item0: items) {
+                        if (item0 instanceof OwnedEntity) {
+                            // OwnedEntity, relink
+                            OwnedEntity item = (OwnedEntity)item0;
+
+                            // New entity
+                            if (item.getUuid() == null) {
+                                newItems.add(item);
+                                item.setUuid(uuidGenerator.generate());
+                                relink(item, user, known);
+                                // Connected existing entity
+                            } else if (item.getNodeId() != null) {
+                                newItems.add(item);
+                                // Disconnected potentially existing entity
+                            } else {
+                                OwnedEntity v = getRelinked(item, known);
+                                // Entity known in the database, add the connected version to the list
+                                if (v != null) {
+                                    newItems.add(v);
+                                    known.put(v.getUuid(), v);
+                                    // New entity
+                                } else {
+                                    newItems.add(item);
+                                    relink(item, user, known);
+                                }
+                            }
+                        } else {
+                            // Not owned entity, probably relationship entity
+                            // keep it as it is and relink the internal properties
+                            newItems.add(item0);
+                            relinkImpl(item0, user, known);
+                        }
+                    }
+
+                    // Replace the references with the relinked ones using proper
+                    // add calls so the AspectJ mapping on linked entities updates
+                    // the database propery
+                    items.clear();
+                    items.addAll(newItems);
+                } catch (InvocationTargetException | IllegalAccessException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
     protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, Object> known) {
         if (entity.getUuid() != null
                 && known.containsKey(entity.getUuid())) {
@@ -69,95 +164,14 @@ public class RelinkService {
             known.put(entity.getUuid(), entity);
         }
 
-		PropertyDescriptor[] properties;
-		try {
-			properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
-		} catch (IntrospectionException ex) {
-			ex.printStackTrace();
-			return entity;
-		}
-
-		for (PropertyDescriptor f: properties) {
-			Method getter = f.getReadMethod();
-			if (getter == null) {
-				continue;
-			}
-
-            // One-to-* relationship
-			if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
-				try {
-					OwnedEntity value = (OwnedEntity) getter.invoke(entity);
-					Method setter = f.getWriteMethod();
-
-					if (value != null && setter != null) {
-                        // Potentially existing UUID but unconnected entity
-						if (value.getUuid() != null && value.getNodeId() == null) {
-							OwnedEntity v = getRelinked(value, known);
-                            // Entity does exist in DB, replace the reference with
-                            // the connected entity
-							if (v != null) {
-                                setter.invoke(entity, v);
-								known.put(v.getUuid(), v);
-                            // New entity
-                            } else {
-                                relink(value, user, known);
-                            }
-                        // Missing UUID meaning new entity
-						} else if (value.getUuid() == null) {
-                            value.setUuid(uuidGenerator.generate());
-                            relink(value, user, known);
-                        }
-					}
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-
-            // Many-to-* relationship
-			} else if (Collection.class.isAssignableFrom(f.getPropertyType())) {
-				try {
-					Collection<OwnedEntity> newItems = new ArrayList<OwnedEntity>();
-					Collection<OwnedEntity> items = (Collection<OwnedEntity>)getter.invoke(entity);
-					for (OwnedEntity item: items) {
-                        // New entity
-						if (item.getUuid() == null) {
-							newItems.add(item);
-                            item.setUuid(uuidGenerator.generate());
-							relink(item, user, known);
-                        // Connected existing entity
-						} else if(item.getNodeId() != null) {
-							newItems.add(item);
-                        // Disconnected potentially existing entity
-						} else {
-							OwnedEntity v = getRelinked(item, known);
-                            // Entity known in the database, add the connected version to the list
-                            if (v != null) {
-                                newItems.add(v);
-								known.put(v.getUuid(), v);
-                            // New entity
-                            } else {
-                                newItems.add(item);
-                                relink(item, user, known);
-                            }
-						}
-					}
-
-                    // Replace the references with the relinked ones using proper
-                    // add calls so the AspectJ mapping on linked entities updates
-                    // the database propery
-					items.clear();
-					items.addAll(newItems);
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
+        relinkImpl(entity, user, known);
 
         // Ensure the entity is properly owned
-		if (entity.getOwner() == null && user != null) {
-			entity.setOwner(user);
-		}
+        if (entity.getOwner() == null && user != null) {
+            entity.setOwner(user);
+        }
 
-		return entity;
+        return entity;
 	}
 
 }

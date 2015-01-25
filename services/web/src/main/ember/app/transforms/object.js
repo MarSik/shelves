@@ -3,8 +3,18 @@ import Ember from 'ember';
 
 export default DS.Transform.extend({
     serialize: function (value) {
-        var propertyNames = value.get('propertyNames') || [];
-        return Ember.isNone(value) ? {} : value.getProperties(propertyNames);
+        console.log("Serializing:");
+        console.log(value);
+
+        if (Ember.isNone(value)) {
+            console.log('None');
+            return  {};
+        }
+
+        var propertyNames = Ember.keys(value) || [];
+        console.log(propertyNames);
+
+        return value.getProperties(propertyNames);
     },
     deserialize: function (value) {
         var obj = Ember.Object.create();

@@ -2,9 +2,23 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
     actions: {
-        addProperty: function (entity, property, value) {
+        addProperty: function (entity, property, value, prefix) {
+            var normalizedValue = value;
+
+            if (Ember.isEmpty(prefix)) {
+            } else {
+                var prefixPower = prefix.get('power10');
+                var basePower = property.get('base.power10');
+                var multiplyPower = prefixPower - basePower;
+                normalizedValue = value * Math.pow(10, multiplyPower);
+            }
+
+            var propertyId = property.get('id');
             entity.get('properties').pushObject(property);
-            entity.get('values').set(property.get('id', value));
+
+            var values = entity.get('values');
+            values.set(propertyId, normalizedValue);
+
             var self = this;
             entity.save().catch(function (e) {
                 console.log(e);
@@ -13,5 +27,15 @@ export default Ember.Controller.extend({
         removeProperty: function (entity, property) {
             entity.get('properties').removeObject(property);
         }
-    }
+    },
+    needs: "application",
+    propertySorting: ['name'],
+    sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propertySorting'),
+
+    unitPrefixes: function () {
+        return this.get('propertyToAdd.unit.prefixes');
+    }.property('propertyToAdd.unit.prefixes'),
+
+    prefixSorting: ['power10'],
+    sortedUnitPrefixes: Ember.computed.sort('unitPrefixes', 'prefixSorting')
 });

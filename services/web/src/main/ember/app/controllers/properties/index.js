@@ -1,4 +1,5 @@
 import Ember from 'ember';
+/* global $ */
 
 export default Ember.ArrayController.extend({
     needs: "application",

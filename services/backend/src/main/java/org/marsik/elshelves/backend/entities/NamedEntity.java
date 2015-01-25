@@ -73,7 +73,7 @@ public class NamedEntity extends OwnedEntity {
 	}
 
     @PartOfUpdate
-    public Iterable<NumericPropertyValue> getProperties() {
+    public Set<NumericPropertyValue> getProperties() {
         return properties;
     }
 

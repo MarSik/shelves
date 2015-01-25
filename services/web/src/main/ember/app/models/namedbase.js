@@ -17,6 +17,6 @@ export default DS.Model.extend({
 
     value: function(property) {
         var id = property.get('id');
-        return values.get(id);
+        return this.get('values').get(id);
     }
 });

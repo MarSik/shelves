@@ -22,20 +22,20 @@ public class Unit extends NamedEntity {
     @RelatedTo(type = "OF_UNIT", direction = Direction.INCOMING)
     Iterable<NumericProperty> unitUses;
 
+    @PartOfUpdate
 	public String getSymbol() {
 		return symbol;
 	}
 
-	@PartOfUpdate
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
 
+    @PartOfUpdate
 	public IsoSizePrefix[] getPrefixes() {
 		return prefixes;
 	}
 
-	@PartOfUpdate
 	public void setPrefixes(IsoSizePrefix[] prefixes) {
 		this.prefixes = prefixes;
 	}
