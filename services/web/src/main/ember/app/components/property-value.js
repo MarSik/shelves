@@ -1,15 +1,19 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
-    needs: ['types/show'],
-    entity: Ember.computed.alias('controllers.types/show.model'),
+export default Ember.Component.extend({
+    // property
+    // entity
     value: function() {
-        var property = this.get('model');
+        var property = this.get('property');
         var entity = this.get('entity');
 
         // Base iso prefix exponent and value
         var base = property.get('base.power10');
         var baseValue = entity.get('values.'+property.get('id'));
+
+        if (Ember.isEmpty(baseValue)) {
+            return "—";
+        }
 
         // Nice value and prefix object
         var niceValue = baseValue;
@@ -45,5 +49,5 @@ export default Ember.ObjectController.extend({
         }
 
         return res;
-    }.property('model.base.content.prefix', 'model.base.content.power10', 'model.unit.content.symbol', 'entity', 'model.unit.content.prefixes', 'model.unit.content.prefixes.@each.power10', 'model.unit.content.prefixes.@each.prefix')
+    }.property('property.base.content.prefix', 'property.base.content.power10', 'property.unit.content.symbol', 'entity', 'property.unit.content.prefixes', 'property.unit.content.prefixes.@each.power10', 'property.unit.content.prefixes.@each.prefix')
 });

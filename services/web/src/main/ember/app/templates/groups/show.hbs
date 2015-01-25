@@ -27,6 +27,9 @@ placeholder="Select a property" }}
         <td>{{type.vendor}}</td>
         <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{#link-to 'types.show' type}}{{type.available}}{{/link-to}}</td>
+        {{#each property in model.showProperties}}
+            <td>{{property-value entity=type property=property}}</td>
+        {{/each}}
     </tr>
     <tr>
         <td colspan="4">{{type.summary}}</td>

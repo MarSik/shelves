@@ -3,10 +3,10 @@
 <h3>Additional properties</h3>
 
 <table>
-    {{#each property in model.properties itemController='types/property'}}
+    {{#each property in model.properties}}
         <tr>
-            <td>{{property.model.name}}</td>
-            <td>{{property.value}}</td>
+            <td>{{property.name}}</td>
+            <td>{{property-value entity=model property=property}}</td>
             <td>{{#confirm-button class='button remove' action='removeProperty' param=model param2=property.model}}{{fa-icon 'times'}}{{/confirm-button}}</td>
         </tr>
     {{/each}}
