@@ -1,6 +1,10 @@
 {{partial '_itemheader'}}
 
-<h3>URL</h3>
-{{#click-to-edit content=model field='content.url'}}<a {{bind-attr href=model.url}}>{{model.url}}</a>{{/click-to-edit}}
+<div class="row">
+    <section class="columns large-6 small-12">
+    <h3>URL</h3>
+    {{#click-to-edit content=model field='content.url'}}<a {{bind-attr href=model.url}}>{{model.url}}</a>{{/click-to-edit}}
+    </section>
+</div>
 
 {{outlet}}

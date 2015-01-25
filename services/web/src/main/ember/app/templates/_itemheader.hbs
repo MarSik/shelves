@@ -1,10 +1,19 @@
+<div class="row">
+<section class="title columns small-12">
 <h2>{{#click-to-edit content=model field='content.name'}}{{model.name}}{{/click-to-edit}}</h2>
+</section>
+</div>
 
-<p>{{#click-to-editarea content=model field='content.summary'}}{{model.summary}}{{/click-to-editarea}}</p>
+<div class="row">
+    <section class="description columns small-12 large-6">
+        <h3>Summary</h3>
+        <p>{{#click-to-editarea content=model field='content.summary'}}{{model.summary}}{{/click-to-editarea}}</p>
 
-<h3>Description</h3>
+        <h3>Description</h3>
 
 {{#click-to-editarea content=model field='content.description'}}{{model.description}}{{/click-to-editarea}}
+    </section>
+    <section class="attachments columns small-12 large-6">
 
 <h3>Attachments</h3>
 
@@ -19,3 +28,5 @@
 
 {{save-from-web action='download' entity=model}}
 {{upload-attachments entity=model uploadFinished='uploadFinished'}}
+</section>
+</div>

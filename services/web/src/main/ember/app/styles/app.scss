@@ -95,12 +95,7 @@ nav.qr {
 }
 
 .footprint-summary {
-  @extend .row;
-
   dl {
-    @extend .column;
-    @extend .small-3;
-
     dd, dt {
       display: block;
     }
@@ -156,4 +151,10 @@ h3 {
 
 table {
   width: 100%;
+}
+
+button.qr-button {
+  position: absolute;
+  right: 1em;
+  top: 1em;
 }

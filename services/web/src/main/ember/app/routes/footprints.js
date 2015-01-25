@@ -6,10 +6,5 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         createFootprint: function () {
             this.transitionTo('footprints.new');
         }
-    },
-    model: function () {
-        return this.store.filter('footprint', function (fp) {
-            return !fp.get('isNew');
-        });
     }
 });

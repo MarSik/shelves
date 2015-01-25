@@ -35,10 +35,10 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.APP.API_SERVER = 'http://localhost:8080';
-    ENV.APP.API_NAMESPACE = 'api/1';
+    //ENV.APP.API_NAMESPACE = 'api/1';
 
     ENV['simple-auth-oauth2'] = {
-      serverTokenEndpoint: ENV.APP.API_SERVER + '/' + ENV.APP.API_NAMESPACE + '/oauth/token',
+      serverTokenEndpoint: ENV.APP.API_SERVER + /*'/' + ENV.APP.API_NAMESPACE +*/ '/oauth/token',
       clientId: 'elshelves.js'
     }
   }

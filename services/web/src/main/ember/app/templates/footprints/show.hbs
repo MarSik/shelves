@@ -1,20 +1,26 @@
 {{partial '_itemheader'}}
 
-<div class="footprint-summary">
-    <dl>
-        <dt>{{fa-icon 'fa-square'}} Pads</dt>
-        <dd>{{#click-to-edit content=model field='content.pads'}}{{pads}}{{/click-to-edit}}</dd>
-    </dl>
-    <dl>
-        <dt>{{fa-icon 'fa-circle-o'}} Holes</dt>
-        <dd>{{#click-to-edit content=model field='content.holes'}}{{holes}}{{/click-to-edit}}</dd>
-    </dl>
-    <dl>
-        <dt>{{fa-icon 'fa-circle'}} NPTH</dt>
-        <dt>{{#click-to-edit content=model field='content.npth'}}{{npth}}{{/click-to-edit}}</dt>
-    </dl>
-    <dl>
-        <dt>{{fa-icon 'fa-bars'}} Pitch</dt>
-        <dt>{{#click-to-edit content=model field='content.pitch'}}{{pitch}}{{/click-to-edit}}</dt>
-    </dl>
+<div class="row">
+    <section class="footprint-summary small-12 large-6 columns">
+        <h3>Footprint information</h3>
+
+        <div class="row">
+            <dl class="small-3 columns">
+                <dt>{{fa-icon 'fa-square'}} Pads</dt>
+                <dd>{{#click-to-edit content=model field='content.pads'}}{{pads}}{{/click-to-edit}}</dd>
+            </dl>
+            <dl class="small-3 columns">
+                <dt>{{fa-icon 'fa-circle-o'}} Holes</dt>
+                <dd>{{#click-to-edit content=model field='content.holes'}}{{holes}}{{/click-to-edit}}</dd>
+            </dl>
+            <dl class="small-3 columns">
+                <dt>{{fa-icon 'fa-circle'}} NPTH</dt>
+                <dt>{{#click-to-edit content=model field='content.npth'}}{{npth}}{{/click-to-edit}}</dt>
+            </dl>
+            <dl class="small-3 columns">
+                <dt>{{fa-icon 'fa-bars'}} Pitch</dt>
+                <dt>{{#click-to-edit content=model field='content.pitch'}}{{pitch}}{{/click-to-edit}}</dt>
+            </dl>
+        </div>
+    </section>
 </div>

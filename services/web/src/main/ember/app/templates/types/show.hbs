@@ -1,5 +1,8 @@
 {{partial '_itemheader'}}
 
+<div class="row">
+<section class="meta columns large-6">
+
 <h3>Vendor</h3>
 
 {{#click-to-edit content=model field='content.vendor'}}{{model.vendor}}{{/click-to-edit}}
@@ -35,11 +38,21 @@ optionLabelPath="content.niceName"
 selection=propertyValuePrefixToAdd
 placeholder="Select an ISO prefix" }}
 
-<button {{bind-attr disabled=addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
-<button {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
+<button class='small button' {{bind-attr disabled=addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+<button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
 {{else}}
-    <button {{action 'enableAddProperty'}}>{{fa-icon 'plus'}} Add</button>
+    <button class='small button' {{action 'enableAddProperty'}}>{{fa-icon 'plus'}} Add</button>
 {{/if}}
+</section>
+
+<section class="list columns large-6">
+<h3>Groups</h3>
+
+<ul>
+    {{#each group in model.groups}}
+        <li>{{group.fullName}}</li>
+    {{/each}}
+</ul>
 
 <h3>Available lots</h3>
 <table>
@@ -94,5 +107,7 @@ placeholder="Select an ISO prefix" }}
     </tbody>
     {{/each}}
 </table>
+</section>
+</div>
 
-<button {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
+<button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>

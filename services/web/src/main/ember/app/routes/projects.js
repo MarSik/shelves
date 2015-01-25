@@ -40,12 +40,5 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             requirement.get('type').pushObject(type);
             requirement.save()
         }
-    },
-    model: function () {
-        if (this.get('currentModel')) {
-            return this.get('currentModel');
-        }
-
-        return this.store.find('project');
     }
 });
