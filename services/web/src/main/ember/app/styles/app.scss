@@ -129,3 +129,19 @@ button .edit, .button.edit {
     color: red;
   }
 }
+
+button .remove, .button.remove {
+  display: inline;
+
+  @include button(
+          rem-calc(3), //padding
+          red, // background
+          0, // no radius
+          false, // full width
+          false, // enabled
+          false //is-input
+  );
+
+  margin: 0;
+  color: white;
+}

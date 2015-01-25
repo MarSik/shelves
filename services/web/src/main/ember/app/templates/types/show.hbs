@@ -2,11 +2,15 @@
 
 <h3>Additional properties</h3>
 
-<ul class="small-block-grid-2 large-block-grid-6">
+<table>
     {{#each property in model.properties itemController='types/property'}}
-    <li>{{#confirm-button action='removeProperty' param=model param2=property.model}}{{property.model.name}}: {{property.value}}{{/confirm-button}}</li>
+        <tr>
+            <td>{{property.model.name}}</td>
+            <td>{{property.value}}</td>
+            <td>{{#confirm-button class='button remove' action='removeProperty' param=model param2=property.model}}{{fa-icon 'times'}}{{/confirm-button}}</td>
+        </tr>
     {{/each}}
-</ul>
+</table>
 
 {{ember-selectize
 content=sortedProperties

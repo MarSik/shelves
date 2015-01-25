@@ -21,11 +21,16 @@ export default Ember.Controller.extend({
 
             var self = this;
             entity.save().catch(function (e) {
-                console.log(e);
+                e.rollback();
             });
         },
         removeProperty: function (entity, property) {
             entity.get('properties').removeObject(property);
+            entity.get('values').set(property.get('id'), null);
+
+            entity.save().catch(function (e) {
+                e.rollback();
+            });
         }
     },
     needs: "application",
