@@ -21,5 +21,8 @@ export default Ember.Controller.extend({
     },
     needs: "application",
     propSorting: ['name'],
-    sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propSorting')
+    sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propSorting'),
+    typeColumns: function () {
+        return 4 + this.get('model.showProperties.length');
+    }.property('model.showProperties.size')
 });

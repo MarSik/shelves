@@ -32,7 +32,7 @@ placeholder="Select a property" }}
         {{/each}}
     </tr>
     <tr>
-        <td colspan="4">{{type.summary}}</td>
+        <td {{bind-attr colspan=typeColumns}}>{{type.summary}}</td>
     </tr>
     </tbody>
 {{/each}}
