@@ -27,7 +27,8 @@ public class DocumentAnalysisDoneService implements FileAnalysisDoneHandler {
 		d.setSize(size != null ? size : d.getSize());
 
 		if (metadata != null) {
-            if (metadata.get(Metadata.TITLE) != null) {
+            if (metadata.get(Metadata.TITLE) != null
+                    && !metadata.get(Metadata.TITLE).trim().isEmpty()) {
                 d.setName(metadata.get(Metadata.TITLE));
             }
 		}
