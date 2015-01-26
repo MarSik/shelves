@@ -65,7 +65,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 	protected abstract Iterable<T> getAllEntities(User currentUser);
 
     protected T getSingleEntity(UUID uuid) {
-        return repository.findBySchemaPropertyValue("uuid", uuid);
+        return repository.findBySchemaPropertyValue("uuid", uuid.toString());
     }
 
 	protected int conversionDepth() {
