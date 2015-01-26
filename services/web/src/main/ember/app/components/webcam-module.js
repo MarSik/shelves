@@ -20,7 +20,7 @@ export default Ember.Component.extend({
         },
         unpauseCamera: function () {
             Webcam.unfreeze();
-            this.set('frozen', true);
+            this.set('frozen', false);
         },
         cameraSnap: function () {
             var self = this;
@@ -30,14 +30,17 @@ export default Ember.Component.extend({
             var uploadUrl = this.get('url') + '?access_token=' + token + '&entity=' + entity.get('id');
 
             Webcam.snap( function(data_uri) {
+                self.set('uploading', true);
+
                 Webcam.upload( data_uri, uploadUrl, function(code, text) {
                     // Upload complete!
                     // 'code' will be the HTTP response code from the server, e.g. 200
                     // 'text' will be the raw response content
-                    self.sendAction('uploadFinished', text);
+                    self.sendAction('uploadFinished', JSON.parse(text));
+                    self.set('uploading', false);
                 });
             });
-            this.set('frozen', true);
+            this.set('frozen', false);
         },
         stopCamera: function () {
             Webcam.reset();
@@ -46,6 +49,7 @@ export default Ember.Component.extend({
     },
     frozen: false,
     enabled: false,
+    uploading: false,
     viewportClass: function () {
         if (this.get('enabled')) {
             return "enabled";

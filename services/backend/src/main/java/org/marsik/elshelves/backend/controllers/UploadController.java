@@ -48,6 +48,7 @@ public class UploadController {
 	@ResponseStatus(HttpStatus.OK)
 	public EmberModel upload(@CurrentUser User currentUser,
 					   @RequestParam("files[]") MultipartFile[] files,
+                       @RequestParam(value = "webcam", required = false) MultipartFile webcam,
 					   @RequestParam("entity") UUID entity,
                        HttpServletRequest request) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
 		NamedEntity e = null;
@@ -69,30 +70,38 @@ public class UploadController {
 		describesRecord.setId(entity);
 
 		for (MultipartFile file: files) {
-			DocumentApiModel d = new DocumentApiModel();
-			d.setName(file.getOriginalFilename());
-			d.setSize(file.getSize());
-			d.setContentType(file.getContentType());
-			d.setDescribes(new THashSet<DocumentApiModel.PolymorphicRecord>());
-			d.getDescribes().add(describesRecord);
-
-			d = documentService.create(d, currentUser);
-			if (d == null) {
-				continue;
-			}
-
-			try {
-				storageManager.upload(d.getId(), file, documentAnalysisDoneService);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				documentService.delete(d.getId(), currentUser);
-                continue;
-			}
-
-			documents.add(d);
+            processUpload(currentUser, documents, describesRecord, file);
 		}
+
+        if (webcam != null) {
+            processUpload(currentUser, documents, describesRecord, webcam);
+        }
 
 		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(DocumentApiModel.class, documents);
 		return b.build();
 	}
+
+    private void processUpload(User currentUser, Set<DocumentApiModel> documents, DocumentApiModel.PolymorphicRecord describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+        DocumentApiModel d = new DocumentApiModel();
+        d.setName(file.getOriginalFilename());
+        d.setSize(file.getSize());
+        d.setContentType(file.getContentType());
+        d.setDescribes(new THashSet<DocumentApiModel.PolymorphicRecord>());
+        d.getDescribes().add(describesRecord);
+
+        d = documentService.create(d, currentUser);
+        if (d == null) {
+            return;
+        }
+
+        try {
+            storageManager.upload(d.getId(), file, documentAnalysisDoneService);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            documentService.delete(d.getId(), currentUser);
+            return;
+        }
+
+        documents.add(d);
+    }
 }

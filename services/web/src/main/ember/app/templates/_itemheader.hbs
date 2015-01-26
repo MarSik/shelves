@@ -28,7 +28,11 @@
 
 {{save-from-web action='download' entity=model}}
 {{upload-attachments entity=model uploadFinished='uploadFinished'}}
-{{webcam-module uploadFinished=uploadFinished entity=model}}
+{{#webcam-module uploadFinished='uploadFinished' entity=model}}
+        <h3>Upload picture from webcam</h3>
+
+        <p>Press pause to freeze a picure and then upload to send it to server. Simply un-pause and try again if you do not like the paused image. Once you are done, click the stop button to exit.</p>
+{{/webcam-module}}
 </section>
 </div>
 
