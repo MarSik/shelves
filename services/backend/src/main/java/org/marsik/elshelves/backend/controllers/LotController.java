@@ -101,7 +101,9 @@ public class LotController {
 			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser, lot.getUsedBy());
 			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
             prepareSideloadedUpdates(result.getRequested(), currentUser, modelBuilder);
-            prepareSideloadedUpdates(result.getRemainder(), currentUser, modelBuilder);
+            if (result.getRemainder() != null) {
+                prepareSideloadedUpdates(result.getRemainder(), currentUser, modelBuilder);
+            }
 
             // Purchase specified - DELIVER operation
 		} else if (lot.getPrevious() == null
@@ -155,8 +157,10 @@ public class LotController {
 	}
 
     private void prepareSideloadedUpdates(LotApiModel result, User currentUser, EmberModel.Builder<LotApiModel> modelBuilder) throws PermissionDenied, EntityNotFound {
-        // Update the relevant objects
-        modelBuilder.sideLoad(purchaseService.get(result.getPurchase().getId(), currentUser));
+        // Sideload cache updates for all relevant objects
+        PurchaseApiModel purchaseApiModel = purchaseService.get(result.getPurchase().getId(), currentUser);
+        modelBuilder.sideLoad(purchaseApiModel);
+        modelBuilder.sideLoad(typeService.get(purchaseApiModel.getType().getId(), currentUser));
 
         if (result.getLocation() != null) {
             modelBuilder.sideLoad(boxService.get(result.getLocation().getId(), currentUser));

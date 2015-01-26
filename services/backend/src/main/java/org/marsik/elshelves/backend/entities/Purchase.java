@@ -26,7 +26,7 @@ public class Purchase extends LotBase {
 	@RelatedTo(type = "DELIVERED_AS")
 	Set<Lot> next;
 
-	@Query("START p=node({self}) MATCH (p) -[:DELIVERED_AS]-> () -[:NEXT*0..]-> (l:Lot) WHERE NOT (l) -[:NEXT]-> () RETURN l")
+	@Query("START p=node({self}) MATCH (p) -[:DELIVERED_AS]-> (:Lot) <-[:TAKEN_FROM*0..]- (l:Lot) WHERE NOT (l) <-[:TAKEN_FROM]- (:Lot) RETURN l")
 	Iterable<Lot> lots;
 
 	@PartOfUpdate

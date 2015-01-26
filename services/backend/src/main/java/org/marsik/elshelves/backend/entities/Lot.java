@@ -42,6 +42,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setAction(LotAction.SPLIT);
 		setUsedBy(previous.getUsedBy());
         setLocation(previous.getLocation());
+        setPurchase(previous.getPurchase());
 	}
 
     protected Lot(UUID uuid, User performedBy, Long count, Requirement requirement, Lot previous) {
@@ -59,6 +60,7 @@ public class Lot extends LotBase implements StickerCapable {
             setUsedBy(requirement);
         }
         setLocation(previous.getLocation());
+        setPurchase(previous.getPurchase());
     }
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
@@ -72,6 +74,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setNext(new ArrayList<Lot>());
 		setUsedBy(previous.getUsedBy());
         setLocation(previous.getLocation());
+        setPurchase(previous.getPurchase());
 	}
 
     protected Lot(UUID uuid, User performedBy, LotAction action, Requirement requirement, Lot previous) {
@@ -89,6 +92,7 @@ public class Lot extends LotBase implements StickerCapable {
             setUsedBy(requirement);
         }
         setLocation(previous.getLocation());
+        setPurchase(previous.getPurchase());
     }
 
 	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
@@ -101,6 +105,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setNext(new ArrayList<Lot>());
 		setUsedBy(requirement);
         setLocation(previous.getLocation());
+        setPurchase(previous.getPurchase());
 
 		if (requirement == null) {
 			setAction(LotAction.UNASSIGNED);
@@ -120,6 +125,7 @@ public class Lot extends LotBase implements StickerCapable {
         setUsedBy(previous.getUsedBy());
         setAction(LotAction.MOVED);
         setLocation(location);
+        setPurchase(previous.getPurchase());
     }
 
 	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
@@ -222,7 +228,7 @@ public class Lot extends LotBase implements StickerCapable {
             count = getCount();
         }
 
-		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, this);
+		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, requirement, this);
 
         // No remainder..
         if (getCount() == count) {
@@ -296,17 +302,20 @@ public class Lot extends LotBase implements StickerCapable {
 	}
 
 	public boolean isCanBeSoldered() {
-		return getUsedBy() != null
+		return isValid()
+                && getUsedBy() != null
 				&& !getAction().equals(LotAction.DESTROYED)
 				&& !getAction().equals(LotAction.SOLDERED);
 	}
 
 	public boolean isCanBeUnsoldered() {
-		return getAction().equals(LotAction.SOLDERED);
+		return isValid()
+                && getAction().equals(LotAction.SOLDERED);
 	}
 
 	public boolean isCanBeAssigned() {
-		return getUsedBy() == null
+		return isValid()
+                && getUsedBy() == null
 				&& !getAction().equals(LotAction.DESTROYED);
 	}
 
@@ -315,11 +324,13 @@ public class Lot extends LotBase implements StickerCapable {
 	}
 
     public boolean isCanBeSplit() {
-        return EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
+        return isValid()
+                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
     }
 
     public boolean isCanBeMoved() {
-        return isCanBeSoldered();
+        return isValid()
+                && isCanBeSoldered();
     }
 
     /**
