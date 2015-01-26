@@ -16,8 +16,10 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.BoxService;
 import org.marsik.elshelves.backend.services.LotService;
 import org.marsik.elshelves.backend.services.PurchaseService;
+import org.marsik.elshelves.backend.services.RequirementService;
 import org.marsik.elshelves.backend.services.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,12 @@ public class LotController {
 
 	@Autowired
 	TypeService typeService;
+
+    @Autowired
+    BoxService boxService;
+
+    @Autowired
+    RequirementService requirementService;
 
 	@ResponseBody
 	@RequestMapping
@@ -92,37 +100,52 @@ public class LotController {
                 && lot.getCount() > 0) {
 			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser, lot.getUsedBy());
 			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
-		// Purchase specified - DELIVER operation
+            prepareSideloadedUpdates(result.getRequested(), currentUser, modelBuilder);
+            prepareSideloadedUpdates(result.getRemainder(), currentUser, modelBuilder);
+
+            // Purchase specified - DELIVER operation
 		} else if (lot.getPrevious() == null
 				&& lot.getPurchase() != null
 				&& lot.getLocation() != null
 				&& lot.getCount() > 0) {
             LotApiModel result = lotService.delivery(lot, currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
         // Location and previous specified, but no purchase - MOVE operation
         } else if (lot.getLocation() != null) {
             LotApiModel result = lotService.move(lot.getPrevious(), lot.getLocation(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
-        // Unassigned
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
+            // Unassigned
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.UNASSIGNED)) {
             LotApiModel result = lotService.unassign(lot.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
-        // Unsolder
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
+            // Unsolder
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.UNSOLDERED)) {
             LotApiModel result = lotService.unsolder(lot.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
-        // Solder and possibly assign as well
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
+            // Solder and possibly assign as well
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.SOLDERED)) {
             LotApiModel result = lotService.solder(lot.getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
         // Assign
         } else if (lot.getPrevious() != null
                 && lot.getUsedBy() != null) {
             LotApiModel result = lotService.assign(lot.getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
+            prepareSideloadedUpdates(result, currentUser, modelBuilder);
+
         // Invalid combination of arguments
 		} else {
 			throw new InvalidRequest();
@@ -131,7 +154,24 @@ public class LotController {
 		return modelBuilder.build();
 	}
 
-	@Transactional
+    private void prepareSideloadedUpdates(LotApiModel result, User currentUser, EmberModel.Builder<LotApiModel> modelBuilder) throws PermissionDenied, EntityNotFound {
+        // Update the relevant objects
+        modelBuilder.sideLoad(purchaseService.get(result.getPurchase().getId(), currentUser));
+
+        if (result.getLocation() != null) {
+            modelBuilder.sideLoad(boxService.get(result.getLocation().getId(), currentUser));
+        }
+
+        if (result.getPrevious() != null) {
+            modelBuilder.sideLoad(lotService.get(result.getPrevious().getId(), currentUser));
+        }
+
+        if (result.getUsedBy() != null) {
+            modelBuilder.sideLoad(requirementService.get(result.getUsedBy().getId(), currentUser));
+        }
+    }
+
+    @Transactional
 	@RequestMapping(value = "/{uuid}/qr", produces = "image/png")
 	public void generateQr(HttpServletResponse response,
 						   @CurrentUser User currentUser,
