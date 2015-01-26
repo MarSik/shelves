@@ -14,7 +14,7 @@
         <tr>
             <td>{{property.name}}</td>
             <td>{{property-value entity=model property=property}}</td>
-            <td>{{#confirm-button class='button remove' action='removeProperty' param=model param2=property.model}}{{fa-icon 'times'}}{{/confirm-button}}</td>
+            <td>{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}</td>
         </tr>
     {{/each}}
 </table>
