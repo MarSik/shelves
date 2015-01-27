@@ -56,8 +56,7 @@ placeholder="Select a type" }}
 
 {{outlet}}
 
-<div id="addAlternative" class="reveal-modal" data-reveal>
-    <h2>Add alternative</h2>
+{{#modal-dialog condition=showAlternativeDialog title="Add alternative"}}
     <form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>
 
     {{ember-selectize
@@ -70,14 +69,10 @@ placeholder="Select a type" }}
 
     <button type="submit">{{fa-icon 'plus'}} Add</button>
     </form>
-
-    <a class="close-reveal-modal">&#215;</a>
-</div>
+{{/modal-dialog}}
 
 
-<div id="addLot" class="reveal-modal" data-reveal>
-    <h2>Add lot</h2>
-
+{{#modal-dialog condition=showAssignDialog title="Add lot"}}
     <table>
     {{#each lot in assignableLots}}
         <tr>
@@ -92,6 +87,4 @@ placeholder="Select a type" }}
         </tr>
     {{/each}}
     </table>
-
-    <a class="close-reveal-modal">&#215;</a>
-</div>
+{{/modal-dialog}}

@@ -6,15 +6,15 @@ export default Ember.Controller.extend({
     actions: {
         showAddAlternative: function (req) {
             this.set('lastRequirement', req);
-            $("#addAlternative").foundation("reveal", "open");
+            this.set('showAlternativeDialog', true);
         },
         addAlternativePart: function () {
-            $("#addAlternative").foundation("reveal", "close");
+            this.set('showAlternativeDialog', false);
             return true;
         },
         assignLot: function (req) {
             this.set('assignLotToRequirement', req);
-            $("#addLot").foundation("reveal", "open");
+            this.set('showAssignDialog', true);
         },
         performAssignment: function (req, lot, count) {
             var newLot = this.store.createRecord('lot', {
@@ -31,12 +31,12 @@ export default Ember.Controller.extend({
                 self.growl.error(e);
             }).then(function (d) {
                 if (req.get('missing') <= 0) {
-                    $("#addLot").foundation("reveal", "close");
+                    self.set('showAssignDialog', false);
                 }
             });
         },
         closeAssignment: function () {
-            $("#addLot").foundation("reveal", "close");
+            this.set('showAssignDialog', false);
         },
         unassignLot: function (lot) {
             var newLot = this.store.createRecord('lot', {
