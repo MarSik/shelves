@@ -1,0 +1,12 @@
+{{#if condition}}
+<div class="overlay" {{action 'close'}}></div>
+<div class="modal-window">
+
+    <h2>{{title}}</h2>
+    <div class="modal-content">
+{{yield}}
+    </div>
+
+<a class="close-modal" {{action 'close'}}>&#215;</a>
+</div>
+{{/if}}
