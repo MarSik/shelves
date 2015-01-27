@@ -9,7 +9,7 @@
         <td></td>
         <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
             <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
-            <button {{action 'assignLot' r}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>
+            {{#if r.missing}}<button {{action 'assignLot' r}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
     </tr>
     {{#each type in r.type}}
