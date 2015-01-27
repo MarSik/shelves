@@ -83,7 +83,7 @@ placeholder="Select an ISO prefix" }}
             {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
             {{/if}}
             {{#if lot.canBeUnsoldered}}
-            {{fa-icon 'download-alt'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
+            {{fa-icon 'check-square'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
             {{/if}}
         </td>
     </tr>
