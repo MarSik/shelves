@@ -199,6 +199,10 @@ button.qr-button {
   z-index: 1000;
 
   transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
 
   border-radius: 0.5rem;
   background-color: #FFF;
