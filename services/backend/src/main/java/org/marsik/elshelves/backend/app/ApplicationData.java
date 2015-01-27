@@ -23,6 +23,8 @@ import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.data.neo4j.aspects.config.Neo4jAspectConfiguration;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @EnableNeo4jRepositories("org.marsik.elshelves.backend.repositories")
@@ -78,5 +80,10 @@ public class ApplicationData extends Neo4jAspectConfiguration {
         ConverterRegistry converterRegistry = (ConverterRegistry) super.neo4jConversionService();
         MyConversionServiceConverters.registerConverters(converterRegistry);
         return (ConversionService) converterRegistry;
+    }
+
+    @Bean
+    Validator beanValidation() {
+        return new LocalValidatorFactoryBean();
     }
 }

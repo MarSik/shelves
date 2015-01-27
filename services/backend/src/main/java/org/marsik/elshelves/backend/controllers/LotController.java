@@ -97,6 +97,7 @@ public class LotController {
 		if (lot.getPrevious() != null
 				&& lot.getPurchase() == null
                 && lot.getLocation() == null
+                && lot.getCount() != null
                 && lot.getCount() > 0) {
 			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser, lot.getUsedBy());
 			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
@@ -109,6 +110,7 @@ public class LotController {
 		} else if (lot.getPrevious() == null
 				&& lot.getPurchase() != null
 				&& lot.getLocation() != null
+                && lot.getCount() != null
 				&& lot.getCount() > 0) {
             LotApiModel result = lotService.delivery(lot, currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
@@ -116,35 +118,35 @@ public class LotController {
 
         // Location and previous specified, but no purchase - MOVE operation
         } else if (lot.getLocation() != null) {
-            LotApiModel result = lotService.move(lot.getPrevious(), lot.getLocation(), currentUser);
+            LotApiModel result = lotService.move(lot.getPrevious().getId(), lot.getLocation(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
             // Unassigned
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.UNASSIGNED)) {
-            LotApiModel result = lotService.unassign(lot.getId(), currentUser);
+            LotApiModel result = lotService.unassign(lot.getPrevious().getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
             // Unsolder
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.UNSOLDERED)) {
-            LotApiModel result = lotService.unsolder(lot.getId(), currentUser);
+            LotApiModel result = lotService.unsolder(lot.getPrevious().getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
             // Solder and possibly assign as well
         } else if (lot.getPrevious() != null
                 && lot.getAction().equals(LotAction.SOLDERED)) {
-            LotApiModel result = lotService.solder(lot.getId(), currentUser, lot.getUsedBy());
+            LotApiModel result = lotService.solder(lot.getPrevious().getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
         // Assign
         } else if (lot.getPrevious() != null
                 && lot.getUsedBy() != null) {
-            LotApiModel result = lotService.assign(lot.getId(), currentUser, lot.getUsedBy());
+            LotApiModel result = lotService.assign(lot.getPrevious().getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
@@ -166,12 +168,23 @@ public class LotController {
             modelBuilder.sideLoad(boxService.get(result.getLocation().getId(), currentUser));
         }
 
-        if (result.getPrevious() != null) {
-            modelBuilder.sideLoad(lotService.get(result.getPrevious().getId(), currentUser));
-        }
-
         if (result.getUsedBy() != null) {
             modelBuilder.sideLoad(requirementService.get(result.getUsedBy().getId(), currentUser));
+        }
+
+        /* Update the cache for items that might have lost the entity - box and requirement */
+        if (result.getPrevious() != null) {
+            LotApiModel previous = lotService.get(result.getPrevious().getId(), currentUser);
+            modelBuilder.sideLoad(previous);
+            if (previous.getUsedBy() != null
+                    && !previous.getUsedBy().equals(result.getUsedBy())) {
+                modelBuilder.sideLoad(requirementService.get(previous.getUsedBy().getId(), currentUser));
+            }
+
+            if (previous.getLocation() != null
+                    && !previous.getLocation().equals(result.getLocation())) {
+                modelBuilder.sideLoad(boxService.get(previous.getLocation().getId(), currentUser));
+            }
         }
     }
 

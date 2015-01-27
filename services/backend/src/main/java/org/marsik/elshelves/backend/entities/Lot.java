@@ -53,11 +53,12 @@ public class Lot extends LotBase implements StickerCapable {
         setOwner(previous.getOwner());
         setCreated(new Date());
         setNext(new ArrayList<Lot>());
-        setAction(LotAction.SPLIT);
         if (requirement == null) {
             setUsedBy(previous.getUsedBy());
+            setAction(LotAction.SPLIT);
         } else {
             setUsedBy(requirement);
+            setAction(LotAction.ASSIGNED);
         }
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
@@ -68,7 +69,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setPrevious(previous);
 		setPerformedBy(performedBy);
 		setUuid(uuid);
-		setCount(previous.count);
+		setCount(previous.getCount());
 		setOwner(previous.getOwner());
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
@@ -82,7 +83,7 @@ public class Lot extends LotBase implements StickerCapable {
         setPrevious(previous);
         setPerformedBy(performedBy);
         setUuid(uuid);
-        setCount(previous.count);
+        setCount(previous.getCount());
         setOwner(previous.getOwner());
         setCreated(new Date());
         setNext(new ArrayList<Lot>());
@@ -99,7 +100,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setPrevious(previous);
 		setPerformedBy(performedBy);
 		setUuid(uuid);
-		setCount(previous.count);
+		setCount(previous.getCount());
 		setOwner(previous.getOwner());
 		setCreated(new Date());
 		setNext(new ArrayList<Lot>());
@@ -118,7 +119,7 @@ public class Lot extends LotBase implements StickerCapable {
         setPrevious(previous);
         setPerformedBy(performedBy);
         setUuid(uuid);
-        setCount(previous.count);
+        setCount(previous.getCount());
         setOwner(previous.getOwner());
         setCreated(new Date());
         setNext(new ArrayList<Lot>());
@@ -325,7 +326,7 @@ public class Lot extends LotBase implements StickerCapable {
 
     public boolean isCanBeSplit() {
         return isValid()
-                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY).contains(getAction());
+                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED).contains(getAction());
     }
 
     public boolean isCanBeMoved() {

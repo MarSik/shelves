@@ -1,0 +1,7 @@
+{{#if editing}}
+{{input type='text' value=value class='lotCount'}}
+<button class="primary button" {{action 'saveEdit'}}>save</button>
+<button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
+{{else}}
+<button class="button tiny" {{action 'startEdit'}}>{{yield}}</button>
+{{/if}}

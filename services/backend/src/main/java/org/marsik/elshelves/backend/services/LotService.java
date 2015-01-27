@@ -101,9 +101,9 @@ public class LotService {
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
-    public LotApiModel move(LotApiModel previous, BoxApiModel location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+    public LotApiModel move(UUID previous, BoxApiModel location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
         Box location = boxRepository.findByUuid(location0.getId());
-        Lot lot0 = lotRepository.findByUuid(previous.getId());
+        Lot lot0 = lotRepository.findByUuid(previous);
 
         if (lot0 == null || location == null) {
             throw new EntityNotFound();
@@ -141,7 +141,8 @@ public class LotService {
             throw new PermissionDenied();
         }
 
-        if (!lot.isCanBeSplit()
+        if (count <= 0
+                || (count < lot.getCount() && !lot.isCanBeSplit())
                 || (requirement != null && !lot.isCanBeAssigned())) {
             throw new OperationNotPermitted();
         }

@@ -12,8 +12,7 @@ export default Ember.Controller.extend({
             $("#addAlternative").foundation("reveal", "close");
             return true;
         },
-        assignLot: function (req, type) {
-            this.set('assignLotFromType', type);
+        assignLot: function (req) {
             this.set('assignLotToRequirement', req);
             $("#addLot").foundation("reveal", "open");
         },
@@ -38,6 +37,48 @@ export default Ember.Controller.extend({
         },
         closeAssignment: function () {
             $("#addLot").foundation("reveal", "close");
+        },
+        unassignLot: function (lot) {
+            var newLot = this.store.createRecord('lot', {
+                previous: lot,
+                action: "UNASSIGNED"
+            });
+
+            var self = this;
+
+            newLot.save().catch(function (e) {
+                newLot.destroy();
+                lot.rollback();
+                self.growl.error(e);
+            });
+        },
+        solderLot: function (lot) {
+            var newLot = this.store.createRecord('lot', {
+                previous: lot,
+                action: "SOLDERED"
+            });
+
+            var self = this;
+
+            newLot.save().catch(function (e) {
+                newLot.destroy();
+                lot.rollback();
+                self.growl.error(e);
+            });
+        },
+        unsolderLot: function (lot) {
+            var newLot = this.store.createRecord('lot', {
+                previous: lot,
+                action: "UNSOLDERED"
+            });
+
+            var self = this;
+
+            newLot.save().catch(function (e) {
+                newLot.destroy();
+                lot.rollback();
+                self.growl.error(e);
+            });
         }
     },
     typeSorting: ['name'],
@@ -51,21 +92,30 @@ export default Ember.Controller.extend({
     }.property('requiredType', 'requiredCount'),
 
     assignLotToRequirement: null,
-    assignLotFromType: null,
-    assignableLots: function () {
-        var type = this.get('assignLotFromType');
-        if (Ember.isEmpty(type)) {
-            return [];
+    candidateLots: function () {
+        var req = this.get('assignLotToRequirement');
+
+        console.log('Recomputing available parts');
+
+        var usable = Ember.A();
+
+        if (Ember.isEmpty(req)) {
+            return usable;
         }
 
-        var usable = [];
-
-        type.get('lots').forEach(function (lot) {
-            if (lot.get('canBeAssigned')) {
+        req.get('type').forEach(function (type) {
+            console.log('type:');
+            console.log(type);
+            type.get('lots').forEach(function (lot) {
+                console.log(lot);
                 usable.pushObject(lot);
-            }
+            });
         });
 
+        console.log(usable);
+
         return usable;
-    }.property('assignLotFromType', 'assignLotFromType.lots.@each.canBeAssigned')
+    }.property('assignLotToRequirement.type.@each.lots'),
+
+    assignableLots: Ember.computed.filterBy('candidateLots', 'canBeAssigned', true)
 });
