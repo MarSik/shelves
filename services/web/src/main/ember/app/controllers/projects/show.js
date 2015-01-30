@@ -103,12 +103,16 @@ export default Ember.Controller.extend({
             return usable;
         }
 
-        req.get('type').forEach(function (type) {
-            console.log('type:');
-            console.log(type);
-            type.get('lots').forEach(function (lot) {
-                console.log(lot);
-                usable.pushObject(lot);
+        req.get('type').then(function (l) {
+            l.forEach(function (type) {
+                console.log('type:');
+                console.log(type);
+                type.get('lots').then(function (ll) {
+                    ll.forEach(function (lot) {
+                        console.log(lot);
+                        usable.pushObject(lot);
+                    });
+                });
             });
         });
 
