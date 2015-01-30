@@ -161,29 +161,29 @@ public class LotController {
     private void prepareSideloadedUpdates(LotApiModel result, User currentUser, EmberModel.Builder<LotApiModel> modelBuilder) throws PermissionDenied, EntityNotFound {
         // Sideload cache updates for all relevant objects
         PurchaseApiModel purchaseApiModel = purchaseService.get(result.getPurchase().getId(), currentUser);
-        modelBuilder.sideLoad(purchaseApiModel);
-        modelBuilder.sideLoad(typeService.get(purchaseApiModel.getType().getId(), currentUser));
+        modelBuilder.purge(purchaseApiModel);
+        modelBuilder.purge(typeService.get(purchaseApiModel.getType().getId(), currentUser));
 
         if (result.getLocation() != null) {
-            modelBuilder.sideLoad(boxService.get(result.getLocation().getId(), currentUser));
+            modelBuilder.purge(boxService.get(result.getLocation().getId(), currentUser));
         }
 
         if (result.getUsedBy() != null) {
-            modelBuilder.sideLoad(requirementService.get(result.getUsedBy().getId(), currentUser));
+            modelBuilder.purge(requirementService.get(result.getUsedBy().getId(), currentUser));
         }
 
         /* Update the cache for items that might have lost the entity - box and requirement */
         if (result.getPrevious() != null) {
             LotApiModel previous = lotService.get(result.getPrevious().getId(), currentUser);
-            modelBuilder.sideLoad(previous);
+            modelBuilder.purge(previous);
             if (previous.getUsedBy() != null
                     && !previous.getUsedBy().equals(result.getUsedBy())) {
-                modelBuilder.sideLoad(requirementService.get(previous.getUsedBy().getId(), currentUser));
+                modelBuilder.purge(requirementService.get(previous.getUsedBy().getId(), currentUser));
             }
 
             if (previous.getLocation() != null
                     && !previous.getLocation().equals(result.getLocation())) {
-                modelBuilder.sideLoad(boxService.get(previous.getLocation().getId(), currentUser));
+                modelBuilder.purge(boxService.get(previous.getLocation().getId(), currentUser));
             }
         }
     }
