@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import NamedBase from './namedbase';
 
@@ -7,7 +8,7 @@ var attr = DS.attr,
 
 export default NamedBase.extend({
     symbol: attr('string'),
-    base: belongsTo('isoprefix', {async: true}),
+    base: belongsTo('siprefix', {async: true}),
     unit: belongsTo("unit", {async: true}),
 
     niceName: function () {

@@ -31,8 +31,8 @@ export default Ember.ArrayController.extend({
     createDisabled: function() {
         return Ember.isEmpty(this.get('propertyName')) || Ember.isEmpty(this.get('propertyUnit')) || Ember.isEmpty(this.get('propertyBase'));
     }.property('propertyName', 'propertyUnit', 'propertyBase'),
-    prefixSorting: ['power10'],
-    sortedPrefixes: Ember.computed.sort('controllers.application.availableIsoPrefixes', 'prefixSorting'),
+    prefixSorting: ['base', 'power'],
+    sortedPrefixes: Ember.computed.sort('controllers.application.availableSiPrefixes', 'prefixSorting'),
     unitSorting: ['name'],
     sortedUnits: Ember.computed.sort('controllers.application.availableUnits', 'unitSorting')
 });

@@ -10,9 +10,9 @@
     {{#each prefix in sortedPrefixes itemController='properties/unit'}}
     <li>
         {{#if prefix.isEnabled}}
-        <button {{action 'disablePrefix' prefix.model}} class="button tiny alert">{{prefix.id}} [{{prefix.prefix}}] &ndash; 10<sup>{{prefix.power10}}</sup></button>
+        <button {{action 'disablePrefix' prefix.model}} class="button tiny alert">{{prefix.id}} [{{prefix.prefix}}] &ndash; {{prefix.base}}<sup>{{prefix.power}}</sup></button>
         {{else}}
-        <button {{action 'enablePrefix' prefix.model}} class="button tiny secondary">{{prefix.id}} [{{prefix.prefix}}] &ndash; 10<sup>{{prefix.power10}}</sup></button>
+        <button {{action 'enablePrefix' prefix.model}} class="button tiny secondary">{{prefix.id}} [{{prefix.prefix}}] &ndash; {{prefix.base}}<sup>{{prefix.power}}</sup></button>
         {{/if}}
     </li>
     {{/each}}

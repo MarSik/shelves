@@ -1,7 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
-import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
+import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -22,7 +22,7 @@ public class NumericProperty extends NamedEntity {
      * The value is scaled to base units.
      */
     @NotNull
-    IsoSizePrefix base;
+    SiPrefix base;
 
     String symbol;
 
@@ -39,11 +39,11 @@ public class NumericProperty extends NamedEntity {
     }
 
     @PartOfUpdate
-    public IsoSizePrefix getBase() {
+    public SiPrefix getBase() {
         return base;
     }
 
-    public void setBase(IsoSizePrefix base) {
+    public void setBase(SiPrefix base) {
         this.base = base;
     }
 

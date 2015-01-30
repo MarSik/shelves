@@ -1,7 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.UnitApiModel;
-import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
+import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class EmberToUnit implements CachingConverter<UnitApiModel, Unit, UUID> {
 		model.setSymbol(object.getSymbol());
 
 		if (object.getPrefixes() != null) {
-			IsoSizePrefix[] prefixArray = new IsoSizePrefix[object.getPrefixes().size()];
+			SiPrefix[] prefixArray = new SiPrefix[object.getPrefixes().size()];
 			object.getPrefixes().toArray(prefixArray);
 			model.setPrefixes(prefixArray);
 		}

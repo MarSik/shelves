@@ -1,7 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.marsik.elshelves.api.entities.UnitApiModel;
-import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
+import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -17,7 +17,7 @@ public class Unit extends NamedEntity {
 	String symbol;
 
     @NotNull
-	IsoSizePrefix[] prefixes;
+	SiPrefix[] prefixes;
 
     @RelatedTo(type = "OF_UNIT", direction = Direction.INCOMING)
     Iterable<NumericProperty> unitUses;
@@ -32,11 +32,11 @@ public class Unit extends NamedEntity {
 	}
 
     @PartOfUpdate
-	public IsoSizePrefix[] getPrefixes() {
+	public SiPrefix[] getPrefixes() {
 		return prefixes;
 	}
 
-	public void setPrefixes(IsoSizePrefix[] prefixes) {
+	public void setPrefixes(SiPrefix[] prefixes) {
 		this.prefixes = prefixes;
 	}
 

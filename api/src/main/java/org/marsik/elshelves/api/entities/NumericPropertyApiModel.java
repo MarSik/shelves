@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.marsik.elshelves.api.ember.EmberModelName;
-import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
-import org.marsik.elshelves.api.entities.idresolvers.IsoSizePrefixDeserializer;
+import org.marsik.elshelves.api.entities.fields.SiPrefix;
+import org.marsik.elshelves.api.entities.idresolvers.SiSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
 
 import javax.validation.constraints.NotNull;
@@ -30,7 +30,7 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     UnitApiModel unit;
 
     @NotNull
-    IsoSizePrefix base;
+    SiPrefix base;
 
     @JsonIdentityReference(alwaysAsId = true)
     public UnitApiModel getUnit() {
@@ -42,12 +42,12 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     }
 
     @JsonSerialize(using = ToStringSerializer.class)
-    public IsoSizePrefix getBase() {
+    public SiPrefix getBase() {
         return base;
     }
 
-    @JsonDeserialize(using = IsoSizePrefixDeserializer.class)
-    public void setBase(IsoSizePrefix base) {
+    @JsonDeserialize(using = SiSizePrefixDeserializer.class)
+    public void setBase(SiPrefix base) {
         this.base = base;
     }
 

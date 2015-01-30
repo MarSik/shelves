@@ -14,7 +14,7 @@
         <tr>
             <td>{{property.name}}</td>
             <td>{{property-value entity=model property=property}}</td>
-            <td>{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}</td>
+            <td width="5ex">{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}</td>
         </tr>
     {{/each}}
 </table>
@@ -36,7 +36,7 @@ content=sortedUnitPrefixes
 optionValuePath="content.id"
 optionLabelPath="content.niceName"
 selection=propertyValuePrefixToAdd
-placeholder="Select an ISO prefix" }}
+placeholder="Select an SI prefix" }}
 
 <button class='small button' {{bind-attr disabled=addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
 <button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>

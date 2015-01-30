@@ -1,14 +1,13 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.marsik.elshelves.api.ember.EmberModelName;
-import org.marsik.elshelves.api.entities.fields.IsoSizePrefix;
-import org.marsik.elshelves.api.entities.idresolvers.IsoSizePrefixDeserializer;
+import org.marsik.elshelves.api.entities.fields.SiPrefix;
+import org.marsik.elshelves.api.entities.idresolvers.SiSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.UnitIdResolver;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class UnitApiModel extends AbstractNamedEntityApiModel {
     }
 
     String symbol;
-	List<IsoSizePrefix> prefixes;
+	List<SiPrefix> prefixes;
 
 	public String getSymbol() {
 		return symbol;
@@ -36,12 +35,12 @@ public class UnitApiModel extends AbstractNamedEntityApiModel {
 	}
 
     @JsonSerialize(contentUsing = ToStringSerializer.class)
-	public List<IsoSizePrefix> getPrefixes() {
+	public List<SiPrefix> getPrefixes() {
 		return prefixes;
 	}
 
-    @JsonDeserialize(contentUsing = IsoSizePrefixDeserializer.class)
-	public void setPrefixes(List<IsoSizePrefix> prefixes) {
+    @JsonDeserialize(contentUsing = SiSizePrefixDeserializer.class)
+	public void setPrefixes(List<SiPrefix> prefixes) {
 		this.prefixes = prefixes;
 	}
 }

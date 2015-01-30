@@ -7,10 +7,12 @@ export default Ember.Controller.extend({
 
             if (Ember.isEmpty(prefix)) {
             } else {
-                var prefixPower = prefix.get('power10');
-                var basePower = property.get('base.power10');
-                var multiplyPower = prefixPower - basePower;
-                normalizedValue = value * Math.pow(10, multiplyPower);
+                var prefixBase = prefix.get('base');
+                var prefixPower = prefix.get('power');
+                var baseBase = property.get('base.base');
+                var basePower = property.get('base.power');
+                var multiplyPower = Math.pow(prefixBase, prefixPower) / Math.pow(baseBase, basePower);
+                normalizedValue = value * multiplyPower;
             }
 
             var propertyId = property.get('id');

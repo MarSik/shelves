@@ -7,7 +7,7 @@ var attr = DS.attr,
 
 export default NamedBase.extend({
     symbol: attr("string"),
-    prefixes: hasMany('isoprefix', {async: true}),
+    prefixes: hasMany('siprefix', {async: true}),
 
     niceName: function () {
         return this.get('name') + " [" + this.get('symbol') + ']';
