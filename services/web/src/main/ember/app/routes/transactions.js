@@ -16,5 +16,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 console.log(reason);
             });
         }
+    },
+    model: function () {
+        return this.store.find('transaction', {fullyDelivered: false});
     }
 });

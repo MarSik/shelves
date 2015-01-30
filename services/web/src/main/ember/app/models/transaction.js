@@ -19,5 +19,17 @@ export default DS.Model.extend({
             types.pushObject(p.get('type'));
         });
         return types;
-    }.property('items.@each.type')
+    }.property('items.@each.type'),
+
+    fullyDelivered: function() {
+        var ready = true;
+
+        this.get('items').then(function (items) {
+           items.forEach(function (item) {
+               ready = ready && item.get('fullyDelivered');
+           });
+        });
+
+        return ready;
+    }.property('items.@each.fullyDelivered')
 });
