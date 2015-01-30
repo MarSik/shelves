@@ -67,6 +67,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             controller.set('availableProperties', self.store.filter('property', {}, function (i) {
                 return !i.get('isNew');
             }));
+            controller.set('stickers', []);
         }
     }
 });

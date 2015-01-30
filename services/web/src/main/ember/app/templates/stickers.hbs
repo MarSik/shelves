@@ -2,10 +2,11 @@
 
 <ul>
     {{#each obj in this}}
-        <li>{{obj.id}}</li>
+        <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove">{{fa-icon 'times'}}</button></li>
     {{/each}}
 </ul>
 
-{{#view 'sticker-link' items=this}}Download stickers{{/view}}
+<button {{action 'clearStickers'}} class="alert button">{{fa-icon 'times'}} Clear stickers</button>
+{{#view 'sticker-link' items=this}}<button class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>{{/view}}
 
 {{outlet}}
