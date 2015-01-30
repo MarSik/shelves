@@ -28,6 +28,9 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     FootprintApiModel footprint;
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
+    Set<PartTypeApiModel> seeAlso;
+
+    Boolean serials;
 
     // Parts in store
     Long available;
@@ -112,5 +115,22 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public Boolean getSerials() {
+        return serials;
+    }
+
+    public void setSerials(Boolean serials) {
+        this.serials = serials;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public Set<PartTypeApiModel> getSeeAlso() {
+        return seeAlso;
+    }
+
+    public void setSeeAlso(Set<PartTypeApiModel> seeAlso) {
+        this.seeAlso = seeAlso;
     }
 }

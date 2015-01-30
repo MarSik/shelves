@@ -39,11 +39,38 @@ export default Ember.Controller.extend({
         },
         disableAddProperty: function () {
             this.set('propertyAddingAllowed', false);
+        },
+        addSeeAlso: function (type) {
+            var model = this.model;
+            if (type == this.model) {
+                return;
+            }
+
+            model.get('seeAlso').pushObject(type);
+            model.save().catch(function () {
+               model.rollback();
+            });
+        },
+        removeSeeAlso: function (type) {
+            var model = this.model;
+            model.get('seeAlso').removeObject(type);
+            model.save().catch(function () {
+                model.rollback();
+            });
+        },
+        showAddSeeAlso: function () {
+            this.set('displayAddSeeAlso', true);
+        },
+        hideAddSeeAlso: function () {
+            this.set('displayAddSeeAlso', false);
         }
     },
     needs: "application",
     propertySorting: ['name'],
     sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propertySorting'),
+
+    typeSorting: ['fullName'],
+    sortedTypes: Ember.computed.sort('controllers.application.availableTypes', 'typeSorting'),
 
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');

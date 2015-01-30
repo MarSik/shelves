@@ -4,6 +4,7 @@ import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -18,7 +19,7 @@ public class Lot extends LotBase implements StickerCapable {
 	public Lot() {
 	}
 
-	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, User performedBy) {
+	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, Date expiration, User performedBy) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
 		l.setAction(LotAction.DELIVERY);
@@ -28,6 +29,7 @@ public class Lot extends LotBase implements StickerCapable {
 		l.setPurchase(purchase);
 		l.setCreated(new Date());
 		l.setPerformedBy(performedBy);
+        l.setExpiration(expiration);
 		return l;
 	}
 
@@ -43,6 +45,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setUsedBy(previous.getUsedBy());
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
 	}
 
     protected Lot(UUID uuid, User performedBy, Long count, Requirement requirement, Lot previous) {
@@ -62,6 +65,7 @@ public class Lot extends LotBase implements StickerCapable {
         }
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
     }
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
@@ -76,6 +80,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setUsedBy(previous.getUsedBy());
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
 	}
 
     protected Lot(UUID uuid, User performedBy, LotAction action, Requirement requirement, Lot previous) {
@@ -94,6 +99,7 @@ public class Lot extends LotBase implements StickerCapable {
         }
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
     }
 
 	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
@@ -107,6 +113,7 @@ public class Lot extends LotBase implements StickerCapable {
 		setUsedBy(requirement);
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
 
 		if (requirement == null) {
 			setAction(LotAction.UNASSIGNED);
@@ -127,6 +134,7 @@ public class Lot extends LotBase implements StickerCapable {
         setAction(LotAction.MOVED);
         setLocation(location);
         setPurchase(previous.getPurchase());
+        setExpiration(previous.getExpiration());
     }
 
 	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
@@ -150,6 +158,9 @@ public class Lot extends LotBase implements StickerCapable {
 
 	@RelatedTo(type = "USES", direction = Direction.INCOMING)
 	Requirement usedBy;
+
+    @Indexed
+    Date expiration;
 
 	public Lot getPrevious() {
 		return previous;
@@ -357,4 +368,12 @@ public class Lot extends LotBase implements StickerCapable {
 	public String getBaseUrl() {
 		return "lots";
 	}
+
+    public Date getExpiration() {
+        return expiration;
+    }
+
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
+    }
 }

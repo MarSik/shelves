@@ -49,6 +49,7 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
+        model.setSerials(object.getSerials());
 
 		if (nested == 0) {
 			return model;
@@ -62,6 +63,13 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 				model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
 			}
 		}
+
+        if (object.getSeeAlso() != null) {
+            model.setSeeAlso(new THashSet<Type>());
+            for (PartTypeApiModel t: object.getSeeAlso()) {
+                model.getSeeAlso().add(convert(t, nested - 1, cache));
+            }
+        }
 
 		return model;
 	}

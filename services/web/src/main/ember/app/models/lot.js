@@ -11,6 +11,8 @@ export default LotBase.extend({
   next: hasMany("lot", {inverse: "previous", async: true}),
   action: attr(),
   purchase: belongsTo('purchase', {inverse: null, async: true}),
+  expiration: attr('date'),
+  serial: attr('string'),
 
   performedBy: belongsTo('user', {inverse: null, async: true}),
   usedBy: belongsTo('requirement', {async: true}),

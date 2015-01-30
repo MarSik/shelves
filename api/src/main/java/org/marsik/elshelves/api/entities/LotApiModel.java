@@ -9,6 +9,7 @@ import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -38,6 +39,8 @@ public class LotApiModel extends LotBaseApiModel {
 	PurchaseApiModel purchase;
 
 	RequirementApiModel usedBy;
+
+    Date expiration;
 
 	boolean canBeSoldered;
 	boolean canBeUnsoldered;
@@ -154,5 +157,13 @@ public class LotApiModel extends LotBaseApiModel {
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public Date getExpiration() {
+        return expiration;
+    }
+
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
     }
 }

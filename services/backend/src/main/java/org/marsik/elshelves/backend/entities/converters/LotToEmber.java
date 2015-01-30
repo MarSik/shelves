@@ -39,6 +39,7 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 			return entity;
 		}
 
+        entity.setExpiration(object.getExpiration());
 		entity.setAction(object.getAction());
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
 		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));

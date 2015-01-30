@@ -57,6 +57,7 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
 		model.setVendorId(object.getVendorId());
+        model.setSerials(object.getSerials());
 
         PartCount count = object.getAvailable();
 
@@ -79,6 +80,13 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 				model.getLots().add(lotToEmber.convert(l, nested - 1, cache));
 			}
 		}
+
+        if (object.getSeeAlso() != null) {
+            model.setSeeAlso(new THashSet<PartTypeApiModel>());
+            for (Type t: object.getSeeAlso()) {
+                model.getSeeAlso().add(convert(t, nested - 1, cache));
+            }
+        }
 
 		return model;
 	}

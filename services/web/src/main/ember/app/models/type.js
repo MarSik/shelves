@@ -7,6 +7,7 @@ var attr = DS.attr,
 
 export default NamedBase.extend({
   vendor: attr("string"),
+  serials: attr("boolean"),
 
   free: attr(),
   available: attr(),
@@ -15,6 +16,8 @@ export default NamedBase.extend({
   groups: hasMany("group", {async: true}),
   footprint: belongsTo("footprint", {async: true}),
   lots: hasMany("lot", {async: true, inverse: null}),
+
+  seeAlso: hasMany("type", {async: true, inverse: "seeAlso"}),
 
   fullName: function () {
       var n = this.get('name') + ' | ' + this.get('footprint.name');

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -77,7 +78,7 @@ public class LotService {
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
-	public LotApiModel delivery(LotApiModel newLot0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+	public LotApiModel delivery(LotApiModel newLot0, Date expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.findByUuid(newLot0.getPurchase().getId());
 		Box location = boxRepository.findByUuid(newLot0.getLocation().getId());
 
@@ -93,7 +94,7 @@ public class LotService {
 			throw new PermissionDenied();
 		}
 
-		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, currentUser);
+		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser);
 		lotRepository.save(lot);
 
 		purchase.getNext().add(lot);

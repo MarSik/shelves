@@ -50,9 +50,31 @@ placeholder="Select an SI prefix" }}
 
 <ul>
     {{#each group in model.groups}}
-        <li>{{group.fullName}}</li>
+        <li>{{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}</li>
     {{/each}}
 </ul>
+
+<h3>See also</h3>
+
+<ul>
+    {{#each type in model.seeAlso}}
+        <li>{{#link-to 'types.show' type}}{{fa-icon 'book'}} {{type.fullName}}{{/link-to}} {{#confirm-button class='remove' action='removeSeeAlso' param=type}}{{fa-icon 'times'}}{{/confirm-button}}</li>
+    {{/each}}
+</ul>
+
+{{#if displayAddSeeAlso}}
+    {{ember-selectize
+    content=sortedTypes
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=seeAlsoTypeToAdd
+    placeholder="Select a type" }}
+
+    <button {{action 'addSeeAlso' seeAlsoTypeToAdd}} class="button primary">{{fa-icon 'plus'}} Add see also link</button>
+    <button {{action 'hideAddSeeAlso'}} class="button secondary">Hide</button>
+{{else}}
+<button {{action 'showAddSeeAlso'}} class="button secondary">{{fa-icon 'plus'}} Add see also link</button>
+{{/if}}
 
 <h3>Available lots</h3>
 <table>

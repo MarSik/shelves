@@ -19,6 +19,9 @@ public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
 	String vendorId;
 
+    // Should serial numbers be tracked?
+    Boolean serials;
+
 	@NotNull
 	@RelatedTo(type = "HAS_FOOTPRINT")
 	Footprint footprint;
@@ -31,6 +34,9 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@RelatedTo(type = "REQUIRED_TYPE", direction = Direction.INCOMING)
 	Iterable<Requirement> usedIn;
+
+    @RelatedTo(type = "SEE_ALSO", direction = Direction.BOTH)
+    Set<Type> seeAlso;
 
 	@PartOfUpdate
 	public String getVendor() {
@@ -114,4 +120,22 @@ public class Type extends NamedEntity implements StickerCapable {
 	public String getBaseUrl() {
 		return "types";
 	}
+
+    @PartOfUpdate
+    public Boolean getSerials() {
+        return serials;
+    }
+
+    public void setSerials(Boolean serials) {
+        this.serials = serials;
+    }
+
+    @PartOfUpdate
+    public Set<Type> getSeeAlso() {
+        return seeAlso;
+    }
+
+    public void setSeeAlso(Set<Type> seeAlso) {
+        this.seeAlso = seeAlso;
+    }
 }
