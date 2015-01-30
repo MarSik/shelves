@@ -21,5 +21,19 @@ export default DS.RESTSerializer.extend({
 
         //Remove the root element
         Ember.merge(hash, serialized);
+    },
+    extractMeta: function (store, type, payload) {
+        // Read the meta information about objects that should be
+        // reloaded - purge them from the store to force reload
+        if (payload && payload.meta && payload.meta.purge) {
+            payload.meta.purge.forEach(function (p) {
+                var entity = store.getById(p.type, p.id);
+                if (!Ember.isNone(entity)) {
+                    Ember.run.next(entity, "reload");
+                }
+            });
+        }
+
+        return this._super(store, type, payload);
     }
 });

@@ -10,8 +10,10 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +31,9 @@ public final class EmberModel extends HashMap<String, Object> {
         private final Map<String, Object> metaData = new HashMap<String, Object>();
         private final String payloadName;
         private final Object payload;
+
+        // Set of objects to purge from client's cache
+        private final Set<Object> purge = new THashSet<>();
 
 		// used to avoid recursion during sideloading
 		private final Set<Object> knownObjects = new THashSet<>();
@@ -176,6 +181,11 @@ public final class EmberModel extends HashMap<String, Object> {
 			}
 		}
 
+        public Builder<T> purge(Object entity) {
+            purge.add(entity);
+            return this;
+        }
+
         private String getSingularName(final Class<?> clazz) {
             if (clazz.isAnnotationPresent(EmberModelName.class)) {
                 return clazz.getAnnotation(EmberModelName.class).value();
@@ -193,6 +203,16 @@ public final class EmberModel extends HashMap<String, Object> {
         public EmberModel build() {
             EmberModel sideLoader = new EmberModel();
             sideLoader.putAll(sideLoadedItems);
+
+            List<EmberPurge> purges = new ArrayList<>();
+
+            for (Object entity: purge) {
+                purges.add(new EmberPurge(getSingularName(entity.getClass()), entity));
+            }
+
+            if (!purges.isEmpty()) {
+                metaData.put("purge", purges);
+            }
 
             if (metaData.size() > 0) {
                 sideLoader.put("meta", metaData);
