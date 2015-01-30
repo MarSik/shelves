@@ -56,6 +56,8 @@ placeholder="Select a type" }}
 
 {{outlet}}
 
+<button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
+
 {{#modal-dialog condition=showAlternativeDialog title="Add alternative"}}
     <form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>
 

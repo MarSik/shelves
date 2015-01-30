@@ -1,5 +1,9 @@
 <div class="row">
 <section class="columns large-4">
+    {{#if qrEntity}}
+        <nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
+    {{/if}}
+
     <h2>Locations</h2>
 
 <button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}}</button>
@@ -13,10 +17,6 @@
 
 {{outlet}}
 </div>
-
-{{#if qrEntity}}
-<nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
-{{/if}}
 
 <div id="createBox" class="reveal-modal" data-reveal>
     <h2>Create box</h2>
