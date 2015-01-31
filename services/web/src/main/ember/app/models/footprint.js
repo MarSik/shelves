@@ -6,7 +6,7 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default NamedBase.extend({
-  type: attr(),
+  type: belongsTo('footprinttype', {async: true}),
   kicad: attr(),
 
   pads: attr("number"),

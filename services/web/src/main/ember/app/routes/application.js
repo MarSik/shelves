@@ -46,6 +46,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             controller.set('availableFootprints', self.store.filter("footprint", {}, function (i) {
                 return !i.get('isNew');
             }));
+            controller.set('availableFootprintTypes', self.store.filter("footprinttype", {}, function (i) {
+                return !i.get('isNew');
+            }));
             controller.set('availableGroups', self.store.filter('group', {}, function (i) {
                 return !i.get('isNew');
             }));

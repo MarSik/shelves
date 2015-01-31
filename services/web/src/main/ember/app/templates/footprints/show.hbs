@@ -22,6 +22,10 @@
                 <dt>{{#click-to-edit content=model field='content.pitch'}}{{pitch}}{{/click-to-edit}}</dt>
             </dl>
         </div>
+
+        <h3>Type of footprint</h3>
+
+        {{#click-to-select content=model field='content.type' options=footprintTypes label='content.name'}}{{fa-icon model.type.icon}} {{model.type.name}}{{/click-to-select}}
     </section>
 
     <section class="small-12 large-6 columns">

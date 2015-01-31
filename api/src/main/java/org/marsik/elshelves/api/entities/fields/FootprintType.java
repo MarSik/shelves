@@ -1,8 +1,21 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.marsik.elshelves.api.ember.EmberModelName;
+
+@JsonFormat(shape= JsonFormat.Shape.OBJECT)
+@EmberModelName("footprinttype")
 public enum FootprintType {
     WIRE,
     TH,
     SMD,
-    CONNECTOR
+    CONNECTOR;
+
+    public String getId() {
+        return name();
+    }
+
+    public String getName() {
+        return name();
+    }
 }
