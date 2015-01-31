@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,14 @@ public class EmberToFootprint implements CachingConverter<FootprintApiModel, Foo
 		model.setNpth(object.getNpth());
 		model.setPads(object.getPads());
 		model.setKicad(object.getKicad());
+        model.setType(object.getType());
+
+        if (object.getSeeAlso() != null) {
+            model.setSeeAlso(new THashSet<Footprint>());
+            for (FootprintApiModel t: object.getSeeAlso()) {
+                model.getSeeAlso().add(convert(t, nested - 1, cache));
+            }
+        }
 
 		return model;
 	}

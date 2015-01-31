@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class FootprintToEmber implements CachingConverter<Footprint, FootprintApiModel, UUID> {
+public class  FootprintToEmber implements CachingConverter<Footprint, FootprintApiModel, UUID> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
@@ -43,6 +44,14 @@ public class FootprintToEmber implements CachingConverter<Footprint, FootprintAp
 		model.setPads(object.getPads());
 		model.setNpth(object.getNpth());
 		model.setKicad(object.getKicad());
+        model.setType(object.getType());
+
+        if (object.getSeeAlso() != null) {
+            model.setSeeAlso(new THashSet<FootprintApiModel>());
+            for (Footprint t: object.getSeeAlso()) {
+                model.getSeeAlso().add(convert(t, nested - 1, cache));
+            }
+        }
 
 		return model;
 	}

@@ -23,4 +23,28 @@
             </dl>
         </div>
     </section>
+
+    <section class="small-12 large-6 columns">
+        <h3>See also</h3>
+
+        <ul>
+            {{#each fp in model.seeAlso}}
+                <li>{{#link-to 'footprints.show' fp}}{{fa-icon 'file-o'}} {{fp.name}}{{/link-to}} {{#confirm-button class='remove button' action='removeSeeAlso' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}</li>
+            {{/each}}
+        </ul>
+
+        {{#if displayAddSeeAlso}}
+            {{ember-selectize
+            content=sortedFootprints
+            optionValuePath="content.id"
+            optionLabelPath="content.name"
+            selection=seeAlsoFpToAdd
+            placeholder="Select a footprint" }}
+
+            <button {{action 'addSeeAlso' seeAlsoFpToAdd}} class="button primary">{{fa-icon 'plus'}} Add see also link</button>
+            <button {{action 'hideAddSeeAlso'}} class="button secondary">Hide</button>
+        {{else}}
+            <button {{action 'showAddSeeAlso'}} class="button secondary">{{fa-icon 'plus'}} Add see also link</button>
+        {{/if}}
+    </section>
 </div>
