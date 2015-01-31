@@ -1,8 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +57,13 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 			return model;
 		}
 
-		model.setFootprint(emberToFootprint.convert(object.getFootprint(), nested - 1, cache));
-
+        if (object.getFootprints() != null) {
+            model.setFootprints(new THashSet<Footprint>());
+            for (FootprintApiModel g : object.getFootprints()) {
+                model.getFootprints().add(emberToFootprint.convert(g, nested - 1, cache));
+            }
+        }
+        
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<Group>());
 			for (PartGroupApiModel g : object.getGroups()) {

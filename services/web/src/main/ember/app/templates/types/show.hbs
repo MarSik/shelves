@@ -7,6 +7,14 @@
 
 {{#click-to-edit content=model field='content.vendor'}}{{model.vendor}}{{/click-to-edit}}
 
+<h3>Footprints</h3>
+
+<ul>
+{{#each fp in model.footprints}}
+    <li>{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}</li>
+{{/each}}
+</ul>
+
 <h3>Additional properties</h3>
 
 <table>

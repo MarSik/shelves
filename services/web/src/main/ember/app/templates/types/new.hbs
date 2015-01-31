@@ -7,12 +7,13 @@
     <h3>Vendor</h3>
     {{input type='text' value=model.vendor placeholder='vendor'}}
 
-    <h3>Footprint</h3>
+    <h3>Footprints</h3>
     {{ember-selectize
     content=sortedFootprints
     optionValuePath="content.id"
     optionLabelPath="content.name"
-    selection=model.footprint
+    selection=model.footprints
+    multiple=true
     placeholder="Select a footprint" }}
 
     <h3>Description</h3>

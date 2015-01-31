@@ -24,7 +24,7 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@NotNull
 	@RelatedTo(type = "HAS_FOOTPRINT")
-	Footprint footprint;
+	Set<Footprint> footprints;
 
 	@RelatedTo(type = "CONTAINS", direction = Direction.INCOMING)
 	Set<Group> groups;
@@ -57,12 +57,12 @@ public class Type extends NamedEntity implements StickerCapable {
 	}
 
 	@PartOfUpdate
-	public Footprint getFootprint() {
-		return footprint;
+	public Set<Footprint> getFootprints() {
+		return footprints;
 	}
 
-	public void setFootprint(Footprint footprint) {
-		this.footprint = footprint;
+	public void setFootprints(Set<Footprint> footprints) {
+		this.footprints = footprints;
 	}
 
 	@PartOfUpdate

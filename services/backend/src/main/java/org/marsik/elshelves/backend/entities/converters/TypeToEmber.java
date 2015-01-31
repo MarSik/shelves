@@ -1,9 +1,11 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Type;
@@ -65,8 +67,13 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
         model.setAvailable(count.available);
         model.setTotal(count.total);
 
-		model.setFootprint(footprintToEmber.convert(object.getFootprint(), nested - 1, cache));
-
+        if (object.getFootprints() != null) {
+            model.setFootprints(new THashSet<FootprintApiModel>());
+            for (Footprint g : object.getFootprints()) {
+                model.getFootprints().add(footprintToEmber.convert(g, nested - 1, cache));
+            }
+        }
+        
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<PartGroupApiModel>());
 			for (Group g : object.getGroups()) {

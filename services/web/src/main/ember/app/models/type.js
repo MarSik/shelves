@@ -14,22 +14,32 @@ export default NamedBase.extend({
   total: attr(),
 
   groups: hasMany("group", {async: true}),
-  footprint: belongsTo("footprint", {async: true}),
+  footprints: hasMany("footprint", {async: true}),
   lots: hasMany("lot", {async: true, inverse: null}),
 
   seeAlso: hasMany("type", {async: true, inverse: "seeAlso"}),
 
   fullName: function () {
-      var n = this.get('name') + ' | ' + this.get('footprint.name');
+      var n = this.get('name') + ' | ' + this.get('footprint');
       if (this.get('vendor')) {
           n += ' | ' + this.get('vendor');
       }
-      if (this.get('vendor')) {
+      if (this.get('summary')) {
           n += ' | ' + this.get('summary');
       }
 
       n += " (" + this.get('free') + " / " + this.get('available') + ")";
 
       return n;
-  }.property('name', 'footprint.name', 'vendor', 'summary', 'available', 'free')
+  }.property('name', 'footprint', 'vendor', 'summary', 'available', 'free'),
+
+  footprint: function () {
+      var names = [];
+
+      this.get('footprints').forEach(function (fp) {
+          names.pushObject(fp.get('name'));
+      });
+
+      return names.join(", ");
+  }.property('footprints.@each.name')
 });

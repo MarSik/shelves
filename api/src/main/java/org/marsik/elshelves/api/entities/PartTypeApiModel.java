@@ -25,7 +25,7 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	String vendor;
 	String vendorId;
 
-    FootprintApiModel footprint;
+    Set<FootprintApiModel> footprints;
 	Set<PartGroupApiModel> groups;
 	Set<LotApiModel> lots;
     Set<PartTypeApiModel> seeAlso;
@@ -40,13 +40,13 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     Long total;
 
     @JsonIdentityReference(alwaysAsId = true)
-    public FootprintApiModel getFootprint() {
-        return footprint;
+    public Set<FootprintApiModel> getFootprints() {
+        return footprints;
     }
 
     @JsonSetter
-    public void setFootprint(FootprintApiModel footprint) {
-        this.footprint = footprint;
+    public void setFootprints(Set<FootprintApiModel> footprints) {
+        this.footprints = footprints;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
