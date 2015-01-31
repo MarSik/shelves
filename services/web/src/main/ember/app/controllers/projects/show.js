@@ -12,9 +12,9 @@ export default Ember.Controller.extend({
             this.set('showAlternativeDialog', false);
             return true;
         },
-        assignLot: function (req) {
+        assignLot: function (req, lots) {
             this.set('assignLotToRequirement', req);
-            this.set('showAssignDialog', true);
+            this.set('assignableLots', lots);
         },
         performAssignment: function (req, lot, count) {
             var newLot = this.store.createRecord('lot', {
@@ -30,13 +30,17 @@ export default Ember.Controller.extend({
                 lot.rollback();
                 self.growl.error(e);
             }).then(function (d) {
+                console.log("MISSING");
+                console.log(req.get('missing'));
                 if (req.get('missing') <= 0) {
-                    self.set('showAssignDialog', false);
+                    self.set('assignLotToRequirement', null);
+                    self.set('assignableLots', []);
                 }
             });
         },
         closeAssignment: function () {
-            this.set('showAssignDialog', false);
+            this.set('assignLotToRequirement', null);
+            this.set('assignableLots', []);
         },
         unassignLot: function (lot) {
             var newLot = this.store.createRecord('lot', {
@@ -92,34 +96,7 @@ export default Ember.Controller.extend({
     }.property('requiredType', 'requiredCount'),
 
     assignLotToRequirement: null,
-    candidateLots: function () {
-        var req = this.get('assignLotToRequirement');
+    assignableLots: [],
 
-        console.log('Recomputing available parts');
-
-        var usable = Ember.A();
-
-        if (Ember.isEmpty(req)) {
-            return usable;
-        }
-
-        req.get('type').then(function (l) {
-            l.forEach(function (type) {
-                console.log('type:');
-                console.log(type);
-                type.get('lots').then(function (ll) {
-                    ll.forEach(function (lot) {
-                        console.log(lot);
-                        usable.pushObject(lot);
-                    });
-                });
-            });
-        });
-
-        console.log(usable);
-
-        return usable;
-    }.property('assignLotToRequirement.type.@each.lots'),
-
-    assignableLots: Ember.computed.filterBy('candidateLots', 'canBeAssigned', true)
+    displayRequirements: Ember.computed.map('model.requirements', m => m)
 });

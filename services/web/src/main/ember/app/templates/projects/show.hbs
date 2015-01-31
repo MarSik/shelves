@@ -2,37 +2,33 @@
 
 <h3>Required parts</h3>
 <table>
-{{#each r in model.requirements}}
+{{#each r in displayRequirements itemController='projects/_requirement'}}
     <tbody>
     <tr>
         <td colspan="2">{{#click-to-edit content=r field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
-        <td></td>
         <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
             <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
-            {{#if r.missing}}<button {{action 'assignLot' r}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
+            {{#if r.missing}}<button {{action 'assignLot' r r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
     </tr>
-    {{#each type in r.type}}
+    {{#each type in r.possibleTypes}}
     <tr>
         <td>{{fa-icon 'book'}}</td>
-        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</td>
+        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{type.vendor}}</td>
-        <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
-    {{#each lot in r.lots}}
+    {{#each lot in r.assignedLots}}
     <tr>
-        <td>&nbsp;</td>
-        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
-        <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
-        <td>{{lot.purchase.transaction.source.name}}</td>
         <td>{{lot.count}}</td>
-        <td>[history]</td>
+        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+        <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
         <td>
             {{#if lot.canBeSoldered}}<button class="button tiny alert" {{action 'solderLot' lot}}>Solder</button>{{/if}}
             {{#if lot.canBeUnassigned}}<button class="button tiny secondary" {{action 'unassignLot' lot}}>Unassign</button>{{/if}}
             {{#if lot.canBeUnsoldered}}<button class="button tiny alert" {{action 'unsolderLot' lot}}>Unsolder</button>{{/if}}
+            <button class="tiny button">history</button>
         </td>
     </tr>
     {{/each}}
@@ -74,7 +70,7 @@ placeholder="Select a type" }}
 {{/modal-dialog}}
 
 
-{{#modal-dialog condition=showAssignDialog title="Add lot"}}
+{{#modal-dialog condition=assignLotToRequirement title="Add lot"}}
     <table>
     {{#each lot in assignableLots}}
         <tr>
