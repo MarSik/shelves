@@ -1,9 +1,7 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.marsik.elshelves.backend.services.StickerCapable;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -21,6 +19,9 @@ public class NamedEntity extends OwnedEntity {
 
 	@Indexed
 	String summary;
+
+    @Indexed
+    boolean flagged = false;
 
 	@Indexed
 	String description;
@@ -79,5 +80,13 @@ public class NamedEntity extends OwnedEntity {
 
     public void setProperties(Set<NumericPropertyValue> properties) {
         this.properties = properties;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
     }
 }

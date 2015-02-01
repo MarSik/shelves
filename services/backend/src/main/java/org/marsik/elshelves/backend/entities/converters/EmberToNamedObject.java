@@ -32,6 +32,7 @@ public class EmberToNamedObject {
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
+        model.setFlagged(object.isFlagged());
 
 		if (object.getDescribedBy() != null) {
 			model.setDescribedBy(new THashSet<Document>());

@@ -35,6 +35,7 @@ public class NamedObjectToEmber {
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
+        model.setFlagged(object.isFlagged());
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 

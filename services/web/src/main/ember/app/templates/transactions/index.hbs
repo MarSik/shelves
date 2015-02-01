@@ -10,9 +10,12 @@
         <div class="small-11 columns">
             {{ember-selectize
             content=sortedSources
+            loading=sortedSources.isPending
             optionValuePath="content.id"
             optionLabelPath="content.nameWithDesc"
             selection=model.source
+            required=true
+            create='createSource'
             placeholder="Select a source" }}
         </div>
         <div class="small-1 columns">
@@ -44,6 +47,9 @@
                         optionValuePath="content.id"
                         optionLabelPath="content.fullName"
                         selection=purchase.type
+                        loading=sortedTypes.isPending
+                        required=true
+                        create='createType'
                         sort="content.fullName"
                         placeholder="Select a type" }}
                     </div>

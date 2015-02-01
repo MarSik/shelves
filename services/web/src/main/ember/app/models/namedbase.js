@@ -8,6 +8,7 @@ export default DS.Model.extend({
     name: attr('string'),
     description: attr('string'),
     summary: attr(),
+    flagged: attr('boolean'),
 
     belongsTo: belongsTo('user', {async: true}),
     describedBy: hasMany("document", {async: true}),

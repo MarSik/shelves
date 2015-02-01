@@ -26,7 +26,7 @@
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
         <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
         <td>
-            {{#if lot.canBeSoldered}}<button class="button tiny alert" {{action 'solderLot' lot}}>Solder</button>{{/if}}
+            {{#if lot.canBeSoldered}}{{#add-count-button class="tiny alert" action='solderLot' param=lot}}Solder{{/add-count-button}}{{/if}}
             {{#if lot.canBeUnassigned}}<button class="button tiny secondary" {{action 'unassignLot' lot}}>Unassign</button>{{/if}}
             {{#if lot.canBeUnsoldered}}<button class="button tiny alert" {{action 'unsolderLot' lot}}>Unsolder</button>{{/if}}
             <button class="tiny button">history</button>
@@ -45,6 +45,7 @@ optionValuePath="content.id"
 optionLabelPath="content.fullName"
 selection=requiredType
 sort="content.fullName"
+required=true
 placeholder="Select a type" }}
 
 {{input type='text' value=requiredCount}}
@@ -60,10 +61,12 @@ placeholder="Select a type" }}
 
     {{ember-selectize
     content=sortedTypes
+    loading=sortedTypes.isPending
     optionValuePath="content.id"
     optionLabelPath="content.fullName"
     selection=alternativeType
     sort="content.fullName"
+    required=true
     placeholder="Select a type" }}
 
     <button type="submit">{{fa-icon 'plus'}} Add</button>

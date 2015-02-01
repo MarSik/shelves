@@ -9,9 +9,30 @@ export default Ember.Controller.extend({
                 vatIncluded: true,
                 transaction: this.get('model')
             });
+        },
+        createSource: function (name) {
+            var source = this.store.createRecord('source', {
+                name: name,
+                flagged: true
+            });
+
+            source.save().catch(function (err) {
+                this.growl.error(err);
+                source.destroy();
+            });
+        },
+        createType: function (name) {
+            var type = this.store.createRecord('type', {
+                name: name,
+                flagged: true
+            });
+
+            type.save().catch(function (err) {
+                this.growl.error(err);
+                type.destroy();
+            });
         }
     },
-
     selectedSource: null,
 
     typeSorting: ['name'],

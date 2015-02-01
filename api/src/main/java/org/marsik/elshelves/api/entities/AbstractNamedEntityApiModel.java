@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -22,6 +21,7 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	String summary;
 	String description;
 	boolean hasIcon = false;
+    boolean flagged = false;
 
 	UserApiModel belongsTo;
 
@@ -97,5 +97,13 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 
     public void setProperties(Set<NumericPropertyApiModel> properties) {
         this.properties = properties;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
     }
 }
