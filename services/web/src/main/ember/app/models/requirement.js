@@ -18,8 +18,10 @@ export default DS.Model.extend({
 
     missing: function () {
         var assigned = 0;
-        this.get('lots').forEach(function (lot) {
-            assigned += lot.get('count');
+        this.get('lots').then(function (lots) {
+            lots.forEach(function (lot) {
+                assigned += lot.get('count');
+            });
         });
         return this.get('count') - assigned;
     }.property('lots.@each.count', 'count')
