@@ -1,10 +1,8 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ObjectController.extend({
     possibleTypes: Ember.computed.map('model.type', m => m),
     assignedLots: Ember.computed.map('model.lots', m => m),
-    missing: Ember.computed.alias('model.missing'),
-    count: Ember.computed.alias('model.count'),
 
     candidateLots: function () {
         var req = this.get('model');

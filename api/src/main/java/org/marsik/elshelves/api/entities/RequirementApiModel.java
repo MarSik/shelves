@@ -20,6 +20,9 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	public RequirementApiModel() {
 	}
 
+    String name;
+    String summary;
+
 	ProjectApiModel project;
 
 	Set<PartTypeApiModel> type;
@@ -64,4 +67,20 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 }

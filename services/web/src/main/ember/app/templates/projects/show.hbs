@@ -5,10 +5,11 @@
 {{#each r in displayRequirements itemController='projects/_requirement'}}
     <tbody>
     <tr>
-        <td colspan="2">{{#click-to-edit content=r field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
-        <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
-            <button {{action 'showAddAlternative' r}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
-            {{#if r.missing}}<button {{action 'assignLot' r r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
+        <td>{{#click-to-edit content=r.model field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
+        <td>{{#click-to-edit content=r.model field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
+        <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r.model}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
+            <button {{action 'showAddAlternative' r.model}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
+            {{#if r.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
     </tr>
     {{#each type in r.possibleTypes}}
@@ -16,7 +17,7 @@
         <td>{{fa-icon 'book'}}</td>
         <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
         <td>{{type.vendor}}</td>
-        <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
+        <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
     {{#each lot in r.assignedLots}}

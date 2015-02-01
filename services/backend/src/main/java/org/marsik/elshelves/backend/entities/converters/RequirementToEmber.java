@@ -51,6 +51,8 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 		}
 
 		model.setCount(object.getCount());
+        model.setName(object.getName());
+        model.setSummary(object.getSummary());
 
 		model.setType(new THashSet<PartTypeApiModel>());
 		for (Type t: object.getType()) {

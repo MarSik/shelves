@@ -22,6 +22,9 @@ public class Requirement extends OwnedEntity {
 	@RelatedTo(type = "USES")
 	Set<Lot> rawLots;
 
+    String name;
+    String summary;
+
 	@Min(1)
 	Long count;
 
@@ -62,7 +65,25 @@ public class Requirement extends OwnedEntity {
 		// NOP
 	}
 
-	public Set<Lot> getRawLots() {
+    @PartOfUpdate
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @PartOfUpdate
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public Set<Lot> getRawLots() {
 		return rawLots;
 	}
 

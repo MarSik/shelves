@@ -48,6 +48,8 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 	public Requirement convert(RequirementApiModel object, Requirement model, int nested, Map<UUID, Object> cache) {
 		model.setUuid(object.getId());
 		model.setCount(object.getCount());
+        model.setName(object.getName());
+        model.setSummary(object.getSummary());
 
 		if (object.getType() != null) {
 			model.setType(new THashSet<Type>());

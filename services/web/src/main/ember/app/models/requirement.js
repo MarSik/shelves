@@ -5,6 +5,8 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default DS.Model.extend({
+    name: attr('string'),
+    summary: attr('string'),
     count: attr('number'),
     type: hasMany('type', {inverse: null, async: true}),
     project: belongsTo('project', {async: true}),
