@@ -15,15 +15,15 @@
     {{#each type in r.possibleTypes}}
     <tr>
         <td>{{fa-icon 'book'}}</td>
-        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
-        <td>{{type.vendor}}</td>
+        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
+        <td>{{#each fp in type.footprints}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
     {{#each lot in r.assignedLots}}
     <tr>
         <td>{{lot.count}}</td>
-        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
         <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
         <td>
             {{#if lot.canBeSoldered}}{{#add-count-button class="tiny alert" action='solderLot' param=lot}}Solder{{/add-count-button}}{{/if}}
