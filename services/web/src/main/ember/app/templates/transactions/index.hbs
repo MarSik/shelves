@@ -15,6 +15,8 @@
             optionLabelPath="content.nameWithDesc"
             selection=model.source
             required=true
+            multiple=false
+            maxItems=1
             create='createSource'
             placeholder="Select a source" }}
         </div>
@@ -49,6 +51,7 @@
                         selection=purchase.type
                         loading=sortedTypes.isPending
                         required=true
+                        maxItems=1
                         create='createType'
                         sort="content.fullName"
                         placeholder="Select a type" }}
