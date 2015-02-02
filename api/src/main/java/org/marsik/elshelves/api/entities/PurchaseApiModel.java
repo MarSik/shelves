@@ -28,6 +28,7 @@ public class PurchaseApiModel extends LotBaseApiModel {
     Double totalPrice;
     Double vat;
     Boolean vatIncluded;
+    Long missing;
 
 	TransactionApiModel transaction;
 
@@ -96,4 +97,12 @@ public class PurchaseApiModel extends LotBaseApiModel {
 	public void setLots(Set<LotApiModel> lots) {
 		this.lots = lots;
 	}
+
+    public Long getMissing() {
+        return missing;
+    }
+
+    public void setMissing(Long missing) {
+        this.missing = missing;
+    }
 }

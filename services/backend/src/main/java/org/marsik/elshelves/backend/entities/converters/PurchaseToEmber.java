@@ -55,6 +55,7 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 		model.setTotalPrice(object.getTotalPrice());
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
+        model.setMissing(object.getMissing());
 
 		model.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
 		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));

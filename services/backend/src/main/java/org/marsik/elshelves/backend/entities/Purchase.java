@@ -116,4 +116,15 @@ public class Purchase extends LotBase {
 	public void setLots(Iterable<Lot> lots) {
 		this.lots = lots;
 	}
+
+    public Long getMissing() {
+        if (getLots() == null) return 0L;
+
+        Long count = getCount();
+        for (Lot l: getNext()) {
+            count -= l.getCount();
+        }
+
+        return count;
+    }
 }

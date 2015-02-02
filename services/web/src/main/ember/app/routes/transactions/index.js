@@ -21,6 +21,8 @@ export default Ember.Route.extend({
             return this.get('currentModel');
         }
 
-        return this.store.createRecord('transaction');
+        return this.store.createRecord('transaction', {
+            date: new Date()
+        });
     }
 });

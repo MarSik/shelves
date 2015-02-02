@@ -24,10 +24,10 @@ export default DS.Model.extend({
     fullyDelivered: function() {
         var ready = true;
 
-        this.get('items').then(function (items) {
-           items.forEach(function (item) {
-               ready = ready && item.get('fullyDelivered');
-           });
+        this.get('items').forEach(function (item) {
+            if (!item.get('fullyDelivered')) {
+                ready = false;
+            }
         });
 
         return ready;

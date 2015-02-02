@@ -13,8 +13,9 @@ export default LotBase.extend({
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction", {async: true}),
   next: hasMany("lot", {inverse: null, async: true}),
+  missing: attr('number'),
 
-    priceWithVat: function () {
+  priceWithVat: function () {
       if (this.get('vatIncluded')) {
           return this.get('singlePrice');
       } else {
@@ -41,6 +42,6 @@ export default LotBase.extend({
   }.property('next.@each.count'),
 
   fullyDelivered: function() {
-      return this.get('delivered') >= this.get('count');
-  }.property('count', 'delivered')
+      return this.get('missing') == 0;
+  }.property('missing')
 });
