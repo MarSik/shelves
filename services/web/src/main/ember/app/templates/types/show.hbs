@@ -60,9 +60,28 @@ placeholder="Select an SI prefix" }}
 
 <ul>
     {{#each group in model.groups}}
-        <li>{{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}</li>
+        <li>
+            {{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}
+            {{#confirm-button class='button remove' action='removeGroup' param=group}}{{fa-icon 'times'}}{{/confirm-button}}
+        </li>
     {{/each}}
 </ul>
+
+{{#if displayAddGroup}}
+    {{ember-selectize
+    content=sortedGroups
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=groupToAdd
+    multiple=true
+    create='createEmptyGroup'
+    placeholder="Select a type" }}
+
+    <button {{action 'addGroup' groupToAdd}} class="button primary">{{fa-icon 'plus'}} Add group(s)</button>
+    <button {{action 'hideAddGroup'}} class="button secondary">Hide</button>
+{{else}}
+    <button {{action 'showAddGroup'}} class="button secondary">{{fa-icon 'plus'}} Add group(s)</button>
+{{/if}}
 
 <h3>See also</h3>
 

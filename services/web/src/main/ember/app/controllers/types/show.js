@@ -40,6 +40,40 @@ export default Ember.Controller.extend({
         disableAddProperty: function () {
             this.set('propertyAddingAllowed', false);
         },
+        createEmptyGroup: function (name) {
+            var g = this.store.createRecord('group', {
+                name: name,
+                flagged: true
+            });
+
+            g.save().catch(function () {
+                g.destroy();
+            });
+        },
+        addGroup: function (groups) {
+            var model = this.model;
+
+            groups.forEach(function (g) {
+                model.get('groups').pushObject(g);
+            });
+
+            model.save().catch(function () {
+               model.rollback();
+            });
+        },
+        removeGroup: function (group) {
+            var model = this.model;
+            model.get('groups').removeObject(group);
+            model.save().catch(function () {
+                model.rollback();
+            });
+        },
+        showAddGroup: function () {
+            this.set('displayAddGroup', true);
+        },
+        hideAddGroup: function () {
+            this.set('displayAddGroup', false);
+        },
         addSeeAlso: function (type) {
             var model = this.model;
             if (type == this.model) {
@@ -48,7 +82,7 @@ export default Ember.Controller.extend({
 
             model.get('seeAlso').pushObject(type);
             model.save().catch(function () {
-               model.rollback();
+                model.rollback();
             });
         },
         removeSeeAlso: function (type) {
@@ -72,6 +106,9 @@ export default Ember.Controller.extend({
     typeSorting: ['fullName'],
     sortedTypes: Ember.computed.sort('controllers.application.availableTypes', 'typeSorting'),
 
+    groupSorting: ['fullName'],
+    sortedGroups: Ember.computed.sort('controllers.application.availableGroups', 'groupSorting'),
+    
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');
     }.property('propertyToAdd.unit.prefixes'),
