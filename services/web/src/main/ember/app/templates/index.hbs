@@ -1,10 +1,11 @@
 <h2>Electronic part and project management</h2>
 
 {{#if session.isAuthenticated}}
+    <p class="alert-box alert">This is an unstable demo version. Expect possible data loss. No usage or backup guarantees.</p>
+
     <a {{ action 'invalidateSession' }}>Logout</a> |
     {{#link-to 'account'}}Account{{/link-to}} |
-    {{#link-to 'boxes.index'}}Boxes{{/link-to}} |
-    {{#link-to 'groups.show' 'de305d54-75b4-431b-adb2-eb6b9e546013'}}Group de305d54-75b4-431b-adb2-eb6b9e546013{{/link-to}} |
+    {{#link-to 'boxes.index'}}Boxes{{/link-to}}
 {{else}}
 <div class="row">
     <section class="small-12 large-6 columns" id="login-form">

@@ -26,7 +26,7 @@
                         <ul class="dropdown">
                             <li class="active">{{#link-to 'account'}}Account info{{/link-to}}</li>
                             <li>{{#view 'backup-link'}}Download backup{{/view}}</li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="#" {{ action 'invalidateSession' }}>Logout</a></li>
                         </ul>
                     {{else}}
                         <a href="#"><span style="color: gray;">{{fa-icon "user"}}</span></a>
