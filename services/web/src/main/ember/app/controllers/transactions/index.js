@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-    needs: "application",
+    needs: ["application", "transactions"],
     actions: {
         addRow: function () {
             this.store.createRecord('purchase', {
@@ -55,5 +55,7 @@ export default Ember.Controller.extend({
         }
 
         return false;
-    }.property('model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count')
+    }.property('model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
+
+    pendingTransactions: Ember.computed.filterBy('controllers.transactions.model', 'fullyDelivered', false)
 });

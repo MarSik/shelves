@@ -31,5 +31,15 @@ export default DS.Model.extend({
         });
 
         return ready;
-    }.property('items.@each.fullyDelivered')
+    }.property('items.@each.fullyDelivered'),
+
+    missing: function () {
+        var missing = 0;
+
+        this.get('items').forEach(function (item) {
+            missing += item.get('missing');
+        });
+
+        return missing;
+    }.property('items.@each.missing')
 });
