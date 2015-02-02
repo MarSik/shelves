@@ -11,10 +11,29 @@
 
 <ul>
 {{#each fp in model.footprints}}
-    <li>{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}</li>
+    <li>
+        {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
+        {{#confirm-button class='button remove' action='removeFootprint' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}
+    </li>
 {{/each}}
 </ul>
 
+{{#if displayAddFootprint}}
+    {{ember-selectize
+    content=sortedFootprints
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=footprintToAdd
+    multiple=true
+    create='createEmptyFootprint'
+    placeholder="Select a footprint" }}
+
+    <button {{action 'addFootprint' footprintToAdd}} class="button primary">{{fa-icon 'plus'}} Add footprint(s)</button>
+    <button {{action 'hideAddFootprint'}} class="button secondary">Hide</button>
+{{else}}
+    <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'plus'}} Add footprint(s)</button>
+{{/if}}
+    
 <h3>Additional properties</h3>
 
 <table>

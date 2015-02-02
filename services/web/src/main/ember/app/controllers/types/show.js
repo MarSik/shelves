@@ -74,6 +74,40 @@ export default Ember.Controller.extend({
         hideAddGroup: function () {
             this.set('displayAddGroup', false);
         },
+        createEmptyFootprint: function (name) {
+            var g = this.store.createRecord('footprint', {
+                name: name,
+                flagged: true
+            });
+
+            g.save().catch(function () {
+                g.destroy();
+            });
+        },
+        addFootprint: function (footprints) {
+            var model = this.model;
+
+            footprints.forEach(function (g) {
+                model.get('footprints').pushObject(g);
+            });
+
+            model.save().catch(function () {
+                model.rollback();
+            });
+        },
+        removeFootprint: function (footprint) {
+            var model = this.model;
+            model.get('footprints').removeObject(footprint);
+            model.save().catch(function () {
+                model.rollback();
+            });
+        },
+        showAddFootprint: function () {
+            this.set('displayAddFootprint', true);
+        },
+        hideAddFootprint: function () {
+            this.set('displayAddFootprint', false);
+        },
         addSeeAlso: function (type) {
             var model = this.model;
             if (type == this.model) {
