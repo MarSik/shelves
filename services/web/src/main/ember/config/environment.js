@@ -36,11 +36,6 @@ module.exports = function(environment) {
 
     ENV.APP.API_SERVER = 'http://localhost:8080';
     ENV.APP.API_NAMESPACE = 'api/1';
-
-    ENV['simple-auth-oauth2'] = {
-      serverTokenEndpoint: ENV.APP.API_SERVER + '/' + ENV.APP.API_NAMESPACE + '/oauth/token',
-      clientId: 'elshelves.js'
-    }
   }
 
   if (environment === 'test') {
@@ -56,12 +51,13 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-      ENV.APP.API_SERVER = 'https://api.shelves.cz';
+      ENV.APP.API_SERVER = 'https://a.shelves.cz';
+      ENV.APP.API_NAMESPACE = 'api/1';
+  }
 
-      ENV['simple-auth-oauth2'] = {
-          serverTokenEndpoint: ENV.APP.API_SERVER + '/oauth/token',
-          clientId: 'elshelves.js'
-      }
+  ENV['simple-auth-oauth2'] = {
+      serverTokenEndpoint: ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '') + '/oauth/token',
+      clientId: 'elshelves.js'
   }
 
   ENV.APP.API_ENDPOINT = ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '');
