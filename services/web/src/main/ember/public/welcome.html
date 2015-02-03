@@ -49,6 +49,29 @@
             border-left: solid black 2px;
             border-right: solid black 2px;
         }
+
+        .feature-list {
+            margin-top: 1em;
+        }
+
+        .feature-list li {
+            margin-bottom: 1em;
+        }
+
+        .feature-list li > i {
+            float: left;
+            margin: 0 0.5ex 0 0;
+        }
+
+        .highlights-images {
+            min-height: 100px;
+        }
+
+        .highlights-images li img {
+            width: 1000px;
+            height: 300px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -78,24 +101,24 @@
 <section class="transparent">
     <h2>Shelves</h2>
 
-
+    <p>Shelves is a project aimed at electronic hobbyist's part tracking needs. It help with the process of buying parts, organizing them to groups and multiple storage locations and using them in projects.</p>
 </section>
 
 <section class="solid">
     <a name="highlights"></a>
     <h2>Highlights</h2>
 
-    <ul class="example-orbit" data-orbit>
+    <ul class="highlights-images" data-orbit>
         <li class="active">
-            <img src="../assets/img/examples/satelite-orbit.jpg" alt="slide 1" />
+            <img src="images/FFFFFF-0.8.png" alt="slide 1" />
             <div class="orbit-caption">Caption One.</div>
         </li>
         <li>
-            <img src="../assets/img/examples/andromeda-orbit.jpg" alt="slide 2" />
+            <img src="images/FFFFFF-0.8.png" alt="slide 2" />
             <div class="orbit-caption"> Caption Two.</div>
         </li>
         <li>
-            <img src="../assets/img/examples/launch-orbit.jpg" alt="slide 3" />
+            <img src="images/FFFFFF-0.8.png" alt="slide 3" />
             <div class="orbit-caption"> Caption Three.</div>
         </li>
     </ul>
@@ -105,7 +128,7 @@
     <a name="features"></a>
     <h2>Features</h2>
 
-    <ul class="small-block-grid-2 large-block-grid-5">
+    <ul class="feature-list small-block-grid-2 large-block-grid-5">
         <li><i class="fa fa-cube fa-3x"></i> Organize your storage locations. Hierarchies are also supported.</li>
         <li><i class="fa fa-shopping-cart fa-3x"></i> Manage your sources and orders.</li>
         <li><i class="fa fa-history fa-3x"></i> Track history of every part.</li>
@@ -123,7 +146,7 @@
 
     <h3>We are preparing:</h3>
 
-    <ul class="small-block-grid-2 large-block-grid-5">
+    <ul class="feature-list small-block-grid-2 large-block-grid-5">
         <li><i class="fa fa-android fa-3x"></i> Android application for online part manipulation using QR codes.</li>
         <li><i class="fa fa-code-fork fa-3x"></i> Import requirements to project directly from KiCAD schematics.</li>
         <li><i class="fa fa-bug fa-3x"></i> Assign parts and export footprint assignments to KiCAD.</li>
