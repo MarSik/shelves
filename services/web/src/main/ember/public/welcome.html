@@ -14,7 +14,41 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 
     <style>
+        nav.top-bar {
+            border-bottom: solid 2px #b3b3b3;
+            overflow: hidden;
+        }
 
+        body {
+            background-color: rgba(0, 0, 0, 0.3);
+            background-image: url("images/background-pcb.png");
+            background-attachment: fixed;
+            background-repeat: repeat;
+            line-height: 1.6em;
+        }
+
+        .solid {
+            margin: 0 auto;
+            padding: 1em 5ex 2em 5ex;
+            background-color: rgba(252, 255, 252, 0.92);
+        }
+
+        .transparent {
+            margin: 0 auto;
+            padding: 1em 5ex 2em 5ex;
+            background-color: rgba(0, 0, 0, 0.50);
+            color: white;
+        }
+
+        .transparent * {
+            color: white;
+        }
+
+        body > section {
+            max-width: 1024px;
+            border-left: solid black 2px;
+            border-right: solid black 2px;
+        }
     </style>
 </head>
 <body>
@@ -35,36 +69,94 @@
         <ul class="left">
             <li><a href="#highlights">Highlights</a></li>
             <li><a href="#features">Features</a></li>
-            <li><a href="#author">Author</a></li>
-            <li><a href="#license">License</a></li>
+            <li><a href="#author">Authors</a></li>
+            <li><a href="#license">Usage policy</a></li>
         </ul>
     </section>
 </nav>
 
-<section>
-    <h2>Index</h2>
+<section class="transparent">
+    <h2>Shelves</h2>
+
+
 </section>
 
-<section>
+<section class="solid">
     <a name="highlights"></a>
     <h2>Highlights</h2>
 
-    <p>obrázky</p>
+    <ul class="example-orbit" data-orbit>
+        <li class="active">
+            <img src="../assets/img/examples/satelite-orbit.jpg" alt="slide 1" />
+            <div class="orbit-caption">Caption One.</div>
+        </li>
+        <li>
+            <img src="../assets/img/examples/andromeda-orbit.jpg" alt="slide 2" />
+            <div class="orbit-caption"> Caption Two.</div>
+        </li>
+        <li>
+            <img src="../assets/img/examples/launch-orbit.jpg" alt="slide 3" />
+            <div class="orbit-caption"> Caption Three.</div>
+        </li>
+    </ul>
 </section>
 
-<section>
+<section class="transparent">
     <a name="features"></a>
     <h2>Features</h2>
+
+    <ul class="small-block-grid-2 large-block-grid-5">
+        <li><i class="fa fa-cube fa-3x"></i> Organize your storage locations. Hierarchies are also supported.</li>
+        <li><i class="fa fa-shopping-cart fa-3x"></i> Manage your sources and orders.</li>
+        <li><i class="fa fa-history fa-3x"></i> Track history of every part.</li>
+        <li><i class="fa fa-cubes fa-3x"></i> Manage ICs, modules, cables, ... - multiple footprints can be selected.</li>
+        <li><i class="fa fa-sitemap fa-3x"></i> Organize your parts into hierarchy of groups.</li>
+        <li><i class="fa fa-arrows fa-3x"></i> Create arbitrary properties including proper units and allowed SI prefixes.</li>
+        <li><i class="fa fa-sliders fa-3x"></i> Set property values to types and show them in group listings.</li>
+        <li><i class="fa fa-flask fa-3x"></i> Track projects and required parts.</li>
+        <li><i class="fa fa-qrcode fa-3x"></i> Print QR stickers for storage locations, projects and types.</li>
+        <li><i class="fa fa-cloud-upload fa-3x"></i> Upload datasheets or ask the server to download them.</li>
+        <li><i class="fa fa-camera fa-3x"></i> Use your webcam to take pictures.</li>
+        <li><i class="fa fa-hdd-o fa-3x"></i> Backup and restore all data using menu and REST API.</li>
+        <li><i class="fa fa-plug fa-3x"></i> Write your own frontend using REST API.</li>
+    </ul>
+
+    <h3>We are preparing:</h3>
+
+    <ul class="small-block-grid-2 large-block-grid-5">
+        <li><i class="fa fa-android fa-3x"></i> Android application for online part manipulation using QR codes.</li>
+        <li><i class="fa fa-code-fork fa-3x"></i> Import requirements to project directly from KiCAD schematics.</li>
+        <li><i class="fa fa-bug fa-3x"></i> Assign parts and export footprint assignments to KiCAD.</li>
+        <li><i class="fa fa-code fa-3x"></i> Load footprint from KiCAD or Gerber file.</li>
+        <li><i class="fa fa-ship fa-3x"></i> Load PCBs from KiCAD and prepare Gerber files for manufacturing.</li>
+    </ul>
+
 </section>
 
-<section>
+<section class="solid">
     <a name="author"></a>
-    <h2>Author</h2>
+    <h2>Authors</h2>
+
+    <div class="row">
+        <div class="large-3 columns"><img src="http://www.marsik.org/images/MarSik.jpg" title="Martin Sivak" alt="photo of Martin Sivak"/></div>
+        <div class="large-9 columns">
+            <h3>Martin Sivak</h3>
+
+            <p></p>
+        </div>
+    </div>
+
 </section>
 
-<section>
+<section class="transparent">
     <a name="license"></a>
-    <h2>License</h2>
+    <h2>Usage policy</h2>
+
+    <ol>
+        <li>Please note that this server acts as a demo service for the current bleeding edge version of shelves and can experience downtime during development.</li>
+        <li>This service is provided as-is, without any guarantees about (for example, but not limited to) accessibility, reliability, data integrity or confidentiality. Use at your own risk.</li>
+        <li>There are no explicit limitations regarding a load that can be generated by any single user, but we do reserve the right to limit access or terminate accounts when it violates laws, abuses users or resources, overuses the server or in other cases when it seems necessary to us.</li>
+    </ol>
 </section>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
