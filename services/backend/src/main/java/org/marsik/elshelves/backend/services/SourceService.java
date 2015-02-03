@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.services;
 
-import org.apache.commons.io.IOUtils;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -10,14 +9,11 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
-import org.marsik.elshelves.backend.security.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;

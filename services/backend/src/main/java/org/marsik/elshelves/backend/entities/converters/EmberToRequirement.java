@@ -1,10 +1,8 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
-import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;

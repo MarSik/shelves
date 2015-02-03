@@ -19,7 +19,6 @@ import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.RequirementRepository;
-import org.mozilla.javascript.commonjs.module.Require;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,6 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
-import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

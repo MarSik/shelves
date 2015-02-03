@@ -3,7 +3,6 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;

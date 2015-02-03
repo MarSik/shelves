@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
-import org.marsik.elshelves.api.entities.idresolvers.SiSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
+import org.marsik.elshelves.api.entities.idresolvers.SiSizePrefixDeserializer;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;

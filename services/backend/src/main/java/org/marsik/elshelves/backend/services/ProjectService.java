@@ -9,7 +9,6 @@ import org.marsik.elshelves.backend.entities.converters.EmberToProject;
 import org.marsik.elshelves.backend.entities.converters.ProjectToEmber;
 import org.marsik.elshelves.backend.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 
 @Service

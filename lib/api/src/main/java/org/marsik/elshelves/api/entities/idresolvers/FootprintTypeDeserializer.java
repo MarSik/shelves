@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.base.Joiner;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
-import org.marsik.elshelves.api.entities.fields.SiPrefix;
 
 import java.io.IOException;
 

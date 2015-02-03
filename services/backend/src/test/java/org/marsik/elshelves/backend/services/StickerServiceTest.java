@@ -8,8 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.junit.Test;
 
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class StickerServiceTest {
     @Test
