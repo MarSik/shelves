@@ -1,5 +1,6 @@
 import Ember from "ember";
 import config from "./config/environment";
+// global _paq
 
 var Router = Ember.Router.extend({
   location: config.locationType
@@ -79,6 +80,13 @@ Router.map(function() {
     });
     this.route("new");
   });
+});
+
+Router.reopen({
+    notifyPiwik: function() {
+        _paq.push(['setDocumentTitle', document.title]);
+        _paq.push(['trackPageView']);
+    }.on('didTransition')
 });
 
 export default Router;
