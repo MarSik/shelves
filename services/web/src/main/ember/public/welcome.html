@@ -27,20 +27,20 @@
             line-height: 1.6em;
         }
 
-        .solid {
+        .solid, body > section:nth-child(odd) {
             margin: 0 auto;
             padding: 1em 5ex 2em 5ex;
             background-color: rgba(252, 255, 252, 0.92);
         }
 
-        .transparent {
+        .transparent, body > section:nth-child(even) {
             margin: 0 auto;
             padding: 1em 5ex 2em 5ex;
             background-color: rgba(0, 0, 0, 0.60);
             color: white;
         }
 
-        .transparent * {
+        .transparent *, body > section:nth-child(even) * {
             color: white;
         }
 
@@ -56,11 +56,16 @@
 
         .feature-list li {
             margin-bottom: 1em;
+            text-align: right;
         }
 
-        .feature-list li > i {
+        .development-list li {
+            text-align: left;
+        }
+
+        .feature-list li > i, .feature-list li p > i {
             float: left;
-            margin: 0 0.5ex 0 0;
+            margin: 0 0.5ex 0.1em 0;
         }
 
         .highlights-images {
@@ -79,11 +84,11 @@
     </style>
 </head>
 <body>
-<div class="">
+<div class="contain-to-grid">
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
             <li class="name">
-                <h1><a href="#">shelves - (electronic) part tracking</a></h1>
+                <h1><a href="#">shelves</a></h1>
             </li>
         </ul>
 
@@ -101,18 +106,19 @@
                 <li><a href="#author">Authors</a></li>
                 <li><a href="#license">Usage policy</a></li>
                 <li><a href="#links">See also</a></li>
+                <li><a href="#development">Development</a></li>
             </ul>
         </section>
     </nav>
 </div>
 
-<section class="transparent">
+<section class="">
     <h2>Shelves</h2>
 
     <p>Shelves is a project aimed at electronic hobbyist's part tracking needs. It help with the process of buying parts, organizing them to groups and multiple storage locations and using them in projects.</p>
 </section>
 
-<section class="solid">
+<section class="">
     <a name="highlights"></a>
     <h2>Highlights</h2>
 
@@ -132,38 +138,39 @@
     </ul>
 </section>
 
-<section class="transparent">
+<section class="">
     <a name="features"></a>
     <h2>Features</h2>
 
     <ul class="feature-list small-block-grid-2 large-block-grid-5">
-        <li><i class="fa fa-cube fa-3x"></i> Organize your storage locations. Hierarchies are also supported.</li>
-        <li><i class="fa fa-shopping-cart fa-3x"></i> Manage your sources and orders.</li>
-        <li><i class="fa fa-history fa-3x"></i> Track history of every part.</li>
-        <li><i class="fa fa-cubes fa-3x"></i> Manage ICs, modules, cables, ... - multiple footprints can be selected.</li>
-        <li><i class="fa fa-sitemap fa-3x"></i> Organize your parts into hierarchy of groups.</li>
-        <li><i class="fa fa-arrows fa-3x"></i> Create arbitrary properties including proper units and allowed SI prefixes.</li>
-        <li><i class="fa fa-sliders fa-3x"></i> Set property values to types and show them in group listings.</li>
-        <li><i class="fa fa-flask fa-3x"></i> Track projects and required parts.</li>
-        <li><i class="fa fa-qrcode fa-3x"></i> Print QR stickers for storage locations, projects and types.</li>
-        <li><i class="fa fa-cloud-upload fa-3x"></i> Upload datasheets or ask the server to download them.</li>
-        <li><i class="fa fa-camera fa-3x"></i> Use your webcam to take pictures.</li>
-        <li><i class="fa fa-hdd-o fa-3x"></i> Backup and restore all data using menu and REST API.</li>
-        <li><i class="fa fa-plug fa-3x"></i> Write your own frontend using REST API.</li>
+        <li><i class="fa fa-fw fa-cube fa-3x"></i> Organize your storage locations. Hierarchies are also supported.</li>
+        <li><i class="fa fa-fw fa-shopping-cart fa-3x"></i> Manage your sources and orders.</li>
+        <li><i class="fa fa-fw fa-history fa-3x"></i> Track history of every part.</li>
+        <li><i class="fa fa-fw fa-cubes fa-3x"></i> Manage ICs, modules, cables, ... - multiple footprints can be selected.</li>
+        <li><i class="fa fa-fw fa-sitemap fa-3x"></i> Organize your parts into hierarchy of groups.</li>
+        <li><i class="fa fa-fw fa-arrows fa-3x"></i> Create arbitrary properties including proper units and allowed SI prefixes.</li>
+        <li><i class="fa fa-fw fa-sliders fa-3x"></i> Set property values to types and show them in group listings.</li>
+        <li><i class="fa fa-fw fa-flask fa-3x"></i> Track projects and required parts.</li>
+        <li><i class="fa fa-fw fa-qrcode fa-3x"></i> Print QR stickers for storage locations, projects and types.</li>
+        <li><i class="fa fa-fw fa-cloud-upload fa-3x"></i> Upload datasheets or ask the server to download them.</li>
+        <li><i class="fa fa-fw fa-camera fa-3x"></i> Use your webcam to take pictures.</li>
+        <li><i class="fa fa-fw fa-hdd-o fa-3x"></i> Backup and restore all data using menu and REST API.</li>
+        <li><i class="fa fa-fw fa-plug fa-3x"></i> Write your own frontend using REST API.</li>
+        <li><i class="fa fa-fw fa-envelope fa-3x"></i> Sends and receives emails using <a src="http://www.mailgun.com/">mailgun</a>.</li>
     </ul>
 
     <h3>We are preparing:</h3>
 
     <ul class="feature-list small-block-grid-2 large-block-grid-5">
-        <li><i class="fa fa-android fa-3x"></i> Android application for online part manipulation using QR codes.</li>
-        <li><i class="fa fa-code-fork fa-3x"></i> Import requirements to project directly from KiCAD schematics.</li>
-        <li><i class="fa fa-bug fa-3x"></i> Assign parts and export footprint assignments to KiCAD.</li>
-        <li><i class="fa fa-code fa-3x"></i> Load footprint from KiCAD or Gerber file.</li>
-        <li><i class="fa fa-ship fa-3x"></i> Load PCBs from KiCAD and prepare Gerber files for manufacturing.</li>
+        <li><i class="fa fa-fw fa-android fa-3x"></i> Android application for online part manipulation using QR codes.</li>
+        <li><i class="fa fa-fw fa-code-fork fa-3x"></i> Import requirements to project directly from KiCAD schematics.</li>
+        <li><i class="fa fa-fw fa-bug fa-3x"></i> Assign parts and export footprint assignments to KiCAD.</li>
+        <li><i class="fa fa-fw fa-code fa-3x"></i> Load footprint from KiCAD or Gerber file.</li>
+        <li><i class="fa fa-fw fa-ship fa-3x"></i> Load PCBs from KiCAD and prepare Gerber files for manufacturing.</li>
     </ul>
 </section>
 
-<section class="solid">
+<section class="">
     <a name="pricing"></a>
     <h2>Pricing</h2>
 
@@ -190,7 +197,35 @@
     </div>
 </section>
 
-<section class="transparent">
+<section class="">
+    <a name="license"></a>
+    <h2>Usage policy</h2>
+
+    <ol>
+        <li>Please note that this server acts as a demo service for the current bleeding edge version of shelves and can experience downtime during development.</li>
+        <li>This service is provided as-is, without any guarantees about (for example, but not limited to) accessibility, reliability, data integrity or confidentiality. Use at your own risk.</li>
+        <li>There are no explicit limitations regarding a load that can be generated by any single user, but we do reserve the right to limit access or terminate accounts when it violates laws, abuses users or resources, overuses the server or in other cases when it seems necessary to us.</li>
+    </ol>
+</section>
+
+<section>
+    <a name="development"></a>
+    <h2>Development</h2>
+
+    <ul class="small-block-grid-3 feature-list development-list">
+        <li>
+            <p><i class="fa fa-fw fa-bitbucket fa-3x"></i> The source will be published shortly on bitbucket.</p>
+            <p><i class="fa fa-fw fa-file-text-o fa-3x"></i> The source will be published under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPLv3 license</a>.</p>
+        </li>
+        <li><i class="fa fa-code fa-3x"></i> The REST API documentation is being worked on, use the browser console to watch the requests. The general structure obeys the constraints of <a href="http://emberjs.com/guides/models/the-rest-adapter/">Ember Data</a> and <a href="http://jsonapi.org/">JSON API</a>.</li>
+        <li>
+            <p><i class="fa fa-fw fa-html5 fa-3x"></i> Written using <a href="http://spring.io/">Spring</a> and <a href="http://emberjs.com">Ember.js</a>.</p>
+            <p><i class="fa fa-fw fa-cloud fa-3x"></i> Deployable as WAR or standalone with nginx proxy.</p>
+        </li>
+    </ul>
+</section>
+
+<section class="">
     <a name="author"></a>
     <h2>Authors</h2>
 
@@ -205,23 +240,13 @@
 
 </section>
 
-<section class="solid">
-    <a name="license"></a>
-    <h2>Usage policy</h2>
-
-    <ol>
-        <li>Please note that this server acts as a demo service for the current bleeding edge version of shelves and can experience downtime during development.</li>
-        <li>This service is provided as-is, without any guarantees about (for example, but not limited to) accessibility, reliability, data integrity or confidentiality. Use at your own risk.</li>
-        <li>There are no explicit limitations regarding a load that can be generated by any single user, but we do reserve the right to limit access or terminate accounts when it violates laws, abuses users or resources, overuses the server or in other cases when it seems necessary to us.</li>
-    </ol>
-</section>
-
-<section class="transparent">
+<section class="">
     <a name="links"></a>
     <h2>See also</h2>
 
     <ul class="small-block-grid-4">
         <li><a href="http://vpsfree.cz">vpsFree.cz</a></li>
+        <li><a href="http://emberjs.com">ember.js</a></li>
     </ul>
 </section>
 
