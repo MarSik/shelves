@@ -1,11 +1,14 @@
-grammar kicad;
+grammar Schema;
 
-fragment LibraryCharacter: [a-zA-Z0-9$_.];
-fragment Digit: [0-9];
-fragment SheetClass: [A-E];
-fragment SheetSize: [0-4];
-fragment EscapeSequence: '\\' [btnfr"'\\];
-fragment StringCharacter: ~["\\] | EscapeSequence;
+LibraryCharacter: [a-zA-Z0-9$_.];
+Digit: [0-9];
+SheetClass: [A-E];
+SheetSize: [0-4];
+EscapeSequence: '\\' [btnfr"'\\];
+StringCharacter: ~["\\] | EscapeSequence;
+
+WS: (' ' | '\t')+;
+NL:  '\r'? '\n';
 
 HEADER: 'EESchema Schematic Spins Version 1';
 LIBS: 'LIBS:';
