@@ -15,6 +15,6 @@ public class SchemaTest {
     public void testLoading() throws IOException {
         SchemaLexer l = new SchemaLexer(new ANTLRInputStream(getClass().getResourceAsStream("/empty.sch")));
         SchemaParser p = new SchemaParser(new CommonTokenStream(l));
-        p.schema();
+        assertNotNull(p.schema());
     }
 }
