@@ -142,6 +142,9 @@ export default Ember.Controller.extend({
 
     groupSorting: ['fullName'],
     sortedGroups: Ember.computed.sort('controllers.application.availableGroups', 'groupSorting'),
+
+    footprintSorting: ['fullName'],
+    sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'footprintSorting'),
     
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');
