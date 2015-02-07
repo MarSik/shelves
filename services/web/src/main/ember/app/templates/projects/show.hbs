@@ -29,7 +29,7 @@
             {{#if lot.canBeSoldered}}{{#add-count-button class="tiny alert" action='solderLot' param=lot}}Solder{{/add-count-button}}{{/if}}
             {{#if lot.canBeUnassigned}}<button class="button tiny secondary" {{action 'unassignLot' lot}}>Unassign</button>{{/if}}
             {{#if lot.canBeUnsoldered}}<button class="button tiny alert" {{action 'unsolderLot' lot}}>Unsolder</button>{{/if}}
-            <button class="tiny button">history</button>
+            {{#link-to 'lots.show' lot}}<button class="tiny button">history</button>{{/link-to}}
         </td>
     </tr>
     {{/each}}
@@ -86,7 +86,7 @@ placeholder="Select a type" }}
             <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
             <td>{{lot.type.vendor}}</td>
             <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
-            <td>[history]</td>
+            <td>{{#link-to 'lots.show' lot}}[history]{{/link-to}}</td>
             <td>{{#add-count-button action='performAssignment' param=assignLotToRequirement param2=lot default=assignLotToRequirement.missing}}assign{{/add-count-button}}</td>
         </tr>
     {{/each}}

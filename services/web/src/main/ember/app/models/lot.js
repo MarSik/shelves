@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import LotBase from './lotbase';
 
@@ -6,6 +7,7 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default LotBase.extend({
+  created: attr('date'),
   location: belongsTo("box", {async: true}),
   previous: belongsTo("lot", {inverse: "next", async: true}),
   next: hasMany("lot", {inverse: "previous", async: true}),

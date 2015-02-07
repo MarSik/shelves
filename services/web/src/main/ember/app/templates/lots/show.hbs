@@ -1,1 +1,29 @@
-<h2>Lots id {{id}}</h2>
+<h2>Lot {{model.id}}</h2>
+
+<dl>
+    <dt>Count</dt>
+    <dd>{{model.count}}</dd>
+</dl>
+
+<dl>
+    <dt>Action</dt>
+    <dd>{{model.action}}</dd>
+</dl>
+
+<dl>
+    <dt>Date</dt>
+    <dd>{{model.created}}</dd>
+</dl>
+
+<table>
+    {{#each lot in history}}
+        <tr>
+            <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
+            <td>{{lot.count}}</td>
+            <td>{{lot.action}}</td>
+            <td>{{lot.location.name}}</td>
+            <td>{{lot.usedBy.project.name}}</td>
+            <td>{{lot.performedBy.name}}</td>
+        </tr>
+    {{/each}}
+</table>

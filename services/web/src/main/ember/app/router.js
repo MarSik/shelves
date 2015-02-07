@@ -80,6 +80,12 @@ Router.map(function() {
     });
     this.route("new");
   });
+
+  this.route("lots", function() {
+      this.route("show", {
+          path: "/:lot_id"
+      });
+  });
 });
 
 Router.reopen({
