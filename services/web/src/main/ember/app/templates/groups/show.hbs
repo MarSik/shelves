@@ -6,16 +6,16 @@
 <table style="width: 100%;">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Vendor</th>
-        <th>Footprint</th>
-        <th>Available</th>
+        <th>Name {{sort-link action='sortBy' field='name'}}</th>
+        <th>Vendor {{sort-link action='sortBy' field='vendor'}}</th>
+        <th>Footprint {{sort-link action='sortBy' field='footprint'}}</th>
+        <th>Available {{sort-link action='sortBy' field='available'}}</th>
         {{#each property in model.showProperties}}
-            <th>{{property.name}} [{{property.unit.symbol}}]</th>
+            <th>{{property.name}} [{{property.unit.symbol}}] {{sort-link action='sortByProperty' field=property}}</th>
         {{/each}}
     </tr>
     </thead>
-{{#each type in model.types}}
+{{#each type in sortedTypes}}
     <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{type.name}}{{/draggable-item}}</td>

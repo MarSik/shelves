@@ -17,6 +17,20 @@ export default Ember.Controller.extend({
                 group.rollback();
                 self.growl.error("Could not remove property: "+e);
             })
+        },
+        sortBy: function (p, desc) {
+            var key = p;
+            if (desc) {
+                key += ':desc';
+            }
+            this.set('typeSorting', [key]);
+        },
+        sortByProperty: function (property, desc) {
+            var key = 'values.'+property.get('id');
+            if (desc) {
+                key += ':desc';
+            }
+            this.set('typeSorting', [key]);
         }
     },
     needs: "application",
@@ -24,5 +38,8 @@ export default Ember.Controller.extend({
     sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propSorting'),
     typeColumns: function () {
         return 4 + this.get('model.showProperties.length');
-    }.property('model.showProperties.size')
+    }.property('model.showProperties.size'),
+
+    typeSorting: ['name'],
+    sortedTypes: Ember.computed.sort('model.types', 'typeSorting')
 });
