@@ -23,23 +23,21 @@ export default Ember.Component.extend({
 
         if (!Ember.isEmpty(nicePrefix)) {
             // Prefixes available for unit
-            var unit = property.get('unit.content');
-            var prefixes = unit.get('prefixes.content');
+            var unit = property.get('unit');
+            var prefixes = unit.get('prefixes');
 
-            if (!Ember.isEmpty(prefixes)) {
-                prefixes.forEach(function (p) {
-                    var pPower = p.get('power');
-                    var pBase = p.get('base');
+            prefixes.forEach(function (p) {
+                var pPower = p.get('power');
+                var pBase = p.get('base');
 
-                    var divider = Math.pow(pBase, pPower) / base;
-                    var value = baseValue / divider;
+                var divider = Math.pow(pBase, pPower) / base;
+                var value = baseValue / divider;
 
-                    if (Math.round(value) > 0 && Math.round(value).toString().length < Math.round(niceValue).toString().length) {
-                        niceValue = Math.round(100 * value) / 100.0;
-                        nicePrefix = p;
-                    }
-                });
-            }
+                if (Math.round(value) > 0 && Math.round(value).toString().length < Math.round(niceValue).toString().length) {
+                    niceValue = Math.round(100 * value) / 100.0;
+                    nicePrefix = p;
+                }
+            });
 
             res += nicePrefix.get('prefix');
         }
