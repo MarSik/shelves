@@ -34,8 +34,8 @@ export default Ember.Component.extend({
                     var divider = Math.pow(pBase, pPower) / base;
                     var value = baseValue / divider;
 
-                    if (value > 0 && value.toString().length < niceValue.toString().length) {
-                        niceValue = value;
+                    if (Math.round(value) > 0 && Math.round(value).toString().length < Math.round(niceValue).toString().length) {
+                        niceValue = Math.round(100 * value) / 100.0;
                         nicePrefix = p;
                     }
                 });
