@@ -12,12 +12,13 @@
     <artifactId>scanlib</artifactId>
 
     <dependencies>
-        <!-- Processing //-->
+        <!-- Processing
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
             <version>${processing.version}</version>
         </dependency>
+        //-->
 
         <!-- Computer vision libs //-->
         <dependency>
