@@ -139,8 +139,8 @@
                             </goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v0.10.33</nodeVersion>
-                            <npmVersion>1.4.3</npmVersion>
+                            <nodeVersion>v0.10.36</nodeVersion>
+                            <npmVersion>2.5.0</npmVersion>
                         </configuration>
                     </execution>
 
