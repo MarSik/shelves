@@ -1,4 +1,4 @@
-lexer grammar SchemaTokens;
+lexer grammar SchemaLexer;
 
 SPACE: [ \t]+ -> skip;
 NL: '\r'? '\n' -> skip;
@@ -23,6 +23,7 @@ COMPONENT_END: '$EndComp';
 WIRE: 'Wire';
 LINE: 'Line';
 BUS: 'Bus';
+NOTES: 'Notes';
 
 BITMAP_START: '$Bitmap' -> pushMode(Bitmap);
 TEXT: 'Text' -> pushMode(UnquotedStrings);
@@ -35,12 +36,10 @@ COMPONENT_L: 'L';
 COMPONENT_U: 'U';
 COMPONENT_P: 'P';
 COMPONENT_F: 'F';
-COMPONENT_1: '1';
 
 // Hidden lexer elements (no token is generated)
 fragment Digit: [0-9];
 fragment HexDigit: [0-9A-Fa-f];
-fragment NameFirstCharacter: [a-zA-Z];
 fragment NameCharacter: [a-zA-Z0-9$_.?-];
 fragment EscapeSequence: '\\' [btnfr"'\\];
 fragment UnquotedStringCharacter: ~[\\\n\r] | EscapeSequence;
@@ -50,9 +49,9 @@ fragment FractionSeparator: ',' | '.';
 // Lexer elements
 Number: '-'? Digit Digit*;
 Float: '-'? Digit* FractionSeparator Digit Digit*;
-Name: NameFirstCharacter NameCharacter*;
-StringBeginning: '"' -> pushMode(QuotedStrings);
 HexString: HexDigit HexDigit*;
+Name: NameCharacter NameCharacter*;
+StringBeginning: '"' -> pushMode(QuotedStrings);
 
 mode QuotedStrings;
 
@@ -64,7 +63,7 @@ mode UnquotedStrings;
 LABEL: 'Label';
 GLABEL: 'GLabel';
 HLABEL: 'HLabel';
-NOTES: 'Notes';
+USNOTES: 'Notes' -> type(NOTES);
 
 PinSymbol: 'BiDi' | 'Input' | 'Output' | 'Totem' | '3State';
 TextFormat: '~' | 'Italic' | 'Bold';
