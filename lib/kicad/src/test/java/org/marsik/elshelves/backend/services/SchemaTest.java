@@ -43,6 +43,12 @@ public class SchemaTest {
     }
 
     @Test
+    public void testMeta() throws IOException {
+        SchemaParser p = getSchemaGrammarParser("/meta.sch");
+        assertNotNull(p.schema());
+    }
+
+    @Test
     public void testWire() throws IOException {
         SchemaParser p = getSchemaGrammarParser("/wire.sch");
         assertNotNull(p.schema());
