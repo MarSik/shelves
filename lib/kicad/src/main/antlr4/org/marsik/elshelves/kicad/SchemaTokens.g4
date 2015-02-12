@@ -31,10 +31,17 @@ NO_CONN: 'NoConn';
 CONN: 'Connection';
 ENTRY: 'Entry';
 
+COMPONENT_L: 'L';
+COMPONENT_U: 'U';
+COMPONENT_P: 'P';
+COMPONENT_F: 'F';
+COMPONENT_1: '1';
+
 // Hidden lexer elements (no token is generated)
 fragment Digit: [0-9];
 fragment HexDigit: [0-9A-Fa-f];
-fragment NameCharacter: [a-zA-Z0-9$_.-];
+fragment NameFirstCharacter: [a-zA-Z];
+fragment NameCharacter: [a-zA-Z0-9$_.?-];
 fragment EscapeSequence: '\\' [btnfr"'\\];
 fragment UnquotedStringCharacter: ~[\\\n\r] | EscapeSequence;
 fragment StringCharacter: ~["\\] | EscapeSequence;
@@ -42,9 +49,10 @@ fragment FractionSeparator: ',' | '.';
 
 // Lexer elements
 Number: '-'? Digit Digit*;
-Float: Digit* FractionSeparator Digit Digit*;
-Name: NameCharacter NameCharacter*;
+Float: '-'? Digit* FractionSeparator Digit Digit*;
+Name: NameFirstCharacter NameCharacter*;
 StringBeginning: '"' -> pushMode(QuotedStrings);
+HexString: HexDigit HexDigit*;
 
 mode QuotedStrings;
 
@@ -58,7 +66,7 @@ GLABEL: 'GLabel';
 HLABEL: 'HLabel';
 NOTES: 'Notes';
 
-PinSymbol: 'BiDi' | 'Input' | 'Output' | 'Totem';
+PinSymbol: 'BiDi' | 'Input' | 'Output' | 'Totem' | '3State';
 TextFormat: '~' | 'Italic' | 'Bold';
 USNumber: Number -> type(Number);
 USWS: SPACE -> skip;

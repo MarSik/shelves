@@ -36,7 +36,13 @@ bitmap: BITMAP_START  BITMAP_POSITION  Number  Number  BITMAP_SCALE  Float  DATA
 bus_bus: ENTRY  BUS  BUS   wire_coords ;
 wire_bus: ENTRY  WIRE  LINE   wire_coords ;
 
-component: COMPONENT_START COMPONENT_END;
+component: COMPONENT_START component_label component_unit component_position component_field* component_oldposition component_matrix COMPONENT_END;
+component_label: COMPONENT_L value=Name designator=Name;
+component_unit: COMPONENT_U unit=Number mm=Number timestamp=HexString;
+component_position: COMPONENT_P x=Number y=Number;
+component_field: COMPONENT_F id=Number value=String orientation=Name x=Number y=Number size=Number Number Name Name;
+component_oldposition: COMPONENT_1 x=Number y=Number;
+component_matrix: a=Number b=Number c=Number d=Number;
 
 // Helpers
 bus_start: WIRE  BUS  LINE  ;

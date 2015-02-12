@@ -89,4 +89,16 @@ public class SchemaTest {
         SchemaGrammar p = getSchemaGrammarParser("/bus_to_bus.sch");
         assertNotNull(p.schema());
     }
+
+    @Test
+    public void testComponent() throws IOException {
+        SchemaGrammar p = getSchemaGrammarParser("/ic.sch");
+        assertNotNull(p.schema());
+    }
+
+    @Test
+    public void testTwoComponents() throws IOException {
+        SchemaGrammar p = getSchemaGrammarParser("/ic_two_units.sch");
+        assertNotNull(p.schema());
+    }
 }
