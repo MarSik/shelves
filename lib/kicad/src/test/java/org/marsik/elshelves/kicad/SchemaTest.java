@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.services;
+package org.marsik.elshelves.kicad;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRErrorStrategy;
