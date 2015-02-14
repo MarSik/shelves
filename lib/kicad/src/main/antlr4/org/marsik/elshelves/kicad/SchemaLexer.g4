@@ -40,7 +40,7 @@ COMPONENT_F: 'F';
 // Hidden lexer elements (no token is generated)
 fragment Digit: [0-9];
 fragment HexDigit: [0-9A-Fa-f];
-fragment NameCharacter: [a-zA-Z0-9$_.?-];
+fragment NameCharacter: [#+a-zA-Z0-9$_.?-];
 fragment EscapeSequence: '\\' [btnfr"'\\];
 fragment UnquotedStringCharacter: ~[\\\n\r] | EscapeSequence;
 fragment StringCharacter: ~["\\] | EscapeSequence;

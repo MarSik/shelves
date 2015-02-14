@@ -21,4 +21,11 @@ public class SchemaComponentsTest {
         Collection<SchemaComponents.Component> components = processor.fetchComponents(getClass().getResourceAsStream("/ic_two_units.sch"));
         assertEquals(2, components.size());
     }
+
+    @Test
+    public void testFetchPsuComponents() throws Exception {
+        SchemaComponents processor = new SchemaComponents();
+        Collection<SchemaComponents.Component> components = processor.fetchComponents(getClass().getResourceAsStream("/psu.sch"));
+        assertEquals(70, components.size());
+    }
 }

@@ -15,6 +15,15 @@ public class SchemaComponents extends Schema {
         public String id;
         public String type;
         public String value;
+
+        @Override
+        public String toString() {
+            return "Component{" +
+                    "id='" + id + '\'' +
+                    ", type='" + type + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
+        }
     }
 
     static private class ComponentVisitor extends SchemaParserBaseVisitor<String> {
@@ -61,8 +70,12 @@ public class SchemaComponents extends Schema {
         @Override
         public String visitComponent_field(@NotNull SchemaParser.Component_fieldContext ctx) {
             // Field 1 is the value
-            if (ctx.id.toString().equals("1")) {
-                return ctx.value.toString();
+            if (ctx.id.getText().equals("1")) {
+                for (SchemaParser.Text_contentContext t: ctx.text_content()) {
+                    if (t.content != null && t.content.getText() != null) {
+                        return t.content.getText();
+                    }
+                }
             }
 
             return super.visitComponent_field(ctx);

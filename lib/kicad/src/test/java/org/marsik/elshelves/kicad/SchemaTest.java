@@ -120,6 +120,12 @@ public class SchemaTest {
         assertNotNull(p.schema());
     }
 
+    @Test
+    public void testComplicatedBoard() throws IOException {
+        SchemaParser p = getSchemaGrammarParser("/psu.sch");
+        assertNotNull(p.schema());
+    }
+
     /**
      * This serves as a check of false negatives
      * @throws IOException

@@ -40,7 +40,7 @@ component: COMPONENT_START component_label component_unit component_position com
 component_label: COMPONENT_L value=name_token designator=name_token;
 component_unit: COMPONENT_U unit=number_token mm=number_token timestamp=HexString;
 component_position: COMPONENT_P x=number_token y=number_token;
-component_field: COMPONENT_F id=number_token value=text_content orientation=name_token x=number_token y=number_token size=number_token number_token name_token name_token;
+component_field: COMPONENT_F id=number_token value=text_content orientation=name_token x=number_token y=number_token size=number_token number_token name_token name_token name=text_content?;
 component_oldposition: unit=number_token x=number_token y=number_token;
 component_matrix: a=number_token b=number_token c=number_token d=number_token;
 
@@ -54,9 +54,9 @@ label_start: TEXT  LABEL ;
 global_label_start: TEXT  GLABEL ;
 hier_label_start: TEXT  HLABEL ;
 
-name_token: Name | HexString | number_token | Float;
+name_token: Name | HexString | number_token | Float | COMPONENT_L | COMPONENT_U | COMPONENT_P | COMPONENT_F;
 number_token: Number;
 
 // UnquotedString
-text_content: StringBeginning String? StringEnd;
+text_content: StringBeginning content=String? StringEnd;
 
