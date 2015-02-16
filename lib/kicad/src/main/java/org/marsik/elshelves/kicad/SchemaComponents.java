@@ -1,5 +1,6 @@
 package org.marsik.elshelves.kicad;
 
+import gnu.trove.map.hash.THashMap;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class SchemaComponents extends Schema {
 
@@ -15,6 +17,7 @@ public class SchemaComponents extends Schema {
         public String id;
         public String type;
         public String value;
+        public Integer unit;
 
         @Override
         public String toString() {
@@ -27,7 +30,7 @@ public class SchemaComponents extends Schema {
     }
 
     static private class ComponentVisitor extends SchemaParserBaseVisitor<String> {
-        private List<Component> components = new ArrayList<>();
+        private Map<String, List<Component>> components = new THashMap<>();
 
         @Override
         public String visitComponent(@NotNull SchemaParser.ComponentContext ctx) {
@@ -42,11 +45,12 @@ public class SchemaComponents extends Schema {
             String type = ctx.component_label().value.getText();
 
             String baseUnit = ctx.component_unit().unit.getText();
-            String unit = String.valueOf((char)(Integer.valueOf(baseUnit) + (int)'A' - 1));
+            Integer unit = Integer.valueOf(baseUnit);
 
             Component c = new Component();
-            c.id = designation + unit;
+            c.id = designation;
             c.type = type;
+            c.unit = unit;
 
             for (SchemaParser.Component_fieldContext fieldContext: ctx.component_field()) {
                 String value = visit(fieldContext);
@@ -62,7 +66,10 @@ public class SchemaComponents extends Schema {
                 break;
             }
 
-            components.add(c);
+            if (!components.containsKey(designation)) {
+                components.put(designation, new ArrayList<Component>());
+            }
+            components.get(designation).add(c);
 
             return null;
         }
@@ -81,12 +88,12 @@ public class SchemaComponents extends Schema {
             return super.visitComponent_field(ctx);
         }
 
-        public List<Component> getComponents() {
+        public Map<String, List<Component>> getComponents() {
             return components;
         }
     }
 
-    public Collection<Component> fetchComponents(InputStream schema) throws IOException {
+    public Map<String, List<Component>> fetchComponents(InputStream schema) throws IOException {
         SchemaParser p = getSchemaParser(schema);
         ParseTree tree = p.schema();
 
