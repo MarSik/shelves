@@ -33,5 +33,10 @@ public class SchemaComponentsTest {
         assertEquals(2, components.get("U1").size());
         assertEquals(2, components.get("U2").size());
         assertEquals(1, components.get("U3").size());
+        assertEquals(1, components.get("U4").size());
+        assertEquals(1, components.get("U5").size());
+        assertEquals("LP2992AIM5-3.3V", components.get("U5").get(0).type);
+        assertEquals("SOT23-5", components.get("U5").get(0).footprint);
+        assertNull(components.get("U6"));
     }
 }

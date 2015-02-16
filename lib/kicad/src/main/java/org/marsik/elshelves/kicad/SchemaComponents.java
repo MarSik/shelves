@@ -18,6 +18,7 @@ public class SchemaComponents extends Schema {
         public String type;
         public String value;
         public Integer unit;
+        public String footprint;
 
         @Override
         public String toString() {
@@ -53,17 +54,27 @@ public class SchemaComponents extends Schema {
             c.unit = unit;
 
             for (SchemaParser.Component_fieldContext fieldContext: ctx.component_field()) {
-                String value = visit(fieldContext);
-
-                if (value == null) {
-                    continue;
+                // Field 1 is the value
+                if (fieldContext.id.getText().equals("1")) {
+                    for (SchemaParser.Text_contentContext t: fieldContext.text_content()) {
+                        if (t.content != null && t.content.getText() != null) {
+                            if (!t.content.getText().equals(type)) {
+                                c.value = t.content.getText();
+                            }
+                        }
+                    }
                 }
 
-                if (!value.equals(type)) {
-                    c.value = value;
+                // Field 2 is the footprint
+                if (fieldContext.id.getText().equals("2")) {
+                    for (SchemaParser.Text_contentContext t: fieldContext.text_content()) {
+                        if (t.content != null
+                                && t.content.getText() != null
+                                && !t.content.getText().isEmpty()) {
+                            c.footprint = t.content.getText();
+                        }
+                    }
                 }
-
-                break;
             }
 
             if (!components.containsKey(designation)) {
@@ -72,20 +83,6 @@ public class SchemaComponents extends Schema {
             components.get(designation).add(c);
 
             return null;
-        }
-
-        @Override
-        public String visitComponent_field(@NotNull SchemaParser.Component_fieldContext ctx) {
-            // Field 1 is the value
-            if (ctx.id.getText().equals("1")) {
-                for (SchemaParser.Text_contentContext t: ctx.text_content()) {
-                    if (t.content != null && t.content.getText() != null) {
-                        return t.content.getText();
-                    }
-                }
-            }
-
-            return super.visitComponent_field(ctx);
         }
 
         public Map<String, List<Component>> getComponents() {
