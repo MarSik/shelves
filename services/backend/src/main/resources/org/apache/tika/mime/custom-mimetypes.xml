@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info>
+    <mime-type type="application/x-kicad-schematic">
+        <glob pattern="*.sch"/>
+        <magic priority="60">
+            <match value="EESchema Schematic File Version 2" type="string" offset="0">
+            </match>
+        </magic>
+    </mime-type>
+</mime-info>
