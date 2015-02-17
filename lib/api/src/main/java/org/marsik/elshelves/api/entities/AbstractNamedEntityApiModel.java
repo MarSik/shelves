@@ -22,6 +22,7 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 	String description;
 	boolean hasIcon = false;
     boolean flagged = false;
+    boolean canBeDeleted = false;
 
 	UserApiModel belongsTo;
 
@@ -105,5 +106,13 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 
     public void setFlagged(boolean flagged) {
         this.flagged = flagged;
+    }
+
+    public boolean isCanBeDeleted() {
+        return canBeDeleted;
+    }
+
+    public void setCanBeDeleted(boolean canBeDeleted) {
+        this.canBeDeleted = canBeDeleted;
     }
 }

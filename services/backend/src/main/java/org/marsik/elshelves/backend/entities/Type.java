@@ -95,7 +95,7 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@Override
 	public boolean canBeDeleted() {
-		return !(getPurchases().iterator().hasNext() && getUsedIn().iterator().hasNext());
+		return !(getPurchases().iterator().hasNext() || getUsedIn().iterator().hasNext());
 	}
 
     public PartCount getAvailable() {

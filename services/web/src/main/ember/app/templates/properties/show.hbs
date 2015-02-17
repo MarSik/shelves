@@ -13,3 +13,7 @@
 {{#click-to-select content=model field='content.base' label='content.niceName' options=sortedPrefixes}}{{model.base.niceName}}{{/click-to-select}}
 
 {{outlet}}
+
+<nav class="actions">
+    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+</nav>

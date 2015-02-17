@@ -16,4 +16,7 @@
 </table>
 </section>
 
-<button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
+<nav class="actions">
+    <button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
+    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+</nav>

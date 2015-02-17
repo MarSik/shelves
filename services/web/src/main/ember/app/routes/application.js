@@ -35,6 +35,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         },
         deleteDocument: function (document) {
             document.destroyRecord();
+        },
+        deleteEntity: function (entity) {
+            entity.destroyRecord();
         }
     },
     setupController: function(controller, model) {
