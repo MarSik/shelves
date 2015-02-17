@@ -131,6 +131,27 @@ export default Ember.Controller.extend({
         },
         hideAddSeeAlso: function () {
             this.set('displayAddSeeAlso', false);
+        },
+        createBox: function (name) {
+            var box = this.store.createRecord('box', {
+                name: name,
+                flagged: true
+            });
+
+            box.save().catch(function (err) {
+                this.growl.error(err);
+                box.destroy();
+            });
+        },
+        showMoveLot: function (lot) {
+            this.set('moveLot', lot);
+            this.set('moveLotCount', lot.get('count'));
+        },
+        moveLot: function (lot, destination, count) {
+            // close dialog
+            this.set('moveLot', null);
+            // bubble up
+            return true;
         }
     },
     needs: "application",
@@ -145,7 +166,10 @@ export default Ember.Controller.extend({
 
     footprintSorting: ['fullName'],
     sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'footprintSorting'),
-    
+
+    boxSorting: ['fullName'],
+    sortedBoxes: Ember.computed.sort('controllers.application.availableLocations', 'boxSorting'),
+
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');
     }.property('propertyToAdd.unit.prefixes'),
@@ -156,5 +180,10 @@ export default Ember.Controller.extend({
     propertyAddingAllowed: false,
     addPropertyIncomplete: function () {
         return Ember.isEmpty(this.get('propertyToAdd')) || Ember.isEmpty(this.get('propertyValueToAdd'));
-    }.property('propertyToAdd', 'propertyValueToAdd')
+    }.property('propertyToAdd', 'propertyValueToAdd'),
+
+    moveLotToBox: null,
+    moveLotDisabled: function () {
+        return Ember.isEmpty(this.get('moveLotToBox')) || Ember.isEmpty(this.get('moveLotCount'));
+    }.property('moveLotToBox', 'moveLotCount')
 });

@@ -163,7 +163,7 @@ placeholder="Select an SI prefix" }}
             {{lot.purchase.sku}}
         </td>
         <td class="count">
-            {{lot.count}}
+            {{lot.count}} {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
         </td>
         <td class="price">
             {{lot.purchase.priceWithoutVat}}
@@ -185,3 +185,66 @@ placeholder="Select an SI prefix" }}
     <button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
     {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </nav>
+
+{{#modal-dialog condition=moveLot title="Split or move a lot"}}
+
+    <ul class="large-block-grid-3 small-block-grid-1">
+        <li>
+            <dl>
+                <dt>Source / SKU</dt>
+                <dd>
+                    {{#link-to 'transactions.show' moveLot.purchase.transaction}}{{moveLot.purchase.transaction.source.name}}{{/link-to}}
+                    /
+                    {{moveLot.purchase.sku}}
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>Current location</dt>
+                <dd>
+                    {{#if moveLot.canBeAssigned}}
+                        {{fa-icon 'cube'}} {{#link-to 'boxes.show' moveLot.location}}{{moveLot.location.fullName}}{{/link-to}}
+                    {{/if}}
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>Count</dt>
+                <dd>{{moveLot.count}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>price w/o VAT</dt>
+                <dd>{{moveLot.purchase.priceWithoutVat}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>price w/ VAT</dt>
+                <dd>{{moveLot.purchase.priceWithVat}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>VAT%</dt>
+                <dd>{{moveLot.purchase.vat}}</dd>
+            </dl>
+        </li>
+    </ul>
+
+    {{ember-selectize
+    content=sortedBoxes
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=moveLotToBox
+    create='createBox'
+    maxItems=1
+    placeholder="Select a destination" }}
+
+    {{input type="number" value=moveLotCount}}
+
+    <button {{bind-attr disabled=moveLotDisabled}} {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
+{{/modal-dialog}}

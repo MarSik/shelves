@@ -342,7 +342,7 @@ public class Lot extends LotBase implements StickerCapable {
 
     public boolean isCanBeMoved() {
         return isValid()
-                && isCanBeSoldered();
+                && (isCanBeAssigned() || isCanBeSoldered());
     }
 
     /**

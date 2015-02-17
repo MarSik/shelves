@@ -38,6 +38,18 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         },
         deleteEntity: function (entity) {
             entity.destroyRecord();
+        },
+        moveLot: function (lot, destination, count) {
+            var newLot = this.store.createRecord('lot', {
+                count: count,
+                previous: lot,
+                location: destination
+            });
+
+            newLot.save().catch(function () {
+                newLot.rollback();
+                newLot.destroyRecord();
+            });
         }
     },
     setupController: function(controller, model) {
