@@ -8,5 +8,6 @@ public enum LotAction {
     UNASSIGNED,
 	SOLDERED,
 	UNSOLDERED,
-	DESTROYED
+	DESTROYED,
+    EVENT
 }

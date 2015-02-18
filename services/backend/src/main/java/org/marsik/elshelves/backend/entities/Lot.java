@@ -33,29 +33,32 @@ public class Lot extends LotBase implements StickerCapable {
 		return l;
 	}
 
-	protected Lot(UUID uuid, User performedBy, Long count, Lot previous) {
-		setUuid(uuid);
-		setPerformedBy(performedBy);
-		setCount(count);
-		setPrevious(previous);
-		setOwner(previous.getOwner());
-		setCreated(new Date());
-		setNext(new ArrayList<Lot>());
-		setAction(LotAction.SPLIT);
-		setUsedBy(previous.getUsedBy());
+    protected Lot(UUID uuid, User performedBy, Lot previous) {
+        setUuid(uuid);
+        setPerformedBy(performedBy);
+        setPrevious(previous);
+        setCreated(new Date());
+        setNext(new ArrayList<Lot>());
+        setAction(LotAction.EVENT);
+
+        setOwner(previous.getOwner());
+        setCount(previous.getCount());
+        setUsedBy(previous.getUsedBy());
         setLocation(previous.getLocation());
         setPurchase(previous.getPurchase());
         setExpiration(previous.getExpiration());
+    }
+
+	protected Lot(UUID uuid, User performedBy, Long count, Lot previous) {
+        this(uuid, performedBy, previous);
+		setCount(count);
+		setAction(LotAction.SPLIT);
 	}
 
     protected Lot(UUID uuid, User performedBy, Long count, Requirement requirement, Lot previous) {
-        setUuid(uuid);
-        setPerformedBy(performedBy);
+        this(uuid, performedBy, previous);
         setCount(count);
-        setPrevious(previous);
-        setOwner(previous.getOwner());
-        setCreated(new Date());
-        setNext(new ArrayList<Lot>());
+
         if (requirement == null) {
             setUsedBy(previous.getUsedBy());
             setAction(LotAction.SPLIT);
@@ -63,57 +66,27 @@ public class Lot extends LotBase implements StickerCapable {
             setUsedBy(requirement);
             setAction(LotAction.ASSIGNED);
         }
-        setLocation(previous.getLocation());
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
     }
 
 	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
+        this(uuid, performedBy, previous);
 		setAction(action);
-		setPrevious(previous);
-		setPerformedBy(performedBy);
-		setUuid(uuid);
-		setCount(previous.getCount());
-		setOwner(previous.getOwner());
-		setCreated(new Date());
-		setNext(new ArrayList<Lot>());
-		setUsedBy(previous.getUsedBy());
-        setLocation(previous.getLocation());
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
 	}
 
     protected Lot(UUID uuid, User performedBy, LotAction action, Requirement requirement, Lot previous) {
+        this(uuid, performedBy, previous);
         setAction(action);
-        setPrevious(previous);
-        setPerformedBy(performedBy);
-        setUuid(uuid);
-        setCount(previous.getCount());
-        setOwner(previous.getOwner());
-        setCreated(new Date());
-        setNext(new ArrayList<Lot>());
+
         if (requirement == null) {
             setUsedBy(previous.getUsedBy());
         } else {
             setUsedBy(requirement);
         }
-        setLocation(previous.getLocation());
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
     }
 
 	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
-		setPrevious(previous);
-		setPerformedBy(performedBy);
-		setUuid(uuid);
-		setCount(previous.getCount());
-		setOwner(previous.getOwner());
-		setCreated(new Date());
-		setNext(new ArrayList<Lot>());
+        this(uuid, performedBy, previous);
 		setUsedBy(requirement);
-        setLocation(previous.getLocation());
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
 
 		if (requirement == null) {
 			setAction(LotAction.UNASSIGNED);
@@ -123,18 +96,9 @@ public class Lot extends LotBase implements StickerCapable {
 	}
 
     protected Lot(UUID uuid, User performedBy, Box location, Lot previous) {
-        setPrevious(previous);
-        setPerformedBy(performedBy);
-        setUuid(uuid);
-        setCount(previous.getCount());
-        setOwner(previous.getOwner());
-        setCreated(new Date());
-        setNext(new ArrayList<Lot>());
-        setUsedBy(previous.getUsedBy());
+        this(uuid, performedBy, previous);
         setAction(LotAction.MOVED);
         setLocation(location);
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
     }
 
 	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
