@@ -35,7 +35,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.APP.API_SERVER = 'http://localhost:8080';
-    ENV.APP.API_NAMESPACE = 'api/1';
+    //ENV.APP.API_NAMESPACE = 'api/1';
   }
 
   if (environment === 'test') {
