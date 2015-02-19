@@ -15,15 +15,29 @@
     <dd>{{model.created}}</dd>
 </dl>
 
+<h2>Chain of changes</h2>
 <table>
-    {{#each lot in history}}
-        <tr>
-            <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
-            <td>{{lot.count}}</td>
-            <td>{{lot.action}}</td>
-            <td>{{lot.location.name}}</td>
-            <td>{{lot.usedBy.project.name}}</td>
-            <td>{{lot.performedBy.name}}</td>
-        </tr>
-    {{/each}}
+{{#each lot in model.next}}
+    <tr>
+        <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
+        <td>{{lot.count}}</td>
+        <td>{{lot.action}}</td>
+        <td>{{lot.location.fullName}}</td>
+        <td>{{lot.usedBy.project.name}}</td>
+        <td>{{lot.performedBy.name}}</td>
+</tr>
+{{/each}}
+<tr>
+    <td colspan="6">History:</td>
+</tr>
+{{#each lot in history}}
+    <tr>
+        <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
+        <td>{{lot.count}}</td>
+        <td>{{lot.action}}</td>
+        <td>{{lot.location.fullName}}</td>
+        <td>{{lot.usedBy.project.name}}</td>
+        <td>{{lot.performedBy.name}}</td>
+    </tr>
+{{/each}}
 </table>
