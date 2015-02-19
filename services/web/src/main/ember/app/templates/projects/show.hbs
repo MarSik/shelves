@@ -7,7 +7,7 @@
     <tr>
         <td>{{#click-to-edit content=r.model field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
         <td>{{#click-to-edit content=r.model field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
-        <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r.model}}{{fa-icon 'minus'}} Remove{{/confirm-button}}</button>
+        <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r.model}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
             <button {{action 'showAddAlternative' r.model}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
             {{#if r.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
