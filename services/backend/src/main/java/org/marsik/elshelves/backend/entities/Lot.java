@@ -301,7 +301,7 @@ public class Lot extends LotBase implements StickerCapable {
 
     public boolean isCanBeSplit() {
         return isValid()
-                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED).contains(getAction());
+                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getAction());
     }
 
     public boolean isCanBeMoved() {

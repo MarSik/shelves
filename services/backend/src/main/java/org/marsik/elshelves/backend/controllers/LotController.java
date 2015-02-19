@@ -93,14 +93,23 @@ public class LotController {
 							@RequestBody @Validated LotApiModel lot) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
 		EmberModel.Builder<LotApiModel> modelBuilder;
 
-		// Previous lot specified alone - SPLIT operation
+		// Previous lot specified alone - SPLIT operation (with possible MOVE)
 		if (lot.getPrevious() != null
 				&& lot.getPurchase() == null
-                && lot.getLocation() == null
+                && lot.getUsedBy() == null
                 && lot.getCount() != null
                 && lot.getCount() > 0) {
 			LotSplitResult result = lotService.split(lot.getPrevious().getId(), lot.getCount(), currentUser, lot.getUsedBy());
-			modelBuilder = new EmberModel.Builder<LotApiModel>(result.getRequested());
+            LotApiModel endResult = result.getRequested();
+
+            // Move the requested amount if needed
+            if (lot.getLocation() != null
+                    && !lot.getLocation().equals(result.getRequested().getLocation())) {
+                endResult = lotService.move(endResult.getId(), lot.getLocation(), currentUser);
+            }
+
+			modelBuilder = new EmberModel.Builder<LotApiModel>(endResult);
+            prepareSideloadedUpdates(endResult, currentUser, modelBuilder);
             prepareSideloadedUpdates(result.getRequested(), currentUser, modelBuilder);
             if (result.getRemainder() != null) {
                 prepareSideloadedUpdates(result.getRemainder(), currentUser, modelBuilder);
@@ -117,7 +126,8 @@ public class LotController {
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 
         // Location and previous specified, but no purchase - MOVE operation
-        } else if (lot.getLocation() != null) {
+        } else if (lot.getPrevious() != null
+                && lot.getLocation() != null) {
             LotApiModel result = lotService.move(lot.getPrevious().getId(), lot.getLocation(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
