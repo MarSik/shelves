@@ -146,6 +146,7 @@ export default Ember.Controller.extend({
         showMoveLot: function (lot) {
             this.set('moveLot', lot);
             this.set('moveLotCount', lot.get('count'));
+            this.set('moveLotToBox', lot.get('location'));
         },
         moveLot: function (lot, destination, count) {
             // close dialog
