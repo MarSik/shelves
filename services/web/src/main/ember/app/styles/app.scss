@@ -111,7 +111,9 @@ button .edit, .button.edit {
       false, // enabled
       false //is-input
   );
+
   color: rgba(0.0, 0.0, 0.0, 0.3);
+  margin: 0;
 
   &:hover {
     color: red;
@@ -235,3 +237,4 @@ nav.actions {
     margin-top: 4em;
   }
 }
+

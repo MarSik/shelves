@@ -20,17 +20,24 @@
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
-    {{#each lot in r.assignedLots}}
+    {{#each lot in r.assignedLots itemController='projects/_lot'}}
     <tr>
         <td>{{lot.count}}</td>
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
+        {{#if lot.displayActions}}
+        <td colspan="2">
+            {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count class="tiny alert" action='solderLot' param=lot}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
+            {{#if lot.canBeUnassigned}}{{#confirm-button class="tiny" action='unassignLot' param=lot}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
+            {{#if lot.canBeUnsoldered}}{{#confirm-button class="tiny" action='unsolderLot' param=lot}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
+            <button {{action 'hideActions'}} class="tiny button">Hide</button>
+        </td>
+        {{else}}
         <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
         <td>
-            {{#if lot.canBeSoldered}}{{#add-count-button class="tiny alert" action='solderLot' param=lot}}Solder{{/add-count-button}}{{/if}}
-            {{#if lot.canBeUnassigned}}<button class="button tiny secondary" {{action 'unassignLot' lot}}>Unassign</button>{{/if}}
-            {{#if lot.canBeUnsoldered}}<button class="button tiny alert" {{action 'unsolderLot' lot}}>Unsolder</button>{{/if}}
-            {{#link-to 'lots.show' lot}}<button class="tiny button">history</button>{{/link-to}}
+            <a {{action 'showActions'}}>{{fa-icon 'play'}} actions</a>
+            {{#link-to 'lots.show' lot}}{{fa-icon 'history'}} history{{/link-to}}
         </td>
+        {{/if}}
     </tr>
     {{/each}}
     </tbody>

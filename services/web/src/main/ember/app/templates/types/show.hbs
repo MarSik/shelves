@@ -138,6 +138,7 @@ placeholder="Select an SI prefix" }}
         <th>Price</th>
         <th>w/ Vat</th>
         <th>Vat %</th>
+        <th>&nbsp;</th>
     </tr>
     </thead>
     {{#each lot in model.lots}}
@@ -163,7 +164,9 @@ placeholder="Select an SI prefix" }}
             {{lot.purchase.sku}}
         </td>
         <td class="count">
-            {{lot.count}} {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
+            {{lot.count}}
+            {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
+            {{#link-to 'lots.show' lot}}{{fa-icon 'history'}} history{{/link-to}}
         </td>
         <td class="price">
             {{lot.purchase.priceWithoutVat}}

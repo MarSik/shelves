@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+    tagName: 'span',
     actions: {
         startEdit: function () {
             this.set('value', this.get('default'));

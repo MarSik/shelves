@@ -8,9 +8,10 @@
         <td>{{lot.type.vendor}}</td>
         <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
         <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.count}}{{/link-to}}</td>
+        <td>{{#link-to 'lots.show' lot}}{{fa-icon 'history'}}{{/link-to}}</td>
     </tr>
     <tr>
-        <td colspan="4">{{lot.type.summary}}</td>
+        <td colspan="5">{{lot.type.summary}}</td>
     </tr>
 {{/each}}
 </table>
