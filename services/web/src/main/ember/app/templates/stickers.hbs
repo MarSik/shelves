@@ -91,8 +91,18 @@
             <dd>{{input type="number" name="bottomSpaceMm" readonly=knownPaper value=paper.bottomSpaceMm}}</dd>
         </dl>
     </li>
-
-
+    <li>
+        <dl>
+            <dt>Title font size [pt]</dt>
+            <dd>{{input type="number" name="titleFontSize" readonly=knownPaper value=paper.titleFontSize}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Details font size [pt]</dt>
+            <dd>{{input type="number" name="detailsFontSize" readonly=knownPaper value=paper.detailsFontSize}}</dd>
+        </dl>
+    </li>
 </ol>
 
 <button {{action 'clearStickers'}} class="alert button">{{fa-icon 'times'}} Clear stickers</button>

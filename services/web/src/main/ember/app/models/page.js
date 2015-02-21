@@ -21,5 +21,8 @@ export default DS.Model.extend({
     stickerLeftMarginMm: attr('number'),
 
     rightSpaceMm: attr('number'),
-    bottomSpaceMm: attr('number')
+    bottomSpaceMm: attr('number'),
+
+    titleFontSize: attr('number'),
+    detailsFontSize: attr('number')
 });

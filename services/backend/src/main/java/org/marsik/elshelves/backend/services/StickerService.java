@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
@@ -146,16 +147,17 @@ public class StickerService {
         int pageCount = 0;
         int stickerCount = 0;
 
-        Float codeEdgeSize = MM_TO_UNITS * Math.min(settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm(),
-                settings.getStickerWidthMm()) - 2*settings.getStickerLeftMarginMm();
+        // Load unicode fonts
+        PDFont titleFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans-Bold.ttf"));
+        PDFont summaryFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans.ttf"));
 
-		// Load unicode fonts
-		PDFont titleFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans-Bold.ttf"));
-		PDFont summaryFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans.ttf"));
+
+        Float codeEdgeSize = MM_TO_UNITS * Math.min(settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm(),
+                settings.getStickerWidthMm()) - 2*settings.getStickerLeftMarginMm() - getFontHeight(titleFont, settings.getTitleFontSize());
 
 		Float titleWidth = MM_TO_UNITS * (settings.getStickerWidthMm() - 2*settings.getStickerLeftMarginMm());
 		Float summaryWidth = (MM_TO_UNITS * (settings.getStickerWidthMm() - 2*settings.getStickerLeftMarginMm())) - codeEdgeSize;
-		Float summaryHeight = (MM_TO_UNITS * (settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm())) - 1.4f * getFontHeight(titleFont, 12);
+		Float summaryHeight = (MM_TO_UNITS * (settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm())) - getFontHeight(titleFont, settings.getTitleFontSize());
 
 		PDPageContentStream contentStream = null;
 
@@ -193,32 +195,32 @@ public class StickerService {
               The y coordinate of the image has to be converted to lower-left coordinate system
               by adding the image height to the top-left coordinates.
              */
-            contentStream.drawImage(img, leftCoord, pageHeight - (topCoord + codeEdgeSize));
+            contentStream.drawImage(img, leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, settings.getTitleFontSize()) + codeEdgeSize));
 
             if (object.getName() != null) {
                 contentStream.beginText();
-                contentStream.setFont(titleFont, 12);
-                contentStream.newLineAtOffset(leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, 12)));
-                contentStream.showText(getSingleLine(object.getName(), titleWidth, titleFont, 12, false));
+                contentStream.setFont(titleFont, settings.getTitleFontSize());
+                contentStream.newLineAtOffset(leftCoord, pageHeight - (topCoord + getFontHeight(titleFont, settings.getTitleFontSize())));
+                contentStream.showText(getSingleLine(object.getName(), titleWidth, titleFont, settings.getTitleFontSize(), false));
                 contentStream.endText();
             }
 
             if (object.getSummary() != null) {
                 contentStream.beginText();
-                contentStream.setFont(summaryFont, 10);
-				contentStream.setLeading(getFontHeight(summaryFont, 10));
+                contentStream.setFont(summaryFont, settings.getDetailsFontSize());
+				contentStream.setLeading(getFontHeight(summaryFont, settings.getDetailsFontSize()));
                 contentStream.newLineAtOffset(leftCoord + codeEdgeSize, pageHeight - (topCoord
-                        + getFontHeight(titleFont, 12) + getFontHeight(summaryFont, 10)));
+                        + getFontHeight(titleFont, settings.getTitleFontSize()) + getFontHeight(summaryFont, settings.getDetailsFontSize())));
 
 				int idx = 0;
-				int lines = (int)Math.floor(summaryHeight / (getFontHeight(summaryFont, 10)));
+				int lines = (int)Math.floor(summaryHeight / (getFontHeight(summaryFont, settings.getDetailsFontSize())));
 
 				while (lines > 0 && idx < object.getSummary().length()) {
 					lines--;
 					String part = getSingleLine(object.getSummary().substring(idx),
 							summaryWidth,
 							summaryFont,
-							10,
+							settings.getDetailsFontSize(),
 							true);
 					contentStream.showText(part.trim());
 					if (lines > 0) {
@@ -245,6 +247,7 @@ public class StickerService {
                 .to(ImageType.PNG)
                 .withErrorCorrection(ErrorCorrectionLevel.M)
                 .withCharset("utf-8")
+                .withHint(EncodeHintType.MARGIN, 2) // violates the QR standard (should be 4)
                 .stream();
         ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
         PDImageXObject img = LosslessFactory.createFromImage(document, ImageIO.read(is));

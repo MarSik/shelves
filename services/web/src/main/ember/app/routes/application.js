@@ -100,7 +100,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerTopMarginMm: 0,
                 stickerLeftMarginMm: 0,
                 rightSpaceMm: 0,
-                bottomSpaceMm: 0
+                bottomSpaceMm: 0,
+                titleFontSize: 12,
+                detailsFontSize: 10
             });
 
 
@@ -117,7 +119,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerTopMarginMm: 0,
                 stickerLeftMarginMm: 0,
                 rightSpaceMm: 0,
-                bottomSpaceMm: 0
+                bottomSpaceMm: 0,
+                titleFontSize: 12,
+                detailsFontSize: 10
             });
 
             self.store.createRecord('page', {
@@ -133,7 +137,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerTopMarginMm: 0,
                 stickerLeftMarginMm: 0,
                 rightSpaceMm: 0,
-                bottomSpaceMm: 0
+                bottomSpaceMm: 0,
+                titleFontSize: 12,
+                detailsFontSize: 10
             });
 
 
@@ -150,7 +156,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerTopMarginMm: 0,
                 stickerLeftMarginMm: 0,
                 rightSpaceMm: 0,
-                bottomSpaceMm: 0
+                bottomSpaceMm: 0,
+                titleFontSize: 12,
+                detailsFontSize: 10
             });
 
             self.store.createRecord('page', {
@@ -166,7 +174,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerTopMarginMm: 1,
                 stickerLeftMarginMm: 1,
                 rightSpaceMm: 0,
-                bottomSpaceMm: 0
+                bottomSpaceMm: 0,
+                titleFontSize: 12,
+                detailsFontSize: 10
             });
 
             controller.set('availablePapers', self.store.all('page'));

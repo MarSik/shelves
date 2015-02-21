@@ -19,6 +19,22 @@ public class StickerSettings {
     PageSize page = PageSize.A4;
 
     /**
+     * Font size for the first row
+     */
+    @NotNull
+    @Min(6)
+    @Max(64)
+    Integer titleFontSize = 12;
+
+    /**
+     * Font size for the detail section
+     */
+    @NotNull
+    @Min(4)
+    @Max(64)
+    Integer detailsFontSize = 10;
+
+    /**
      * Space between left edge of the page and left edge of the first sticker
      */
     @NotNull
@@ -204,5 +220,21 @@ public class StickerSettings {
     public StickerSettings setPrintName(Boolean printName) {
         this.printName = printName;
         return this;
+    }
+
+    public Integer getTitleFontSize() {
+        return titleFontSize;
+    }
+
+    public void setTitleFontSize(Integer titleFontSize) {
+        this.titleFontSize = titleFontSize;
+    }
+
+    public Integer getDetailsFontSize() {
+        return detailsFontSize;
+    }
+
+    public void setDetailsFontSize(Integer detailsFontSize) {
+        this.detailsFontSize = detailsFontSize;
     }
 }
