@@ -204,6 +204,10 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 			// provided by the URL
 			update.setUuid(uuid);
             one = updateEntity(one, update, currentUser);
+
+            // Introspection based updater breaks the aspected behaviour
+            // so it is necessary to resave the updated object here
+            neo4jTemplate.save(one);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }
