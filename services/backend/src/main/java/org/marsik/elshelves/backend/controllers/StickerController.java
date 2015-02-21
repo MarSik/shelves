@@ -3,7 +3,7 @@ package org.marsik.elshelves.backend.controllers;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.dtos.StickerSettings;
+import org.marsik.elshelves.api.StickerSettings;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,16 @@ public class StickerController {
 	@RequestMapping(produces = "application/pdf")
 	public void generateStickers(HttpServletResponse response,
 								 @CurrentUser User currentUser,
+                                 @Valid StickerSettings stickerSettings,
 								 @RequestParam("uuids[]") UUID[] uuids) throws IOException, PermissionDenied, EntityNotFound, InvalidRequest {
+        /*
 		StickerSettings stickerSettings = new StickerSettings()
 				.setPage(StickerSettings.PageSize.A4)
 				.setStickerHeightMm(37f)
 				.setStickerWidthMm(70f)
 				.setStickerVerticalCount(8)
 				.setStickerHorizontalCount(3);
+		*/
 
 		List<StickerCapable> objects = new ArrayList<>();
 		for (UUID uuid: uuids) {

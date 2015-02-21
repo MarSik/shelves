@@ -2,11 +2,101 @@
 
 <ul>
     {{#each obj in this}}
-        <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove">{{fa-icon 'times'}}</button></li>
+        <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove button">{{fa-icon 'times'}}</button></li>
     {{/each}}
 </ul>
 
+<h2>Paper</h2>
+
+<dl>
+    <dt>Page format</dt>
+    <dd>
+        {{ember-selectize
+        content=papers
+        loading=papers.isPending
+        optionValuePath="content.name"
+        optionLabelPath="content.name"
+        selection=paper
+        required=true
+        multiple=false
+        maxItems=1
+        placeholder="Select a paper" }}
+        {{input type='hidden' name='pageSize' value=paper.paperSize}}
+    </dd>
+</dl>
+
+{{#sticker-form items=this}}
+<ol class="small-block-grid-2 large-block-grid-5" {{bind-attr style=paperDetailStyle}}>
+    <li>
+        <dl>
+            <dt>Top page margin [mm]</dt>
+            <dd>{{input type="number" name="topMarginMm" readonly=knownPaper value=paper.topMarginMm}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Left page margin [mm]</dt>
+            <dd>{{input type="number" name="leftMarginMm" readonly=knownPaper value=paper.leftMarginMm}}</dd>
+        </dl>
+    </li>
+
+    <li>
+        <dl>
+            <dt>Horizontal count</dt>
+            <dd>{{input type="number" name="stickerHorizontalCount" readonly=knownPaper value=paper.stickerHorizontalCount}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Vertical count</dt>
+            <dd>{{input type="number" name="stickerVerticalCount" readonly=knownPaper value=paper.stickerVerticalCount}}</dd>
+        </dl>
+    </li>
+
+    <li>
+        <dl>
+            <dt>Sticker width [mm]</dt>
+            <dd>{{input type="number" name="stickerWidthMm" readonly=knownPaper value=paper.stickerWidthMm}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Sticker height [mm]</dt>
+            <dd>{{input type="number" name="stickerHeightMm" readonly=knownPaper value=paper.stickerHeightMm}}</dd>
+        </dl>
+    </li>
+
+    <li>
+        <dl>
+            <dt>Top sticker margin [mm]</dt>
+            <dd>{{input type="number" name="stickerTopMarginMm" readonly=knownPaper value=paper.stickerTopMarginMm}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Left sticker margin [mm]</dt>
+            <dd>{{input type="number" name="stickerLeftMarginMm" readonly=knownPaper value=paper.stickerLeftMarginMm}}</dd>
+        </dl>
+    </li>
+
+    <li>
+        <dl>
+            <dt>Horizontal sticker spacing [mm]</dt>
+            <dd>{{input type="number" name="rightSpaceMm" readonly=knownPaper value=paper.rightSpaceMm}}</dd>
+        </dl>
+    </li>
+    <li>
+        <dl>
+            <dt>Vertical sticker spacing [mm]</dt>
+            <dd>{{input type="number" name="bottomSpaceMm" readonly=knownPaper value=paper.bottomSpaceMm}}</dd>
+        </dl>
+    </li>
+
+
+</ol>
+
 <button {{action 'clearStickers'}} class="alert button">{{fa-icon 'times'}} Clear stickers</button>
-{{#view 'sticker-link' items=this}}<button class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>{{/view}}
+<button type='submit' {{bind-attr disabled=cannotPrint}} class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>
+{{/sticker-form}}
 
 {{outlet}}

@@ -86,6 +86,90 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 return !i.get('isNew');
             }));
             controller.set('stickers', []);
+
+            self.store.createRecord('page', {
+                name: "A4",
+                custom: true,
+                pageSize: 'A4',
+                topMarginMm: 0,
+                leftMarginMm: 0,
+                stickerHorizontalCount: 1,
+                stickerVerticalCount: 1,
+                stickerWidthMm: 0,
+                stickerHeightMm: 0,
+                stickerTopMarginMm: 0,
+                stickerLeftMarginMm: 0,
+                rightSpaceMm: 0,
+                bottomSpaceMm: 0
+            });
+
+
+            self.store.createRecord('page', {
+                name: "A4 Landscape",
+                custom: true,
+                pageSize: 'A4R',
+                topMarginMm: 0,
+                leftMarginMm: 0,
+                stickerHorizontalCount: 1,
+                stickerVerticalCount: 1,
+                stickerWidthMm: 0,
+                stickerHeightMm: 0,
+                stickerTopMarginMm: 0,
+                stickerLeftMarginMm: 0,
+                rightSpaceMm: 0,
+                bottomSpaceMm: 0
+            });
+
+            self.store.createRecord('page', {
+                name: "Letter",
+                custom: true,
+                pageSize: 'LETTER',
+                topMarginMm: 0,
+                leftMarginMm: 0,
+                stickerHorizontalCount: 1,
+                stickerVerticalCount: 1,
+                stickerWidthMm: 0,
+                stickerHeightMm: 0,
+                stickerTopMarginMm: 0,
+                stickerLeftMarginMm: 0,
+                rightSpaceMm: 0,
+                bottomSpaceMm: 0
+            });
+
+
+            self.store.createRecord('page', {
+                name: "Letter Landscape",
+                custom: true,
+                pageSize: 'LETTERR',
+                topMarginMm: 0,
+                leftMarginMm: 0,
+                stickerHorizontalCount: 1,
+                stickerVerticalCount: 1,
+                stickerWidthMm: 0,
+                stickerHeightMm: 0,
+                stickerTopMarginMm: 0,
+                stickerLeftMarginMm: 0,
+                rightSpaceMm: 0,
+                bottomSpaceMm: 0
+            });
+
+            self.store.createRecord('page', {
+                name: "Print Etikety KZK 2500 - 3x8 70x36mm",
+                custom: false,
+                pageSize: 'A4',
+                topMarginMm: 5,
+                leftMarginMm: 1,
+                stickerHorizontalCount: 3,
+                stickerVerticalCount: 8,
+                stickerWidthMm: 70,
+                stickerHeightMm: 36,
+                stickerTopMarginMm: 1,
+                stickerLeftMarginMm: 1,
+                rightSpaceMm: 0,
+                bottomSpaceMm: 0
+            });
+
+            controller.set('availablePapers', self.store.all('page'));
         }
     }
 });

@@ -11,7 +11,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.marsik.elshelves.backend.dtos.StickerSettings;
+import org.marsik.elshelves.api.StickerSettings;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
