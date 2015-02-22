@@ -45,7 +45,7 @@ public class SchemaComponents extends Schema {
 
             String type = ctx.component_label().value.getText();
 
-            String baseUnit = ctx.component_unit().unit.getText();
+            String baseUnit = ctx.component_unit() != null ? ctx.component_unit().unit.getText() : "1";
             Integer unit = Integer.valueOf(baseUnit);
 
             Component c = new Component();

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ENV from '../../config/environment';
 /* global $ */
 
 export default Ember.Controller.extend({
@@ -83,6 +84,14 @@ export default Ember.Controller.extend({
                 lot.rollback();
                 self.growl.error(e);
             });
+        },
+        importRequirements: function (document) {
+            var url = ENV.APP.API_ENDPOINT + '/projects/' + this.get('model.id') + '/import';
+            $.post(url, {
+                document: document.get('id')
+            }, function (data) {
+                this.get('store').pushPayload('project', data);
+            });
         }
     },
     typeSorting: ['name'],
@@ -98,5 +107,6 @@ export default Ember.Controller.extend({
     assignLotToRequirement: null,
     assignableLots: [],
 
-    displayRequirements: Ember.computed.map('model.requirements', m => m)
+    displayRequirements: Ember.computed.map('model.requirements', m => m),
+    importableDocuments: Ember.computed.filterBy('model.describedBy', 'contentType', 'application/x-kicad-schematic')
 });

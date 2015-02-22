@@ -60,6 +60,21 @@ placeholder="Select a type" }}
 <button type="submit">Add</button>
 </form>
 
+<h3>Import requirements from schematics</h3>
+
+<form {{action 'importRequirements' importFromDocument on='submit'}}>
+    {{ember-selectize
+    content=importableDocuments
+    optionValuePath="content.id"
+    optionLabelPath="content.name"
+    selection=importFromDocument
+    sort="content.name"
+    maxItems=1
+    required=true
+    placeholder="Select a file to import parts from" }}
+<button type="submit">Import</button>
+</form>
+
 {{outlet}}
 
 <nav class="actions">
