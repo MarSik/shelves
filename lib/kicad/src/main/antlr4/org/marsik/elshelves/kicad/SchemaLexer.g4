@@ -17,8 +17,7 @@ EELAYER: 'EELAYER';
 END: 'END';
 DESCR: '$Descr' -> pushMode(SheetDescription);
 
-COMPONENT_START: '$Comp';
-COMPONENT_END: '$EndComp';
+COMPONENT_START: '$Comp' -> pushMode(Component);
 
 WIRE: 'Wire';
 LINE: 'Line';
@@ -31,11 +30,6 @@ TEXT: 'Text' -> pushMode(UnquotedStrings);
 NO_CONN: 'NoConn';
 CONN: 'Connection';
 ENTRY: 'Entry';
-
-COMPONENT_L: 'L';
-COMPONENT_U: 'U';
-COMPONENT_P: 'P';
-COMPONENT_F: 'F';
 
 // Hidden lexer elements (no token is generated)
 fragment Digit: [0-9];
@@ -52,6 +46,29 @@ Float: '-'? Digit* FractionSeparator Digit Digit*;
 HexString: HexDigit HexDigit*;
 Name: NameCharacter NameCharacter*;
 StringBeginning: '"' -> pushMode(QuotedStrings);
+
+mode Component;
+
+CompSPACE: [ \t]+ -> skip;
+CompNL: '\r'? '\n' -> skip;
+COMPONENT_END: '$EndComp' -> popMode;
+
+COMPONENT_L: 'L' -> pushMode(ComponentLabel);
+COMPONENT_U: 'U';
+COMPONENT_P: 'P';
+COMPONENT_F: 'F';
+
+ComponentNumberToken: Number -> type(Number);
+CompHexString: HexDigit HexDigit* -> type(HexString);
+ComponentNameToken: Name -> type(Name);
+ComponentStringBeginning: '"' -> pushMode(QuotedStrings), type(StringBeginning);
+
+mode ComponentLabel;
+
+CompLabelNL: '\r'? '\n' -> skip, popMode;
+CompLabelSPACE: [ \t]+ -> skip;
+CompLabelName: NOSPACE+ -> type(Name);
+NOSPACE: ~[ \n\r\t];
 
 mode QuotedStrings;
 

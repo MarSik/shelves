@@ -39,4 +39,13 @@ public class SchemaComponentsTest {
         assertEquals("SOT23-5", components.get("U5").get(0).footprint);
         assertNull(components.get("U6"));
     }
+
+    @Test
+    public void testFetchComponentsWithWeirdName() throws Exception {
+        SchemaComponents processor = new SchemaComponents();
+        Map<String, List<SchemaComponents.Component>> components = processor.fetchComponents(getClass().getResourceAsStream("/ic_quot_in_name.sch"));
+        assertEquals(1, components.size());
+        assertEquals(1, components.get("CONN1").size());
+        assertEquals("3.5\"_JACK", components.get("CONN1").get(0).type);
+    }
 }

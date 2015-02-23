@@ -115,6 +115,12 @@ public class SchemaTest {
     }
 
     @Test
+    public void testComponentWithQuotMarkInName() throws IOException {
+        SchemaParser p = getSchemaGrammarParser("/ic_quot_in_name.sch");
+        assertNotNull(p.schema());
+    }
+
+    @Test
     public void testTwoComponents() throws IOException {
         SchemaParser p = getSchemaGrammarParser("/ic_two_units.sch");
         assertNotNull(p.schema());
