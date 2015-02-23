@@ -1,13 +1,16 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import org.apache.commons.lang3.StringUtils;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
@@ -15,6 +18,7 @@ import org.marsik.elshelves.backend.repositories.DocumentRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.kicad.SchemaComponents;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,7 +43,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 	FileAnalysisDoneHandler documentAnalysisDoneService;
 
     @Autowired
-    TypeRepository typeRepository;
+    TypeService typeService;
 
 	@Autowired
 	public DocumentService(DocumentRepository repository,
@@ -120,6 +125,8 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
         Map<String, List<SchemaComponents.Component>> components = schemaComponents.fetchComponents(storageManager.retrieve(uuid));
 
         Map<String, List<String>> bom = new THashMap<>();
+        Map<String, Long> bomCount = new THashMap<>();
+        Map<String, PartTypeApiModel> bomType = new THashMap<>();
 
         for (Map.Entry<String, List<SchemaComponents.Component>> e: components.entrySet()) {
             SchemaComponents.Component c = e.getValue().get(0);
@@ -136,16 +143,29 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 
             if (!bom.containsKey(summary)) {
                 bom.put(summary, new ArrayList<String>());
+                bomCount.put(summary, 0L);
+
+                PartTypeApiModel type = typeService.getUniqueTypeByNameAndFootprint(c.type, c.footprint, currentUser);
+                if (type != null) {
+                    bomType.put(summary, type);
+                }
             }
 
             bom.get(summary).add(e.getKey());
+            bomCount.put(summary, bomCount.get(summary) + 1);
         }
 
         for (Map.Entry<String, List<String>> e: bom.entrySet()) {
             RequirementApiModel r = new RequirementApiModel();
             r.setName(StringUtils.join(e.getValue(), ", "));
             r.setSummary(e.getKey());
-            r.setCount((long) e.getValue().size());
+            r.setCount(bomCount.get(e.getKey()));
+
+            if (bomType.containsKey(e.getKey())) {
+                r.setType(new THashSet<PartTypeApiModel>());
+                r.getType().add(bomType.get(e.getKey()));
+            }
+
             requirements.add(r);
         }
 
