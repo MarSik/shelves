@@ -145,9 +145,14 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
                 bom.put(summary, new ArrayList<String>());
                 bomCount.put(summary, 0L);
 
-                PartTypeApiModel type = typeService.getUniqueTypeByNameAndFootprint(c.type, c.footprint, currentUser);
-                if (type != null) {
-                    bomType.put(summary, type);
+                if (c.type != null
+                        && !c.type.isEmpty()
+                        && c.footprint != null
+                        && !c.footprint.isEmpty()) {
+                    PartTypeApiModel type = typeService.getUniqueTypeByNameAndFootprint(c.type, c.footprint, currentUser);
+                    if (type != null) {
+                        bomType.put(summary, type);
+                    }
                 }
             }
 

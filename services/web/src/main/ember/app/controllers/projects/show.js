@@ -87,10 +87,11 @@ export default Ember.Controller.extend({
         },
         importRequirements: function (document) {
             var url = ENV.APP.API_ENDPOINT + '/projects/' + this.get('model.id') + '/import';
+            var self = this;
             $.post(url, {
                 document: document.get('id')
             }, function (data) {
-                this.get('store').pushPayload('project', data);
+                self.get('store').pushPayload('project', data);
             });
         }
     },
