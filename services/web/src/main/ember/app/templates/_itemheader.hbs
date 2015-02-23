@@ -17,14 +17,15 @@
 
 <h3>Attachments</h3>
 
-<ul>
-    {{#each doc in model.describedBy}}
-    <li>
-        {{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}
-        {{#confirm-button action='deleteDocument' param=doc class='tiny button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}
-    </li>
+<table>
+    {{#each doc in model.describedBy itemController='document'}}
+    <tr>
+        <td {{bind-attr title=doc.contentType}}>{{fa-icon doc.icon}} {{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}}{{/view}}</td>
+        <td>{{doc.created}}</td>
+        <td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
+    </tr>
     {{/each}}
-</ul>
+</table>
 
 {{save-from-web action='download' entity=model}}
 {{upload-attachments entity=model uploadFinished='uploadFinished'}}

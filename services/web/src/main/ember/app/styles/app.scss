@@ -121,17 +121,10 @@ button .edit, .button.edit {
 }
 
 button .remove, .button.remove {
+  @extend button.alert;
   display: inline;
 
-  @include button(
-          rem-calc(3), //padding
-          red, // background
-          0, // no radius
-          false, // full width
-          false, // enabled
-          false //is-input
-  );
-
+  padding: rem-calc(3);
   margin: 0;
   color: white;
 }
