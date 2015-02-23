@@ -93,6 +93,12 @@ export default Ember.Controller.extend({
             }, function (data) {
                 self.get('store').pushPayload('project', data);
             });
+        },
+        toggleImportRequirements: function () {
+            this.set('showImportRequirements', !this.get('showImportRequirements'));
+        },
+        toggleAddRequirement: function () {
+            this.set('showAddRequirement', !this.get('showAddRequirement'));
         }
     },
     typeSorting: ['name'],
@@ -109,5 +115,28 @@ export default Ember.Controller.extend({
     assignableLots: [],
 
     displayRequirements: Ember.computed.map('model.requirements', m => m),
-    importableDocuments: Ember.computed.filterBy('model.describedBy', 'contentType', 'application/x-kicad-schematic')
+    importableDocuments: Ember.computed.filterBy('model.describedBy', 'contentType', 'application/x-kicad-schematic'),
+    
+    showAddRequirement: false,
+    addRequirementClass: function () {
+        if (this.get('showAddRequirement')) {
+            return "primary button";
+        } else {
+            return "secondary button";
+        }
+    }.property('showAddRequirement'),
+
+    showImportRequirements: false,
+    importRequirementsClass: function () {
+        if (this.get('showImportRequirements')) {
+            return "primary button";
+        } else {
+            return "secondary button";
+        }
+    }.property('showImportRequirements'),
+
+    importableDocumentPresent: function () {
+        var docs = this.get('importableDocuments');
+        return !Ember.isEmpty(docs);
+    }.property('importableDocuments.@each')
 });
