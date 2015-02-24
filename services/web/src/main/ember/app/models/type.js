@@ -41,5 +41,9 @@ export default NamedBase.extend({
       });
 
       return names.join(", ");
-  }.property('footprints.@each.name')
+  }.property('footprints.@each.name'),
+
+    link: function() {
+        return "types.show";
+    }.property()
 });

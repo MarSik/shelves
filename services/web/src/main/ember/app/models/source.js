@@ -12,5 +12,9 @@ export default NamedBase.extend({
             n += " | " + this.get('summary');
         }
         return n;
-    }.property('name', 'summary')
+    }.property('name', 'summary'),
+
+    link: function() {
+        return "sources.show";
+    }.property()
 });

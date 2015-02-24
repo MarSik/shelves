@@ -1,6 +1,9 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -88,5 +91,20 @@ public class NamedEntity extends OwnedEntity {
 
     public void setFlagged(boolean flagged) {
         this.flagged = flagged;
+    }
+
+    public String getEmberType() {
+        String type = "unknown";
+
+        DefaultEmberModel emberModelAnnotation = getClass().getAnnotation(DefaultEmberModel.class);
+        if (emberModelAnnotation != null) {
+            Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
+            EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
+            if (emberModelName != null) {
+                type = emberModelName.value();
+            }
+        }
+
+        return type;
     }
 }

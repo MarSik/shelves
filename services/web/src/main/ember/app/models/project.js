@@ -6,5 +6,9 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default NamedBase.extend({
-    requirements: hasMany('requirement', {async: true})
+    requirements: hasMany('requirement', {async: true}),
+
+    link: function() {
+        return "projects.show";
+    }.property()
 });

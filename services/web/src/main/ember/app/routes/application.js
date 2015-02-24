@@ -3,8 +3,14 @@ import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
     actions: {
-        search: function() {
+        search: function(query) {
+            var search = this.store.createRecord('search', {
+                query: query
+            });
             var self = this;
+            search.save().then(function (result) {
+                self.transitionTo('search.result', result);
+            });
         },
         sessionAuthenticationSucceeded: function () {
             var controller = this.get('controller');

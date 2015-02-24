@@ -41,5 +41,9 @@ export default DS.Model.extend({
         });
 
         return missing;
-    }.property('items.@each.missing')
+    }.property('items.@each.missing'),
+
+    link: function() {
+        return "transactions.show";
+    }.property()
 });

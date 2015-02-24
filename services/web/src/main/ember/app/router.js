@@ -86,6 +86,11 @@ Router.map(function() {
           path: "/:lot_id"
       });
   });
+  this.resource('search', function() {
+    this.route('result', {
+        path: "/:search_id"
+    });
+  });
 });
 
 Router.reopen({

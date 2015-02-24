@@ -13,5 +13,9 @@ export default DS.Model.extend({
     size: attr('number'),
     created: attr('date'),
     belongsTo: belongsTo('user', {async: true}),
-    describes: hasMany('namedbase', {async: true, polymorphic: true})
+    describes: hasMany('namedbase', {async: true, polymorphic: true}),
+
+    link: function() {
+        return "documents.show";
+    }.property()
 });

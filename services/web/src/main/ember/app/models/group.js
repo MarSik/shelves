@@ -38,5 +38,9 @@ export default NamedBase.extend({
             c = this.get('directCount') + ' / ' + c;
         }
         return c;
-    }.property('nestedCount', 'hasChildren', 'directCount')
+    }.property('nestedCount', 'hasChildren', 'directCount'),
+
+    link: function() {
+        return "groups.show";
+    }.property()
 });

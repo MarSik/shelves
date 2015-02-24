@@ -4,6 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -56,23 +57,11 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
 		if (object.getDescribes() != null) {
-			model.setDescribes(new THashSet<DocumentApiModel.PolymorphicRecord>());
+			model.setDescribes(new THashSet<PolymorphicRecord>());
 			for (final NamedEntity n: object.getDescribes()) {
-				DocumentApiModel.PolymorphicRecord r = new DocumentApiModel.PolymorphicRecord();
+				PolymorphicRecord r = new PolymorphicRecord();
 				r.setId(n.getUuid());
-
-                String type = "unknown";
-
-                DefaultEmberModel emberModelAnnotation = n.getClass().getAnnotation(DefaultEmberModel.class);
-                if (emberModelAnnotation != null) {
-                    Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
-                    EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
-                    if (emberModelName != null) {
-                        type = emberModelName.value();
-                    }
-                }
-
-				r.setType(type);
+				r.setType(n.getEmberType());
 				model.getDescribes().add(r);
 			}
 		}

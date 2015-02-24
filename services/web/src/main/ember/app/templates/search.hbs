@@ -1,0 +1,10 @@
+<section>
+<h2>Search</h2>
+
+<form {{action 'search' query on='submit'}}>
+{{input type='text' value=query}}
+<button type="submit">{{fa-icon 'search'}}</button>
+</form>
+</section>
+
+{{outlet}}

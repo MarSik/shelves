@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -66,7 +67,7 @@ public class UploadController {
 
 		Set<DocumentApiModel> documents = new THashSet<>();
 
-		DocumentApiModel.PolymorphicRecord describesRecord = new DocumentApiModel.PolymorphicRecord();
+		PolymorphicRecord describesRecord = new PolymorphicRecord();
 		describesRecord.setId(entity);
 
 		for (MultipartFile file: files) {
@@ -81,12 +82,12 @@ public class UploadController {
 		return b.build();
 	}
 
-    private void processUpload(User currentUser, Set<DocumentApiModel> documents, DocumentApiModel.PolymorphicRecord describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    private void processUpload(User currentUser, Set<DocumentApiModel> documents, PolymorphicRecord describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
         DocumentApiModel d = new DocumentApiModel();
         d.setName(file.getOriginalFilename());
         d.setSize(file.getSize());
         d.setContentType(file.getContentType());
-        d.setDescribes(new THashSet<DocumentApiModel.PolymorphicRecord>());
+        d.setDescribes(new THashSet<PolymorphicRecord>());
         d.getDescribes().add(describesRecord);
 
         d = documentService.create(d, currentUser);

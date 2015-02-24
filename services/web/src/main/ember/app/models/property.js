@@ -14,5 +14,9 @@ export default NamedBase.extend({
     niceName: function () {
         var symbol = this.get('symbol');
         return this.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol) + " [" + this.get('unit.symbol') + ']';
-    }.property('name', 'symbol', 'unit.symbol')
+    }.property('name', 'symbol', 'unit.symbol'),
+
+    link: function() {
+        return "properties.show";
+    }.property()
 });

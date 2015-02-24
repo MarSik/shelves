@@ -11,5 +11,9 @@ export default NamedBase.extend({
 
     niceName: function () {
         return this.get('name') + " [" + this.get('symbol') + ']';
-    }.property('name', 'symbol')
+    }.property('name', 'symbol'),
+
+    link: function() {
+        return "units.show";
+    }.property()
 });

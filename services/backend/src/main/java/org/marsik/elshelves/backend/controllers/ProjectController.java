@@ -40,7 +40,7 @@ public class ProjectController extends AbstractRestController<Project, ProjectAp
 
         EmberModel.Builder<ProjectApiModel> builder = new EmberModel.Builder<ProjectApiModel>(project);
         sideLoad(project, builder);
-        
+
         //This would be nice, but Ember has an issue in beta 14.1/15 that breaks the model
         //builder.sideLoad(RequirementApiModel.class, newRequirements);
         return builder.build();

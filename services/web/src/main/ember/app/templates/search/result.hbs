@@ -1,0 +1,7 @@
+<ul>
+    {{#each obj in model.items}}
+    <li {{bind-attr class="obj.flagged"}}>{{#link-to obj.link obj}}{{obj.name}}{{/link-to}} - {{obj.summary}}</li>
+    {{/each}}
+</ul>
+
+{{outlet}}

@@ -36,5 +36,9 @@ export default NamedBase.extend({
       sum += item.get('count');
     });
     return sum;
-  }.property('lots.@each.count', 'lots.@each.valid')
+  }.property('lots.@each.count', 'lots.@each.valid'),
+
+  link: function() {
+      return "boxes.show";
+  }.property()
 });

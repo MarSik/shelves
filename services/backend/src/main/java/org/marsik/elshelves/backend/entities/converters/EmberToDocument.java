@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class EmberToDocument implements CachingConverter<DocumentApiModel, Docum
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
 		if (object.getDescribes() != null) {
 			model.setDescribes(new THashSet<NamedEntity>());
-			for (final DocumentApiModel.PolymorphicRecord r: object.getDescribes()) {
+			for (final PolymorphicRecord r: object.getDescribes()) {
 				NamedEntity entity = new NamedEntity();
 				entity.setUuid(r.getId());
 				model.getDescribes().add(entity);
