@@ -45,5 +45,9 @@ export default DS.Model.extend({
 
     link: function() {
         return "transactions.show";
+    }.property(),
+
+    icon: function () {
+        return "shopping-cart";
     }.property()
 });

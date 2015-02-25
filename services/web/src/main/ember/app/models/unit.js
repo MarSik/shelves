@@ -15,5 +15,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "units.show";
+    }.property(),
+
+    icon: function () {
+        return "arrows";
     }.property()
 });

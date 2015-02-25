@@ -20,5 +20,9 @@ export default DS.Model.extend({
     value: function(property) {
         var id = property.get('id');
         return this.get('values').get(id);
-    }
+    },
+
+    icon: function () {
+        return "circle-thin";
+    }.property()
 });

@@ -40,5 +40,9 @@ export default NamedBase.extend({
 
   link: function() {
       return "boxes.show";
+  }.property(),
+
+  icon: function () {
+      return "cube";
   }.property()
 });

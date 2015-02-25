@@ -17,5 +17,9 @@ export default DS.Model.extend({
 
     link: function() {
         return "documents.show";
+    }.property(),
+
+    icon: function () {
+        return "file-text-o";
     }.property()
 });

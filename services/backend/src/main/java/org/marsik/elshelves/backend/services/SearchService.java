@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang.text.StrTokenizer;
 
 @Service
 public class SearchService {
@@ -26,17 +27,35 @@ public class SearchService {
         searchResult.setId(uuidGenerator.generate());
         searchResult.setQuery(q);
 
-        Set<PolymorphicRecord> result = new THashSet<>();
+        Set<NamedEntity> result = null;
         if (q.length() > 2) {
-            for (NamedEntity e : entityRepository.queryByUser(currentUser, "(?i).*" + q + ".*")) {
-                PolymorphicRecord record = new PolymorphicRecord();
-                record.setId(e.getUuid());
-                record.setType(e.getEmberType());
-                result.add(record);
+            for (String partialQuery: new StrTokenizer(q, ' ', '"').getTokenArray()) {
+                Set<NamedEntity> partialResult = new THashSet<>();
+
+                for (NamedEntity e : entityRepository.queryByUser(currentUser, "(?i).*" + partialQuery + ".*")) {
+                    partialResult.add(e);
+                }
+
+                if (result == null) {
+                    result = partialResult;
+                } else {
+                    result.retainAll(partialResult);
+                }
             }
         }
 
-        searchResult.setItems(result);
+        searchResult.setItems(new THashSet<PolymorphicRecord>());
+        if (result == null) {
+            return searchResult;
+        }
+
+        for (NamedEntity n: result) {
+            PolymorphicRecord record = new PolymorphicRecord();
+            record.setId(n.getUuid());
+            record.setType(n.getEmberType());
+            searchResult.getItems().add(record);
+        }
+
         return searchResult;
     }
 }

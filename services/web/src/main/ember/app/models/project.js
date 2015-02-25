@@ -10,5 +10,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "projects.show";
+    }.property(),
+
+    icon: function () {
+        return "flask";
     }.property()
 });

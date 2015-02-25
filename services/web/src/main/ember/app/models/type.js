@@ -45,5 +45,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "types.show";
+    }.property(),
+
+    icon: function () {
+        return "book";
     }.property()
 });

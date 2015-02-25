@@ -16,5 +16,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "sources.show";
+    }.property(),
+
+    icon: function () {
+        return "truck";
     }.property()
 });

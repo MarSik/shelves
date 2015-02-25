@@ -18,5 +18,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "properties.show";
+    }.property(),
+
+    icon: function () {
+        return "bar-chart";
     }.property()
 });

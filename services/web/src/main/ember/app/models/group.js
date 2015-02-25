@@ -42,5 +42,9 @@ export default NamedBase.extend({
 
     link: function() {
         return "groups.show";
+    }.property(),
+
+    icon: function () {
+        return "database";
     }.property()
 });

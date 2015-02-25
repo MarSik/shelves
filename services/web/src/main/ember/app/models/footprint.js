@@ -17,7 +17,11 @@ export default NamedBase.extend({
 
   seeAlso: hasMany("footprint", {async: true, inverse: "seeAlso"}),
 
-    link: function() {
-        return "footprints.show";
-    }.property()
+  link: function() {
+      return "footprints.show";
+  }.property(),
+
+  icon: function () {
+      return "bug";
+  }.property()
 });

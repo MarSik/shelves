@@ -1,7 +1,20 @@
-<ul>
-    {{#each obj in model.items}}
-    <li {{bind-attr class="obj.flagged"}}>{{#link-to obj.link obj}}{{obj.name}}{{/link-to}} - {{obj.summary}}</li>
-    {{/each}}
-</ul>
+<section>
+    <h2>Search</h2>
+
+    <form {{action 'search' query on='submit'}}>
+    {{input type='text' value=query}}
+    <button type="submit">{{fa-icon 'search'}}</button>
+    </form>
+</section>
+
+<section>
+    <h2>Results</h2>
+
+    <ul>
+        {{#each obj in model.items}}
+        <li {{bind-attr class="obj.flagged"}}>{{#link-to obj.link obj}}{{fa-icon obj.icon}} {{obj.name}}{{/link-to}} - {{obj.summary}}</li>
+        {{/each}}
+    </ul>
+</section>
 
 {{outlet}}
