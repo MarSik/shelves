@@ -134,6 +134,7 @@ public class LotController {
 
             // Unassigned
         } else if (lot.getPrevious() != null
+                && lot.getAction() != null
                 && lot.getAction().equals(LotAction.UNASSIGNED)) {
             LotApiModel result = lotService.unassign(lot.getPrevious().getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
@@ -141,6 +142,7 @@ public class LotController {
 
             // Unsolder
         } else if (lot.getPrevious() != null
+                && lot.getAction() != null
                 && lot.getAction().equals(LotAction.UNSOLDERED)) {
             LotApiModel result = lotService.unsolder(lot.getPrevious().getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
@@ -148,6 +150,7 @@ public class LotController {
 
             // Solder and possibly assign as well
         } else if (lot.getPrevious() != null
+                && lot.getAction() != null
                 && lot.getAction().equals(LotAction.SOLDERED)) {
             LotApiModel result = lotService.solder(lot.getPrevious().getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
