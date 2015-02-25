@@ -231,3 +231,7 @@ nav.actions {
   }
 }
 
+.placeholder {
+  color: lighten($body-font-color, 60%);
+  font-style: italic;
+}
