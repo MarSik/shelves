@@ -23,7 +23,10 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	String description;
 
 	String vendor;
-	String vendorId;
+	String customId;
+
+    Long minimumCount;
+    Long buyMultiple;
 
     Set<FootprintApiModel> footprints;
 	Set<PartGroupApiModel> groups;
@@ -75,12 +78,12 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 		this.vendor = vendor;
 	}
 
-	public String getVendorId() {
-		return vendorId;
+	public String getCustomId() {
+		return customId;
 	}
 
-	public void setVendorId(String vendorId) {
-		this.vendorId = vendorId;
+	public void setCustomId(String customId) {
+		this.customId = customId;
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
@@ -132,5 +135,21 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 
     public void setSeeAlso(Set<PartTypeApiModel> seeAlso) {
         this.seeAlso = seeAlso;
+    }
+
+    public Long getMinimumCount() {
+        return minimumCount;
+    }
+
+    public void setMinimumCount(Long minimumCount) {
+        this.minimumCount = minimumCount;
+    }
+
+    public Long getBuyMultiple() {
+        return buyMultiple;
+    }
+
+    public void setBuyMultiple(Long buyMultiple) {
+        this.buyMultiple = buyMultiple;
     }
 }

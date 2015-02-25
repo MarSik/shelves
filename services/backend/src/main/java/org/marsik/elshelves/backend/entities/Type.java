@@ -17,7 +17,10 @@ import java.util.Set;
 @DefaultEmberModel(PartTypeApiModel.class)
 public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
-	String vendorId;
+	String customId;
+
+    Long minimumCount;
+    Long buyMultiple;
 
     // Should serial numbers be tracked?
     Boolean serials;
@@ -48,12 +51,12 @@ public class Type extends NamedEntity implements StickerCapable {
 	}
 
 	@PartOfUpdate
-	public String getVendorId() {
-		return vendorId;
+	public String getCustomId() {
+		return customId;
 	}
 
-	public void setVendorId(String vendorId) {
-		this.vendorId = vendorId;
+	public void setCustomId(String customId) {
+		this.customId = customId;
 	}
 
 	@PartOfUpdate
@@ -137,5 +140,23 @@ public class Type extends NamedEntity implements StickerCapable {
 
     public void setSeeAlso(Set<Type> seeAlso) {
         this.seeAlso = seeAlso;
+    }
+
+    @PartOfUpdate
+    public Long getMinimumCount() {
+        return minimumCount;
+    }
+
+    public void setMinimumCount(Long minimumCount) {
+        this.minimumCount = minimumCount;
+    }
+
+    @PartOfUpdate
+    public Long getBuyMultiple() {
+        return buyMultiple;
+    }
+
+    public void setBuyMultiple(Long buyMultiple) {
+        this.buyMultiple = buyMultiple;
     }
 }

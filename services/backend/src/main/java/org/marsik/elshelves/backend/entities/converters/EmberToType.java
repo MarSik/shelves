@@ -50,8 +50,11 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		emberToNamedObject.convert(object, model, nested, cache);
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
-		model.setVendorId(object.getVendorId());
+		model.setCustomId(object.getCustomId());
         model.setSerials(object.getSerials());
+
+        model.setBuyMultiple(object.getBuyMultiple());
+        model.setMinimumCount(object.getMinimumCount());
 
 		if (nested == 0) {
 			return model;

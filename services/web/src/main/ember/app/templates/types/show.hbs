@@ -2,10 +2,26 @@
 
 <div class="row">
 <section class="meta columns large-6">
+<h3>Custom id</h3>
+
+{{#click-to-edit content=model field='content.customId'}}{{model.customId}}{{/click-to-edit}}
 
 <h3>Vendor</h3>
 
 {{#click-to-edit content=model field='content.vendor'}}{{model.vendor}}{{/click-to-edit}}
+
+<h3>Purchasing</h3>
+
+<ul class="small-block-grid-1 large-block-grid-2">
+    <li>
+        Minimum amount:
+        {{#click-to-edit content=model field='content.minimumCount'}}{{model.minimumCount}}{{/click-to-edit}}
+    </li>
+    <li>
+        Buy in multiples of:
+        {{#click-to-edit content=model field='content.buyMultiple'}}{{model.buyMultiple}}{{/click-to-edit}}
+    </li>
+</ul>
 
 <h3>Footprints</h3>
 
