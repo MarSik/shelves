@@ -1,16 +1,26 @@
 {{partial '_itemheader'}}
 
+<section class="columns small-12">
 <h3>Symbol</h3>
 
-{{#click-to-edit content=model field='content.symbol'}}{{model.symbol}}{{/click-to-edit}}
+<p>
+{{#click-to-edit content=model field='content.symbol' placeholder='place for the value symbol (eg. Vcc, Ipk, ...)'}}{{model.symbol}}{{/click-to-edit}}
+</p>
 
 <h3>Unit</h3>
 
+<p>
 {{#click-to-select content=model field='content.unit' label='content.niceName' options=sortedUnits}}{{model.unit.niceName}}{{/click-to-select}}
+</p>
 
 <h3>Precision</h3>
 
+<p class="placeholder">Shelves uses fixed precision for values. This field controls the smallest unit you can save.</p>
+
+<p>
 {{#click-to-select content=model field='content.base' label='content.niceName' options=sortedPrefixes}}{{model.base.niceName}}{{/click-to-select}}
+</p>
+</section>
 
 {{outlet}}
 

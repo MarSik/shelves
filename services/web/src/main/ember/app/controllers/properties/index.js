@@ -34,5 +34,8 @@ export default Ember.ArrayController.extend({
     prefixSorting: ['base', 'power'],
     sortedPrefixes: Ember.computed.sort('controllers.application.availableSiPrefixes', 'prefixSorting'),
     unitSorting: ['name'],
-    sortedUnits: Ember.computed.sort('controllers.application.availableUnits', 'unitSorting')
+    sortedUnits: Ember.computed.sort('controllers.application.availableUnits', 'unitSorting'),
+    propertyNotComplete: function () {
+        return Ember.isEmpty(this.get('propertyName')) || Ember.isEmpty(this.get('propertyBase')) || Ember.isEmpty(this.get('propertyUnit'));
+    }.property('propertyName', 'propertyBase', 'propertyUnit')
 });

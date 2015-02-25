@@ -17,9 +17,12 @@
 <div id="createProperty" class="reveal-modal" data-reveal>
     <h2>Create property</h2>
     <form {{action 'createProperty' propertyName propertyUnit propertyBase on='submit'}}>
+    <p>
     <label for="name">Name:</label>
     {{input id='name' placeholder='Enter property name' value=propertyName required='required'}}
+    </p>
 
+    <p>
     <label for="unit">Unit:</label>
     {{ember-selectize
     content=sortedUnits
@@ -28,8 +31,11 @@
     selection=propertyUnit
     maxItems=1
     placeholder="Select an unit" }}
+    </p>
 
-    <label for="precision">Precision:</label>
+    <p>
+    <label for="precision">Precision:
+        <p class="placeholder">Shelves uses fixed precision for values. This field controls the smallest unit you can save.</p></label>
     {{ember-selectize
     content=sortedPrefixes
     optionValuePath="content.id"
@@ -37,8 +43,9 @@
     selection=propertyBase
     maxItems=1
     placeholder="Select an unit" }}
+    </p>
 
-    <button type="submit">Create property</button>
+    <button type="submit" {{bind-attr disabled=propertyNotComplete}}>Create property</button>
     </form>
 
     <a class="close-reveal-modal">&#215;</a>

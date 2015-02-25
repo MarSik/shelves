@@ -1,8 +1,11 @@
 {{partial '_itemheader'}}
 
+<section class="columns small-12">
 <h3>Unit symbol</h3>
 
+<p>
 {{#click-to-edit content=model field='content.symbol'}}{{model.symbol}}{{/click-to-edit}}
+</p>
 
 <h3>Enabled ISO prefixes</h3>
 
@@ -17,6 +20,7 @@
     </li>
     {{/each}}
 </ul>
+</section>
 
 {{outlet}}
 
