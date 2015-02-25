@@ -16,7 +16,6 @@ export default Ember.Route.extend({
 
     model: function () {
         var fp = this.store.createRecord('type', {
-            name: "New type"
         });
         return fp;
     }
