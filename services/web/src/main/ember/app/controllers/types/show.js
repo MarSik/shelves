@@ -41,6 +41,7 @@ export default Ember.Controller.extend({
             this.set('propertyAddingAllowed', false);
         },
         createEmptyGroup: function (name) {
+            var self = this;
             var g = this.store.createRecord('group', {
                 name: name,
                 flagged: true
@@ -48,17 +49,11 @@ export default Ember.Controller.extend({
 
             g.save().catch(function () {
                 g.destroy();
-            });
-        },
-        addGroup: function (groups) {
-            var model = this.model;
-
-            groups.forEach(function (g) {
-                model.get('groups').pushObject(g);
-            });
-
-            model.save().catch(function () {
-               model.rollback();
+            }).then(function (g) {
+                self.get('model.groups').pushObject(g);
+                self.get('model').save().catch(function (e) {
+                    self.get('model.groups').removeObject(g);
+                });
             });
         },
         removeGroup: function (group) {
@@ -75,6 +70,8 @@ export default Ember.Controller.extend({
             this.set('displayAddGroup', false);
         },
         createEmptyFootprint: function (name) {
+            var self = this;
+
             var g = this.store.createRecord('footprint', {
                 name: name,
                 flagged: true
@@ -82,17 +79,11 @@ export default Ember.Controller.extend({
 
             g.save().catch(function () {
                 g.destroy();
-            });
-        },
-        addFootprint: function (footprints) {
-            var model = this.model;
-
-            footprints.forEach(function (g) {
-                model.get('footprints').pushObject(g);
-            });
-
-            model.save().catch(function () {
-                model.rollback();
+            }).then(function (fp) {
+                self.get('model.footprints').pushObject(fp);
+                self.get('model').save().catch(function (e) {
+                    self.get('model.footprints').removeObject(fp);
+                });
             });
         },
         removeFootprint: function (footprint) {

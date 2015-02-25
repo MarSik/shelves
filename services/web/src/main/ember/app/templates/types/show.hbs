@@ -39,15 +39,14 @@
     content=sortedFootprints
     optionValuePath="content.id"
     optionLabelPath="content.name"
-    selection=footprintToAdd
+    selection=model.footprints
     multiple=true
     create='createEmptyFootprint'
     placeholder="Select a footprint" }}
 
-    <button {{action 'addFootprint' footprintToAdd}} class="button primary">{{fa-icon 'plus'}} Add footprint(s)</button>
     <button {{action 'hideAddFootprint'}} class="button secondary">Hide</button>
 {{else}}
-    <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'plus'}} Add footprint(s)</button>
+    <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'bug'}} Manage footprint(s)</button>
 {{/if}}
     
 <h3>Additional properties</h3>
@@ -107,15 +106,14 @@ placeholder="Select an SI prefix" }}
     content=sortedGroups
     optionValuePath="content.id"
     optionLabelPath="content.fullName"
-    selection=groupToAdd
+    selection=model.groups
     multiple=true
     create='createEmptyGroup'
     placeholder="Select a type" }}
 
-    <button {{action 'addGroup' groupToAdd}} class="button primary">{{fa-icon 'plus'}} Add group(s)</button>
     <button {{action 'hideAddGroup'}} class="button secondary">Hide</button>
 {{else}}
-    <button {{action 'showAddGroup'}} class="button secondary">{{fa-icon 'plus'}} Add group(s)</button>
+    <button {{action 'showAddGroup'}} class="button secondary">{{fa-icon 'database'}} Manage group(s)</button>
 {{/if}}
 
 <h3>See also</h3>
