@@ -10,6 +10,9 @@ export default Ember.Controller.extend({
                 transaction: this.get('model')
             });
         },
+        removeRow: function (purchase) {
+            this.get('model.items').removeObject(purchase);
+        },
         createSource: function (name) {
             var source = this.store.createRecord('source', {
                 name: name,
