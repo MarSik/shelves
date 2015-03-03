@@ -231,6 +231,33 @@ export default Ember.Controller.extend({
         return this.get('propertyToAdd.unit.prefixes');
     }.property('propertyToAdd.unit.prefixes', 'propertyToAdd.unit.prefixes.@each'),
 
+    unitHint: function () {
+        if (this.get('propertyValuePrefixToAdd')) {
+            return "Enter value: 1 or 1.5";
+        } else {
+            var symbol = this.get('propertyToAdd.unit.symbol');
+            var prefix = "p";
+
+            var prefixes = this.get('propertyToAdd.unit.prefixes');
+            console.log(prefixes);
+
+            if (prefixes && prefixes.get('length') > 0) {
+                var single = prefixes.get('firstObject');
+                console.log(single);
+                if (single) {
+                    prefix = single.get('prefix');
+                    console.log(prefix);
+                }
+            }
+            var t = "Enter value: 1, 1.5, 1" + prefix + "5, 1.5" + prefix;
+            if (symbol) {
+                t += ", 1" + prefix + "5" + symbol + ", 1" + prefix + symbol + ", 1.5" + prefix + symbol;
+            }
+            return t;
+        }
+    }.property('propertyToAdd.unit', 'propertyToAdd.unit.symbol', 'propertyValuePrefixToAdd',
+        'propertyToAdd.unit.prefixes', 'propertyToAdd.unit.prefixes.@each'),
+
     prefixSorting: ['power10'],
     sortedUnitPrefixes: Ember.computed.sort('unitPrefixes', 'prefixSorting'),
 
