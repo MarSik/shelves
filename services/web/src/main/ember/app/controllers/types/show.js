@@ -5,15 +5,80 @@ export default Ember.Controller.extend({
         addProperty: function (entity, property, value, prefix) {
             var normalizedValue = value;
 
+            var prefixBase = 10;
+            var prefixPower = 0;
+
             if (Ember.isEmpty(prefix)) {
+                var pattern = /^(\d+)((\D+)(\d+)?)?(\D+)?$/i;
+                var full, whole, ign, separator, frac, suffix;
+                var match = value.match(pattern);
+
+                if (match == null) {
+                    this.growl.error("Cannot parse "+value);
+                    return;
+                }
+
+                [full, whole, ign, separator, frac, suffix] = match;
+
+                if (whole == null && frac == null) {
+                    this.growl.error("Cannot parse value "+value);
+                    return;
+                }
+
+                // When 1k5 format is used it has a priority
+                if (separator && separator != ".") {
+                    suffix = separator;
+                }
+
+                // Support micro sign 'µ' alias 'u'
+                if (separator == "u") {
+                    separator = "µ";
+                }
+
+                console.log([full, whole, ign, separator, frac, suffix]);
+
+                var unit = property.get('unit.symbol');
+                var foundPrefix = null;
+                var prefixScore = 0;
+
+                if (suffix) {
+                    property.get('unit.prefixes').forEach(function (prefix) {
+                        console.log(prefix.get('prefix') + unit);
+                        if (prefix.get('prefix') == suffix && prefixScore < 4) {
+                            foundPrefix = prefix;
+                            prefixScore = 4;
+                        } else if (prefix.get('prefix') + unit == suffix && prefixScore < 5) {
+                            foundPrefix = prefix;
+                            prefixScore = 5;
+                        } else if (prefix.get('prefix').toLowerCase() == suffix.toLowerCase() && prefixScore < 2) {
+                            foundPrefix = prefix;
+                            prefixScore = 2;
+                        } else if ((prefix.get('prefix') + unit).toLowerCase() == suffix.toLowerCase() && prefixScore < 3) {
+                            foundPrefix = prefix;
+                            prefixScore = 3;
+                        }
+                    });
+                }
+
+                if (suffix && foundPrefix == null) {
+                    this.growl.error("Cannot parse units in " + value);
+                    return;
+                }
+
+                value = parseFloat((whole ? whole : "0") + "." + (frac ? frac : "0"));
+                if (foundPrefix) {
+                    prefixBase = foundPrefix.get('base');
+                    prefixPower = foundPrefix.get('power');
+                }
             } else {
-                var prefixBase = prefix.get('base');
-                var prefixPower = prefix.get('power');
-                var baseBase = property.get('base.base');
-                var basePower = property.get('base.power');
-                var multiplyPower = Math.pow(prefixBase, prefixPower) / Math.pow(baseBase, basePower);
-                normalizedValue = value * multiplyPower;
+                prefixBase = prefix.get('base');
+                prefixPower = prefix.get('power');
             }
+
+            var baseBase = property.get('base.base');
+            var basePower = property.get('base.power');
+            var multiplyPower = Math.pow(prefixBase, prefixPower) / Math.pow(baseBase, basePower);
+            normalizedValue = value * multiplyPower;
 
             var propertyId = property.get('id');
             entity.get('properties').pushObject(property);
