@@ -21,10 +21,14 @@ export default Ember.Component.extend({
 
         var res =  " ";
 
-        if (!Ember.isEmpty(nicePrefix)) {
+        while (!Ember.isEmpty(nicePrefix)) {
             // Prefixes available for unit
             var unit = property.get('unit');
             var prefixes = unit.get('prefixes');
+
+            if (prefixes == null) {
+                break;
+            }
 
             prefixes.forEach(function (p) {
                 var pPower = p.get('power');
@@ -40,6 +44,7 @@ export default Ember.Component.extend({
             });
 
             res += nicePrefix.get('prefix');
+            break;
         }
 
         res = niceValue + res;
