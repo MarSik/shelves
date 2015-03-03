@@ -164,7 +164,7 @@ export default Ember.Controller.extend({
 
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');
-    }.property('propertyToAdd.unit.prefixes'),
+    }.property('propertyToAdd.unit.prefixes', 'propertyToAdd.unit.prefixes.@each'),
 
     prefixSorting: ['power10'],
     sortedUnitPrefixes: Ember.computed.sort('unitPrefixes', 'prefixSorting'),

@@ -13,8 +13,15 @@ export default NamedBase.extend({
 
     niceName: function () {
         var symbol = this.get('symbol');
-        return this.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol) + " [" + this.get('unit.symbol') + ']';
-    }.property('name', 'symbol', 'unit.symbol'),
+        var self = this;
+        return DS.PromiseObject.create({
+            promise: new Promise(function (resolve) {
+                self.get('unit').then(function (unit) {
+                    resolve(self.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol) + " [" + unit.get('symbol') + ']');
+                });
+            })
+        });
+    }.property('name', 'symbol', 'unit', 'unit.symbol'),
 
     link: function() {
         return "properties.show";

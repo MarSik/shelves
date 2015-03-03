@@ -49,5 +49,12 @@ export default Ember.Component.extend({
         }
 
         return res;
-    }.property('property.base.content.prefix', 'property.base.content.power', 'property.base.content.base', 'property.unit.content.symbol', 'entity', 'property.unit.content.prefixes', 'property.unit.content.prefixes.@each.power', 'property.unit.content.prefixes.@each.base', 'property.unit.content.prefixes.@each.prefix')
+    }.property('property.base.content.prefix', 'property.base.content.power', 'property.base.content.base',
+        'property.unit.content.symbol',
+        'entity', 'property',
+        'property.base', 'property.base.content',
+        'property.unit', 'property.unit.content',
+        'property.unit.content.prefixes', 'property.unit.content.prefixes.@each',
+        'property.unit.content.prefixes.@each.power',
+        'property.unit.content.prefixes.@each.base', 'property.unit.content.prefixes.@each.prefix')
 });
