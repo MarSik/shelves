@@ -21,8 +21,6 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
 	public BoxApiModel() {
 	}
 
-	CodeApiModel code;
-
     Set<LotApiModel> lots;
 
     BoxApiModel parent;
@@ -58,21 +56,4 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
     public void setBoxes(Set<BoxApiModel> boxes) {
         this.boxes = boxes;
     }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public CodeApiModel getCode() {
-        return code;
-    }
-
-    @JsonIgnore
-    public void setCode(CodeApiModel code) {
-        this.code = code;
-    }
-
-    @JsonSetter
-    public void setCode(UUID code) {
-        this.code = new CodeApiModel();
-        this.code.setId(code);
-    }
-
 }

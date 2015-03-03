@@ -2,8 +2,10 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
+import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
+import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
@@ -24,6 +26,9 @@ public class EmberToNamedObject {
 	EmberToDocument emberToDocument;
 
     @Autowired
+    EmberToCode emberToCode;
+
+    @Autowired
     EmberToNumericProperty emberToNumericProperty;
 
 	public NamedEntity convert(AbstractNamedEntityApiModel object, NamedEntity model, int nested, Map<UUID, Object> cache) {
@@ -33,6 +38,13 @@ public class EmberToNamedObject {
 		model.setDescription(object.getDescription());
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
         model.setFlagged(object.isFlagged());
+
+        if (object.getCodes() != null) {
+            model.setCodes(new THashSet<Code>());
+            for (CodeApiModel c: object.getCodes()) {
+                model.getCodes().add(emberToCode.convert(c, nested, cache));
+            }
+        }
 
 		if (object.getDescribedBy() != null) {
 			model.setDescribedBy(new THashSet<Document>());

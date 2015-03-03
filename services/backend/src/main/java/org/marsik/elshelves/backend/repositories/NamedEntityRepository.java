@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.repositories;
 
+import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.data.neo4j.annotation.Query;

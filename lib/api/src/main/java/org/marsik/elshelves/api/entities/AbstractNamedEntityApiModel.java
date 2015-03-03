@@ -31,6 +31,8 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
     Map<UUID, Long> values;
     Set<NumericPropertyApiModel> properties;
 
+    Set<CodeApiModel> codes;
+
 	public String getName() {
 		return name;
 	}
@@ -114,5 +116,14 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
 
     public void setCanBeDeleted(boolean canBeDeleted) {
         this.canBeDeleted = canBeDeleted;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public Set<CodeApiModel> getCodes() {
+        return codes;
+    }
+
+    public void setCodes(Set<CodeApiModel> codes) {
+        this.codes = codes;
     }
 }

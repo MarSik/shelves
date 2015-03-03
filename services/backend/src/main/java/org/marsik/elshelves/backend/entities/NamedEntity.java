@@ -35,6 +35,12 @@ public class NamedEntity extends OwnedEntity {
     @RelatedToVia(type = "HAS_PROPERTY", elementClass = NumericPropertyValue.class)
     Set<NumericPropertyValue> properties;
 
+    /**
+     * Barcode associated with this entity
+     */
+    @RelatedTo(type = "IDENTIFIED_BY")
+    Set<Code> codes;
+
 	@PartOfUpdate
 	public String getName() {
 		return name;
@@ -53,7 +59,7 @@ public class NamedEntity extends OwnedEntity {
 		this.summary = summary;
 	}
 
-	@PartOfUpdate
+    @PartOfUpdate
 	public String getDescription() {
 		return description;
 	}
@@ -106,5 +112,14 @@ public class NamedEntity extends OwnedEntity {
         }
 
         return type;
+    }
+
+    @PartOfUpdate
+    public Set<Code> getCodes() {
+        return codes;
+    }
+
+    public void setCodes(Set<Code> codes) {
+        this.codes = codes;
     }
 }

@@ -11,6 +11,8 @@ export default DS.Model.extend({
     flagged: attr('boolean'),
     canBeDeleted: attr('boolean'),
 
+    codes: hasMany('code', {async: true}),
+
     belongsTo: belongsTo('user', {async: true}),
     describedBy: hasMany("document", {async: true}),
 

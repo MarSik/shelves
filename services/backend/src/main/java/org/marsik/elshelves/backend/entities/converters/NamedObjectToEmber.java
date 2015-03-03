@@ -3,8 +3,11 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
+import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
+import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericPropertyValue;
@@ -25,6 +28,9 @@ public class NamedObjectToEmber {
     @Autowired
     NumericPropertyToEmber numericPropertyToEmber;
 
+    @Autowired
+    CodeToEmber codeToEmber;
+
 	public AbstractNamedEntityApiModel convert(NamedEntity object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getUuid());
 
@@ -37,6 +43,13 @@ public class NamedObjectToEmber {
 		model.setDescription(object.getDescription());
         model.setFlagged(object.isFlagged());
         model.setCanBeDeleted(object.canBeDeleted());
+
+        if (object.getCodes() != null) {
+            model.setCodes(new THashSet<CodeApiModel>());
+            for (Code c: object.getCodes()) {
+                model.getCodes().add(codeToEmber.convert(c, nested -1, cache));
+            }
+        }
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 

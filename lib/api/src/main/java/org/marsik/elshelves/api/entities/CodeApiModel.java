@@ -6,22 +6,45 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.idresolvers.CodeIdResolver;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = CodeIdResolver.class)
 @EmberModelName("code")
 public class CodeApiModel extends AbstractEntityApiModel {
-	public CodeApiModel(UUID id) {
-		super(id);
-	}
+    public CodeApiModel(UUID id) {
+        this.id = id;
+    }
 
-	public CodeApiModel() {
-	}
+    public CodeApiModel() {
+    }
 
-	String code;
+    @NotNull
+    String type; // CODE_TYPE - EAN, QR, UPC...
+    @NotNull
+    String code; // CODE_VALUE
 
-    BoxApiModel box;
+    PolymorphicRecord reference;
+
+    UserApiModel belongsTo;
+
+    public PolymorphicRecord getReference() {
+        return reference;
+    }
+
+    public void setReference(PolymorphicRecord reference) {
+        this.reference = reference;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCode() {
         return code;
@@ -32,18 +55,11 @@ public class CodeApiModel extends AbstractEntityApiModel {
     }
 
     @JsonIdentityReference(alwaysAsId = true)
-    public BoxApiModel getBox() {
-        return box;
+    public UserApiModel getBelongsTo() {
+        return belongsTo;
     }
 
-    @JsonIgnore
-    public void setBox(BoxApiModel box) {
-        this.box = box;
-    }
-
-    @JsonSetter
-    public void setBox(UUID box) {
-        this.box = new BoxApiModel();
-        this.box.setId(box);
+    public void setBelongsTo(UserApiModel belongsTo) {
+        this.belongsTo = belongsTo;
     }
 }
