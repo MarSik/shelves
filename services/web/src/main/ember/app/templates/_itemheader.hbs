@@ -20,9 +20,9 @@
 <table>
     {{#each doc in model.describedBy itemController='document'}}
     <tr>
-        <td {{bind-attr title=doc.contentType}}>{{fa-icon doc.icon}} {{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}}{{/view}}</td>
+        <td {{bind-attr title=doc.contentType}}>{{#view 'entity-link' entity=doc.model resource='download' models='documents'}}{{fa-icon doc.icon}} {{doc.name}}{{/view}}</td>
         <td>{{doc.created}}</td>
-        <td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
+        <td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc.model class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
     </tr>
     {{/each}}
 </table>
