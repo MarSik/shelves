@@ -56,6 +56,7 @@ public class SanityService {
             Group g = orphanGroups.get(u);
             logger.info("Adding type {} to orphan group {} for user {}", t, g, u);
             t.getGroups().add(g);
+            neo4jTemplate.save(t);
         }
     }
 }
