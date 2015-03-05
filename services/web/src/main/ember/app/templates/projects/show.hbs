@@ -34,8 +34,8 @@
         {{else}}
         <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
         <td>
-            <a {{action 'showActions'}}>{{fa-icon 'play'}} actions</a>
-            {{#link-to 'lots.show' lot}}{{fa-icon 'history'}} history{{/link-to}}
+            <a {{action 'showActions'}}>{{fa-icon 'play'}}&nbsp;actions</a>
+            {{#link-to 'lots.show' lot}}{{fa-icon 'history'}}&nbsp;history{{/link-to}}
         </td>
         {{/if}}
     </tr>

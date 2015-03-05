@@ -45,6 +45,7 @@ export default NamedBase.extend({
       if (arguments.length > 1) {
           return value;
       }
+      var self = this;
 
       this.get('parent').then(function (p) {
           if (!Ember.isNone(p)) {
@@ -55,12 +56,23 @@ export default NamedBase.extend({
       return this.get('name');
   }.property('parent', 'parent.fullName', 'name'),
 
-  count: function () {
-    var sum = 0;
-    this.get('lots').filterBy('valid', true).forEach(function (item, index) {
-      sum += item.get('count');
-    });
-    return sum;
+  count: function (key, value) {
+      if (arguments.length > 1) {
+          console.log(this.get('name') + ' box count ' + value);
+          return value;
+      }
+
+      var self = this;
+
+      this.get('lots').then(function (lots) {
+          var sum = 0;
+          lots.filterBy('valid', true).forEach(function (item, index) {
+              sum += item.get('count');
+          });
+          self.set('count', sum);
+      });
+
+      return 0;
   }.property('lots', 'lots.@each.count', 'lots.@each.valid'),
 
   link: function() {

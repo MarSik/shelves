@@ -44,5 +44,6 @@ export default Ember.ArrayController.extend({
         }
     },
     sortProperties: ['name'],
-    sortAscending: true
+    sortAscending: true,
+    topLevel: Ember.computed.filterBy('model', 'hasParent', false)
 });

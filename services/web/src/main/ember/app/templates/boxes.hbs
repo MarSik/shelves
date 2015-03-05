@@ -9,7 +9,7 @@
 <button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}}</button>
 
 <ul>
-    {{#each box in model}}
+    {{#each box in topLevel}}
     {{item-tree item=box count='item.count' class='box-entity' deleteAction='deleteBox' createAction='showCreateBox' action='selectBox' hoverAction='hoverBox'}}
     {{/each}}
 </ul>

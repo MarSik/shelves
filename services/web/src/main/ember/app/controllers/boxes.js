@@ -52,5 +52,6 @@ export default Ember.ArrayController.extend({
         } else {
             this.send('hideQr');
         }
-    }.observes('selectedBox')
+    }.observes('selectedBox'),
+    topLevel: Ember.computed.filterBy('model', 'hasParent', false)
 });

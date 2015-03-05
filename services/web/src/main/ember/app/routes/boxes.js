@@ -15,13 +15,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             this.set('controller.qrModels', null);
         }
     },
-    model: function() {
-        return this.store.filter('box', function (box) {
-            // return only top level boxes
-            return !box.get('hasParent');
-        });
-    },
     activate: function() {
         $(document).attr('title', 'shelves - Locations');
+    },
+    model: function () {
+        return this.store.find('box');
     }
 });

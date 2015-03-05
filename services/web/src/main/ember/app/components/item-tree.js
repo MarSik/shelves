@@ -62,15 +62,11 @@ export default Ember.Component.extend({
     isEditing: false,
     isDeleting: false,
     isExpanded: false,
-    hasChildren: function() {
-        return this.get('item.hasChildren');
-    }.property('item.hasChildren'),
+    hasChildren: Ember.computed.alias('item.hasChildren'),
     showChildren: function() {
         return this.get('isExpanded') && this.get('hasChildren');
     }.property('isExpanded', 'hasChildren'),
     sorting: ['fullName'],
     sorted: Ember.computed.sort('item.children', 'sorting'),
-    auxInfo: function() {
-        return this.get(this.get('count'));
-    }.property('count', 'item')
+    auxInfo: Ember.computed.indirect('count')
 });

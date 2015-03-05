@@ -19,13 +19,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             });
         }
     },
-    model: function() {
-        return this.store.filter('group', function (box) {
-            // return only top level boxes
-            return !box.get('hasParent');
-        });
-    },
     activate: function() {
         $(document).attr('title', 'shelves - Part groups');
+    },
+    model: function () {
+        return this.store.find('group');
     }
 });
