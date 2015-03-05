@@ -5,8 +5,8 @@
 {{#each r in displayRequirements itemController='projects/_requirement'}}
     <tbody>
     <tr>
-        <td>{{#click-to-edit content=r.model field='content.count'}}{{r.count}}{{/click-to-edit}} of</td>
-        <td>{{#click-to-edit content=r.model field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
+        <td>{{#click-to-edit content=r.model field='content.count' placeholder='item count'}}{{r.model.count}}{{/click-to-edit}} of</td>
+        <td>{{#click-to-edit content=r.model field='content.name'}}{{r.model.name}}{{/click-to-edit}}</td>
         <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r.model}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
             <button {{action 'showAddAlternative' r.model}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
             {{#if r.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
@@ -23,12 +23,12 @@
     {{#each lot in r.assignedLots itemController='projects/_lot'}}
     <tr>
         <td>{{lot.count}}</td>
-        <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
+        <td>{{#link-to 'types.show' lot.model.type}}{{lot.model.type.name}}{{/link-to}} / {{lot.model.type.footprint}}</td>
         {{#if lot.displayActions}}
         <td colspan="2">
-            {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count class="tiny alert" action='solderLot' param=lot}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
-            {{#if lot.canBeUnassigned}}{{#confirm-button class="tiny" action='unassignLot' param=lot}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
-            {{#if lot.canBeUnsoldered}}{{#confirm-button class="tiny" action='unsolderLot' param=lot}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
+            {{#if lot.canBeSoldered}}{{#add-count-button default=lot.model.count class="tiny alert" action='solderLot' param=lot.model}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
+            {{#if lot.canBeUnassigned}}{{#confirm-button class="tiny" action='unassignLot' param=lot.model}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
+            {{#if lot.canBeUnsoldered}}{{#confirm-button class="tiny" action='unsolderLot' param=lot.model}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
             <button {{action 'hideActions'}} class="tiny button">Hide</button>
         </td>
         {{else}}
