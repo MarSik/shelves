@@ -37,14 +37,22 @@ export default NamedBase.extend({
       return n;
   }.property('name', 'footprint', 'vendor', 'summary', 'available', 'free'),
 
-  footprint: function () {
-      var names = [];
+  footprint: function (key, value) {
+      if (arguments.length > 1) {
+          return value;
+      }
 
-      this.get('footprints').forEach(function (fp) {
-          names.pushObject(fp.get('name'));
+      var self = this;
+
+      this.get('footprints').then(function (fs) {
+          var names = [];
+          fs.forEach(function (fp) {
+              names.pushObject(fp.get('name'));
+          });
+          self.set('footprint', names.join(", "));
       });
 
-      return names.join(", ");
+      return "";
   }.property('footprints.@each.name'),
 
     link: function() {

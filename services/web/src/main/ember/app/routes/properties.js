@@ -6,5 +6,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         return this.store.filter('property', function (fp) {
             return !fp.get('isNew');
         });
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Properties');
     }
 });

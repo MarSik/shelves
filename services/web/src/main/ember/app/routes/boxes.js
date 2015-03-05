@@ -20,5 +20,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             // return only top level boxes
             return !box.get('hasParent');
         });
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Locations');
     }
 });

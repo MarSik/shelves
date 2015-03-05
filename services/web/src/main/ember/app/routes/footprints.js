@@ -6,5 +6,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         createFootprint: function () {
             this.transitionTo('footprints.new');
         }
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Footprints');
     }
 });

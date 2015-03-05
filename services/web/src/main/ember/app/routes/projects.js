@@ -40,5 +40,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             requirement.get('type').pushObject(type);
             requirement.save()
         }
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Projects');
     }
 });

@@ -9,5 +9,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         deleteType: function (type) {
             type.destroyRecord();
         }
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Part types');
     }
 });

@@ -24,5 +24,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         return this.store.filter('unit', function (fp) {
             return !fp.get('isNew');
         });
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Measurement and property units');
     }
 });

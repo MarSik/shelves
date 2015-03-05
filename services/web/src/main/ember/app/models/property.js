@@ -11,16 +11,23 @@ export default NamedBase.extend({
     base: belongsTo('siprefix', {async: true}),
     unit: belongsTo("unit", {async: true}),
 
-    niceName: function () {
+    niceName: function (key, value) {
+        if (arguments.length > 1) {
+            return value;
+        }
+
         var symbol = this.get('symbol');
         var self = this;
-        return DS.PromiseObject.create({
-            promise: new Promise(function (resolve) {
-                self.get('unit').then(function (unit) {
-                    resolve(self.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol) + " [" + unit.get('symbol') + ']');
-                });
-            })
+
+        this.get('unit').then(function (unit) {
+            var nice = self.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol);
+            if (unit) {
+                nice += " [" + unit.get('symbol') + ']';
+            }
+            self.set('niceName', nice);
         });
+
+        return this.get('name');
     }.property('name', 'symbol', 'unit', 'unit.symbol'),
 
     link: function() {

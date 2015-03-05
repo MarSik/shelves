@@ -17,20 +17,45 @@ export default NamedBase.extend({
     children: function() {
         return this.get('groups');
     }.property('groups'),
-    hasChildren: function() {
-        return this.get('groups.length') != 0;
-    }.property('groups'),
-    hasParent: function() {
-        // XXX this is a hack, belongsTo returns a promise..
-        return !Ember.isNone(this.get('parent.content'));
-    }.property('parent.content'),
-    fullName: function() {
-        if (Ember.isNone(this.get('parent.content'))) {
-            return this.get('name');
-        } else {
-            return this.get('parent.content.fullName') + ' | ' + this.get('name');
+
+    hasChildren: function(key, value) {
+        if (arguments.length > 1) {
+            return value;
         }
-    }.property('parent.content', 'parent.content.fullName', 'name'),
+
+        var self = this;
+        this.get('groups').then(function (gs) {
+            self.set('hasChildren', gs.get('length') != 0);
+        });
+        return false;
+    }.property('groups', 'groups.@each'),
+
+    hasParent: function(key, value) {
+        if (arguments.length > 1) {
+            return value;
+        }
+
+        var self = this;
+        this.get('parent').then(function (p) {
+            self.set('hasParent', !Ember.isNone(p));
+        });
+
+        return false;
+    }.property('parent'),
+
+    fullName: function(key, value) {
+        if (arguments.length > 1) {
+            return value;
+        }
+
+        this.get('parent').then(function (p) {
+            if (!Ember.isNone(p)) {
+                self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
+            }
+        });
+
+        return this.get('name');
+    }.property('parent', 'parent.fullName', 'name'),
 
     count: function () {
         var c = this.get('nestedCount');

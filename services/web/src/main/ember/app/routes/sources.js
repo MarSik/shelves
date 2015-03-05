@@ -14,5 +14,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 self.growl.error(reason);
             });
         }
+    },
+    activate: function() {
+        $(document).attr('title', 'shelves - Sources');
     }
 });
