@@ -1,7 +1,10 @@
 package org.marsik.elshelves.backend.repositories;
 
-/**
- * Created by msivak on 3/4/15.
- */
-public interface AuthorizationRepository {
+import org.marsik.elshelves.backend.entities.Authorization;
+import org.springframework.data.neo4j.repository.GraphRepository;
+
+import java.util.UUID;
+
+public interface AuthorizationRepository extends GraphRepository<Authorization> {
+    Authorization findByUuid(UUID uuid);
 }

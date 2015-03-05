@@ -5,9 +5,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.entities.Authorization;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
+import org.marsik.elshelves.backend.repositories.AuthorizationRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,9 +28,11 @@ import java.util.UUID;
 
 @Service
 public class CustomUserDetailsService implements ElshelvesUserDetailsService {
-
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AuthorizationRepository authorizationRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -50,7 +54,29 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Try fetching Authorization object with the email as ID
+        // use it for logging in when it exists (mobile device logging in)
+        try {
+            Authorization auth = authorizationRepository.findByUuid(UUID.fromString(email));
+            if (auth != null) {
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new GrantedAuthority() {
+                    @Override
+                    public String getAuthority() {
+                        return "REMOTE";
+                    }
+                });
 
+                return new org.springframework.security.core.userdetails.User(
+                        auth.getOwner().getEmail(),
+                        auth.getSecret(),
+                        authorities);
+            }
+        } catch (IllegalArgumentException ex) {
+            // ignore
+        }
+
+        // Use the standard user/password mechanism for logging in
         User user = userRepository.getUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User does not exist.");

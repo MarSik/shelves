@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -28,7 +29,7 @@ public class User extends OwnedEntity implements StickerCapable {
     Date registrationDate;
 
     @RelatedTo(type = "OWNS", enforceTargetType = true)
-    Set<Box> boxes;
+    Set<Authorization> authorizations;
 
     public UUID getUuid() {
         return uuid;
@@ -80,14 +81,6 @@ public class User extends OwnedEntity implements StickerCapable {
         this.registrationDate = registrationDate;
     }
 
-    public Set<Box> getBoxes() {
-        return boxes;
-    }
-
-    public void setBoxes(Set<Box> boxes) {
-        this.boxes = boxes;
-    }
-
 	public Date getVerificationStartTime() {
 		return verificationStartTime;
 	}
@@ -96,7 +89,15 @@ public class User extends OwnedEntity implements StickerCapable {
 		this.verificationStartTime = verificationStartTime;
 	}
 
-	@Override
+    public Set<Authorization> getAuthorizations() {
+        return authorizations;
+    }
+
+    public void setAuthorizations(Set<Authorization> authorizations) {
+        this.authorizations = authorizations;
+    }
+
+    @Override
 	public User getOwner() {
 		return this;
 	}
