@@ -35,12 +35,16 @@
 
     <h3>Additional properties to display</h3>
 
-    <ul class="small-block-grid-2 large-block-grid-6">
+    <ul>
         {{#each property in model.showProperties}}
-            <li>{{#confirm-button action='removeProperty' param=model param2=property}}{{property.niceName}}{{/confirm-button}}</li>
+        <li>
+            {{#link-to 'properties.show' property}}{{property.niceName}}{{/link-to}}
+            {{#if manageProperties}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}} remove{{/confirm-button}}{{/if}}
+        </li>
         {{/each}}
     </ul>
 
+    {{#if manageProperties}}
     {{ember-selectize
     content=sortedProperties
     maxItems=1
@@ -48,5 +52,9 @@
     optionLabelPath="content.niceName"
     selection=propertyToAdd
     placeholder="Select a property" }}
-    <button {{action 'addProperty' model propertyToAdd}}>{{fa-icon 'plus'}} Add</button>
+    <button {{action 'addProperty' model propertyToAdd}}>{{fa-icon 'plus'}} Add property</button>
+    <button class='secondary' {{action 'manageProperties' false}}>{{fa-icon 'times'}} Hide</button>
+    {{else}}
+        <button class='secondary' {{action 'manageProperties' true}}>{{fa-icon 'bar-chart'}} Manage properties</button>
+    {{/if}}
 </div>

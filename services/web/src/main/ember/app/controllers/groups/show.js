@@ -31,6 +31,9 @@ export default Ember.Controller.extend({
                 key += ':desc';
             }
             this.set('typeSorting', [key]);
+        },
+        manageProperties: function (value) {
+            this.set('manageProperties', value);
         }
     },
     needs: "application",
