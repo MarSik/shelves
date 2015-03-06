@@ -91,17 +91,17 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 
     @Override
     public DocumentApiModel create(DocumentApiModel dto, User currentUser) throws OperationNotPermitted {
-        DocumentApiModel doc = super.create(dto, currentUser);
-
-		if (doc != null
-				&& (doc.getName() == null || doc.getName().isEmpty())
-				&& doc.getUrl() != null) {
+		if (dto != null
+				&& (dto.getName() == null || dto.getName().isEmpty())
+				&& dto.getUrl() != null) {
 			try {
-				doc.setName(new File(doc.getUrl().toURI().getPath()).getName());
+				dto.setName(new File(dto.getUrl().toURI().getPath()).getName());
 			} catch (URISyntaxException ex) {
 				ex.printStackTrace();
 			}
 		}
+
+        DocumentApiModel doc = super.create(dto, currentUser);
 
         if (doc != null && doc.getId() != null && doc.getUrl() != null) {
             downloadDoc(doc.getId(), doc.getUrl());

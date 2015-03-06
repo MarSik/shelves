@@ -32,5 +32,7 @@ public class DocumentAnalysisDoneService implements FileAnalysisDoneHandler {
                 d.setName(metadata.get(Metadata.TITLE));
             }
 		}
+
+        documentRepository.save(d);
 	}
 }
