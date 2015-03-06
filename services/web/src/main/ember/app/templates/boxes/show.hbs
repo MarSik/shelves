@@ -3,6 +3,7 @@
 
 <table style="width: 100%;">
 {{#each lot in lots}}
+    <tbody>
     <tr {{action 'showQr' 'lots' lot on='mouseEnter'}}>
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
@@ -13,6 +14,7 @@
     <tr>
         <td colspan="5">{{lot.type.summary}}</td>
     </tr>
+    </tbody>
 {{/each}}
 </table>
 </section>
