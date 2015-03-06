@@ -48,6 +48,7 @@ export default NamedBase.extend({
             return value;
         }
 
+        var self = this;
         this.get('parent').then(function (p) {
             if (!Ember.isNone(p)) {
                 self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
