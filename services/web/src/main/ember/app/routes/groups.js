@@ -23,6 +23,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Part groups');
     },
     model: function () {
-        return this.store.find('group');
+        return this.store.all('group');
     }
 });

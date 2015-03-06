@@ -9,5 +9,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     },
     activate: function() {
         $(document).attr('title', 'shelves - Footprints');
+    },
+    model: function () {
+        return this.store.all('footprint');
     }
 });

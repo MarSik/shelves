@@ -19,6 +19,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Locations');
     },
     model: function () {
-        return this.store.find('box');
+        return this.store.all('box');
     }
 });
