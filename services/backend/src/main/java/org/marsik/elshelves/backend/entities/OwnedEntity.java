@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.UUID;
 
 @NodeEntity
@@ -18,6 +19,12 @@ public abstract class OwnedEntity {
 	@NotNull
 	@Indexed
 	UUID uuid;
+
+    /**
+     * Record the timestamp of last modification so
+     * we can tell the client to use cached result
+     */
+    Date lastModified;
 
 	// Provided by AspectJ-ized NodeEntity
 	// public abstract Long getNodeId();
@@ -40,4 +47,12 @@ public abstract class OwnedEntity {
 	}
 
 	public abstract boolean canBeDeleted();
+
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
 }

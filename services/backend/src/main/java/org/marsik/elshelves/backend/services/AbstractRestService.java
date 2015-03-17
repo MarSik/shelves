@@ -20,6 +20,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -77,6 +78,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 		created = relinkService.relink(created);
         created.setUuid(uuidGenerator.generate());
         created.setOwner(currentUser);
+        created.setLastModified(new Date());
         return created;
     }
 
@@ -86,6 +88,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 
     protected T updateEntity(T entity, T update, User currentUser) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
 		update = relinkService.relink(update, currentUser, entity);
+        Set<Object> modified = new THashSet<>();
 
 		PropertyDescriptor[] properties;
 		try {
@@ -112,6 +115,11 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 			if (Collection.class.isAssignableFrom(f.getPropertyType())) {
 				try {
 					Collection<Object> items = (Collection<Object>)getter.invoke(update);
+
+                    // Track modifications
+                    modified.addAll(items);
+                    modified.addAll((Collection<Object>)getter.invoke(entity));
+
 					((Collection<Object>)getter.invoke(entity)).clear();
 					((Collection<Object>)getter.invoke(entity)).addAll(items);
 				} catch (InvocationTargetException | IllegalAccessException ex) {
@@ -127,6 +135,11 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 				try {
 					Object value = getter.invoke(update);
 					Method setter = f.getWriteMethod();
+
+                    // Track modifications
+                    modified.add(value);
+                    modified.add(getter.invoke(entity));
+
 					if (setter != null) {
 						setter.invoke(entity, value);
 					}
@@ -135,6 +148,16 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 				}
 			}
 		}
+
+
+        // Mark all old and new elements as modified
+        Date modificationDate = new Date();
+        modified.add(entity);
+        for (Object m: modified) {
+            if (m != null && m instanceof OwnedEntity) {
+                ((OwnedEntity) m).setLastModified(modificationDate);
+            }
+        }
 
         return entity;
     }

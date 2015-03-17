@@ -34,6 +34,7 @@ public class Authorization extends OwnedEntity {
         return true;
     }
 
+    @PartOfUpdate
     public String getName() {
         return name;
     }
@@ -42,6 +43,7 @@ public class Authorization extends OwnedEntity {
         this.name = name;
     }
 
+    @PartOfUpdate
     public String getSecret() {
         return secret;
     }
