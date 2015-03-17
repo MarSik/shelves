@@ -16,26 +16,32 @@
             <dt>ID</dt>
             <dd>{{model.id}}</dd>
         </dl>
-    </section>
-
-    <section class="columns large-6">
-        <h3>Pairing token</h3>
-
-        <p>{{session.content.access_token}}</p>
-
-        <p>{{fa-icon 'android' size=2}} Pair your Android application by scanning the code below:</p>
-
-        <p>{{view 'qrcodejs' url=tokenQrUrl size=256}}</p>
 
         <h3>Authorizations</h3>
 
-        <p>This is a list of paired devices that have access to your account.</p>
+        {{#if model.authorizations.length}}
+            <p>This is a list of paired devices that have access to your account.</p>
+        {{else}}
+            <p>You do not have any paired device at this moment.</p>
+        {{/if}}
 
         <ul>
             {{#each auth in model.authorizations}}
                 <li>{{auth.name}} {{#confirm-button class='remove button' action='removeAuthorization' param=auth}}{{fa-icon 'times'}}{{/confirm-button}}</li>
             {{/each}}
         </ul>
+    </section>
+
+    <section class="columns large-6">
+        <h3>Pairing token</h3>
+
+        <p>Select the black area to see the token. You can then use it in your custom HTTP requests by adding an <em>Authorization: Bearer token</em> header.</p>
+
+        <p class="hover-to-see-password">{{session.content.access_token}}</p>
+
+        <p>{{fa-icon 'android' size=2}} Pair your Android application by scanning the code below:</p>
+
+        <p>{{view 'qrcodejs' url=tokenQrUrl size=256}}</p>
     </section>
 </div>
 
