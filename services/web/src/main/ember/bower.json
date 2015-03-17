@@ -15,7 +15,8 @@
     "foundation": "~5.4.7",
     "ember-simple-auth": "0.7.3",
     "ember-uploader": "0.3.0",
-    "ember-data": "1.0.0-beta.15"
+    "ember-data": "1.0.0-beta.15",
+    "qrcodejs": "~0.1.0"
   },
   "resolutions": {
     "handlebars": ">= 2.0.0 < 3.0.0",

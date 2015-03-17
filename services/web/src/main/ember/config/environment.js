@@ -58,7 +58,7 @@ module.exports = function(environment) {
   ENV['simple-auth-oauth2'] = {
       serverTokenEndpoint: ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '') + '/oauth/token',
       clientId: 'elshelves.js'
-  }
+  };
 
   ENV.APP.API_ENDPOINT = ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '');
   ENV['simple-auth'].crossOriginWhitelist = [ENV.APP.API_SERVER];
