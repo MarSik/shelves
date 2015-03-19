@@ -6,7 +6,6 @@ export default Authenticator.extend({
     makeRequest: function (url, data) {
         var client_id = ENV['simple-auth']['client-id'];
         var client_secret = ENV['simple-auth']['client-secret'];
-        data.grant_type = "password";
 
         return Ember.$.ajax({
             url: url,
