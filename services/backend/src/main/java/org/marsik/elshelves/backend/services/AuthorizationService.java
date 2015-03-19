@@ -11,12 +11,18 @@ import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EmberToAuthorization;
 import org.marsik.elshelves.backend.repositories.AuthorizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
 public class AuthorizationService extends AbstractRestService<AuthorizationRepository, Authorization, AuthorizationApiModel> {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     public AuthorizationService(AuthorizationRepository repository,
                                 AuthorizationToEmber dbToRest,
@@ -33,5 +39,12 @@ public class AuthorizationService extends AbstractRestService<AuthorizationRepos
     @Override
     public AuthorizationApiModel update(UUID uuid, AuthorizationApiModel dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         throw new OperationNotPermitted();
+    }
+
+    @Override
+    protected Authorization createEntity(AuthorizationApiModel dto, User currentUser) {
+        String hashed = passwordEncoder.encode(dto.getSecret());
+        dto.setSecret(hashed);
+        return super.createEntity(dto, currentUser);
     }
 }
