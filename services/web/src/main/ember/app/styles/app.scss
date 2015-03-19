@@ -44,7 +44,15 @@
 
   .draggable-dropzone {
     display: inline-block;
+
+    &.activated {
+      background-color: rgba(1.0, 0.0, 0.0, 0.1);
+    }
   }
+}
+
+.draggable-item {
+  cursor: move;
 }
 
 .purchase {

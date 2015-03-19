@@ -40,7 +40,7 @@ export default Ember.Controller.extend({
     propSorting: ['name'],
     sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propSorting'),
     typeColumns: function () {
-        return 4 + this.get('model.showProperties.length');
+        return 5 + this.get('model.showProperties.length');
     }.property('model.showProperties.size'),
 
     typeSorting: ['name'],

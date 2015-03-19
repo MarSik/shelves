@@ -13,6 +13,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         hideQr: function () {
             this.set('controller.qrEntity', null);
             this.set('controller.qrModels', null);
+        },
+        moveItem: function (itemId, boxId) {
+            var self = this;
+            console.log('drop processing');
+            this.store.find('lot', itemId).then(function (item) {
+                self.store.find('box', boxId).then(function (box) {
+                    self.send('moveLot', item, box, item.get('count'));
+                });
+            });
         }
     },
     activate: function() {

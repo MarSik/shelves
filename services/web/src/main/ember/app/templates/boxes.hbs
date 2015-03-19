@@ -10,7 +10,7 @@
 
 <ul>
     {{#each box in topLevel}}
-    {{item-tree item=box count='item.count' class='box-entity' deleteAction='deleteBox' createAction='showCreateBox' action='selectBox' hoverAction='hoverBox'}}
+    {{item-tree item=box count='item.count' class='box-entity' moveItem='moveItem' deleteAction='deleteBox' createAction='showCreateBox' action='selectBox' hoverAction='hoverBox'}}
     {{/each}}
 </ul>
 </section>
