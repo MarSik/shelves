@@ -63,17 +63,23 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
                 authorities.add(new GrantedAuthority() {
                     @Override
                     public String getAuthority() {
-                        return "REMOTE";
+                        return "MOBILE";
+                    }
+                });
+                authorities.add(new GrantedAuthority() {
+                    @Override
+                    public String getAuthority() {
+                        return "USER";
                     }
                 });
 
                 return new org.springframework.security.core.userdetails.User(
-                        auth.getOwner().getEmail(),
+                        auth.getUuid().toString(),
                         auth.getSecret(),
                         authorities);
             }
         } catch (IllegalArgumentException ex) {
-            // ignore
+            // ignore non UUID logins here
         }
 
         // Use the standard user/password mechanism for logging in
@@ -91,6 +97,12 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
             @Override
             public String getAuthority() {
                 return "USER";
+            }
+        });
+        authorities.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return "IDENTITY";
             }
         });
 
