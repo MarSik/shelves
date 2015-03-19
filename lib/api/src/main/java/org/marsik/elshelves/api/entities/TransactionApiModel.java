@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = TransactionIdResolver.class)
 @EmberModelName("transaction")
-public class TransactionApiModel extends AbstractEntityApiModel {
+public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	public TransactionApiModel(UUID id) {
 		super(id);
 	}
@@ -21,22 +21,10 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	public TransactionApiModel() {
 	}
 
-	String name;
 	Date date;
 
 	Set<PurchaseApiModel> items;
-
-	UserApiModel belongsTo;
-
 	SourceApiModel source;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Date getDate() {
 		return date;
@@ -54,16 +42,6 @@ public class TransactionApiModel extends AbstractEntityApiModel {
 	@JsonSetter
 	public void setItems(Set<PurchaseApiModel> items) {
 		this.items = items;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
-	}
-
-	@JsonSetter
-	public void setBelongsTo(UserApiModel belongsTo) {
-		this.belongsTo = belongsTo;
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)

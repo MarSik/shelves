@@ -22,6 +22,9 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 	@Autowired
 	EmberToSource emberToSource;
 
+    @Autowired
+    EmberToNamedObject emberToNamedObject;
+
 	@Override
 	public Transaction convert(TransactionApiModel object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
@@ -44,15 +47,12 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 
 	@Override
 	public Transaction convert(TransactionApiModel object, Transaction model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
-		model.setName(object.getName());
-		model.setDate(object.getDate());
+		emberToNamedObject.convert(object, model, nested, cache);
 
 		if (nested == 0) {
 			return model;
 		}
 
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested - 1, cache));
 		model.setSource(emberToSource.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {

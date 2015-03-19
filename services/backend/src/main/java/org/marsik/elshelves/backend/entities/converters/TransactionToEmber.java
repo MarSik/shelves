@@ -22,6 +22,9 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 	@Autowired
 	UserToEmber userToEmber;
 
+    @Autowired
+    NamedObjectToEmber namedObjectToEmber;
+
 	@Override
 	public TransactionApiModel convert(Transaction object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
@@ -43,16 +46,13 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 
 	@Override
 	public TransactionApiModel convert(Transaction object, TransactionApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getUuid());
+		namedObjectToEmber.convert(object, model, nested, cache);
 
 		if (nested == 0) {
 			return model;
 		}
 
-		model.setName(object.getName());
 		model.setDate(object.getDate());
-
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 		model.setSource(sourceToEmber.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {
