@@ -26,6 +26,19 @@ public final class EmberModel extends HashMap<String, Object> {
         //Must use the builder
     }
 
+    public static String getSingularName(final Class<?> clazz) {
+        if (clazz.isAnnotationPresent(EmberModelName.class)) {
+            return clazz.getAnnotation(EmberModelName.class).value();
+        }
+        else {
+            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
+        }
+    }
+
+    public static String getPluralName(final Class<?> clazz) {
+        return English.plural(getSingularName(clazz));
+    }
+
     public static class Builder<T> implements org.marsik.elshelves.api.ember.Builder<EmberModel> {
         private final Map<String, Set<Object>> sideLoadedItems = new THashMap<String, Set<Object>>();
         private final Map<String, Object> metaData = new HashMap<String, Object>();
@@ -184,19 +197,6 @@ public final class EmberModel extends HashMap<String, Object> {
         public Builder<T> purge(Object entity) {
             purge.add(entity);
             return this;
-        }
-
-        private String getSingularName(final Class<?> clazz) {
-            if (clazz.isAnnotationPresent(EmberModelName.class)) {
-                return clazz.getAnnotation(EmberModelName.class).value();
-            }
-            else {
-                return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
-            }
-        }
-
-        private String getPluralName(final Class<?> clazz) {
-            return English.plural(getSingularName(clazz));
         }
 
         @Override
