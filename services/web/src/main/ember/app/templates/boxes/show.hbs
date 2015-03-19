@@ -15,7 +15,13 @@
 {{#each lot in sortedLots}}
     <tbody>
     <tr {{action 'showQr' 'lots' lot on='mouseEnter'}}>
-        <td>{{#draggable-item content=lot.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}</td>
+        <td>
+            {{#if lot.canBeMoved}}
+                {{#draggable-item content=lot.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}
+            {{else}}
+                &nbsp;
+            {{/if}}
+        </td>
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
         <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>

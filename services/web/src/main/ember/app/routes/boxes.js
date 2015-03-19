@@ -19,7 +19,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             console.log('drop processing');
             this.store.find('lot', itemId).then(function (item) {
                 self.store.find('box', boxId).then(function (box) {
-                    self.send('moveLot', item, box, item.get('count'));
+                    self.send('moveLot', item, box);
                 });
             });
         }

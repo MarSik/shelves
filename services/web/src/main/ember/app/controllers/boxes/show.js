@@ -11,6 +11,8 @@ export default Ember.Controller.extend({
         }
     },
     lots: Ember.computed.filterBy('model.lots', 'valid', true),
+    // Show everything that is not soldered
+    availableLots: Ember.computed.filterBy('lots', 'canBeUnsoldered', false),
     lotSorting: ['type.name'],
-    sortedLots: Ember.computed.sort('lots', 'lotSorting')
+    sortedLots: Ember.computed.sort('availableLots', 'lotSorting')
 });
