@@ -24,7 +24,11 @@
         </td>
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
-        <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+        <td>
+            {{#each fp in lot.type.footprints}}
+            {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
+            {{/each}}
+        </td>
         <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.count}}{{/link-to}}</td>
         <td>{{#link-to 'lots.show' lot}}{{fa-icon 'history'}}{{/link-to}}</td>
     </tr>

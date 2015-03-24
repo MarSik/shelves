@@ -22,7 +22,11 @@
         <td>{{#draggable-item content=type.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}</td>
         <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</td>
         <td>{{type.vendor}}</td>
-        <td>{{#link-to 'footprints.show' type.footprint}}{{type.footprint.name}}{{/link-to}}</td>
+        <td>
+            {{#each fp in type.footprints}}
+            {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
+            {{/each}}
+        </td>
         <td>{{#link-to 'types.show' type}}{{type.available}}{{/link-to}}</td>
         {{#each property in model.showProperties}}
             <td>{{property-value entity=type property=property}}</td>
