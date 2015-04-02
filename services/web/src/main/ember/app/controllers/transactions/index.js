@@ -43,6 +43,10 @@ export default Ember.Controller.extend({
     sourceSorting: ['name'],
     sortedSources: Ember.computed.sort('controllers.application.availableSources', 'sourceSorting'),
     submitDisabled: function () {
+        if (Ember.isEmpty(this.get('model.name'))) {
+            return true;
+        }
+
         if (!this.get('model.source.content')) {
             return true;
         }
@@ -58,7 +62,7 @@ export default Ember.Controller.extend({
         }
 
         return false;
-    }.property('model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
+    }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
 
     pendingTransactions: Ember.computed.filterBy('controllers.transactions.model', 'fullyDelivered', false)
 });

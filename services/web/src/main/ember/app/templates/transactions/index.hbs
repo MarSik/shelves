@@ -23,6 +23,8 @@
 
     <form {{action 'purchase' model on='submit'}}>
 
+    {{input type='text' value=model.name id=name placeholder='Purchase name'}}
+
     <label for="source">
         Source:
     </label>
