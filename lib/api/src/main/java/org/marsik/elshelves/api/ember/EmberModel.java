@@ -39,6 +39,10 @@ public final class EmberModel extends HashMap<String, Object> {
         return English.plural(getSingularName(clazz));
     }
 
+    public static String getPluralName(String singular) {
+        return English.plural(singular);
+    }
+
     public static class Builder<T> implements org.marsik.elshelves.api.ember.Builder<EmberModel> {
         private final Map<String, Set<Object>> sideLoadedItems = new THashMap<String, Set<Object>>();
         private final Map<String, Object> metaData = new HashMap<String, Object>();
