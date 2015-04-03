@@ -15,6 +15,7 @@ import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.backend.services.CodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,8 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
         super(CodeApiModel.class, service);
     }
 
-    @RequestMapping(value = "{type}/{code}", method = RequestMethod.GET)
+    @Transactional(readOnly = true)
+    @RequestMapping(value = "/{type}/{code}", method = RequestMethod.GET)
     public EmberModel getByTypeAndCode(@CurrentUser User user,
                               @PathVariable("code") String code,
                               @PathVariable("type") String type) throws PermissionDenied, EntityNotFound {
