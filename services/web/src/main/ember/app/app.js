@@ -11,14 +11,6 @@ var App = Ember.Application.extend({
   Resolver: Resolver
 });
 
-/*
-Ember.onerror = function(error) {
-    Ember.$.ajax('/error-notification', 'POST', {
-        stack: error.stack
-    });
-};
-*/
-
 loadInitializers(App, config.modulePrefix);
 
 export default App;
