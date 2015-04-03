@@ -24,12 +24,16 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             var newDoc = this.store.createRecord('document', {
                 url: url
             });
-            newDoc.get('describes').pushObject(entity);
 
             var self = this;
 
             newDoc.save().then(function (e) {
                 self.growl.info('Document saved, downloading..');
+
+                // Save the document to the entity
+                // workarounds Many-To-Many polymorphic issue
+                entity.get('describedBy').pushObject(e);
+                entity.save();
             }).catch(function (e) {
                 newDoc.rollback();
                 self.growl.error('Download request failed: '+e);
