@@ -1,5 +1,7 @@
 package org.marsik.elshelves.api.entities;
 
+import org.marsik.elshelves.api.ember.EmberModel;
+
 import java.util.UUID;
 
 public class PolymorphicRecord extends AbstractEntityApiModel {
@@ -8,19 +10,18 @@ public class PolymorphicRecord extends AbstractEntityApiModel {
     public PolymorphicRecord() {
     }
 
-    public PolymorphicRecord(UUID id) {
-        super(id);
-    }
-
-    public PolymorphicRecord(String id) {
-        super(UUID.fromString(id));
-    }
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public static PolymorphicRecord build(AbstractEntityApiModel entity) {
+        PolymorphicRecord p = new PolymorphicRecord();
+        p.setType(EmberModel.getSingularName(entity.getClass()));
+        p.setId(entity.getId());
+        return p;
     }
 }
