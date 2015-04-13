@@ -269,5 +269,12 @@ export default Ember.Controller.extend({
     moveLotToBox: null,
     moveLotDisabled: function () {
         return Ember.isEmpty(this.get('moveLotToBox')) || Ember.isEmpty(this.get('moveLotCount'));
-    }.property('moveLotToBox', 'moveLotCount')
+    }.property('moveLotToBox', 'moveLotCount'),
+
+    saveChanges: function () {
+        var model = this.get('model');
+        model.save().catch(function () {
+            model.rollback();
+        })
+    }.observes('model.footprints', 'model.groups')
 });
