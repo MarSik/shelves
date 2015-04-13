@@ -42,7 +42,9 @@
     selection=model.footprints
     multiple=true
     create='createEmptyFootprint'
-    placeholder="Select a footprint" }}
+    placeholder="Select a footprint"
+    add-item='changeObserved'
+    remove-item='changeObserved' }}
 
     <button {{action 'hideAddFootprint'}} class="button secondary">Hide</button>
 {{else}}
@@ -109,7 +111,9 @@ placeholder="Select an SI prefix" }}
     selection=model.groups
     multiple=true
     create='createEmptyGroup'
-    placeholder="Select a type" }}
+    placeholder="Select a type"
+    add-item='changeObserved'
+    remove-item='changeObserved' }}
 
     <button {{action 'hideAddGroup'}} class="button secondary">Hide</button>
 {{else}}
