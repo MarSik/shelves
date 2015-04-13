@@ -117,8 +117,16 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 					Collection<Object> items = (Collection<Object>)getter.invoke(update);
 
                     // Track modifications
-                    modified.addAll(items);
-                    modified.addAll((Collection<Object>)getter.invoke(entity));
+                    for (Object item: items) {
+                        if (OwnedEntity.class.isAssignableFrom(item.getClass())) {
+                            modified.add(item);
+                        }
+                    }
+                    for (Object item: (Collection<Object>) getter.invoke(entity)) {
+                        if (OwnedEntity.class.isAssignableFrom(item.getClass())) {
+                            modified.add(item);
+                        }
+                    }
 
 					((Collection<Object>)getter.invoke(entity)).clear();
 					((Collection<Object>)getter.invoke(entity)).addAll(items);
@@ -137,8 +145,10 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 					Method setter = f.getWriteMethod();
 
                     // Track modifications
-                    modified.add(value);
-                    modified.add(getter.invoke(entity));
+                    if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
+                        modified.add(value);
+                        modified.add(getter.invoke(entity));
+                    }
 
 					if (setter != null) {
 						setter.invoke(entity, value);
