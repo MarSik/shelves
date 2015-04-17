@@ -1,6 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.Set;
 
 @NodeEntity
+@DefaultEmberModel(DocumentApiModel.class)
 public class Document extends NamedEntity implements StickerCapable {
 	@NotEmpty
 	String contentType;
