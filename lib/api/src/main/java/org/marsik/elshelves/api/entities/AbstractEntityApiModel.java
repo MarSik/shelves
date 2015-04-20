@@ -25,6 +25,8 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
 
     UUID id;
 
+    boolean stub;
+
     @Override
     public UUID getId() {
         return id;
@@ -32,6 +34,20 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    /**
+     * Signalizes whether this object was created without
+     * data to act as an empty ID holder.
+     */
+    @JsonIgnore
+    public boolean isStub() {
+        return stub;
+    }
+
+    @JsonIgnore
+    public void setStub(boolean stub) {
+        this.stub = stub;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.marsik.elshelves.api.entities.idresolvers;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -30,7 +31,9 @@ public abstract class AbstractIdResolver implements ObjectIdResolver {
 	public Object createItem(ObjectIdGenerator.IdKey id) {
 		try {
 			System.out.println("Creating empty " +getType().getName()+ " with id "+id.key.toString());
-			return getType().getConstructor(id.key.getClass()).newInstance(id.key);
+			AbstractEntityApiModel stub =  getType().getConstructor(id.key.getClass()).newInstance(id.key);
+			stub.setStub(true);
+			return stub;
 		} catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException|InstantiationException ex) {
 			ex.printStackTrace();
 			return null;
@@ -42,7 +45,7 @@ public abstract class AbstractIdResolver implements ObjectIdResolver {
 		return getClass().isAssignableFrom(resolverType.getClass());
 	}
 
-	protected abstract Class<?> getType();
+	protected abstract Class<? extends AbstractEntityApiModel> getType();
 
 	@Override
 	public ObjectIdResolver newForDeserialization(Object c) {
