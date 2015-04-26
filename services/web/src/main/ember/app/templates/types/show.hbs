@@ -41,10 +41,10 @@
     optionLabelPath="content.name"
     selection=model.footprints
     multiple=true
-    create='createEmptyFootprint'
-    placeholder="Select a footprint"
     add-item='changeObserved'
-    remove-item='changeObserved' }}
+    remove-item='changeObserved'
+    create-item='createEmptyFootprint'
+    placeholder="Select a footprint" }}
 
     <button {{action 'hideAddFootprint'}} class="button secondary">Hide</button>
 {{else}}
@@ -110,10 +110,10 @@ placeholder="Select an SI prefix" }}
     optionLabelPath="content.fullName"
     selection=model.groups
     multiple=true
-    create='createEmptyGroup'
-    placeholder="Select a type"
     add-item='changeObserved'
-    remove-item='changeObserved' }}
+    remove-item='changeObserved'
+    create-item='createEmptyGroup'
+    placeholder="Select a type" }}
 
     <button {{action 'hideAddGroup'}} class="button secondary">Hide</button>
 {{else}}
@@ -263,7 +263,7 @@ placeholder="Select an SI prefix" }}
     optionValuePath="content.id"
     optionLabelPath="content.fullName"
     selection=moveLotToBox
-    create='createBox'
+    create-item='createBox'
     maxItems=1
     placeholder="Select a destination" }}
 

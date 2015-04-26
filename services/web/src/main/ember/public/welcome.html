@@ -63,7 +63,7 @@
             text-align: left;
         }
 
-        .feature-list li > i, .feature-list li p > i {
+        .title-icon, .feature-list li > i, .feature-list li p > i {
             float: left;
             margin: 0 0.5ex 0.1em 0;
         }
@@ -93,6 +93,11 @@
         .seealso li {
             text-align: center;
         }
+
+        .primary {
+            background-color: rgba(0, 140, 186, 0.8) !important;
+            color: white !important;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +119,7 @@
             <ul class="left">
                 <li><a href="#highlights">Highlights</a></li>
                 <li><a href="#features">Features</a></li>
+                <li><a href="#mobile">Mobile</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#author">Authors</a></li>
                 <li><a href="#license">Usage policy</a></li>
@@ -185,6 +191,13 @@
 </section>
 
 <section class="">
+    <a name="mobile"></a>
+    <h2>Mobile</h2>
+
+    <p><i class="title-icon fa fa-android fa-3x"></i> Android application to search, browse and manipulate parts is under development. The alpha version is available to users registered to <a href="https://groups.google.com/forum/#!forum/elshelves">elshelves@googlegroups.com</a> group.</p>
+</section>
+
+<section class="">
     <a name="pricing"></a>
     <h2>Pricing</h2>
 
@@ -222,6 +235,15 @@
     </ol>
 </section>
 
+<section class="primary">
+    <a name="goto"></a>
+    <h2>Try it out</h2>
+
+    <p>We would be glad if you could try Shelves out and tell us what you think (and possibly report any issues you find).</p>
+
+    <p><a href="https://a.shelves.cz"><i class="title-icon fa fa-play fa-3x"></i> <br/>Go to Shelves</a></p>
+</section>
+
 <section>
     <a name="development"></a>
     <h2>Development</h2>
@@ -237,11 +259,23 @@
             <p><i class="fa fa-fw fa-cloud fa-3x"></i> Deployable as WAR or standalone with nginx proxy.</p>
         </li>
     </ul>
+
+    <ul class="small-block-grid-1 feature-list development-list">
+        <li>
+            <p><i class="fa fa-android fa-3x"></i> The Android application can be tested by first becoming a member of <a href="https://groups.google.com/forum/#!forum/elshelves">elshelves@googlegroups.com</a> group and then <a href="https://play.google.com/apps/testing/org.marsik.elshelves.android">registering as a tester</a>.</p>
+        </li>
+    </ul>
 </section>
 
 <section class="">
     <a name="author"></a>
     <h2>Authors</h2>
+
+    <div class="row">
+        <p class="columns">
+            <i class="fa fa-envelope fa-3x"></i> The main place to discuss shelves and the android application is the <a href="https://groups.google.com/forum/#!forum/elshelves">elshelves@googlegroups.com</a> group.
+        </p>
+    </div>
 
     <div class="row">
         <div class="large-3 columns"><img src="http://www.marsik.org/images/MarSik.jpg" title="Martin Sivak" alt="photo of Martin Sivak"/></div>

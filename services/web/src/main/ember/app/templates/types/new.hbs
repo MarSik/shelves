@@ -20,7 +20,7 @@
     optionLabelPath="content.name"
     selection=model.footprints
     multiple=true
-    create='createEmptyFootprint'
+    create-item='createEmptyFootprint'
     placeholder="Select a footprint" }}
 
     <h3>Description</h3>
@@ -34,7 +34,7 @@
     selection=model.groups
     multiple=true
     sort="content.fullName"
-    create='createEmptyGroup'
+    create-item='createEmptyGroup'
     placeholder="Select groups" }}
 
     <button {{bind-attr disabled=incompleteForm}} type="submit">Save</button>
