@@ -11,6 +11,10 @@ export default Ember.Route.extend({
             });
 
             lot.save();
+        },
+        fixVat: function (purchase) {
+            purchase.set('vatIncluded', !purchase.get('vatIncluded'));
+            purchase.save();
         }
     },
     setupController: function(controller, model) {
