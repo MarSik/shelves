@@ -2,12 +2,12 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     actions: {
-        delivered: function (purchase, location) {
+        delivered: function (purchase, location, count) {
             console.log('delivering...');
             var lot = this.store.createRecord('lot', {
                 purchase: purchase,
                 location: location,
-                count: purchase.get('count')
+                count: count
             });
 
             lot.save();

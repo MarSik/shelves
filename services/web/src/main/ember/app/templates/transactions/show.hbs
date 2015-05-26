@@ -50,14 +50,14 @@
             <th>Vat %</th>
         </tr>
         </thead>
-        {{#each purchase in model.items}}
+        {{#each purchase in sortedItems}}
         <tbody>
         <tr>
             <td>
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
             <td colspan="4">
-                {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location}}
+                {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
                 {{#if purchase.delivered}}{{else}}<button {{action 'fixVat' purchase}}>{{fa-icon 'wrench'}} VAT {{#if purchase.vatIncluded}}not{{/if}} included</button>{{/if}}
             </td>
         </tr>

@@ -4,10 +4,11 @@ export default Ember.Component.extend({
     actions: {
         startDelivery: function() {
             this.set('delivering', true);
+            this.set('count', this.get('purchase.missing'));
         },
         delivered: function() {
             this.set('delivering', false);
-            this.sendAction('action', this.get('purchase'), this.get('location'));
+            this.sendAction('action', this.get('purchase'), this.get('location'), this.get('count'));
         }
     },
     delivering: false,

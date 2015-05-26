@@ -1,6 +1,9 @@
 {{#if isDelivering}}
 <div class="row collapse">
-    <div class="small-11 columns">
+    <div class="small-1 columns">
+        {{input value=count}}
+    </div>
+    <div class="small-10 columns">
         {{ember-selectize
         content=sortedBoxes
         optionValuePath="content.id"

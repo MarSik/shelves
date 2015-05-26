@@ -57,48 +57,9 @@
             <th>Vat %</th>
         </tr>
         </thead>
+
         {{#each purchase in model.items}}
-        <tbody>
-        <tr>
-            <td colspan="5">
-                <div class="row collapse">
-                    <div class="small-11 columns">
-                        {{ember-selectize
-                        content=sortedTypes
-                        optionValuePath="content.id"
-                        optionLabelPath="content.fullName"
-                        selection=purchase.type
-                        loading=sortedTypes.isPending
-                        required=true
-                        maxItems=1
-                        create-item='createType'
-                        sort="content.fullName"
-                        placeholder="Select a type" }}
-                    </div>
-                    <div class="small-1 columns">
-                        <button {{action 'removeRow' purchase}} class='postfix'>{{fa-icon 'times'}}</button>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="sku">
-                {{input type='text' value=purchase.sku id=sku placeholder='SKU'}}
-            </td>
-            <td class="count">
-                {{input type='text' value=purchase.count id=count placeholder='count'}}
-            </td>
-            <td class="price">
-                {{input type='text' value=purchase.singlePrice id=price placeholder='price'}}
-            </td>
-            <td class="vat-included">
-                {{input type='checkbox' checked=purchase.vatIncluded id=vatIncluded}}
-            </td>
-            <td class="vat">
-                {{input type='text' value=purchase.vat id=vat placeholder='vat%'}}
-            </td>
-        </tr>
-        </tbody>
+        {{purchase-line purchase=purchase sortedTypes=sortedTypes removeRow="removeRow" createType="createType"}}
         {{/each}}
 
         <tr>
