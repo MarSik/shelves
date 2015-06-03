@@ -15,64 +15,69 @@ export default NamedBase.extend({
       return this.get('boxes');
   }.property('boxes'),
 
-  hasChildren: function(key, value) {
-      if (arguments.length > 1) {
+  hasChildren: Ember.computed('boxes', 'boxes.@each', {
+      set(key, value) {
           return value;
-      }
-
-      var self = this;
-      this.get('boxes').then(function (gs) {
+      },
+      get() {
+        var self = this;
+        this.get('boxes').then(function (gs) {
           self.set('hasChildren', gs.get('length') !== 0);
-      });
-      return false;
-  }.property('boxes', 'boxes.@each'),
-
-  hasParent: function(key, value) {
-      if (arguments.length > 1) {
-          return value;
+        });
+        return false;
       }
+  }),
 
-      var self = this;
-      this.get('parent').then(function (p) {
-         self.set('hasParent', !Ember.isNone(p));
-      });
-
-      return false;
-  }.property('parent'),
-
-  fullName: function(key, value) {
-      if (arguments.length > 1) {
+  hasParent: Ember.computed('parent', {
+      set(key, value) {
           return value;
+      },
+      get() {
+        var self = this;
+        this.get('parent').then(function (p) {
+          self.set('hasParent', !Ember.isNone(p));
+        });
+
+        return false;
       }
-      var self = this;
+  }),
 
-      this.get('parent').then(function (p) {
-          if (!Ember.isNone(p)) {
-              self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
-          }
-      });
+  fullName: Ember.computed('parent', 'parent.fullName', 'name', {
+      set(key, value) {
+          return value;
+      },
+      get() {
+          var self = this;
 
-      return this.get('name');
-  }.property('parent', 'parent.fullName', 'name'),
+          this.get('parent').then(function (p) {
+              if (!Ember.isNone(p)) {
+                  self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
+              }
+          });
 
-  count: function (key, value) {
-      if (arguments.length > 1) {
+          return this.get('name');
+      }
+  }),
+
+  count: Ember.computed('lots', 'lots.@each.count', 'lots.@each.valid', {
+      set(key, value) {
           console.log(this.get('name') + ' box count ' + value);
           return value;
-      }
+      },
+      get() {
+        var self = this;
 
-      var self = this;
-
-      this.get('lots').then(function (lots) {
+        this.get('lots').then(function (lots) {
           var sum = 0;
           lots.filterBy('valid', true).forEach(function (item) {
-              sum += item.get('count');
+            sum += item.get('count');
           });
           self.set('count', sum);
-      });
+        });
 
-      return 0;
-  }.property('lots', 'lots.@each.count', 'lots.@each.valid'),
+        return 0;
+      }
+  }),
 
   link: function() {
       return "boxes.show";

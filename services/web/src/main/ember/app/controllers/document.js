@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
     icon: function () {
         var ct = this.get('model.contentType');
         if (ct === "text/plain") {

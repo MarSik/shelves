@@ -19,45 +19,48 @@ export default NamedBase.extend({
         return this.get('groups');
     }.property('groups'),
 
-    hasChildren: function(key, value) {
-        if (arguments.length > 1) {
+    hasChildren: Ember.computed('groups', 'groups.@each', {
+        set(key, value) {
             return value;
-        }
-
-        var self = this;
-        this.get('groups').then(function (gs) {
+        },
+        get() {
+          var self = this;
+          this.get('groups').then(function (gs) {
             self.set('hasChildren', gs.get('length') !== 0);
-        });
-        return false;
-    }.property('groups', 'groups.@each'),
-
-    hasParent: function(key, value) {
-        if (arguments.length > 1) {
-            return value;
+          });
+          return false;
         }
+    }),
 
-        var self = this;
-        this.get('parent').then(function (p) {
+    hasParent: Ember.computed('parent', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+          var self = this;
+          this.get('parent').then(function (p) {
             self.set('hasParent', !Ember.isNone(p));
-        });
+          });
 
-        return false;
-    }.property('parent'),
-
-    fullName: function(key, value) {
-        if (arguments.length > 1) {
-            return value;
+          return false;
         }
+    }),
 
-        var self = this;
-        this.get('parent').then(function (p) {
+    fullName: Ember.computed('parent', 'parent.fullName', 'name', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+          var self = this;
+          this.get('parent').then(function (p) {
             if (!Ember.isNone(p)) {
-                self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
+              self.set('fullName', p.get('fullName') + ' | ' + self.get('name'));
             }
-        });
+          });
 
-        return this.get('name');
-    }.property('parent', 'parent.fullName', 'name'),
+          return this.get('name');
+        }
+    }),
 
     count: function () {
         var c = this.get('nestedCount');

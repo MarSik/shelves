@@ -10,7 +10,7 @@
 <h3>Enabled ISO prefixes</h3>
 
 <ul class="prefixes small-block-grid-2 large-block-grid-6">
-    {{#each prefix in sortedPrefixes itemController='properties/unit'}}
+    {{#each sortedPrefixes itemController='properties/unit' as |prefix|}}
     <li>
         {{#if prefix.isEnabled}}
         <button {{action 'disablePrefix' prefix.model}} class="button tiny alert">{{prefix.id}} [{{prefix.prefix}}] &ndash; {{prefix.base}}<sup>{{prefix.power}}</sup></button>

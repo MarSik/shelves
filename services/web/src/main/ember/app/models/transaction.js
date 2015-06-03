@@ -12,58 +12,61 @@ export default DS.Model.extend({
     source: belongsTo("source", {async: true}),
 
     // needed for sticker test
-    types: function(key, value) {
-        if (arguments.length > 1) {
+    types: Ember.computed('items.@each.type', {
+        set(key, value) {
             return value;
-        }
-
-        var self = this;
-        this.get('items').then(function (ts) {
+        },
+        get() {
+          var self = this;
+          this.get('items').then(function (ts) {
             var types = [];
             ts.forEach(function (p) {
-                types.pushObject(p.get('type'));
+              types.pushObject(p.get('type'));
             });
             self.set('types', types);
-        });
-        return [];
-    }.property('items.@each.type'),
-
-    fullyDelivered: function(key, value) {
-        if (arguments.length > 1) {
-            return value;
+          });
+          return [];
         }
+    }),
 
-        var self = this;
+    fullyDelivered: Ember.computed('items.@each.fullyDelivered', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+          var self = this;
 
-        this.get('items').then(function (ts) {
+          this.get('items').then(function (ts) {
             var ready = true;
             ts.forEach(function (item) {
-                if (!item.get('fullyDelivered')) {
-                    ready = false;
-                }
+              if (!item.get('fullyDelivered')) {
+                ready = false;
+              }
             });
             self.set('fullyDelivered', ready);
-        });
+          });
 
-        return true;
-    }.property('items.@each.fullyDelivered'),
-
-    missing: function (key, value) {
-        if (arguments.length > 1) {
-            return value;
+          return true;
         }
+    }),
 
-        var self = this;
-        this.get('items').then(function (ts) {
+    missing: Ember.computed('items.@each.missing', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+          var self = this;
+          this.get('items').then(function (ts) {
             var missing = 0;
             ts.forEach(function (item) {
-                missing += item.get('missing');
+              missing += item.get('missing');
             });
             self.set('missing', missing);
-        });
+          });
 
-        return 0;
-    }.property('items.@each.missing'),
+          return 0;
+        }
+    }),
 
     link: function() {
         return "transactions.show";

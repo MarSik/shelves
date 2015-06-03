@@ -2,14 +2,14 @@
 
 <h3>Required parts</h3>
 <table>
-{{#each r in displayRequirements itemController='projects/_requirement'}}
+{{#each displayRequirements itemController='projects/_requirement' as |r|}}
     <tbody>
     <tr>
         <td>{{#click-to-edit content=r.model field='content.count' placeholder='item count'}}{{r.model.count}}{{/click-to-edit}} of</td>
         <td>{{#click-to-edit content=r.model field='content.name'}}{{r.model.name}}{{/click-to-edit}}</td>
         <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button' param=r.model}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
             <button {{action 'showAddAlternative' r.model}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
-            {{#if r.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
+            {{#if r.model.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
     </tr>
     {{#each r.possibleTypes as |type|}}
@@ -17,25 +17,25 @@
         <td>{{fa-icon 'book'}}</td>
         <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
         <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
-        <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
+        <td>{{#if r.model.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
-    {{#each lot in r.assignedLots itemController='projects/_lot'}}
+    {{#each r.assignedLots itemController='projects/_lot' as |lot|}}
     <tr>
-        <td>{{lot.count}}</td>
+        <td>{{lot.model.count}}</td>
         <td>{{#link-to 'types.show' lot.model.type}}{{lot.model.type.name}}{{/link-to}} / {{lot.model.type.footprint}}</td>
         {{#if lot.displayActions}}
         <td colspan="2">
-            {{#if lot.canBeSoldered}}{{#add-count-button default=lot.model.count class="tiny alert" action='solderLot' param=lot.model}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
-            {{#if lot.canBeUnassigned}}{{#confirm-button class="tiny" action='unassignLot' param=lot.model}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
-            {{#if lot.canBeUnsoldered}}{{#confirm-button class="tiny" action='unsolderLot' param=lot.model}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
+            {{#if lot.model.canBeSoldered}}{{#add-count-button default=lot.model.count class="tiny alert" action='solderLot' param=lot.model}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
+            {{#if lot.model.canBeUnassigned}}{{#confirm-button class="tiny" action='unassignLot' param=lot.model}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
+            {{#if lot.model.canBeUnsoldered}}{{#confirm-button class="tiny" action='unsolderLot' param=lot.model}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
             <button {{action 'hideActions'}} class="tiny button">Hide</button>
         </td>
         {{else}}
-        <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
+        <td>{{lot.model.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.model.purchase.transaction}}{{lot.model.purchase.transaction.date}}{{/link-to}}</td>
         <td>
             <a {{action 'showActions'}}>{{fa-icon 'play'}}&nbsp;actions</a>
-            {{#link-to 'lots.show' lot}}{{fa-icon 'history'}}&nbsp;history{{/link-to}}
+            {{#link-to 'lots.show' lot.model}}{{fa-icon 'history'}}&nbsp;history{{/link-to}}
         </td>
         {{/if}}
     </tr>

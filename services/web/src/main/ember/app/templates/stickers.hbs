@@ -106,7 +106,7 @@
 </ol>
 
 <button {{action 'clearStickers'}} class="alert button">{{fa-icon 'times'}} Clear stickers</button>
-<button type='submit' disabled="{{cannotPrint}}" class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>
+<button type='submit' disabled={{cannotPrint}} class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>
 {{/sticker-form}}
 
 {{outlet}}

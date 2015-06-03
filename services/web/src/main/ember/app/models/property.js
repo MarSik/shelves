@@ -10,24 +10,25 @@ export default NamedBase.extend({
     base: belongsTo('siprefix', {async: true}),
     unit: belongsTo("unit", {async: true}),
 
-    niceName: function (key, value) {
-        if (arguments.length > 1) {
+    niceName: Ember.computed('name', 'symbol', 'unit', 'unit.symbol', {
+        set(key, value) {
             return value;
-        }
+        },
+        get() {
+          var symbol = this.get('symbol');
+          var self = this;
 
-        var symbol = this.get('symbol');
-        var self = this;
-
-        this.get('unit').then(function (unit) {
+          this.get('unit').then(function (unit) {
             var nice = self.get('name') + "; " + (Ember.isEmpty(symbol)? '': symbol);
             if (unit) {
-                nice += " [" + unit.get('symbol') + ']';
+              nice += " [" + unit.get('symbol') + ']';
             }
             self.set('niceName', nice);
-        });
+          });
 
-        return this.get('name');
-    }.property('name', 'symbol', 'unit', 'unit.symbol'),
+          return this.get('name');
+        }
+    }),
 
     link: function() {
         return "properties.show";

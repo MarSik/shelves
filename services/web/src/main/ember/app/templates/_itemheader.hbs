@@ -18,12 +18,8 @@
 <h3>Attachments</h3>
 
 <table>
-    {{#each doc in model.describedBy itemController='document'}}
-    <tr>
-        <td title="{{doc.contentType}}">{{#view 'entity-link' entity=doc.model resource='download' models='documents'}}{{fa-icon doc.icon}} {{doc.name}}{{/view}}</td>
-        <td>{{doc.created}}</td>
-        <td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc.model class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
-    </tr>
+    {{#each model.describedBy as |doc|}}
+        {{doc-summary-line deleteDocument="deleteDocument" doc=doc}}
     {{/each}}
 </table>
 

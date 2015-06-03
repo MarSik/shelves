@@ -50,7 +50,7 @@
 {{else}}
     <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'bug'}} Manage footprint(s)</button>
 {{/if}}
-    
+
 <h3>Additional properties</h3>
 
 <table>
@@ -84,7 +84,7 @@ selection=propertyValuePrefixToAdd
 maxItems=1
 placeholder="Select an SI prefix" }}
 
-<button class='small button' disabled="{{addPropertyIncomplete}}" {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+<button class='small button' disabled={{addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
 <button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
 {{else}}
     <button class='secondary button' {{action 'enableAddProperty'}}>{{fa-icon 'bar-chart'}} Manage properties</button>
@@ -269,5 +269,5 @@ placeholder="Select an SI prefix" }}
 
     {{input type="number" value=moveLotCount}}
 
-    <button disabled="{{moveLotDisabled}}" {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
+    <button disabled={{moveLotDisabled}} {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
 {{/modal-dialog}}

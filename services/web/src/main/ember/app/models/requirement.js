@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 var attr = DS.attr,
@@ -16,19 +17,20 @@ export default DS.Model.extend({
         return this.get('type.length') > 1;
     }.property('type'),
 
-    missing: function (key, value) {
-        if (arguments.length > 1) {
-            return value;
-        }
-
+    missing: Ember.computed('lots.@each.count', 'count', {
+      set(key, value) {
+          return value;
+      },
+      get() {
         var self = this;
         this.get('lots').then(function (lots) {
-            var assigned = 0;
-            lots.forEach(function (lot) {
-                assigned += lot.get('count');
-            });
-            self.set('missing', self.get('count') - assigned);
+          var assigned = 0;
+          lots.forEach(function (lot) {
+            assigned += lot.get('count');
+          });
+          self.set('missing', self.get('count') - assigned);
         });
         return 0;
-    }.property('lots.@each.count', 'count')
+      }
+    })
 });

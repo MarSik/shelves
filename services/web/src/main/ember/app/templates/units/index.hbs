@@ -3,7 +3,7 @@
     <form {{action 'createUnit' unitName unitSymbol on='submit'}}>
     {{input type='text' value=unitName placeholder='unit name'}}
     {{input type='text' value=unitSymbol placeholder='unit symbol'}}
-    <button type="submit" disabled="{{createDisabled}}">Create</button>
+    <button type="submit" disabled={{createDisabled}}>Create</button>
     </form>
 
     <h2>Units</h2>

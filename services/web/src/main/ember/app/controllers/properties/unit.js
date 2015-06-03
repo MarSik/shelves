@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
     needs: ['units/show'],
     enabledList: Ember.computed.alias('controllers.units/show.model.prefixes'),
     isEnabled: function() {

@@ -1,0 +1,3 @@
+<td title="{{doc.contentType}}">{{#view 'entity-link' entity=doc resource='download' models='documents'}}{{fa-icon icon}} {{doc.name}}{{/view}}</td>
+<td>{{doc.created}}</td>
+<td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>

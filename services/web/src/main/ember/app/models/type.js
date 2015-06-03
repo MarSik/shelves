@@ -36,23 +36,24 @@ export default NamedBase.extend({
       return n;
   }.property('name', 'footprint', 'vendor', 'summary', 'available', 'free'),
 
-  footprint: function (key, value) {
-      if (arguments.length > 1) {
+  footprint: Ember.computed('footprints.@each.name', {
+      set(key, value) {
           return value;
-      }
+      },
+      get() {
+        var self = this;
 
-      var self = this;
-
-      this.get('footprints').then(function (fs) {
+        this.get('footprints').then(function (fs) {
           var names = [];
           fs.forEach(function (fp) {
-              names.pushObject(fp.get('name'));
+            names.pushObject(fp.get('name'));
           });
           self.set('footprint', names.join(", "));
-      });
+        });
 
-      return "";
-  }.property('footprints.@each.name'),
+        return "";
+      }
+    }),
 
     link: function() {
         return "types.show";
