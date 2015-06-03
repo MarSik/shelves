@@ -7,6 +7,6 @@ export default Ember.Component.extend({
 
     dragStart: function(event) {
         event.dataTransfer.dropEffect = 'move';
-        event.dataTransfer.setData('text/data', this.get('content'))
+        event.dataTransfer.setData('text/data', this.get('content'));
     }
 });

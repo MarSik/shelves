@@ -4,7 +4,7 @@ export default Ember.Controller.extend({
     actions: {
         addSeeAlso: function (fp) {
             var model = this.model;
-            if (fp == this.model) {
+            if (fp === this.model) {
                 return;
             }
 

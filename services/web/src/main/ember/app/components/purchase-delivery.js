@@ -13,7 +13,7 @@ export default Ember.Component.extend({
     },
     delivering: false,
     fullyDelivered: function() {
-        return this.get('purchase.fullyDelivered')
+        return this.get('purchase.fullyDelivered');
     }.property('purchase.fullyDelivered'),
     isDelivering: function () {
         return this.get('delivering') && !this.get('fullyDelivered');

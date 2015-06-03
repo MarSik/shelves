@@ -26,12 +26,12 @@ export default Ember.Controller.extend({
                 }
 
                 // When 1k5 format is used it has a priority
-                if (separator && separator != ".") {
+                if (separator && separator !== ".") {
                     suffix = separator;
                 }
 
                 // Support micro sign 'µ' alias 'u'
-                if (separator == "u") {
+                if (separator === "u") {
                     separator = "µ";
                 }
 
@@ -44,16 +44,16 @@ export default Ember.Controller.extend({
                 if (suffix) {
                     property.get('unit.prefixes').forEach(function (prefix) {
                         console.log(prefix.get('prefix') + unit);
-                        if (prefix.get('prefix') == suffix && prefixScore < 4) {
+                        if (prefix.get('prefix') === suffix && prefixScore < 4) {
                             foundPrefix = prefix;
                             prefixScore = 4;
-                        } else if (prefix.get('prefix') + unit == suffix && prefixScore < 5) {
+                        } else if (prefix.get('prefix') + unit === suffix && prefixScore < 5) {
                             foundPrefix = prefix;
                             prefixScore = 5;
-                        } else if (prefix.get('prefix').toLowerCase() == suffix.toLowerCase() && prefixScore < 2) {
+                        } else if (prefix.get('prefix').toLowerCase() === suffix.toLowerCase() && prefixScore < 2) {
                             foundPrefix = prefix;
                             prefixScore = 2;
-                        } else if ((prefix.get('prefix') + unit).toLowerCase() == suffix.toLowerCase() && prefixScore < 3) {
+                        } else if ((prefix.get('prefix') + unit).toLowerCase() === suffix.toLowerCase() && prefixScore < 3) {
                             foundPrefix = prefix;
                             prefixScore = 3;
                         }
@@ -86,7 +86,6 @@ export default Ember.Controller.extend({
             var values = entity.get('values');
             values.set(propertyId, normalizedValue);
 
-            var self = this;
             entity.save().catch(function (e) {
                 e.rollback();
             });
@@ -116,7 +115,7 @@ export default Ember.Controller.extend({
                 g.destroy();
             }).then(function (g) {
                 self.get('model.groups').pushObject(g);
-                self.get('model').save().catch(function (e) {
+                self.get('model').save().catch(function () {
                     self.get('model.groups').removeObject(g);
                 });
             });
@@ -146,7 +145,7 @@ export default Ember.Controller.extend({
                 g.destroy();
             }).then(function (fp) {
                 self.get('model.footprints').pushObject(fp);
-                self.get('model').save().catch(function (e) {
+                self.get('model').save().catch(function () {
                     self.get('model.footprints').removeObject(fp);
                 });
             });
@@ -172,7 +171,7 @@ export default Ember.Controller.extend({
         },
         addSeeAlso: function (type) {
             var model = this.model;
-            if (type == this.model) {
+            if (type === this.model) {
                 return;
             }
 
@@ -210,7 +209,7 @@ export default Ember.Controller.extend({
             this.set('moveLotCount', lot.get('count'));
             this.set('moveLotToBox', lot.get('location'));
         },
-        moveLot: function (lot, destination, count) {
+        moveLot: function (/*lot, destination, count*/) {
             // close dialog
             this.set('moveLot', null);
             // bubble up

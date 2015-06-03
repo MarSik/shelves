@@ -38,7 +38,7 @@ export default Ember.Controller.extend(LoginControllerMixin, {
                 type: "POST"
             }).then(function () {
                 self.growl.info("Verification email was sent to the user this email (" +email+ ") belongs to. Use it to request a new password.");
-            })
+            });
         }
     },
     authenticator: 'oauth2-w-auth:oauth2-password-grant'

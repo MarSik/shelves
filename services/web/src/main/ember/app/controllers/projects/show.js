@@ -30,7 +30,7 @@ export default Ember.Controller.extend({
                 newLot.destroy();
                 lot.rollback();
                 self.growl.error(e);
-            }).then(function (d) {
+            }).then(function () {
                 console.log("MISSING");
                 console.log(req.get('missing'));
                 if (req.get('missing') <= 0) {
@@ -116,7 +116,7 @@ export default Ember.Controller.extend({
 
     displayRequirements: Ember.computed.map('model.requirements', m => m),
     importableDocuments: Ember.computed.filterBy('model.describedBy', 'contentType', 'application/x-kicad-schematic'),
-    
+
     showAddRequirement: false,
     addRequirementClass: function () {
         if (this.get('showAddRequirement')) {

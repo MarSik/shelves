@@ -2,8 +2,7 @@ import DS from 'ember-data';
 import Ember from 'ember';
 import NamedBase from './namedbase';
 
-var attr = DS.attr,
-    hasMany = DS.hasMany,
+var hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
 export default NamedBase.extend({
@@ -23,7 +22,7 @@ export default NamedBase.extend({
 
       var self = this;
       this.get('boxes').then(function (gs) {
-          self.set('hasChildren', gs.get('length') != 0);
+          self.set('hasChildren', gs.get('length') !== 0);
       });
       return false;
   }.property('boxes', 'boxes.@each'),
@@ -66,7 +65,7 @@ export default NamedBase.extend({
 
       this.get('lots').then(function (lots) {
           var sum = 0;
-          lots.filterBy('valid', true).forEach(function (item, index) {
+          lots.filterBy('valid', true).forEach(function (item) {
               sum += item.get('count');
           });
           self.set('count', sum);

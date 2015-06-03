@@ -7,7 +7,7 @@ export default Ember.Component.extend({
     confirming: false,
     done: false,
     mouseLeave: function () {
-        this.set('confirming', false)
+        this.set('confirming', false);
     },
     click: function () {
         if (this.get('done')) {

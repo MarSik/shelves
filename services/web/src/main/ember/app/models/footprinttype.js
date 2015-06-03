@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 
-var attr = DS.attr,
-    hasMany = DS.hasMany,
-    belongsTo = DS.belongsTo;
+var attr = DS.attr;
 
 export default DS.Model.extend({
     name: attr('string'),

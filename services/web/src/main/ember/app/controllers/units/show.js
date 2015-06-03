@@ -6,7 +6,7 @@ export default Ember.ObjectController.extend({
             var unit = this.get('model');
             var prefixes = unit.get('prefixes');
             prefixes.pushObject(prefix);
-            unit.save().catch(function (e) {
+            unit.save().catch(function () {
                 unit.rollback();
             });
         },
@@ -14,7 +14,7 @@ export default Ember.ObjectController.extend({
             var unit = this.get('model');
             var prefixes = unit.get('prefixes');
             prefixes.removeObject(prefix);
-            unit.save().catch(function (e) {
+            unit.save().catch(function () {
                 unit.rollback();
             });
         }

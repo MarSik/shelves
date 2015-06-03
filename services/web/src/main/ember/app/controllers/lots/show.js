@@ -3,8 +3,8 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
     _history: null,
     history: function () {
-        if (this.get('_history') == null
-            || this.get('_history')[0].get('id') != this.get('model.id')) {
+        if (this.get('_history') == null ||
+                this.get('_history')[0].get('id') !== this.get('model.id')) {
             this.set('_history', [this.get('model')]);
 
             Ember.run.next(this, 'loadAdditionalHistory');

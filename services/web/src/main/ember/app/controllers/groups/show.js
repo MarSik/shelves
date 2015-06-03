@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
             group.save().catch(function (e) {
                 group.rollback();
                 self.growl.error("Could not add property: "+e);
-            })
+            });
         },
         removeProperty: function (group, property) {
             group.get('showProperties').removeObject(property);
@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
             group.save().catch(function (e) {
                 group.rollback();
                 self.growl.error("Could not remove property: "+e);
-            })
+            });
         },
         sortBy: function (p, desc) {
             var key = p;

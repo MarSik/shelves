@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var computedIndirect = function (middlePropertyName) {
     return function(key, value) {
         var sourceProperty = this.get(middlePropertyName);

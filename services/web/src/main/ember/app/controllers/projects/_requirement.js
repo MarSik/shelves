@@ -15,16 +15,16 @@ export default Ember.ObjectController.extend({
         console.log('Recomputing available parts');
 
         if (Ember.isEmpty(req)) {
-            return usable;
+            return [];
         }
 
-        Promise.all(this.get('possibleTypes')).then(function (types) {
+        Ember.Promise.all(this.get('possibleTypes')).then(function (types) {
             var lots = [];
             types.forEach(function (type) {
                 lots.pushObject(type.get('lots'));
             });
 
-            Promise.all(lots).then(function (lots) {
+            Ember.Promise.all(lots).then(function (lots) {
                 var usable = [];
                 lots.forEach(function (lotArray) {
                     lotArray.forEach(function (lot) {

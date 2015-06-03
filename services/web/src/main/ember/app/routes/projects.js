@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
+// global $
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     actions: {
@@ -29,7 +30,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 this.transitionTo('projects.show', p);
             }).catch(function () {
                 project.rollback();
-            })
+            });
         },
         addRequirement: function (project, type, count) {
             var requirement = this.store.createRecord('requirement', {
@@ -38,7 +39,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             });
 
             requirement.get('type').pushObject(type);
-            requirement.save()
+            requirement.save();
         }
     },
     activate: function() {

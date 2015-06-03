@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import NamedBase from './namedbase';
 
@@ -25,7 +26,7 @@ export default NamedBase.extend({
 
         var self = this;
         this.get('groups').then(function (gs) {
-            self.set('hasChildren', gs.get('length') != 0);
+            self.set('hasChildren', gs.get('length') !== 0);
         });
         return false;
     }.property('groups', 'groups.@each'),

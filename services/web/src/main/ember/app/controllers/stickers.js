@@ -20,7 +20,7 @@ export default Ember.ArrayController.extend({
     }.property('paper', 'paper.custom'),
 
     paperNotSelected: function() {
-        return Ember.isEmpty(this.get('paper'))
+        return Ember.isEmpty(this.get('paper'));
     }.property('paper'),
 
     paperDetailStyle: function () {
@@ -32,6 +32,6 @@ export default Ember.ArrayController.extend({
     }.property('knownPaper'),
 
     cannotPrint: function () {
-        return this.get('paperNotSelected') || Ember.isEmpty(this.get('model'))
+        return this.get('paperNotSelected') || Ember.isEmpty(this.get('model'));
     }.property('paperNotSelected', 'model.@each')
 });

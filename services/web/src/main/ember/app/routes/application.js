@@ -37,7 +37,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             }).catch(function (e) {
                 newDoc.rollback();
                 self.growl.error('Download request failed: '+e);
-            })
+            });
         },
         uploadFinished: function (response) {
             this.growl.info('Files uploaded');

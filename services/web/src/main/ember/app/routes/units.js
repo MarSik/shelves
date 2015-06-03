@@ -1,6 +1,6 @@
 import Ember from 'ember';
-
 import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
+// global $
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     actions: {
@@ -16,7 +16,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 self.transitionTo('units.show', u);
             }).catch(function () {
                 unit.rollback();
-            })
+            });
         }
     },
     model: function () {
