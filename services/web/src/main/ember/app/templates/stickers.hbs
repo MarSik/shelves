@@ -1,7 +1,7 @@
 <h2>Stickers</h2>
 
 <ul>
-    {{#each obj in this}}
+    {{#each this as |obj|}}
         <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove button">{{fa-icon 'times'}}</button></li>
     {{/each}}
 </ul>
@@ -26,7 +26,7 @@
 </dl>
 
 {{#sticker-form items=this}}
-<ol class="small-block-grid-2 large-block-grid-5" {{bind-attr style=paperDetailStyle}}>
+<ol class="small-block-grid-2 large-block-grid-5" style="{{paperDetailStyle}}">
     <li>
         <dl>
             <dt>Top page margin [mm]</dt>
@@ -106,7 +106,7 @@
 </ol>
 
 <button {{action 'clearStickers'}} class="alert button">{{fa-icon 'times'}} Clear stickers</button>
-<button type='submit' {{bind-attr disabled=cannotPrint}} class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>
+<button type='submit' disabled="{{cannotPrint}}" class="primary button">{{fa-icon 'qr-code'}} Download stickers</button>
 {{/sticker-form}}
 
 {{outlet}}

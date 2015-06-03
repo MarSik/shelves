@@ -2,7 +2,7 @@
     <h2>Properties</h2>
 
     <ul class="small-block-grid-2 large-block-grid-4">
-        {{#each property in this}}
+        {{#each this as |property|}}
         <li>
             {{#link-to 'properties.show' property}}{{property.name}}{{/link-to}}<br/>
             <aside>{{property.symbol}} [ {{#link-to 'units.show' property.unit}}{{property.unit.symbol}}{{/link-to}} ]</aside>
@@ -45,7 +45,7 @@
     placeholder="Select an unit" }}
     </p>
 
-    <button type="submit" {{bind-attr disabled=propertyNotComplete}}>Create property</button>
+    <button type="submit" disabled="{{propertyNotComplete}}">Create property</button>
     </form>
 
     <a class="close-reveal-modal">&#215;</a>

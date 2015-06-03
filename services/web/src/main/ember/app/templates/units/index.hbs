@@ -3,13 +3,13 @@
     <form {{action 'createUnit' unitName unitSymbol on='submit'}}>
     {{input type='text' value=unitName placeholder='unit name'}}
     {{input type='text' value=unitSymbol placeholder='unit symbol'}}
-    <button type="submit" {{bind-attr disabled=createDisabled}}>Create</button>
+    <button type="submit" disabled="{{createDisabled}}">Create</button>
     </form>
 
     <h2>Units</h2>
 
     <ul class="small-block-grid-2 large-block-grid-4">
-        {{#each unit in this}}
+        {{#each this as |unit|}}
         <li>
             {{#link-to 'units.show' unit}}{{unit.name}}{{/link-to}}<br/>{{unit.summary}}
             <aside>[ {{unit.symbol}} ]</aside>

@@ -26,7 +26,7 @@
 <h3>Footprints</h3>
 
 <ul>
-{{#each fp in model.footprints}}
+{{#each model.footprints as |fp|}}
     <li>
         {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
     {{#if displayAddFootprint}}{{#confirm-button class='button remove' action='removeFootprint' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
@@ -54,7 +54,7 @@
 <h3>Additional properties</h3>
 
 <table>
-    {{#each property in model.properties}}
+    {{#each model.properties as |property|}}
         <tr>
             <td>{{property.name}}</td>
             <td>{{property-value entity=model property=property}}</td>
@@ -84,7 +84,7 @@ selection=propertyValuePrefixToAdd
 maxItems=1
 placeholder="Select an SI prefix" }}
 
-<button class='small button' {{bind-attr disabled=addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+<button class='small button' disabled="{{addPropertyIncomplete}}" {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
 <button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
 {{else}}
     <button class='secondary button' {{action 'enableAddProperty'}}>{{fa-icon 'bar-chart'}} Manage properties</button>
@@ -95,7 +95,7 @@ placeholder="Select an SI prefix" }}
 <h3>Groups</h3>
 
 <ul>
-    {{#each group in model.groups}}
+    {{#each model.groups as |group|}}
         <li>
             {{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}
             {{#if displayAddGroup}}{{#confirm-button class='button remove' action='removeGroup' param=group}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
@@ -123,7 +123,7 @@ placeholder="Select an SI prefix" }}
 <h3>See also</h3>
 
 <ul>
-    {{#each type in model.seeAlso}}
+    {{#each model.seeAlso as |type|}}
         <li>
             {{#link-to 'types.show' type}}{{fa-icon 'book'}} {{type.fullName}}{{/link-to}}
             {{#if displayAddSeeAlso}}{{#confirm-button class='remove' action='removeSeeAlso' param=type}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
@@ -161,7 +161,7 @@ placeholder="Select an SI prefix" }}
         <th>Vat %</th>
     </tr>
     </thead>
-    {{#each lot in model.lots}}
+    {{#each model.lots as |lot|}}
     <tbody>
     <tr>
         <td>
@@ -269,5 +269,5 @@ placeholder="Select an SI prefix" }}
 
     {{input type="number" value=moveLotCount}}
 
-    <button {{bind-attr disabled=moveLotDisabled}} {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
+    <button disabled="{{moveLotDisabled}}" {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
 {{/modal-dialog}}

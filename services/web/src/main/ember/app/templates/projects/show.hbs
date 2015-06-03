@@ -12,11 +12,11 @@
             {{#if r.missing}}<button {{action 'assignLot' r.model r.assignableLots}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
         </td>
     </tr>
-    {{#each type in r.possibleTypes}}
+    {{#each r.possibleTypes as |type|}}
     <tr>
         <td>{{fa-icon 'book'}}</td>
         <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
-        <td>{{#each fp in type.footprints}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
+        <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
         <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' r.model type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
     </tr>
     {{/each}}
@@ -45,8 +45,8 @@
 </table>
 
 <ul class="button-group round">
-    <li><button {{action 'toggleAddRequirement'}} {{bind-attr class=addRequirementClass}}>Add requirement</button></li>
-    {{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} {{bind-attr class=importRequirementsClass}}>Import requirements</button></li>{{/if}}
+    <li><button {{action 'toggleAddRequirement'}} class="{{addRequirementClass}}">Add requirement</button></li>
+    {{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="{{importRequirementsClass}}">Import requirements</button></li>{{/if}}
 </ul>
 
 {{#if showAddRequirement}}
@@ -121,7 +121,7 @@ placeholder="Select a type" }}
 
 {{#modal-dialog condition=assignLotToRequirement title="Add lot"}}
     <table>
-    {{#each lot in assignableLots}}
+    {{#each assignableLots as |lot|}}
         <tr>
             <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
             <td>{{lot.purchase.transaction.source.name}}</td>

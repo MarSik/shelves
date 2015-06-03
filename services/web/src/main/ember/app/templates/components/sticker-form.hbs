@@ -1,5 +1,5 @@
 {{input type='hidden' name='access_token' value=access_token}}
-{{#each item in items}}
+{{#each items as |item|}}
     {{input type='hidden' name='uuids[]' value=item.id}}
 {{/each}}
 

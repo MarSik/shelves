@@ -32,7 +32,7 @@
         <h3>See also</h3>
 
         <ul>
-            {{#each fp in model.seeAlso}}
+            {{#each model.seeAlso as |fp|}}
                 <li>{{#link-to 'footprints.show' fp}}{{fa-icon 'file-o'}} {{fp.name}}{{/link-to}} {{#confirm-button class='remove button' action='removeSeeAlso' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}</li>
             {{/each}}
         </ul>

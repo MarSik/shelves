@@ -37,7 +37,7 @@
     create-item='createEmptyGroup'
     placeholder="Select groups" }}
 
-    <button {{bind-attr disabled=incompleteForm}} type="submit">Save</button>
+    <button disabled="{{incompleteForm}}" type="submit">Save</button>
 </form>
 
 {{outlet}}

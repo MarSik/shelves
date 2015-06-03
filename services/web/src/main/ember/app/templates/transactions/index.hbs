@@ -7,7 +7,7 @@
             <th>Name</th>
             <th>Missing</th>
         </tr>
-        {{#each trans in pendingTransactions}}
+        {{#each pendingTransactions as |trans|}}
             <tr>
             <td>{{#link-to 'transactions.show' trans}}{{trans.source.name}}{{/link-to}}</td>
             <td>{{trans.date}}</td>
@@ -58,7 +58,7 @@
         </tr>
         </thead>
 
-        {{#each purchase in model.items}}
+        {{#each model.items as |purchase|}}
         {{purchase-line purchase=purchase sortedTypes=sortedTypes removeRow="removeRow" createType="createType"}}
         {{/each}}
 
@@ -68,7 +68,7 @@
     </table>
 
 
-    <button type="submit" {{bind-attr disabled=submitDisabled}}>Purchase</button>
+    <button type="submit" disabled="{{submitDisabled}}">Purchase</button>
     </form>
 </section>
 

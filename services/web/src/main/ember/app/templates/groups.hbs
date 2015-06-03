@@ -5,7 +5,7 @@
 <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}}</button>
 
 <ul>
-    {{#each group in topLevel}}
+    {{#each topLevel as |group|}}
     {{item-tree item=group count='item.count' class='group-entity' moveItem='moveItem' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
     {{/each}}
 </ul>

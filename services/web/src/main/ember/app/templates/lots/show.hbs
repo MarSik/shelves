@@ -17,7 +17,7 @@
 
 <h2>Chain of changes</h2>
 <table>
-{{#each lot in model.next}}
+{{#each model.next as |lot|}}
     <tr>
         <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
         <td>{{lot.count}}</td>
@@ -30,7 +30,7 @@
 <tr>
     <td colspan="6">History:</td>
 </tr>
-{{#each lot in history}}
+{{#each history as |lot|}}
     <tr>
         <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
         <td>{{lot.count}}</td>

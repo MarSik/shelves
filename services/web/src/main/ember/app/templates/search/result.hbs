@@ -11,8 +11,8 @@
     <h2>Results</h2>
 
     <ul>
-        {{#each obj in model.items}}
-        <li {{bind-attr class="obj.flagged"}}>{{#link-to obj.link obj}}{{fa-icon obj.icon}} {{obj.name}}{{/link-to}} - {{obj.summary}}</li>
+        {{#each model.items as |obj|}}
+        <li class="{{obj.flagged}}">{{#link-to obj.link obj}}{{fa-icon obj.icon}} {{obj.name}}{{/link-to}} - {{obj.summary}}</li>
         {{/each}}
     </ul>
 </section>

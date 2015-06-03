@@ -38,7 +38,7 @@
 
 {{#if showChildren}}
 <ul>
-    {{#each i in sorted}}
+    {{#each sorted as |i|}}
         {{item-tree item=i class=class count=count action='nestedSelectItem'
                    hoverAction='nestedHoverItem' deleteAction='nestedDeleteItem'
                    editAction='nestedEditItem' createAction='nestedCreateItem'

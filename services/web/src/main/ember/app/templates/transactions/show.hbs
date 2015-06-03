@@ -13,7 +13,7 @@
 <h3>Attachments</h3>
 
 <ul>
-    {{#each doc in describedBy}}
+    {{#each describedBy as |doc|}}
     <li>{{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}</li>
     {{/each}}
 </ul>
@@ -50,7 +50,7 @@
             <th>Vat %</th>
         </tr>
         </thead>
-        {{#each purchase in sortedItems}}
+        {{#each sortedItems as |purchase|}}
         <tbody>
         <tr>
             <td>

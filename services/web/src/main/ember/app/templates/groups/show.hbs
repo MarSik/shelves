@@ -11,29 +11,29 @@
         <th>Vendor {{sort-link action='sortBy' field='vendor'}}</th>
         <th>Footprint {{sort-link action='sortBy' field='footprint'}}</th>
         <th>Available {{sort-link action='sortBy' field='available'}}</th>
-        {{#each property in model.showProperties}}
+        {{#each model.showProperties as |property|}}
             <th>{{property.name}} [{{property.unit.symbol}}] {{sort-link action='sortByProperty' field=property}}</th>
         {{/each}}
     </tr>
     </thead>
-{{#each type in sortedTypes}}
+{{#each sortedTypes as |type|}}
     <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}</td>
         <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</td>
         <td>{{type.vendor}}</td>
         <td>
-            {{#each fp in type.footprints}}
+            {{#each type.footprints as |fp|}}
             {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
             {{/each}}
         </td>
         <td>{{#link-to 'types.show' type}}{{type.available}}{{/link-to}}</td>
-        {{#each property in model.showProperties}}
+        {{#each model.showProperties as |property|}}
             <td>{{property-value entity=type property=property}}</td>
         {{/each}}
     </tr>
     <tr>
-        <td {{bind-attr colspan=typeColumns}}>{{type.summary}}</td>
+        <td colspan="{{typeColumns}}">{{type.summary}}</td>
     </tr>
     </tbody>
 {{/each}}
@@ -42,7 +42,7 @@
     <h3>Additional properties to display</h3>
 
     <ul>
-        {{#each property in model.showProperties}}
+        {{#each model.showProperties as |property|}}
         <li>
             {{#link-to 'properties.show' property}}{{property.niceName}}{{/link-to}}
             {{#if manageProperties}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}} remove{{/confirm-button}}{{/if}}
