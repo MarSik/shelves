@@ -2,7 +2,7 @@
   "name": "webapp",
   "dependencies": {
     "jquery": "2.1.3",
-    "ember": "1.11.0",
+    "ember": "1.13.0-beta.1",
     "ember-resolver": "~0.1.15",
     "loader.js": "stefanpenner/loader.js#1.0.1",
     "ember-cli-shims": "stefanpenner/ember-cli-shims#0.0.3",
@@ -13,20 +13,13 @@
     "foundation": "5.5.1",
     "ember-simple-auth": "0.7.3",
     "ember-uploader": "0.3.0",
-    "ember-data": "1.0.0-beta.16.1",
+    "ember-data": "1.0.0-beta.18",
     "qrcodejs": "~0.1.0",
     "selectize": "~0.12.0",
     "qunit": "~1.18.0"
   },
   "resolutions": {
-    "handlebars": ">= 2.0.0 < 3.0.0",
-    "ember": "1.11.0",
-    "jquery": ">= 2.1.0",
-    "ember-data": "1.0.0-beta.16.1",
-    "ember-cli-test-loader": "0.1.3",
-    "foundation": "5.5.1",
-    "ember-qunit": "0.2.8",
-    "ember-qunit-notifications": "0.0.7"
+    "ember-cli-test-loader": "0.1.3"
   },
   "devDependencies": {
     "webcamjs": "*"
