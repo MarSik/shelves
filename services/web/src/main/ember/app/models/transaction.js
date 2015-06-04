@@ -11,6 +11,9 @@ export default DS.Model.extend({
     belongsTo: belongsTo("user", {async: true}),
     source: belongsTo("source", {async: true}),
 
+    // UI specific field
+    locked: attr('boolean', {serialize: false, defaultValue: true}),
+
     // needed for sticker test
     types: Ember.computed('items.@each.type', {
         set(key, value) {

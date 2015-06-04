@@ -15,6 +15,12 @@ export default Ember.Route.extend({
         fixVat: function (purchase) {
             purchase.set('vatIncluded', !purchase.get('vatIncluded'));
             purchase.save();
+        },
+        lock(model) {
+            model.set("locked", true);
+        },
+        unlock(model) {
+          model.set("locked", false);
         }
     },
     setupController: function(controller, model) {

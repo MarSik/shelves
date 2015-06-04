@@ -33,51 +33,83 @@
 
     <dl>
         <dt>Purchase date</dt>
-        <dd>{{model.date}}</dd>
+        <dd>{{#click-to-edit content=model field='content.date' editable=editEnabled}}{{model.date}}{{/click-to-edit}}</dd>
+    </dl>
+
+    <dl>
+        <dt>Status</dt>
+        <dd>
+            {{#if model.locked}}
+              {{#confirm-button action="unlock" param=model}}{{fa-icon "lock"}} locked{{/confirm-button}}
+            {{else}}
+              <button {{action 'lock' model}}>{{fa-icon "unlock"}} unlocked</button>
+            {{/if}}
+        </dd>
     </dl>
 
     <table>
         <thead>
         <tr>
             <th>Type</th>
-            <th colspan="4">Box</th>
-        </tr>
-        <tr>
             <th>SKU</th>
             <th>Cnt.</th>
             <th>Price</th>
             <th>w/ Vat</th>
             <th>Vat %</th>
         </tr>
+        <tr>
+            <th colspan="2">Location</th>
+            <th colspan="4">Cnt.</th>
+        </tr>
         </thead>
         {{#each sortedItems as |purchase|}}
-        <tbody>
+        <tbody class="delivery">
         <tr>
             <td>
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
-            <td colspan="4">
-                {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
-                {{#if purchase.delivered}}{{else}}<button {{action 'fixVat' purchase}}>{{fa-icon 'wrench'}} VAT {{#if purchase.vatIncluded}}not{{/if}} included</button>{{/if}}
-            </td>
-        </tr>
-        <tr>
             <td class="sku">
-                {{purchase.sku}}
+              {{#click-to-edit content=purchase field='content.sku' editable=editEnabled}}{{lot.purchase.sku}}{{/click-to-edit}}
             </td>
             <td class="count">
-                {{purchase.count}}
+                {{#click-to-edit content=purchase field='content.count' editable=editEnabled}}{{purchase.count}}{{/click-to-edit}}
             </td>
+            {{#if editEnabled}}
+            <td class="price">
+                {{#click-to-edit content=purchase field='content.singlePrice'}}{{purchase.singlePrice}}{{/click-to-edit}}
+            </td>
+            <td class="vat-included">
+                <button class="button remove" {{action 'fixVat' purchase}}>{{fa-icon 'wrench'}} VAT {{#if purchase.vatIncluded}}{{else}}not{{/if}} included</button>
+            </td>
+            {{else}}
             <td class="price">
                 {{purchase.priceWithoutVat}}
             </td>
             <td class="vat-included">
                 {{purchase.priceWithVat}}
             </td>
+            {{/if}}
             <td class="vat">
-                {{purchase.vat}}
+                {{#click-to-edit content=purchase field='content.vat' editable=editEnabled}}{{purchase.vat}}{{/click-to-edit}}
             </td>
         </tr>
+        {{#each purchase.next as |lot|}}
+        <tr>
+          <td colspan="2" class="location">
+            {{fa-icon "cube"}} {{lot.location.fullName}}
+          </td>
+          <td colspan="4" class="count">
+            {{lot.count}}
+          </td>
+        </tr>
+        {{/each}}
+        {{#if purchase.missing}}
+        <tr>
+            <td colspan="5">
+                {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
+            </td>
+        </tr>
+        {{/if}}
         </tbody>
         {{/each}}
     </table>

@@ -95,8 +95,8 @@ public class Purchase extends LotBase {
 
 	@Override
 	public boolean canBeUpdated() {
-		// Purchase can be updated only if it has not been used yet
-		return canBeDeleted();
+		// Purchase data can be updated
+		return true;
 	}
 
 	@Override

@@ -12,5 +12,8 @@ export default Ember.Controller.extend({
     sortedBoxes: Ember.computed.sort('controllers.application.availableLocations', 'boxSorting'),
     itemSorting: ['type.name'],
     sortedItems: Ember.computed.sort('model.items', 'itemSorting'),
-    location: null
+    location: null,
+    editEnabled: Ember.computed('model.locked', function () {
+        return !this.get('model.locked');
+    })
 });

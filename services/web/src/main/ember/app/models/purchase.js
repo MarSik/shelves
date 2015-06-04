@@ -13,7 +13,10 @@ export default LotBase.extend({
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction", {async: true}),
   next: hasMany("lot", {inverse: null, async: true}),
-  missing: attr('number'),
+
+  missing: Ember.computed('delivered', 'count', function () {
+      return this.get('count') - this.get('delivered')
+  }),
 
   priceWithVat: function () {
       if (this.get('vatIncluded')) {

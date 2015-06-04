@@ -163,6 +163,12 @@ table {
     tr {
       border: 0;
     }
+
+    &.delivery::before {
+      content: '';
+      display: block;
+      height: 1em;
+    }
   }
 }
 
