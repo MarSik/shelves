@@ -15,6 +15,8 @@ import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class TransactionService extends AbstractRestService<TransactionRepository, Transaction, TransactionApiModel> {
 	@Autowired
@@ -42,6 +44,10 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 	@Override
 	protected Transaction createEntity(TransactionApiModel dto, User currentUser) {
+		if (dto.getDate() == null) {
+			dto.setDate(new Date());
+		}
+
 		Transaction t = super.createEntity(dto, currentUser);
 
 		for (Purchase p: t.getItems()) {
