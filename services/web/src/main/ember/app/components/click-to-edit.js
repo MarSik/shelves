@@ -4,6 +4,10 @@ export default Ember.Component.extend({
     tagName: 'span',
     actions: {
         startEdit: function () {
+            if (!this.get("enabled")) {
+                return;
+            }
+
             this.set('value', this.get('show'));
             this.set('editing', true);
         },
@@ -18,7 +22,12 @@ export default Ember.Component.extend({
     },
     // content
     // field
+    // editable
     editing: false,
     value: null,
-    show: Ember.computed.indirect('field')
+    show: Ember.computed.indirect('field'),
+    enabled: Ember.computed("editable", function () {
+      var e = this.get("editable");
+      return Ember.isNone(this.get('editable')) || this.get('editable');
+    })
 });
