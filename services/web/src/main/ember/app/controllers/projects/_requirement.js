@@ -1,4 +1,5 @@
 import Ember from 'ember';
+// global Promise
 
 export default Ember.Controller.extend({
     possibleTypes: Ember.computed.map('model.type', m => m),
@@ -18,13 +19,13 @@ export default Ember.Controller.extend({
             return [];
           }
 
-          Ember.Promise.all(this.get('possibleTypes')).then(function (types) {
+          Promise.all(this.get('possibleTypes')).then(function (types) {
             var lots = [];
             types.forEach(function (type) {
               lots.pushObject(type.get('lots'));
             });
 
-            Ember.Promise.all(lots).then(function (lots) {
+            Promise.all(lots).then(function (lots) {
               var usable = [];
               lots.forEach(function (lotArray) {
                 lotArray.forEach(function (lot) {
