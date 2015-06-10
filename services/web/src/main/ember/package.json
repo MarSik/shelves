@@ -41,7 +41,7 @@
     "ember-cli-simple-auth-cookie-store": "^0.7.3",
     "ember-cli-simple-auth-oauth2": "^0.7.3",
     "ember-cli-uploader": "~0.3.0",
-    "ember-data": "~1.0.0-beta.18",
+    "ember-data": "~1.0.0-beta.19.1",
     "ember-export-application-global": "^1.0.0",
     "ember-infinite-scroll": "^0.1.1",
     "express": "^4.8.5",

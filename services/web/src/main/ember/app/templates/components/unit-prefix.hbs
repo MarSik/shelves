@@ -1,0 +1,5 @@
+{{#if isEnabled}}
+<button {{action 'disablePrefix' prefix}} class="button tiny alert">{{prefix.id}} [{{prefix.prefix}}] &ndash; {{prefix.base}}<sup>{{prefix.power}}</sup></button>
+{{else}}
+<button {{action 'enablePrefix' prefix}} class="button tiny secondary">{{prefix.id}} [{{prefix.prefix}}] &ndash; {{prefix.base}}<sup>{{prefix.power}}</sup></button>
+{{/if}}

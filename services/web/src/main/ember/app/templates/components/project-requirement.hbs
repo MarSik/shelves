@@ -1,0 +1,19 @@
+<tr>
+  <td>{{#click-to-edit content=r field='content.count' placeholder='item count'}}{{r.count}}{{/click-to-edit}} of</td>
+  <td>{{#click-to-edit content=r field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
+  <td colspan="2">{{#confirm-button action='removeRequirement' class='alert tiny button'}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
+    <button {{action 'showAddAlternative'}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
+    {{#if r.missing}}<button {{action 'assignLot'}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}
+  </td>
+</tr>
+{{#each possibleTypes as |type|}}
+<tr>
+  <td>{{fa-icon 'book'}}</td>
+  <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
+  <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
+  <td>{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}</td>
+</tr>
+{{/each}}
+{{#each assignedLots as |lot|}}
+  {{project-requirement-lot lot=lot unassignLot="unassignLot" unsolderLot="unsolderLot" solderLot="solderLot"}}
+{{/each}}

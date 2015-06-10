@@ -13,7 +13,7 @@
     "foundation": "5.5.1",
     "ember-simple-auth": "0.7.3",
     "ember-uploader": "0.3.0",
-    "ember-data": "1.0.0-beta.18",
+    "ember-data": "1.0.0-beta.19.1",
     "qrcodejs": "~0.1.0",
     "selectize": "~0.12.0",
     "qunit": "~1.18.0"
