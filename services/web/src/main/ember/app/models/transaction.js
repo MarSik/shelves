@@ -72,6 +72,86 @@ export default DS.Model.extend({
         }
     }),
 
+    totalWithVat: Ember.computed('items.@each.priceWithVat', 'items.@each.count', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+            var self = this;
+            this.get('items').then(function (ts) {
+                var total = 0;
+                ts.forEach(function (item) {
+                    total += item.get('priceWithVat') * item.get('count');
+                });
+                self.set('totalWithVat', total);
+            });
+
+            return 0;
+        }
+    }),
+
+    totalWithoutVat: Ember.computed('items.@each.priceWithoutVat', 'items.@each.count', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+            var self = this;
+            this.get('items').then(function (ts) {
+                var total = 0;
+                ts.forEach(function (item) {
+                    total += item.get('priceWithoutVat') * item.get('count');
+                });
+                self.set('totalWithoutVat', total);
+            });
+
+            return 0;
+        }
+    }),
+
+    deliveredWithVat: Ember.computed('items.@each.priceWithVat', 'items.@each.delivered', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+            var self = this;
+            this.get('items').then(function (ts) {
+                var total = 0;
+                ts.forEach(function (item) {
+                    total += item.get('priceWithVat') * item.get('delivered');
+                });
+                self.set('deliveredWithVat', total);
+            });
+
+            return 0;
+        }
+    }),
+
+    deliveredWithoutVat: Ember.computed('items.@each.priceWithoutVat', 'items.@each.delivered', {
+        set(key, value) {
+            return value;
+        },
+        get() {
+            var self = this;
+            this.get('items').then(function (ts) {
+                var total = 0;
+                ts.forEach(function (item) {
+                    total += item.get('priceWithoutVat') * item.get('delivered');
+                });
+                self.set('deliveredWithoutVat', total);
+            });
+
+            return 0;
+        }
+    }),
+
+    missingWithVat: Ember.computed('totalWithVat', 'deliveredWithVat', function () {
+       return this.get('totalWithVat') - this.get('deliveredWithVat');
+    }),
+
+    missingWithoutVat: Ember.computed('totalWithoutVat', 'deliveredWithoutVat', function () {
+        return this.get('totalWithoutVat') - this.get('deliveredWithoutVat');
+    }),
+
     link: function() {
         return "transactions.show";
     }.property(),

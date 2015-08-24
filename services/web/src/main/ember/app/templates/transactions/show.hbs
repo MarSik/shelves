@@ -48,6 +48,15 @@
     </dl>
 
     <table>
+        <tr>
+            <th></th><th>without VAT</th><th>with VAT</th>
+            <th>total</th><td>{{model.totalWithoutVat}}</td><td>{{model.totalWithVat}}</td>
+            <th>delivered</th><td>{{model.deliveredWithoutVat}}</td><td>{{model.deliveredWithVat}}</td>
+            <th>missing</th><td>{{model.missingWithoutVat}}</td><td>{{model.missingWithVat}}</td>
+        </tr>
+    </table>
+
+    <table>
         <thead>
         <tr>
             <th>Type</th>
