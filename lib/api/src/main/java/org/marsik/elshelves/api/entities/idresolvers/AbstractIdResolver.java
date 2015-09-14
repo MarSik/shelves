@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.jackson.CreateObjectIdResolver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractIdResolver implements ObjectIdResolver {
+public abstract class AbstractIdResolver implements CreateObjectIdResolver {
 	private Map<ObjectIdGenerator.IdKey,Object> _items = new HashMap<ObjectIdGenerator.IdKey,Object>();
 
 	@Override
