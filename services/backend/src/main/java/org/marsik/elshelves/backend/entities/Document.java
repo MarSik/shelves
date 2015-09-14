@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.net.URL;
 import java.util.Date;
@@ -31,7 +32,7 @@ public class Document extends NamedEntity implements StickerCapable {
 
     URL url;
 
-	@RelatedTo(type = "DESCRIBES")
+	@ManyToOne
 	Set<NamedEntity> describes;
 
 	@PartOfUpdate

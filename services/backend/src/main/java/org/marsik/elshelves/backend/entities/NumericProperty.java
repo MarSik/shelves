@@ -11,6 +11,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
 
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -33,6 +34,7 @@ public class NumericProperty extends NamedEntity {
     String symbol;
 
     @RelatedToVia(type = "HAS_PROPERTY", direction = Direction.INCOMING)
+    @OneToMany(mappedBy = "property")
     Iterable<NumericPropertyValue> propertyUses;
 
     @PartOfUpdate

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -40,6 +41,7 @@ import java.util.Locale;
 @ComponentScan("org.marsik.elshelves.backend")
 @EnableWebMvc
 @Configuration
+@EnableJpaRepositories
 public class BackendApplication extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {

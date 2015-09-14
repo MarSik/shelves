@@ -7,44 +7,38 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
-import org.springframework.data.neo4j.annotation.RelatedToVia;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 public class NamedEntity extends OwnedEntity {
-	@Indexed
 	@NotEmpty
 	@NotNull
 	String name;
 
-	@Indexed
 	String summary;
 
-    @Indexed
     boolean flagged = false;
 
-	@Indexed
 	String description;
 
-	@RelatedTo(type = "DESCRIBES", direction = Direction.INCOMING)
+	@OneToMany(mappedBy = "document.describes")
 	Set<Document> describedBy;
 
-    @RelatedToVia(type = "HAS_PROPERTY", elementClass = NumericPropertyValue.class)
+	@OneToMany(mappedBy = "entity")
     Set<NumericPropertyValue> properties;
 
     /**
      * Barcode associated with this entity
      */
-    @RelatedTo(type = "IDENTIFIED_BY")
+	@OneToMany(mappedBy = "code.reference")
     Set<Code> codes;
 
 	@PartOfUpdate

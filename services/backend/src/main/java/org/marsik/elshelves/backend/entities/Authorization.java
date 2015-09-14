@@ -4,13 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@NodeEntity
+@Entity
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)

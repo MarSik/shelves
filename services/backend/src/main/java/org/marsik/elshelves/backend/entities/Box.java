@@ -10,12 +10,13 @@ import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(BoxApiModel.class)
 public class Box extends NamedEntity implements StickerCapable {
 

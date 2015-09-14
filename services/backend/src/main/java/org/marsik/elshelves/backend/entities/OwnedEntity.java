@@ -3,11 +3,10 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
@@ -15,15 +14,13 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"uuid"})
-@NodeEntity
+@Entity
 public abstract class OwnedEntity {
-	@PartOfUpdate
-	@RelatedTo(type = "OWNS", direction = Direction.INCOMING, enforceTargetType = true)
+	@ManyToOne(optional = false)
 	@NotNull
 	User owner;
 
-	@NotNull
-	@Indexed
+	@Id
 	UUID uuid;
 
     /**

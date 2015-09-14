@@ -6,17 +6,16 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(CodeApiModel.class)
 public class Code extends OwnedEntity {
     @NotNull
@@ -27,7 +26,7 @@ public class Code extends OwnedEntity {
     @NotEmpty
     String code;
 
-    @RelatedTo(type = "IDENTIFIED_BY", direction = Direction.INCOMING)
+    @ManyToOne
     NamedEntity reference;
 
     @Override
