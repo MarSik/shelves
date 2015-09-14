@@ -8,6 +8,7 @@ import net.spy.memcached.transcoders.SerializingTranscoder;
 import org.marsik.elshelves.backend.app.spring.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -80,6 +81,12 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
         converters.add(emberJackson2HttpMessageConverter());
+    }
+
+    @Bean
+    public ModelMapper configureModelMapper() {
+        final ModelMapper mm = new ModelMapper();
+        return mm;
     }
 
     @Bean

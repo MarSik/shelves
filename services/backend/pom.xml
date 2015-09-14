@@ -379,6 +379,13 @@
             <artifactId>tika-core</artifactId>
             <version>${tika.version}</version>
         </dependency>
+
+        <!-- Model mapper //-->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
