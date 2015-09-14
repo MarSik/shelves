@@ -1,22 +1,17 @@
 package org.marsik.elshelves.api.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.ember.EmberModel;
 
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class PolymorphicRecord extends AbstractEntityApiModel {
     String type;
-
-    public PolymorphicRecord() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public static PolymorphicRecord build(AbstractEntityApiModel entity) {
         PolymorphicRecord p = new PolymorphicRecord();

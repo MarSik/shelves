@@ -1,5 +1,7 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum LotAction {
     DELIVERY,
 	SPLIT,
@@ -9,5 +11,10 @@ public enum LotAction {
 	SOLDERED,
 	UNSOLDERED,
 	DESTROYED,
-    EVENT
+    EVENT;
+
+    @JsonCreator
+    public static LotAction forValue(String s) {
+        return LotAction.valueOf(s);
+    }
 }

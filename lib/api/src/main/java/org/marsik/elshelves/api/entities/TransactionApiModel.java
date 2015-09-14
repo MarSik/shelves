@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.TransactionIdResolver;
 
@@ -11,6 +13,8 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = TransactionIdResolver.class)
 @EmberModelName("transaction")
 public class TransactionApiModel extends AbstractNamedEntityApiModel {
@@ -26,31 +30,13 @@ public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	Set<PurchaseApiModel> items;
 	SourceApiModel source;
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	@JsonIdentityReference(alwaysAsId = true)
 	public Set<PurchaseApiModel> getItems() {
 		return items;
 	}
 
-	@JsonSetter
-	public void setItems(Set<PurchaseApiModel> items) {
-		this.items = items;
-	}
-
 	@JsonIdentityReference(alwaysAsId = true)
 	public SourceApiModel getSource() {
 		return source;
-	}
-
-	@JsonSetter
-	public void setSource(SourceApiModel source) {
-		this.source = source;
 	}
 }

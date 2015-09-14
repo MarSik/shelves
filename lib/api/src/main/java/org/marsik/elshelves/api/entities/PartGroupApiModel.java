@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.PartGroupIdResolver;
 
 import java.util.Set;
 import java.util.UUID;
 
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = PartGroupIdResolver.class)
 @EmberModelName("group")
 public class PartGroupApiModel extends AbstractNamedEntityApiModel {
@@ -39,19 +43,9 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
         return groups;
     }
 
-    @JsonSetter
-    public void setGroups(Set<PartGroupApiModel> groups) {
-        this.groups = groups;
-    }
-
     @JsonIdentityReference(alwaysAsId = true)
     public PartGroupApiModel getParent() {
         return parent;
-    }
-
-    @JsonSetter
-    public void setParent(PartGroupApiModel parent) {
-        this.parent = parent;
     }
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -59,34 +53,8 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
         return types;
     }
 
-    @JsonSetter
-    public void setTypes(Set<PartTypeApiModel> types) {
-        this.types = types;
-    }
-
     @JsonIdentityReference(alwaysAsId = true)
     public Set<NumericPropertyApiModel> getShowProperties() {
         return showProperties;
     }
-
-    @JsonSetter
-    public void setShowProperties(Set<NumericPropertyApiModel> showProperties) {
-        this.showProperties = showProperties;
-    }
-
-    public Long getDirectCount() {
-		return directCount;
-	}
-
-	public void setDirectCount(Long directCount) {
-		this.directCount = directCount;
-	}
-
-	public Long getNestedCount() {
-		return nestedCount;
-	}
-
-	public void setNestedCount(Long nestedCount) {
-		this.nestedCount = nestedCount;
-	}
 }

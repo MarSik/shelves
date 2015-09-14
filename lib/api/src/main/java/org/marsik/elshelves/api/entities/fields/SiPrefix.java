@@ -1,5 +1,6 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
@@ -71,4 +72,9 @@ public enum SiPrefix {
     public String getId() {
         return name();
     }
+
+	@JsonCreator
+	public static SiPrefix forValue(String s) {
+		return SiPrefix.valueOf(s);
+	}
 }

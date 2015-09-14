@@ -24,6 +24,6 @@ import java.util.UUID;
  *             .addMeta("totalRecords", 100)
  *             .build();
  */
-public interface EmberEntity extends EmberLinks {
+public interface EmberEntity {
     UUID getId();
 }

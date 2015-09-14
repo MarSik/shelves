@@ -1,9 +1,10 @@
 package org.marsik.elshelves.api.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
-@JsonFormat(shape= JsonFormat.Shape.OBJECT)
+@JsonFormat(shape=JsonFormat.Shape.OBJECT)
 @EmberModelName("footprinttype")
 public enum FootprintType {
     WIRE,
@@ -17,5 +18,10 @@ public enum FootprintType {
 
     public String getName() {
         return name();
+    }
+
+    @JsonCreator
+    public static FootprintType forValue(String s) {
+        return FootprintType.valueOf(s);
     }
 }
