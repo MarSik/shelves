@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -12,6 +15,9 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 public class User extends OwnedEntity implements StickerCapable {
     @NotNull
@@ -44,57 +50,9 @@ public class User extends OwnedEntity implements StickerCapable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
 	@PartOfUpdate
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-
-    public Date getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-	public Date getVerificationStartTime() {
-		return verificationStartTime;
-	}
-
-	public void setVerificationStartTime(Date verificationStartTime) {
-		this.verificationStartTime = verificationStartTime;
-	}
-
-    public Set<Authorization> getAuthorizations() {
-        return authorizations;
-    }
-
-    public void setAuthorizations(Set<Authorization> authorizations) {
-        this.authorizations = authorizations;
     }
 
     @Override

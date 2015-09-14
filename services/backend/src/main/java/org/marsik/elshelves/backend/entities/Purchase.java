@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -7,6 +10,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 public class Purchase extends LotBase {
 	@NotNull
@@ -33,17 +39,9 @@ public class Purchase extends LotBase {
 		return singlePrice;
 	}
 
-	public void setSinglePrice(Double singlePrice) {
-		this.singlePrice = singlePrice;
-	}
-
 	@PartOfUpdate
 	public Double getTotalPrice() {
 		return totalPrice;
-	}
-
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
 	}
 
 	@PartOfUpdate
@@ -51,17 +49,9 @@ public class Purchase extends LotBase {
 		return vat;
 	}
 
-	public void setVat(Double vat) {
-		this.vat = vat;
-	}
-
 	@PartOfUpdate
 	public Boolean getVatIncluded() {
 		return vatIncluded;
-	}
-
-	public void setVatIncluded(Boolean vatIncluded) {
-		this.vatIncluded = vatIncluded;
 	}
 
 	public Source getSource() {
@@ -74,17 +64,9 @@ public class Purchase extends LotBase {
 		return transaction;
 	}
 
-	public void setTransaction(Transaction transaction) {
-		this.transaction = transaction;
-	}
-
 	@PartOfUpdate
 	public Type getType() {
 		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
 	}
 
 	@Override
@@ -97,23 +79,6 @@ public class Purchase extends LotBase {
 	public boolean canBeUpdated() {
 		// Purchase data can be updated
 		return true;
-	}
-
-	@Override
-	public Set<Lot> getNext() {
-		return next;
-	}
-
-	public void setNext(Set<Lot> next) {
-		this.next = next;
-	}
-
-	public Iterable<Lot> getLots() {
-		return lots;
-	}
-
-	public void setLots(Iterable<Lot> lots) {
-		this.lots = lots;
 	}
 
     public Long getMissing() {

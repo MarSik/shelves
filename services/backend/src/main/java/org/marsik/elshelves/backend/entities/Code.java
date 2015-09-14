@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -10,6 +13,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(CodeApiModel.class)
 public class Code extends OwnedEntity {
@@ -29,28 +35,9 @@ public class Code extends OwnedEntity {
         return true;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     @PartOfUpdate
     public NamedEntity getReference() {
         return reference;
     }
 
-    public void setReference(NamedEntity reference) {
-        this.reference = reference;
-    }
 }

@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -9,6 +12,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(FootprintApiModel.class)
 public class Footprint extends NamedEntity {
@@ -42,17 +48,9 @@ public class Footprint extends NamedEntity {
 		return kicad;
 	}
 
-	public void setKicad(String kicad) {
-		this.kicad = kicad;
-	}
-
 	@PartOfUpdate
 	public Integer getPads() {
 		return pads;
-	}
-
-	public void setPads(Integer pads) {
-		this.pads = pads;
 	}
 
 	@PartOfUpdate
@@ -60,21 +58,9 @@ public class Footprint extends NamedEntity {
 		return holes;
 	}
 
-	public void setHoles(Integer holes) {
-		this.holes = holes;
-	}
-
 	@PartOfUpdate
 	public Integer getNpth() {
 		return npth;
-	}
-
-	public void setNpth(Integer npth) {
-		this.npth = npth;
-	}
-
-	public Iterable<Type> getTypes() {
-		return types;
 	}
 
 	@Override
@@ -87,16 +73,8 @@ public class Footprint extends NamedEntity {
         return seeAlso;
     }
 
-    public void setSeeAlso(Set<Footprint> seeAlso) {
-        this.seeAlso = seeAlso;
-    }
-
     @PartOfUpdate
     public FootprintType getType() {
         return type;
-    }
-
-    public void setType(FootprintType type) {
-        this.type = type;
     }
 }

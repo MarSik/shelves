@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
@@ -13,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(PartTypeApiModel.class)
 public class Type extends NamedEntity implements StickerCapable {
@@ -46,17 +52,9 @@ public class Type extends NamedEntity implements StickerCapable {
 		return vendor;
 	}
 
-	public void setVendor(String vendor) {
-		this.vendor = vendor;
-	}
-
 	@PartOfUpdate
 	public String getCustomId() {
 		return customId;
-	}
-
-	public void setCustomId(String customId) {
-		this.customId = customId;
 	}
 
 	@PartOfUpdate
@@ -64,17 +62,9 @@ public class Type extends NamedEntity implements StickerCapable {
 		return footprints;
 	}
 
-	public void setFootprints(Set<Footprint> footprints) {
-		this.footprints = footprints;
-	}
-
 	@PartOfUpdate
 	public Set<Group> getGroups() {
 		return groups;
-	}
-
-	public void setGroups(Set<Group> groups) {
-		this.groups = groups;
 	}
 
 	public Iterable<Lot> getLots() {
@@ -86,14 +76,6 @@ public class Type extends NamedEntity implements StickerCapable {
 		}
 
 		return lots;
-	}
-
-	public Iterable<Purchase> getPurchases() {
-		return purchases;
-	}
-
-	public Iterable<Requirement> getUsedIn() {
-		return usedIn;
 	}
 
 	@Override
@@ -129,17 +111,9 @@ public class Type extends NamedEntity implements StickerCapable {
         return serials;
     }
 
-    public void setSerials(Boolean serials) {
-        this.serials = serials;
-    }
-
     @PartOfUpdate
     public Set<Type> getSeeAlso() {
         return seeAlso;
-    }
-
-    public void setSeeAlso(Set<Type> seeAlso) {
-        this.seeAlso = seeAlso;
     }
 
     @PartOfUpdate
@@ -147,16 +121,8 @@ public class Type extends NamedEntity implements StickerCapable {
         return minimumCount;
     }
 
-    public void setMinimumCount(Long minimumCount) {
-        this.minimumCount = minimumCount;
-    }
-
     @PartOfUpdate
     public Long getBuyMultiple() {
         return buyMultiple;
-    }
-
-    public void setBuyMultiple(Long buyMultiple) {
-        this.buyMultiple = buyMultiple;
     }
 }

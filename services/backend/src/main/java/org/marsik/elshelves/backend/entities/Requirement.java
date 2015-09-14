@@ -1,6 +1,9 @@
 package org.marsik.elshelves.backend.entities;
 
 import gnu.trove.set.hash.THashSet;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -9,6 +12,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 public class Requirement extends OwnedEntity {
 	@NotNull
@@ -33,26 +39,14 @@ public class Requirement extends OwnedEntity {
 		return project;
 	}
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
 	@PartOfUpdate
 	public Set<Type> getType() {
 		return type;
 	}
 
-	public void setType(Set<Type> type) {
-		this.type = type;
-	}
-
 	@PartOfUpdate
 	public Long getCount() {
 		return count;
-	}
-
-	public void setCount(Long count) {
-		this.count = count;
 	}
 
 	@Override
@@ -70,26 +64,10 @@ public class Requirement extends OwnedEntity {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @PartOfUpdate
     public String getSummary() {
         return summary;
     }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public Set<Lot> getRawLots() {
-		return rawLots;
-	}
-
-	public void setRawLots(Set<Lot> lots) {
-		this.rawLots = lots;
-	}
 
     /**
      * Return all active lots that are assigned to this

@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.neo4j.graphdb.Direction;
@@ -8,6 +11,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
@@ -28,25 +34,9 @@ public class Group extends NamedEntity {
 		return parent;
 	}
 
-	public void setParent(Group parent) {
-		this.parent = parent;
-	}
-
-	public Set<Group> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(Set<Group> groups) {
-		this.groups = groups;
-	}
-
 	@PartOfUpdate
 	public Set<Type> getTypes() {
 		return types;
-	}
-
-	public void setTypes(Set<Type> types) {
-		this.types = types;
 	}
 
 	@Override
@@ -59,12 +49,8 @@ public class Group extends NamedEntity {
         return showProperties;
     }
 
-    public void setShowProperties(Set<NumericProperty> showProperties) {
-        this.showProperties = showProperties;
-    }
-
     public Long getCount() {
-		return Long.valueOf(getTypes().size());
+		return (long) getTypes().size();
 	}
 
 	public Long getNestedCount() {

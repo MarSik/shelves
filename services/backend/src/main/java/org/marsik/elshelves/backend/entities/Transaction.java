@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -10,6 +13,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.Date;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(TransactionApiModel.class)
 public class Transaction extends NamedEntity implements StickerCapable {
@@ -20,30 +26,6 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 	@RelatedTo(type = "PURCHASED_FROM")
 	Source source;
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public Source getSource() {
-		return source;
-	}
-
-	public void setSource(Source source) {
-		this.source = source;
-	}
-
-	public Set<Purchase> getItems() {
-		return items;
-	}
-
-	public void setItems(Set<Purchase> items) {
-		this.items = items;
-	}
 
 	@Override
 	public boolean canBeDeleted() {

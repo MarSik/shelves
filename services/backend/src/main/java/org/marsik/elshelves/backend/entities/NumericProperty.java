@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -10,6 +13,9 @@ import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 import javax.validation.constraints.NotNull;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
@@ -34,21 +40,9 @@ public class NumericProperty extends NamedEntity {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
     @PartOfUpdate
     public SiPrefix getBase() {
         return base;
-    }
-
-    public void setBase(SiPrefix base) {
-        this.base = base;
-    }
-
-    public Iterable<NumericPropertyValue> getPropertyUses() {
-        return propertyUses;
     }
 
     @Override
@@ -59,9 +53,5 @@ public class NumericProperty extends NamedEntity {
     @PartOfUpdate
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 }

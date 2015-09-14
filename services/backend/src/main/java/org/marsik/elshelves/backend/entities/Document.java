@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -12,6 +15,9 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(DocumentApiModel.class)
 public class Document extends NamedEntity implements StickerCapable {
@@ -33,26 +39,14 @@ public class Document extends NamedEntity implements StickerCapable {
 		return contentType;
 	}
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
 	@PartOfUpdate
 	public Long getSize() {
 		return size;
 	}
 
-	public void setSize(Long size) {
-		this.size = size;
-	}
-
 	@PartOfUpdate
 	public Date getCreated() {
 		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
 	}
 
 	@Override
@@ -69,16 +63,4 @@ public class Document extends NamedEntity implements StickerCapable {
     public URL getUrl() {
         return url;
     }
-
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
-	public Set<NamedEntity> getDescribes() {
-		return describes;
-	}
-
-	public void setDescribes(Set<NamedEntity> describes) {
-		this.describes = describes;
-	}
 }

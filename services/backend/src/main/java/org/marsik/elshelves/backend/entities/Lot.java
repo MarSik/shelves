@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
@@ -15,6 +18,8 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 @NodeEntity
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Lot extends LotBase implements StickerCapable {
 	public Lot() {
 	}
@@ -126,30 +131,6 @@ public class Lot extends LotBase implements StickerCapable {
     @Indexed
     Date expiration;
 
-	public Lot getPrevious() {
-		return previous;
-	}
-
-	public void setPrevious(Lot previous) {
-		this.previous = previous;
-	}
-
-	public LotAction getAction() {
-		return action;
-	}
-
-	public void setAction(LotAction action) {
-		this.action = action;
-	}
-
-	public Box getLocation() {
-		return location;
-	}
-
-	public void setLocation(Box location) {
-		this.location = location;
-	}
-
     public Long usedCount() {
         long count = 0;
         for (Lot l: getNext()) {
@@ -239,44 +220,6 @@ public class Lot extends LotBase implements StickerCapable {
 		return new Lot(uuidGenerator.generate(), performedBy, (Requirement)null, this);
 	}
 
-	public Purchase getPurchase() {
-		return purchase;
-	}
-
-	public void setPurchase(Purchase purchase) {
-		this.purchase = purchase;
-	}
-
-	@Override
-	public Type getType() {
-		return getPurchase().getType();
-	}
-
-
-	public Iterable<Lot> getNext() {
-		return next;
-	}
-
-	public void setNext(Iterable<Lot> next) {
-		this.next = next;
-	}
-
-	public User getPerformedBy() {
-		return performedBy;
-	}
-
-	public void setPerformedBy(User performedBy) {
-		this.performedBy = performedBy;
-	}
-
-	public Requirement getUsedBy() {
-		return usedBy;
-	}
-
-	public void setUsedBy(Requirement usedBy) {
-		this.usedBy = usedBy;
-	}
-
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
@@ -332,12 +275,4 @@ public class Lot extends LotBase implements StickerCapable {
 	public String getBaseUrl() {
 		return "lots";
 	}
-
-    public Date getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
-    }
 }

@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -9,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {"uuid"})
 @NodeEntity
 public abstract class OwnedEntity {
 	@PartOfUpdate
@@ -34,25 +40,5 @@ public abstract class OwnedEntity {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
 	public abstract boolean canBeDeleted();
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
-    }
 }

@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
@@ -8,6 +11,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @NodeEntity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Authorization extends OwnedEntity {
     @NotEmpty
     @NotNull
@@ -39,32 +45,8 @@ public class Authorization extends OwnedEntity {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @PartOfUpdate
     public String getSecret() {
         return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getLastUsed() {
-        return lastUsed;
-    }
-
-    public void setLastUsed(Date lastUsed) {
-        this.lastUsed = lastUsed;
     }
 }

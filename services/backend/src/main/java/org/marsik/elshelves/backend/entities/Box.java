@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -9,6 +12,9 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(BoxApiModel.class)
 public class Box extends NamedEntity implements StickerCapable {
@@ -22,30 +28,10 @@ public class Box extends NamedEntity implements StickerCapable {
 	@RelatedTo(type = "LOCATED_AT", direction = Direction.INCOMING)
 	Set<Lot> lots;
 
-	public Set<Box> getContains() {
-        return contains;
-    }
-
-    public void setContains(Set<Box> contains) {
-        this.contains = contains;
-    }
-
 	@PartOfUpdate
     public Box getParent() {
         return parent;
     }
-
-    public void setParent(Box parent) {
-        this.parent = parent;
-    }
-
-	public Set<Lot> getLots() {
-		return lots;
-	}
-
-	public void setLots(Set<Lot> lots) {
-		this.lots = lots;
-	}
 
 	@Override
 	public boolean canBeDeleted() {

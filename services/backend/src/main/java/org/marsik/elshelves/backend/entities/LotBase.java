@@ -1,11 +1,17 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 public abstract class LotBase extends OwnedEntity {
 	@NotNull
@@ -14,22 +20,6 @@ public abstract class LotBase extends OwnedEntity {
 	@NotNull
 	@Min(1)
 	Long count;
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Long getCount() {
-		return count;
-	}
-
-	public void setCount(Long count) {
-		this.count = count;
-	}
 
 	public Type getType() {
 		return null;

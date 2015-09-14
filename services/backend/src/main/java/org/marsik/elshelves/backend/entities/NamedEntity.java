@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
@@ -13,6 +16,9 @@ import org.springframework.data.neo4j.annotation.RelatedToVia;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 public class NamedEntity extends OwnedEntity {
 	@Indexed
@@ -46,17 +52,9 @@ public class NamedEntity extends OwnedEntity {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@PartOfUpdate
 	public String getSummary() {
 		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
 	}
 
     @PartOfUpdate
@@ -64,17 +62,9 @@ public class NamedEntity extends OwnedEntity {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	@PartOfUpdate
 	public Set<Document> getDescribedBy() {
 		return describedBy;
-	}
-
-	public void setDescribedBy(Set<Document> describedBy) {
-		this.describedBy = describedBy;
 	}
 
 	@Override
@@ -85,18 +75,6 @@ public class NamedEntity extends OwnedEntity {
     @PartOfUpdate
     public Set<NumericPropertyValue> getProperties() {
         return properties;
-    }
-
-    public void setProperties(Set<NumericPropertyValue> properties) {
-        this.properties = properties;
-    }
-
-    public boolean isFlagged() {
-        return flagged;
-    }
-
-    public void setFlagged(boolean flagged) {
-        this.flagged = flagged;
     }
 
     public String getEmberType() {
@@ -117,9 +95,5 @@ public class NamedEntity extends OwnedEntity {
     @PartOfUpdate
     public Set<Code> getCodes() {
         return codes;
-    }
-
-    public void setCodes(Set<Code> codes) {
-        this.codes = codes;
     }
 }

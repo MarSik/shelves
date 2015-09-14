@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.ShippingCalculator;
@@ -8,6 +11,9 @@ import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 @NodeEntity
 @DefaultEmberModel(SourceApiModel.class)
 public class Source extends NamedEntity {
@@ -22,30 +28,6 @@ public class Source extends NamedEntity {
 	@PartOfUpdate
 	public String getUrl() {
 		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public SourceDownloader getSourceDownloader() {
-		return sourceDownloader;
-	}
-
-	public void setSourceDownloader(SourceDownloader sourceDownloader) {
-		this.sourceDownloader = sourceDownloader;
-	}
-
-	public ShippingCalculator getShippingCalculator() {
-		return shippingCalculator;
-	}
-
-	public void setShippingCalculator(ShippingCalculator shippingCalculator) {
-		this.shippingCalculator = shippingCalculator;
-	}
-
-	public Iterable<Purchase> getPurchases() {
-		return purchases;
 	}
 
 	public boolean canBeDeleted() {
