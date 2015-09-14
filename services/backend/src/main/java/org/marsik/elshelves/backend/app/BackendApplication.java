@@ -5,6 +5,7 @@ import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
+import org.marsik.elshelves.backend.app.spring.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
