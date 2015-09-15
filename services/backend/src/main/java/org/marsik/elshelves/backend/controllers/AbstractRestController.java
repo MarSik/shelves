@@ -11,6 +11,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.AbstractRestService;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +30,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends GraphRepository<T>, T, E>> {
+public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends JpaRepository<T, UUID>, T, E>> {
 
     final Class<E> dtoClazz;
     final S service;

@@ -33,9 +33,6 @@ import java.util.UUID;
 @RequestMapping("/upload")
 public class UploadController {
 	@Autowired
-	Neo4jTemplate neo4jTemplate;
-
-	@Autowired
 	DocumentService documentService;
 
 	@Autowired

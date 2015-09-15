@@ -31,9 +31,6 @@ public class StickerController {
 	@Autowired
 	StickerService stickerService;
 
-	@Autowired
-	Neo4jTemplate neo4jTemplate;
-
 	@Transactional(readOnly = true)
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(produces = "application/pdf")
