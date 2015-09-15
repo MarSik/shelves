@@ -7,10 +7,10 @@ import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.marsik.elshelves.backend.services.StickerCapable;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(PartTypeApiModel.class)
 public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
@@ -32,19 +32,19 @@ public class Type extends NamedEntity implements StickerCapable {
     Boolean serials;
 
 	@NotNull
-	@RelatedTo(type = "HAS_FOOTPRINT")
+	@ManyToMany(mappedBy = "types")
 	Set<Footprint> footprints;
 
-	@RelatedTo(type = "CONTAINS", direction = Direction.INCOMING)
+	@ManyToMany(mappedBy = "types")
 	Set<Group> groups;
 
-	@RelatedTo(type = "OF_TYPE", direction = Direction.INCOMING)
+	@OneToMany(mappedBy = "type")
 	Iterable<Purchase> purchases;
 
-	@RelatedTo(type = "REQUIRED_TYPE", direction = Direction.INCOMING)
+	@ManyToMany(mappedBy = "type")
 	Iterable<Requirement> usedIn;
 
-    @RelatedTo(type = "SEE_ALSO", direction = Direction.BOTH)
+	@ManyToMany(mappedBy = "seeAlso")
     Set<Type> seeAlso;
 
 	@PartOfUpdate

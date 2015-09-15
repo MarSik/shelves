@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
 @DefaultEmberModel(ProjectApiModel.class)
+@Entity
 public class Project extends NamedEntity implements StickerCapable {
-	@RelatedTo(type = "REQUIRES")
+	@OneToMany(mappedBy = "project")
 	Set<Requirement> requires;
 
 	public boolean canBeDeleted() {

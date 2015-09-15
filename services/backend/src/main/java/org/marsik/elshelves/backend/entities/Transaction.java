@@ -6,25 +6,25 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(TransactionApiModel.class)
 public class Transaction extends NamedEntity implements StickerCapable {
 	Date date;
 
-	@RelatedTo(type = "IN_TRANSACTION", direction = Direction.INCOMING)
+	@OneToMany(mappedBy = "transaction")
 	Set<Purchase> items;
 
-	@RelatedTo(type = "PURCHASED_FROM")
+	@ManyToOne
 	Source source;
 
 	@Override

@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
 import org.marsik.elshelves.backend.services.StickerCapable;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -18,23 +17,21 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 public class User extends OwnedEntity implements StickerCapable {
     @NotNull
     String name;
 
     @NotNull
     @Email
-	@Indexed
     String email;
     String password;
 
-	@Indexed
     String verificationCode;
 	Date verificationStartTime;
     Date registrationDate;
 
-    @RelatedTo(type = "OWNS", enforceTargetType = true)
+    @OneToMany(mappedBy = "owner")
     Set<Authorization> authorizations;
 
     public UUID getUuid() {

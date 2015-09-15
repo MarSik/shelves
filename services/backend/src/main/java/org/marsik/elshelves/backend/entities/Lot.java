@@ -2,22 +2,20 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.UUID;
 
-@NodeEntity
+@Entity
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class Lot extends LotBase implements StickerCapable {
@@ -106,29 +104,28 @@ public class Lot extends LotBase implements StickerCapable {
         setLocation(location);
     }
 
-	@RelatedTo(type = "TAKEN_FROM", enforceTargetType = true)
+	@ManyToOne
 	Lot previous;
 
-	@RelatedTo(type = "TAKEN_FROM", direction = Direction.INCOMING, enforceTargetType = true)
+	@OneToMany(mappedBy = "previous")
 	Iterable<Lot> next;
 
-	@RelatedTo(type = "PERFORMED_BY", enforceTargetType = true)
+	@ManyToOne
 	User performedBy;
 
 	@NotNull
-	@RelatedTo(type = "PURCHASED_AS")
+	@ManyToOne
 	Purchase purchase;
 
 	@NotNull
 	LotAction action;
 
-	@RelatedTo(type = "LOCATED_AT")
+	@ManyToOne
 	Box location;
 
-	@RelatedTo(type = "USES", direction = Direction.INCOMING)
+	@ManyToOne
 	Requirement usedBy;
 
-    @Indexed
     Date expiration;
 
     public Long usedCount() {
@@ -188,7 +185,7 @@ public class Lot extends LotBase implements StickerCapable {
 		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, requirement, this);
 
         // No remainder..
-        if (getCount() == count) {
+        if (getCount().equals(count)) {
             return new SplitResult(requested, null);
         }
 

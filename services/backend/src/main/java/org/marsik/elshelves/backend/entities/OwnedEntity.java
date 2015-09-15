@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"uuid"})
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class OwnedEntity {
 	@ManyToOne(optional = false)
 	@NotNull

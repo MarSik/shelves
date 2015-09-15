@@ -7,14 +7,15 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.ShippingCalculator;
 import org.marsik.elshelves.backend.entities.fields.SourceDownloader;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(SourceApiModel.class)
 public class Source extends NamedEntity {
 	String url;
@@ -22,8 +23,8 @@ public class Source extends NamedEntity {
 	SourceDownloader sourceDownloader;
 	ShippingCalculator shippingCalculator;
 
-	@RelatedTo(type = "PURCHASED_FROM", direction = Direction.INCOMING)
-	Iterable<Purchase> purchases;
+	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
+	Iterable<Transaction> transactions;
 
 	@PartOfUpdate
 	public String getUrl() {
@@ -31,6 +32,6 @@ public class Source extends NamedEntity {
 	}
 
 	public boolean canBeDeleted() {
-		return !getPurchases().iterator().hasNext();
+		return !getTransactions().iterator().hasNext();
 	}
 }

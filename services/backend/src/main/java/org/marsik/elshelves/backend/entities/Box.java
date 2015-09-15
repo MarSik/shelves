@@ -6,11 +6,10 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Data
@@ -20,13 +19,13 @@ import java.util.Set;
 @DefaultEmberModel(BoxApiModel.class)
 public class Box extends NamedEntity implements StickerCapable {
 
-	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
+	@OneToMany(mappedBy = "parent")
     Set<Box> contains;
 
-    @RelatedTo(type = "PARENT")
+	@ManyToOne
     Box parent;
 
-	@RelatedTo(type = "LOCATED_AT", direction = Direction.INCOMING)
+	@OneToMany(mappedBy = "location")
 	Set<Lot> lots;
 
 	@PartOfUpdate

@@ -247,7 +247,7 @@ public class BackupService {
         backup.setTransactions(backup(transactionRepository.findByOwner(currentUser), transactionToEmber, cache));
         backup.setPurchases(backup(purchaseRepository.findByOwner(currentUser), purchaseToEmber, cache));
         backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
-        backup.setRequirements(backup(requirementRepository.findByOwner(currentUser), requirementToEmber, cache));
+        backup.setRequirements(backup(requirementRepository.findByProjectOwner(currentUser), requirementToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
 
         return backup;

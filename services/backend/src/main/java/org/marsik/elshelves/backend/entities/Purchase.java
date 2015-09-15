@@ -1,22 +1,24 @@
 package org.marsik.elshelves.backend.entities;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 public class Purchase extends LotBase {
 	@NotNull
-	@RelatedTo(type = "OF_TYPE")
+	@ManyToOne
 	Type type;
 
 	Double singlePrice;
@@ -25,14 +27,11 @@ public class Purchase extends LotBase {
 	Boolean vatIncluded;
 
 	@NotNull
-	@RelatedTo(type = "IN_TRANSACTION")
+	@ManyToOne
 	Transaction transaction;
 
-	@RelatedTo(type = "DELIVERED_AS")
-	Set<Lot> next;
-
-	@Query("START p=node({self}) MATCH (p) -[:DELIVERED_AS]-> (:Lot) <-[:TAKEN_FROM*0..]- (l:Lot) WHERE NOT (l) <-[:TAKEN_FROM]- (:Lot) RETURN l")
-	Iterable<Lot> lots;
+    @OneToMany(mappedBy = "purchase")
+	Iterable<Lot> rawLots;
 
 	@PartOfUpdate
 	public Double getSinglePrice() {
@@ -90,5 +89,33 @@ public class Purchase extends LotBase {
         }
 
         return count;
+    }
+
+    /**
+     * Return all lots that are currently at the end of the dependency tree
+     * - the actual lots that are available for manipulation
+     */
+    public Iterable<Lot> getLots() {
+        return FluentIterable.from(getRawLots())
+                .filter(new Predicate<Lot>() {
+                    @Override
+                    public boolean apply(Lot lot) {
+                        return !lot.getNext().iterator().hasNext();
+                    }
+                });
+    }
+
+    /**
+     * Return all lots that are roots of the lot dependency tree - the actual
+     * lots that were originally assigned to the Purchase.
+     */
+    public Iterable<Lot> getNext() {
+        return FluentIterable.from(getRawLots())
+                .filter(new Predicate<Lot>() {
+                    @Override
+                    public boolean apply(Lot lot) {
+                        return lot.getPrevious() == null;
+                    }
+                });
     }
 }

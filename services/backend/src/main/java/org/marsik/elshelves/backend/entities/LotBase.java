@@ -3,8 +3,8 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 public abstract class LotBase extends OwnedEntity {
 	@NotNull
 	Date created;

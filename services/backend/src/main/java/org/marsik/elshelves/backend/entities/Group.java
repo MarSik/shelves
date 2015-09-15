@@ -5,28 +5,29 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
-	@RelatedTo(type = "PARENT_OF", direction = Direction.INCOMING)
+	@ManyToOne
 	Group parent;
 
-	@RelatedTo(type = "PARENT_OF")
+	@OneToMany(mappedBy = "parent")
 	Set<Group> groups;
 
-	@RelatedTo(type = "CONTAINS")
+	@ManyToMany(mappedBy = "groups")
 	Set<Type> types;
 
-    @RelatedTo(type = "SHOW_PROPERTY")
+    @OneToMany
     Set<NumericProperty> showProperties;
 
 	@PartOfUpdate

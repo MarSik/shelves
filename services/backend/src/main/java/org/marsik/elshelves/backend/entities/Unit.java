@@ -6,16 +6,15 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.UnitApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(UnitApiModel.class)
 public class Unit extends NamedEntity {
 
@@ -25,7 +24,7 @@ public class Unit extends NamedEntity {
     @NotNull
 	SiPrefix[] prefixes;
 
-    @RelatedTo(type = "OF_UNIT", direction = Direction.INCOMING)
+    @OneToMany(mappedBy = "unit")
     Iterable<NumericProperty> unitUses;
 
     @PartOfUpdate

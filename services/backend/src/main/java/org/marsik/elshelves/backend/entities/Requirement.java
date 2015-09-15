@@ -4,10 +4,11 @@ import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -15,17 +16,17 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 public class Requirement extends OwnedEntity {
 	@NotNull
-	@RelatedTo(type = "REQUIRES", direction = Direction.INCOMING)
+	@ManyToOne
 	Project project;
 
 	@NotNull
-	@RelatedTo(type = "REQUIRED_TYPE")
+	@ManyToMany(mappedBy = "usedIn")
 	Set<Type> type;
 
-	@RelatedTo(type = "USES")
+	@OneToMany(mappedBy = "uses")
 	Set<Lot> rawLots;
 
     String name;

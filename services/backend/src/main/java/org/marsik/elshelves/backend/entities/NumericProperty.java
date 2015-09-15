@@ -6,22 +6,21 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
-import org.springframework.data.neo4j.annotation.RelatedToVia;
 
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
-@NodeEntity
+@Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
-    @RelatedTo(type = "OF_UNIT")
+    @ManyToOne
     @NotNull
     Unit unit;
 
@@ -33,7 +32,6 @@ public class NumericProperty extends NamedEntity {
 
     String symbol;
 
-    @RelatedToVia(type = "HAS_PROPERTY", direction = Direction.INCOMING)
     @OneToMany(mappedBy = "property")
     Iterable<NumericPropertyValue> propertyUses;
 
