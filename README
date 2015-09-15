@@ -4,6 +4,12 @@ Part and project tracking REST-ful web application.
 
 Distributed under the terms of Affero GPLv3 or later license.
 
+=== version ===
+
+Version should be changed using the following maven command:
+
+mvn versions:set -DnewVersion=<new version>
+
 === building ===
 
 Requirements:
