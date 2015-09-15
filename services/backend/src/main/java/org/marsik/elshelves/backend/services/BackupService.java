@@ -47,8 +47,11 @@ import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.backend.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaContext;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -58,7 +61,7 @@ import java.util.UUID;
 @Service
 public class BackupService {
 	@Autowired
-	Neo4jTemplate neo4jTemplate;
+    JpaContext jpaContext;
 
 	@Autowired
 	RelinkService relinkService;
@@ -196,7 +199,7 @@ public class BackupService {
 			F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
 			relinkService.relink(i, currentUser, relinkCache, false);
 			i.setOwner(currentUser);
-			neo4jTemplate.save(i);
+			jpaContext.getEntityManagerByManagedType(i.getClass()).persist(i);
 		}
 	}
 
@@ -221,7 +224,7 @@ public class BackupService {
 		return true;
 	}
 
-    protected <T extends OwnedEntity, E extends AbstractEntityApiModel, R extends GraphRepository<T>> Set<E> backup(Iterable<T> items,
+    protected <T extends OwnedEntity, E extends AbstractEntityApiModel, R extends JpaRepository<T, UUID>> Set<E> backup(Iterable<T> items,
                                                                                                                     CachingConverter<T, E, UUID> convertor,
                                                                                                                     Map<UUID, Object> cache) {
         Set<E> dtos = new THashSet<>();

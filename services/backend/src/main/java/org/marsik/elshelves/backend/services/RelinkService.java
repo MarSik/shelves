@@ -4,7 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
 import java.beans.IntrospectionException;
@@ -19,17 +19,17 @@ import java.util.UUID;
 
 @Service
 public class RelinkService {
-	@Autowired
-	Neo4jTemplate neo4jTemplate;
-
     @Autowired
     UuidGenerator uuidGenerator;
+
+    @Autowired
+    JpaContext jpaContext;
 
 	protected <E extends OwnedEntity> E getRelinked(E value, Map<UUID, Object> cache)  {
 		if (cache.containsKey(value.getUuid())) {
 			return (E)cache.get(value.getUuid());
 		}
-		E entity = (E)neo4jTemplate.findByIndexedValue(value.getClass(), "uuid", value.getUuid().toString()).singleOrNull();
+		E entity = jpaContext.getEntityManagerByManagedType(value.getClass()).find((Class<E>)value.getClass(), value.getUuid());
 		return entity;
 	}
 
@@ -88,7 +88,7 @@ public class RelinkService {
 
                     if (value != null && setter != null) {
                         // Potentially existing UUID but unconnected entity
-                        if (value.getUuid() != null && value.getNodeId() == null) {
+                        if (value.getUuid() != null && value.getUuid() == null) {
                             OwnedEntity v = getRelinked(value, known);
                             // Entity does exist in DB, replace the reference with
                             // the connected entity
@@ -125,7 +125,7 @@ public class RelinkService {
                                 item.setUuid(uuidGenerator.generate());
                                 relink(item, user, known, false);
                                 // Connected existing entity
-                            } else if (item.getNodeId() != null) {
+                            } else if (item.getUuid() != null) {
                                 newItems.add(item);
                                 // Disconnected potentially existing entity
                             } else {

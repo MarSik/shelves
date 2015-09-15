@@ -11,8 +11,7 @@ import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.repository.GraphRepository;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -25,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends GraphRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
+public abstract class AbstractRestService<R extends JpaRepository<T, UUID>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
     final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;
@@ -33,9 +32,6 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 
 	@Autowired
 	RelinkService relinkService;
-
-	@Autowired
-	Neo4jTemplate neo4jTemplate;
 
     public AbstractRestService(R repository,
                                CachingConverter<T, E, UUID> dbToRest,
@@ -66,7 +62,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 	protected abstract Iterable<T> getAllEntities(User currentUser);
 
     protected T getSingleEntity(UUID uuid) {
-        return repository.findBySchemaPropertyValue("uuid", uuid.toString());
+        return repository.findOne(uuid);
     }
 
 	protected int conversionDepth() {
@@ -240,7 +236,7 @@ public abstract class AbstractRestService<R extends GraphRepository<T>, T extend
 
             // Introspection based updater breaks the aspected behaviour
             // so it is necessary to resave the updated object here
-            neo4jTemplate.save(one);
+            repository.save(one);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }

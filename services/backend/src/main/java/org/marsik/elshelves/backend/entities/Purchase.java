@@ -31,7 +31,7 @@ public class Purchase extends LotBase {
 	Transaction transaction;
 
     @OneToMany(mappedBy = "purchase")
-	Iterable<Lot> rawLots;
+	Set<Lot> rawLots;
 
 	@PartOfUpdate
 	public Double getSinglePrice() {

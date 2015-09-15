@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.set.hash.THashSet;
+import org.apache.commons.lang3.text.StrTokenizer;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.SearchResult;
 import org.marsik.elshelves.backend.entities.NamedEntity;
@@ -9,10 +10,7 @@ import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang.text.StrTokenizer;
 
 @Service
 public class SearchService {
@@ -32,7 +30,9 @@ public class SearchService {
             for (String partialQuery: new StrTokenizer(q, ' ', '"').getTokenArray()) {
                 Set<NamedEntity> partialResult = new THashSet<>();
 
-                for (NamedEntity e : entityRepository.queryByUser(currentUser, "(?i).*" + partialQuery + ".*")) {
+                for (NamedEntity e : entityRepository.findDistinctByOwnerAndNameLikeAllIgnoreCase(
+                        currentUser,
+                        "(?i).*" + partialQuery + ".*")) {
                     partialResult.add(e);
                 }
 

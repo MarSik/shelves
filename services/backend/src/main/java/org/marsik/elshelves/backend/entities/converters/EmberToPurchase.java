@@ -53,9 +53,9 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 		model.setType(emberToType.convert(object.getType(), nested, cache));
 
 		if (object.getNext() != null) {
-			model.setNext(new THashSet<Lot>());
+			model.setRawLots(new THashSet<Lot>());
 			for (LotApiModel l: object.getNext()) {
-				model.getNext().add(emberToLot.convert(l, nested, cache));
+				model.getRawLots().add(emberToLot.convert(l, nested, cache));
 			}
 		}
 

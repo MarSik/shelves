@@ -41,7 +41,6 @@ import java.util.Locale;
 @ComponentScan("org.marsik.elshelves.backend")
 @EnableWebMvc
 @Configuration
-@EnableJpaRepositories
 public class BackendApplication extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {

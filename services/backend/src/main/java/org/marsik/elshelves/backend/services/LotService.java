@@ -96,7 +96,7 @@ public class LotService {
 		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser);
 		lotRepository.save(lot);
 
-		purchase.getNext().add(lot);
+		purchase.getRawLots().add(lot);
 
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}

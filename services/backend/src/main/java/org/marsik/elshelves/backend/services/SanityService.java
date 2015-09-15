@@ -8,7 +8,6 @@ import org.marsik.elshelves.backend.repositories.SanityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +22,6 @@ public class SanityService {
 
     @Autowired
     SanityRepository sanityRepository;
-
-    @Autowired
-    Neo4jTemplate neo4jTemplate;
 
     @Autowired
     UuidGenerator uuidGenerator;
@@ -56,7 +52,7 @@ public class SanityService {
             Group g = orphanGroups.get(u);
             logger.info("Adding type {} to orphan group {} for user {}", t, g, u);
             t.getGroups().add(g);
-            neo4jTemplate.save(t);
+            //neo4jTemplate.save(t);
         }
     }
 }

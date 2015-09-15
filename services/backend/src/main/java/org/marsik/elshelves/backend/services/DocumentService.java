@@ -18,7 +18,6 @@ import org.marsik.elshelves.backend.repositories.DocumentRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.kicad.SchemaComponents;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
