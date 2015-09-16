@@ -9,12 +9,12 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.FileAnalysisDoneHandler;
 import org.marsik.elshelves.backend.services.StorageManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +41,9 @@ public class UploadController {
 	@Autowired
 	FileAnalysisDoneHandler documentAnalysisDoneService;
 
+	@Autowired
+	NamedEntityRepository namedEntityRepository;
+
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -49,10 +52,10 @@ public class UploadController {
                        @RequestParam(value = "webcam", required = false) MultipartFile webcam,
 					   @RequestParam("entity") UUID entity,
                        HttpServletRequest request) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
-		NamedEntity e = null;
+		NamedEntity e;
 
 		if (entity != null) {
-			e = neo4jTemplate.findByIndexedValue(NamedEntity.class, "uuid", entity.toString()).singleOrNull();
+			e = namedEntityRepository.findOne(entity);
 			if (e == null) {
 				throw new EntityNotFound();
 			}

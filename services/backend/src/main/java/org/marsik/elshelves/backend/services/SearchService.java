@@ -30,9 +30,9 @@ public class SearchService {
             for (String partialQuery: new StrTokenizer(q, ' ', '"').getTokenArray()) {
                 Set<NamedEntity> partialResult = new THashSet<>();
 
-                for (NamedEntity e : entityRepository.findDistinctByOwnerAndNameLikeAllIgnoreCase(
+                for (NamedEntity e : entityRepository.queryByOwnerAndText(
                         currentUser,
-                        "(?i).*" + partialQuery + ".*")) {
+                        "%" + partialQuery.toLowerCase() + "%")) {
                     partialResult.add(e);
                 }
 
