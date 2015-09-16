@@ -3,13 +3,16 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.UnitApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +25,8 @@ public class Unit extends NamedEntity {
 	String symbol;
 
     @NotNull
-	SiPrefix[] prefixes;
+    @ElementCollection(targetClass = SiPrefix.class)
+    Set<SiPrefix> prefixes;
 
     @OneToMany(mappedBy = "unit")
     Iterable<NumericProperty> unitUses;
@@ -33,7 +37,7 @@ public class Unit extends NamedEntity {
 	}
 
     @PartOfUpdate
-	public SiPrefix[] getPrefixes() {
+	public Set<SiPrefix> getPrefixes() {
 		return prefixes;
 	}
 

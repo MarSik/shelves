@@ -12,6 +12,7 @@ import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.api.entities.idresolvers.UnitIdResolver;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -27,10 +28,10 @@ public class UnitApiModel extends AbstractNamedEntityApiModel {
     }
 
     String symbol;
-	List<SiPrefix> prefixes;
+	Set<SiPrefix> prefixes;
 
     @JsonSerialize(contentUsing = ToStringSerializer.class)
-	public List<SiPrefix> getPrefixes() {
+	public Set<SiPrefix> getPrefixes() {
 		return prefixes;
 	}
 }

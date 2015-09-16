@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -55,10 +56,15 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
     }
 
     @Override
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     public OutputStream store(UUID uuid) throws IOException {
         File f = new File(getPath(uuid));
+
 		f.getParentFile().mkdirs();
-        f.createNewFile();
+
+        if (!f.createNewFile()) {
+            return null;
+        }
         return new FileOutputStream(f);
     }
 
@@ -87,6 +93,7 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
     }
 
 	@Override
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
 	public void download(UUID uuid, URL url, FileAnalysisDoneHandler finishedHandler) throws IOException {
         File downloadTarget = new File(getPath(uuid) + ".download");
 
@@ -102,6 +109,7 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
 	}
 
     @Override
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     public void upload(UUID uuid, MultipartFile file, FileAnalysisDoneHandler finishedHandler) throws IOException {
         File destination = get(uuid);
         destination.getParentFile().mkdirs();
@@ -151,6 +159,7 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
         // Traverse files and delete stale (more than a day old) downloads
     }
 
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private void performHardlinking(UUID uuid) {
         // Compute file checksum
         String hash;

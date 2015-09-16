@@ -41,7 +41,7 @@ public class UnitToEmber implements CachingConverter<Unit, UnitApiModel, UUID> {
 		}
 
 		model.setSymbol(object.getSymbol());
-		model.setPrefixes(Arrays.asList(object.getPrefixes()));
+		model.setPrefixes(object.getPrefixes());
 		return model;
 	}
 }

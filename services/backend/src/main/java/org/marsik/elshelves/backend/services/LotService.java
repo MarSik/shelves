@@ -35,17 +35,19 @@ public class LotService {
 	PurchaseRepository purchaseRepository;
 	BoxRepository boxRepository;
 	LotToEmber lotToEmber;
-	EmberToLot emberToLot;
+	//EmberToLot emberToLot;
 	UuidGenerator uuidGenerator;
     RequirementRepository requirementRepository;
 
     @Autowired
-    public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository, LotToEmber lotToEmber, EmberToLot emberToLot, UuidGenerator uuidGenerator, RequirementRepository requirementRepository) {
+    public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository,
+                      LotToEmber lotToEmber, /*EmberToLot emberToLot,*/ UuidGenerator uuidGenerator,
+                      RequirementRepository requirementRepository) {
         this.lotRepository = lotRepository;
         this.purchaseRepository = purchaseRepository;
         this.boxRepository = boxRepository;
         this.lotToEmber = lotToEmber;
-        this.emberToLot = emberToLot;
+        //this.emberToLot = emberToLot;
         this.uuidGenerator = uuidGenerator;
         this.requirementRepository = requirementRepository;
     }

@@ -62,7 +62,9 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
         boolean res = super.delete(uuid, currentUser);
         if (res) {
             try {
-                storageManager.delete(uuid);
+                if (!storageManager.delete(uuid)) {
+                    return false;
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

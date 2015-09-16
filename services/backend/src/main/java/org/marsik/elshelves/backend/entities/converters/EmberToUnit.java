@@ -39,9 +39,7 @@ public class EmberToUnit implements CachingConverter<UnitApiModel, Unit, UUID> {
 		model.setSymbol(object.getSymbol());
 
 		if (object.getPrefixes() != null) {
-			SiPrefix[] prefixArray = new SiPrefix[object.getPrefixes().size()];
-			object.getPrefixes().toArray(prefixArray);
-			model.setPrefixes(prefixArray);
+			model.setPrefixes(object.getPrefixes());
 		}
 
 		return model;
