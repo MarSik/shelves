@@ -47,6 +47,7 @@
         <tika.version>1.7</tika.version>
         <lombok.version>1.16.6</lombok.version>
         <modelmapper.version>0.7.5</modelmapper.version>
+        <flyway.version>3.2.1</flyway.version>
 
         <!-- computer vision libs //-->
 
