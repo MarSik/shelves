@@ -51,7 +51,7 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
-		model.setCreated(new DateTime(object.getCreated()));
+		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
         model.setUrl(object.getUrl());
 

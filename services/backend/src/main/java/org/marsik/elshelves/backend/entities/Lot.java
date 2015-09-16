@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
@@ -22,7 +23,7 @@ public class Lot extends LotBase implements StickerCapable {
 	public Lot() {
 	}
 
-	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, Date expiration, User performedBy) {
+	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, DateTime expiration, User performedBy) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
 		l.setAction(LotAction.DELIVERY);
@@ -30,7 +31,7 @@ public class Lot extends LotBase implements StickerCapable {
 		l.setLocation(location);
 		l.setCount(count);
 		l.setPurchase(purchase);
-		l.setCreated(new Date());
+		l.setCreated(new DateTime());
 		l.setPerformedBy(performedBy);
         l.setExpiration(expiration);
 		return l;
@@ -40,7 +41,7 @@ public class Lot extends LotBase implements StickerCapable {
         setUuid(uuid);
         setPerformedBy(performedBy);
         setPrevious(previous);
-        setCreated(new Date());
+        setCreated(new DateTime());
         setNext(new ArrayList<Lot>());
         setAction(LotAction.EVENT);
 
@@ -126,7 +127,7 @@ public class Lot extends LotBase implements StickerCapable {
 	@ManyToOne
 	Requirement usedBy;
 
-    Date expiration;
+    DateTime expiration;
 
     public Long usedCount() {
         long count = 0;
@@ -140,7 +141,7 @@ public class Lot extends LotBase implements StickerCapable {
         return getCount() - usedCount();
     }
 
-	public class SplitResult {
+	public static class SplitResult {
 		final Lot requested;
 		final Lot remainder;
 

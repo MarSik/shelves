@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
@@ -32,8 +34,9 @@ public class Authorization extends OwnedEntity {
     @NotEmpty
     String secret;
 
-    Date created;
-    Date lastUsed;
+    @CreatedDate
+    DateTime created;
+    DateTime lastUsed;
 
     @Override
     public boolean canBeDeleted() {

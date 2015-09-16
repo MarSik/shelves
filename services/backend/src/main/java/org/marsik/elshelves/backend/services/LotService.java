@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
@@ -77,7 +78,7 @@ public class LotService {
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
 
-	public LotApiModel delivery(LotApiModel newLot0, Date expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+	public LotApiModel delivery(LotApiModel newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.findByUuid(newLot0.getPurchase().getId());
 		Box location = boxRepository.findByUuid(newLot0.getLocation().getId());
 

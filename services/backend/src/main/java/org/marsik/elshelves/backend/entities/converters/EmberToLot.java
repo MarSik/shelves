@@ -46,7 +46,7 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
 		emberToLotBase.convert(object, model, nested, cache);
 
-        model.setExpiration(object.getExpiration().toDate());
+        model.setExpiration(object.getExpiration());
 		model.setAction(object.getAction());
 		model.setLocation(emberToBox.convert(object.getLocation(), nested, cache));
 		model.setPurchase(emberToPurchase.convert(object.getPurchase(), nested, cache));

@@ -20,7 +20,7 @@ public class EmberToLotBase  {
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
 		model.setUuid(object.getId());
 		model.setCount(object.getCount());
-		model.setCreated(object.getCreated().toDate());
+		model.setCreated(object.getCreated());
 
 		return model;
 	}

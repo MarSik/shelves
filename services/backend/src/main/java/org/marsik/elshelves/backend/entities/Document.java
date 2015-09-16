@@ -4,9 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -27,7 +29,8 @@ public class Document extends NamedEntity implements StickerCapable {
 	Long size;
 
 	@NotNull
-	Date created;
+	@CreatedDate
+	DateTime created;
 
     URL url;
 
@@ -45,7 +48,7 @@ public class Document extends NamedEntity implements StickerCapable {
 	}
 
 	@PartOfUpdate
-	public Date getCreated() {
+	public DateTime getCreated() {
 		return created;
 	}
 

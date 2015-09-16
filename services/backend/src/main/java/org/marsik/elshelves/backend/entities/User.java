@@ -5,7 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.services.StickerCapable;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -28,8 +30,10 @@ public class User extends OwnedEntity implements StickerCapable {
     String password;
 
     String verificationCode;
-	Date verificationStartTime;
-    Date registrationDate;
+	DateTime verificationStartTime;
+
+    @CreatedDate
+    DateTime registrationDate;
 
     @OneToMany(mappedBy = "owner")
     Set<Authorization> authorizations;

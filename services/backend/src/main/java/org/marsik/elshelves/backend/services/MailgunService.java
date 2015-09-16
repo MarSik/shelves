@@ -46,9 +46,19 @@ public class MailgunService {
 
 	private HttpHeaders prepareAuthHeaders() {
 		String plainCreds = "api:" + configuration.getKey();
-		byte[] plainCredsBytes = plainCreds.getBytes();
+		byte[] plainCredsBytes = new byte[0];
+		try {
+			plainCredsBytes = plainCreds.getBytes("ASCII");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-		String base64Creds = new String(base64CredsBytes);
+		String base64Creds = "";
+		try {
+			base64Creds = new String(base64CredsBytes, "ASCII");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Basic " + base64Creds);

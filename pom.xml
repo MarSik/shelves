@@ -16,24 +16,25 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <version>1.2.5.RELEASE</version>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.android.target>1.7</maven.android.target>
 
         <version.findbugs>3.0.1</version.findbugs>
         <version.findbugs.annotations>3.0.0</version.findbugs.annotations>
 
-        <maven.android.target>1.7</maven.android.target>
         <spring.version>4.2.1.RELEASE</spring.version>
-        <spring.security.version>3.2.5.RELEASE</spring.security.version>
-        <spring.security.oauth.version>2.0.5.RELEASE</spring.security.oauth.version>
+        <spring.security.version>3.2.8.RELEASE</spring.security.version>
+        <spring.security.oauth.version>2.0.7.RELEASE</spring.security.oauth.version>
         <spring.data.jpa.version>1.9.0.RELEASE</spring.data.jpa.version>
+
         <freemarker.version>2.3.21</freemarker.version>
-        <hibernate.version>5.1.3.Final</hibernate.version>
+        <hibernate.version>5.0.1.Final</hibernate.version>
         <hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
         <neo4j.version>2.1.6</neo4j.version>

@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Entity
 public abstract class LotBase extends OwnedEntity {
 	@NotNull
-	Date created;
+	DateTime created;
 
 	@NotNull
 	@Min(1)

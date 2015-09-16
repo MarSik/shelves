@@ -3,6 +3,8 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,7 +32,8 @@ public abstract class OwnedEntity {
      * Record the timestamp of last modification so
      * we can tell the client to use cached result
      */
-    Date lastModified;
+	@LastModifiedDate
+    DateTime lastModified;
 
 	// Provided by AspectJ-ized NodeEntity
 	// public abstract Long getNodeId();

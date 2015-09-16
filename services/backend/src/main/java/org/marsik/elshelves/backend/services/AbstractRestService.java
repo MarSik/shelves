@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -74,7 +75,7 @@ public abstract class AbstractRestService<R extends JpaRepository<T, UUID>, T ex
 		created = relinkService.relink(created);
         created.setUuid(uuidGenerator.generate());
         created.setOwner(currentUser);
-        created.setLastModified(new Date());
+        created.setLastModified(new DateTime());
         return created;
     }
 
@@ -157,7 +158,7 @@ public abstract class AbstractRestService<R extends JpaRepository<T, UUID>, T ex
 
 
         // Mark all old and new elements as modified
-        Date modificationDate = new Date();
+        DateTime modificationDate = new DateTime();
         modified.add(entity);
         for (Object m: modified) {
             if (m != null && m instanceof OwnedEntity) {

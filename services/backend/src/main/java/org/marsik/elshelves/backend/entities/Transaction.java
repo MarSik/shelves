@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Entity
 @DefaultEmberModel(TransactionApiModel.class)
 public class Transaction extends NamedEntity implements StickerCapable {
-	Date date;
+	DateTime date;
 
 	@OneToMany(mappedBy = "transaction")
 	Set<Purchase> items;

@@ -13,9 +13,8 @@ public class MailgunConfiguration extends AbstractConfiguration {
 	final Properties properties = new Properties();
 
 	public void load() {
-		try {
-			String path = getBasePath() + "/mailgun.properties";
-			FileInputStream f = new FileInputStream(path);
+		String path = getBasePath() + "/mailgun.properties";
+		try (FileInputStream f = new FileInputStream(path)) {
 			properties.load(f);
 		} catch (IOException ex) {
 			logger.error("Failed to get Mailgun configuration", ex);

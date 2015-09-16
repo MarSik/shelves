@@ -2,6 +2,8 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jadira.usertype.dateandtime.legacyjdk.columnmapper.TimestampColumnDateMapper;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -121,8 +123,8 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
         user.setUuid(uuidGenerator.generate());
 		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
-		user.setVerificationStartTime(new Date());
-		user.setRegistrationDate(new Date());
+		user.setVerificationStartTime(new DateTime());
+		user.setRegistrationDate(new DateTime());
 
         userRepository.save(user);
 
@@ -136,17 +138,17 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 			return null;
 		}
 
-		Calendar timeLimit = new GregorianCalendar();
-		timeLimit.add(Calendar.MINUTE, -15);
+		DateTime timeLimit = new DateTime();
+		timeLimit.minusMinutes(15);
 
 		/* One verification per 15 minutes */
 		if (u.getVerificationStartTime() != null
-				&& u.getVerificationStartTime().after(timeLimit.getTime())) {
+				&& u.getVerificationStartTime().isAfter(timeLimit)) {
 			return null;
 		}
 
 		u.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
-		u.setVerificationStartTime(new Date());
+		u.setVerificationStartTime(new DateTime());
 		return u.getVerificationCode();
 	}
 
