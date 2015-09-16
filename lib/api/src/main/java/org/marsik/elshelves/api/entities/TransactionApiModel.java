@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.TransactionIdResolver;
 
@@ -25,7 +26,7 @@ public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	public TransactionApiModel() {
 	}
 
-	Date date;
+	DateTime date;
 
 	Set<PurchaseApiModel> items;
 	SourceApiModel source;

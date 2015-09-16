@@ -22,10 +22,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 public class ApplicationData {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationData.class);
 
-    /*public ApplicationData() {
-        setBasePackage("org.marsik.elshelves.backend.entities");
-    }*/
-
     @Bean
     DatabaseConfiguration getDbConfiguration() {
         return new DatabaseConfiguration();

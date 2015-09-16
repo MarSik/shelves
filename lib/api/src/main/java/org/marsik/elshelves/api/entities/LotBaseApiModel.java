@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.joda.time.DateTime;
 
 import javax.validation.constraints.Min;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 	public LotBaseApiModel() {
 	}
 
-	Date created;
+	DateTime created;
 	@Min(1)
 	Long count;
 

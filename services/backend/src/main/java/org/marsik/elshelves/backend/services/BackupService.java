@@ -49,8 +49,6 @@ import org.marsik.elshelves.backend.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.neo4j.repository.GraphRepository;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 

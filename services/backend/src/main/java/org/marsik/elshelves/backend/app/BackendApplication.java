@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.app;
 
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
@@ -74,6 +75,7 @@ public class BackendApplication extends WebMvcConfigurerAdapter {
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
 		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
+        builder.modulesToInstall(new JodaModule());
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         return converter;
     }

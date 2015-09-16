@@ -121,7 +121,7 @@ public class LotController {
 				&& lot.getLocation() != null
                 && lot.getCount() != null
 				&& lot.getCount() > 0) {
-            LotApiModel result = lotService.delivery(lot, lot.getExpiration(), currentUser);
+            LotApiModel result = lotService.delivery(lot, lot.getExpiration().toDate(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(result);
             prepareSideloadedUpdates(result, currentUser, modelBuilder);
 

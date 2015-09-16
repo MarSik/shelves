@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Purchase;
@@ -45,7 +46,7 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 	@Override
 	protected Transaction createEntity(TransactionApiModel dto, User currentUser) {
 		if (dto.getDate() == null) {
-			dto.setDate(new Date());
+			dto.setDate(new DateTime());
 		}
 
 		Transaction t = super.createEntity(dto, currentUser);

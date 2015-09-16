@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.Purchase;
@@ -52,7 +53,7 @@ public class TransactionToEmber implements CachingConverter<Transaction, Transac
 			return model;
 		}
 
-		model.setDate(object.getDate());
+		model.setDate(new DateTime(object.getDate()));
 		model.setSource(sourceToEmber.convert(object.getSource(), nested - 1, cache));
 
 		if (object.getItems() != null) {

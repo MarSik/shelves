@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
@@ -50,7 +51,7 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
-		model.setCreated(object.getCreated());
+		model.setCreated(new DateTime(object.getCreated()));
 		model.setSize(object.getSize());
         model.setUrl(object.getUrl());
 

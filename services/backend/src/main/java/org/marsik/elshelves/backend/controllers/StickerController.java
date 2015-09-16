@@ -6,11 +6,11 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.api.StickerSettings;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.StickerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,9 @@ public class StickerController {
 	@Autowired
 	StickerService stickerService;
 
+	@Autowired
+	OwnedEntityRepository ownedEntityRepository;
+
 	@Transactional(readOnly = true)
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(produces = "application/pdf")
@@ -49,7 +52,7 @@ public class StickerController {
 
 		List<StickerCapable> objects = new ArrayList<>();
 		for (UUID uuid: uuids) {
-			OwnedEntity e = neo4jTemplate.findByIndexedValue(OwnedEntity.class, "uuid", uuid).singleOrNull();
+			OwnedEntity e = ownedEntityRepository.findByUuid(uuid);
 			if (e == null) {
 				throw new EntityNotFound();
 			}

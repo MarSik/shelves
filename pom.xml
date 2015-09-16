@@ -42,6 +42,7 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
         <jackson.version>2.6.1</jackson.version>
+        <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
         <tika.version>1.7</tika.version>
         <lombok.version>1.16.6</lombok.version>
         <modelmapper.version>0.7.5</modelmapper.version>

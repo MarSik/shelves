@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 			return entity;
 		}
 
-        entity.setExpiration(object.getExpiration());
+        entity.setExpiration(new DateTime(object.getExpiration()));
 		entity.setAction(object.getAction());
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
 		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));

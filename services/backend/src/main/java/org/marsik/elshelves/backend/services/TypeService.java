@@ -39,7 +39,7 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 
     public PartTypeApiModel getUniqueTypeByNameAndFootprint(String name, String footprint, User currentUser) throws PermissionDenied {
         /* If there is only one type matching the description, save a reference to it */
-        Result<Type> res = getRepository().findByNameAndFootprintName(name, footprint, currentUser);
+        Iterable<Type> res = getRepository().findByNameAndFootprintName(name, footprint, currentUser);
         PartTypeApiModel ret = null;
 
         Iterator<Type> iterator = res.iterator();
@@ -50,7 +50,6 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
                 ret = dbToRest.convert(t, 1, new THashMap<UUID, Object>());
             }
         }
-        res.finish();
 
         return ret;
     }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
@@ -44,7 +45,7 @@ public class LotApiModel extends LotBaseApiModel {
 
 	RequirementApiModel usedBy;
 
-    Date expiration;
+    DateTime expiration;
 
 	boolean canBeSoldered;
 	boolean canBeUnsoldered;

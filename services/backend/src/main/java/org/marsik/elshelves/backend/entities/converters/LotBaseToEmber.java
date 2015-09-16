@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.LotBaseApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
@@ -27,7 +28,7 @@ public class LotBaseToEmber  {
 		}
 
 		model.setCount(object.getCount());
-		model.setCreated(object.getCreated());
+		model.setCreated(new DateTime(object.getCreated()));
 
 		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
 
