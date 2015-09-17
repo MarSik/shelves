@@ -21,7 +21,7 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class OwnedEntity {
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@NotNull
 	User owner;
 

@@ -21,10 +21,10 @@ public class Requirement extends OwnedEntity {
 	@ManyToOne
 	Project project;
 
-	@ManyToMany(mappedBy = "usedIn")
+	@ManyToMany
 	Set<Type> type;
 
-	@OneToMany(mappedBy = "uses")
+	@OneToMany(mappedBy = "usedBy")
 	Set<Lot> rawLots;
 
     String name;

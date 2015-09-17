@@ -35,7 +35,7 @@ public class User extends OwnedEntity implements StickerCapable {
     @CreatedDate
     DateTime registrationDate;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany
     Set<Authorization> authorizations;
 
     public UUID getUuid() {

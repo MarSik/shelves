@@ -9,6 +9,8 @@ import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -32,7 +34,7 @@ public class Type extends NamedEntity implements StickerCapable {
     // Should serial numbers be tracked?
     Boolean serials;
 
-	@ManyToMany(mappedBy = "types")
+	@ManyToMany
 	Set<Footprint> footprints;
 
 	@ManyToMany(mappedBy = "types")
@@ -44,7 +46,12 @@ public class Type extends NamedEntity implements StickerCapable {
 	@ManyToMany(mappedBy = "type")
 	Collection<Requirement> usedIn;
 
-	@ManyToMany(mappedBy = "seeAlso")
+	@JoinTable(name = "type_type_see_also",
+			joinColumns = {
+					@JoinColumn(name = "type1", referencedColumnName = "id", nullable = false)},
+			inverseJoinColumns = {
+					@JoinColumn(name = "type2", referencedColumnName = "id", nullable = false)})
+	@ManyToMany
     Set<Type> seeAlso;
 
 	@PartOfUpdate

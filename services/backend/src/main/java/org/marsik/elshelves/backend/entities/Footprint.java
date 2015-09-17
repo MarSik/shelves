@@ -8,6 +8,8 @@ import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.Collection;
 import java.util.Set;
@@ -38,7 +40,12 @@ public class Footprint extends NamedEntity {
 	@ManyToMany(mappedBy = "footprints")
 	Collection<Type> types;
 
-	@ManyToMany(mappedBy = "seeAlso")
+	@JoinTable(name = "fp_fp_see_also",
+			joinColumns = {
+					@JoinColumn(name = "fp1", referencedColumnName = "id", nullable = false)},
+			inverseJoinColumns = {
+					@JoinColumn(name = "fp2", referencedColumnName = "id", nullable = false)})
+	@ManyToMany
     Set<Footprint> seeAlso;
 
     FootprintType type;

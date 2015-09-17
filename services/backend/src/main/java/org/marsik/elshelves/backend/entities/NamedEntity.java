@@ -38,7 +38,7 @@ public class NamedEntity extends OwnedEntity {
     /**
      * Barcode associated with this entity
      */
-	@OneToMany(mappedBy = "code.reference")
+	@OneToMany(mappedBy = "reference")
     Set<Code> codes;
 
 	@PartOfUpdate

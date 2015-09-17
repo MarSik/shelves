@@ -24,7 +24,7 @@ public class Group extends NamedEntity {
 	@OneToMany(mappedBy = "parent")
 	Set<Group> groups;
 
-	@ManyToMany(mappedBy = "groups")
+	@ManyToMany
 	Set<Type> types;
 
     @OneToMany
