@@ -3,8 +3,8 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
 import java.beans.IntrospectionException;
@@ -23,13 +23,13 @@ public class RelinkService {
     UuidGenerator uuidGenerator;
 
     @Autowired
-    JpaContext jpaContext;
+    OwnedEntityRepository ownedEntityRepository;
 
 	protected <E extends OwnedEntity> E getRelinked(E value, Map<UUID, Object> cache)  {
 		if (cache.containsKey(value.getUuid())) {
 			return (E)cache.get(value.getUuid());
 		}
-		E entity = jpaContext.getEntityManagerByManagedType(value.getClass()).find((Class<E>)value.getClass(), value.getUuid());
+		E entity = (E)ownedEntityRepository.findByUuid(value.getUuid());
 		return entity;
 	}
 

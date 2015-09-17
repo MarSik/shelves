@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.UUID;
@@ -109,7 +110,7 @@ public class Lot extends LotBase implements StickerCapable {
 	Lot previous;
 
 	@OneToMany(mappedBy = "previous")
-	Iterable<Lot> next;
+	Collection<Lot> next;
 
 	@ManyToOne
 	User performedBy;

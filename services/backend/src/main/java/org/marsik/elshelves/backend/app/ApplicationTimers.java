@@ -1,7 +1,9 @@
 package org.marsik.elshelves.backend.app;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -14,6 +16,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 public class ApplicationTimers implements SchedulingConfigurer
 {
     @Bean
+    @Qualifier(value = "taskExecutor")
+    @Primary
     public ThreadPoolTaskScheduler taskScheduler() {
         return new ThreadPoolTaskScheduler();
     }

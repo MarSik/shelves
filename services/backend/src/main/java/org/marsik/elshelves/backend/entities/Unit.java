@@ -12,6 +12,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -29,7 +30,7 @@ public class Unit extends NamedEntity {
     Set<SiPrefix> prefixes;
 
     @OneToMany(mappedBy = "unit")
-    Iterable<NumericProperty> unitUses;
+    Collection<NumericProperty> unitUses;
 
     @PartOfUpdate
 	public String getSymbol() {

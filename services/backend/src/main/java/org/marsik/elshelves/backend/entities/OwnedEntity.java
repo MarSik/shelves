@@ -26,6 +26,8 @@ public abstract class OwnedEntity {
 	User owner;
 
 	@Id
+    Long id;
+
 	UUID uuid;
 
     /**

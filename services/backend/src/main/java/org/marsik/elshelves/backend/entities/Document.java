@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.net.URL;
-import java.util.Date;
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -34,8 +34,8 @@ public class Document extends NamedEntity implements StickerCapable {
 
     URL url;
 
-	@ManyToOne
-	Set<NamedEntity> describes;
+	@ManyToOne(targetEntity = NamedEntity.class)
+	Collection<NamedEntity> describes;
 
 	@PartOfUpdate
 	public String getContentType() {

@@ -39,6 +39,7 @@ import org.marsik.elshelves.backend.repositories.FootprintRepository;
 import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
+import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.repositories.ProjectRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.RequirementRepository;
@@ -47,7 +48,6 @@ import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.backend.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,7 @@ import java.util.UUID;
 @Service
 public class BackupService {
 	@Autowired
-    JpaContext jpaContext;
+    OwnedEntityRepository ownedEntityRepository;
 
 	@Autowired
 	RelinkService relinkService;
@@ -197,7 +197,7 @@ public class BackupService {
 			F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
 			relinkService.relink(i, currentUser, relinkCache, false);
 			i.setOwner(currentUser);
-			jpaContext.getEntityManagerByManagedType(i.getClass()).persist(i);
+			ownedEntityRepository.save(i);
 		}
 	}
 

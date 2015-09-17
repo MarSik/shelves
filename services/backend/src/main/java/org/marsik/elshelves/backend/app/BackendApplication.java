@@ -44,10 +44,6 @@ import java.util.Locale;
 @Configuration
 public class BackendApplication extends WebMvcConfigurerAdapter {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
-    }
-
     @Bean
     public Filter getPutDeleteEmulator() {
         return new WebFormSupportFilter();

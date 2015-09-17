@@ -18,11 +18,9 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Requirement extends OwnedEntity {
-	@NotNull
 	@ManyToOne
 	Project project;
 
-	@NotNull
 	@ManyToMany(mappedBy = "usedIn")
 	Set<Type> type;
 

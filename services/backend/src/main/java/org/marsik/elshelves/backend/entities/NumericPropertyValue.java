@@ -4,16 +4,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @Entity
 public class NumericPropertyValue {
-    @NotNull
+    @Id
+    Long id;
+
+    @ManyToOne
     NamedEntity entity;
 
-    @NotNull
+    @ManyToOne
     NumericProperty property;
 
     @NotNull

@@ -16,7 +16,7 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@EnableJpaRepositories("org.marsik.elshelves.backend.repositories")
+@EnableJpaRepositories(basePackages = "org.marsik.elshelves.backend.repositories")
 @EntityScan(basePackages = "org.marsik.elshelves.backend.entities")
 @EnableTransactionManagement
 public class ApplicationData {

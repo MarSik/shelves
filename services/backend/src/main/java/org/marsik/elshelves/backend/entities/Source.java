@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.entities.fields.SourceDownloader;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class Source extends NamedEntity {
 	ShippingCalculator shippingCalculator;
 
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
-	Iterable<Transaction> transactions;
+	Collection<Transaction> transactions;
 
 	@PartOfUpdate
 	public String getUrl() {

@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -35,7 +36,7 @@ public class Footprint extends NamedEntity {
 	Integer npth;
 
 	@ManyToMany(mappedBy = "footprints")
-	Iterable<Type> types;
+	Collection<Type> types;
 
 	@ManyToMany(mappedBy = "seeAlso")
     Set<Footprint> seeAlso;

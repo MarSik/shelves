@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,6 @@ public class Type extends NamedEntity implements StickerCapable {
     // Should serial numbers be tracked?
     Boolean serials;
 
-	@NotNull
 	@ManyToMany(mappedBy = "types")
 	Set<Footprint> footprints;
 
@@ -39,10 +39,10 @@ public class Type extends NamedEntity implements StickerCapable {
 	Set<Group> groups;
 
 	@OneToMany(mappedBy = "type")
-	Iterable<Purchase> purchases;
+	Collection<Purchase> purchases;
 
 	@ManyToMany(mappedBy = "type")
-	Iterable<Requirement> usedIn;
+	Collection<Requirement> usedIn;
 
 	@ManyToMany(mappedBy = "seeAlso")
     Set<Type> seeAlso;

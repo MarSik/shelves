@@ -29,7 +29,7 @@ public class NamedEntity extends OwnedEntity {
 
 	String description;
 
-	@OneToMany(mappedBy = "document.describes")
+	@OneToMany(mappedBy = "describes")
 	Set<Document> describedBy;
 
 	@OneToMany(mappedBy = "entity")
