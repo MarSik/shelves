@@ -5,9 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends BaseIdentifiedEntityRepository<User> {
     User getUserByEmail(String email);
     User getUserByVerificationCode(String verificationCode);
-
-    User findByUuid(UUID uuid);
 }

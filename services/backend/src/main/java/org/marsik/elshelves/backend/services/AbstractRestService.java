@@ -11,6 +11,8 @@ import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
+import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
+import org.marsik.elshelves.backend.repositories.BaseOwnedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -25,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends JpaRepository<T, UUID>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
     final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;
@@ -63,7 +65,7 @@ public abstract class AbstractRestService<R extends JpaRepository<T, UUID>, T ex
 	protected abstract Iterable<T> getAllEntities(User currentUser);
 
     protected T getSingleEntity(UUID uuid) {
-        return repository.findOne(uuid);
+        return repository.findByUuid(uuid);
     }
 
 	protected int conversionDepth() {

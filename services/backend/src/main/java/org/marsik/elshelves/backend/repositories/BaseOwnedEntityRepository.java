@@ -7,5 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.UUID;
 
-public interface OwnedEntityRepository extends BaseOwnedEntityRepository<OwnedEntity> {
+@NoRepositoryBean
+public interface BaseOwnedEntityRepository<T extends OwnedEntity> extends BaseIdentifiedEntityRepository<T> {
+    Iterable<T> findByOwner(User owner);
 }

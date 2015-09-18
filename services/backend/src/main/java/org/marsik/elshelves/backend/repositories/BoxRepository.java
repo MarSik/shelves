@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface BoxRepository extends JpaRepository<Box, UUID> {
-    Iterable<Box> findByOwner(User owner);
-    Box findByUuid(UUID uuid);
+public interface BoxRepository extends BaseOwnedEntityRepository<Box> {
 }

@@ -7,10 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.UUID;
 
-public interface TypeRepository extends JpaRepository<Type, UUID> {
-    Iterable<Type> findByOwner(User owner);
-    Type findByUuid(UUID uuid);
-
+public interface TypeRepository extends BaseOwnedEntityRepository<Type> {
     @Query("SELECT t from Type t, Footprint f WHERE t.owner = ?3 AND t.name = ?1 AND f.type = t AND f.name = ?2")
     Iterable<Type> findByNameAndFootprintName(String name, String footprintName, User user);
 }

@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface NumericPropertyRepository extends JpaRepository<NumericProperty, UUID> {
-    Iterable<NumericProperty> findByOwner(User owner);
-    NumericProperty findByUuid(UUID uuid);
+public interface NumericPropertyRepository extends BaseOwnedEntityRepository<NumericProperty> {
 }

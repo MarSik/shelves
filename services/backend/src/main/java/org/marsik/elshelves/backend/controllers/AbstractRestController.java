@@ -10,6 +10,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
+import org.marsik.elshelves.backend.repositories.BaseOwnedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,7 +32,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends JpaRepository<T, UUID>, T, E>> {
+public class AbstractRestController<T extends OwnedEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends BaseIdentifiedEntityRepository<T>, T, E>> {
 
     final Class<E> dtoClazz;
     final S service;

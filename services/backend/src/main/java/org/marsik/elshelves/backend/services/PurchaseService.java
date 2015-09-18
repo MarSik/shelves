@@ -54,6 +54,6 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 
     @Override
     protected Iterable<Purchase> getAllEntities(User currentUser) {
-        return getRepository().findByOwner(currentUser);
+        return getRepository().findByTransactionOwner(currentUser);
     }
 }

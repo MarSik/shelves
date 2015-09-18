@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ProjectRepository extends JpaRepository<Project, UUID> {
-    Iterable<Project> findByOwner(User owner);
-    Project findByUuid(UUID uuid);
+public interface ProjectRepository extends BaseOwnedEntityRepository<Project> {
 }

@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface RequirementRepository extends JpaRepository<Requirement, UUID> {
-	//@Query("START u=node({0}) MATCH u -[:OWNS]-> (p:Project) -- (r:Requirement) RETURN DISTINCT r")
+public interface RequirementRepository extends BaseOwnedEntityRepository<Requirement> {
 	Iterable<Requirement> findByProjectOwner(User owner);
-    Requirement findByUuid(UUID uuid);
 }

@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface AuthorizationRepository extends JpaRepository<Authorization, UUID> {
-    Authorization findByUuid(UUID uuid);
+public interface AuthorizationRepository extends BaseOwnedEntityRepository<Authorization> {
 }

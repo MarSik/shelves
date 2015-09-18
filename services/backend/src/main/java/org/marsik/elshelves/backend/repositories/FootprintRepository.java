@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface FootprintRepository extends JpaRepository<Footprint, UUID> {
-    Iterable<Footprint> findByOwner(User owner);
-    Footprint findByUuid(UUID uuid);
+public interface FootprintRepository extends BaseOwnedEntityRepository<Footprint> {
 }

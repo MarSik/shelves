@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface CodeRepository extends JpaRepository<Code, UUID> {
-    Iterable<Code> findByOwner(User owner);
-    Code findByUuid(UUID uuid);
+public interface CodeRepository extends BaseOwnedEntityRepository<Code> {
     Code findByTypeAndCodeAndOwner(String type, String code, User owner);
 }

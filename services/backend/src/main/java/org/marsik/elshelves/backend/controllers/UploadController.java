@@ -55,7 +55,7 @@ public class UploadController {
 		NamedEntity e;
 
 		if (entity != null) {
-			e = namedEntityRepository.findOne(entity);
+			e = namedEntityRepository.findByUuid(entity);
 			if (e == null) {
 				throw new EntityNotFound();
 			}
