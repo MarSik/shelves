@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,6 +21,7 @@ import java.util.Date;
 @Entity
 public abstract class LotBase extends OwnedEntity {
 	@NotNull
+	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime created;
 
 	@NotNull

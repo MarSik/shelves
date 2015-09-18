@@ -33,7 +33,7 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
                 .inMemory()
                 .withClient("elshelves.js")
                 .authorizedGrantTypes("password", "refresh_token")
-                .authorities("USER")
+                .authorities("ROLE_USER")
                 .scopes("read", "write")
                 .resourceIds("elshelves")
                 .secret("public");

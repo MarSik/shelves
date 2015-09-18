@@ -16,6 +16,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -42,6 +44,7 @@ public abstract class OwnedEntity {
      * we can tell the client to use cached result
      */
 	@LastModifiedDate
+	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime lastModified;
 
 	@PartOfUpdate

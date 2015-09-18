@@ -10,6 +10,8 @@ import org.marsik.elshelves.backend.services.UuidGenerator;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,6 +130,7 @@ public class Lot extends LotBase implements StickerCapable {
 	@ManyToOne
 	Requirement usedBy;
 
+	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime expiration;
 
     public Long usedCount() {

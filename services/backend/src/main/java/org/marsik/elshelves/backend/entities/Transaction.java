@@ -11,6 +11,8 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import java.util.Set;
 @Entity
 @DefaultEmberModel(TransactionApiModel.class)
 public class Transaction extends NamedEntity implements StickerCapable {
+	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime date;
 
 	@OneToMany(mappedBy = "transaction")

@@ -15,6 +15,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
@@ -34,9 +36,12 @@ public class User extends OwnedEntity implements StickerCapable {
     String password;
 
     String verificationCode;
+
+    @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime verificationStartTime;
 
     @CreatedDate
+    @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime registrationDate;
 
     //@OneToMany

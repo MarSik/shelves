@@ -65,13 +65,13 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
                 authorities.add(new GrantedAuthority() {
                     @Override
                     public String getAuthority() {
-                        return "MOBILE";
+                        return "ROLE_MOBILE";
                     }
                 });
                 authorities.add(new GrantedAuthority() {
                     @Override
                     public String getAuthority() {
-                        return "USER";
+                        return "ROLE_USER";
                     }
                 });
 
@@ -98,13 +98,13 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         authorities.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "USER";
+                return "ROLE_USER";
             }
         });
         authorities.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "IDENTITY";
+                return "ROLE_IDENTITY";
             }
         });
 

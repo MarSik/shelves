@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -35,7 +37,10 @@ public class Authorization extends OwnedEntity {
     String secret;
 
     @CreatedDate
+    @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime created;
+
+    @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime lastUsed;
 
     @Override
