@@ -47,11 +47,11 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
 		user.setName(entity.getName());
 
         user.setAuthorizations(new ArrayList<AuthorizationApiModel>());
-        if (entity.getAuthorizations() != null) {
+        /*if (entity.getAuthorizations() != null) {
             for (Authorization auth : entity.getAuthorizations()) {
                 user.getAuthorizations().add(authorizationToEmber.convert(auth, nested - 1, cache));
             }
-        }
+        }*/
 
 		return user;
 	}

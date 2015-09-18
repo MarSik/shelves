@@ -42,9 +42,9 @@ public class Footprint extends NamedEntity {
 
 	@JoinTable(name = "fp_fp_see_also",
 			joinColumns = {
-					@JoinColumn(name = "fp1", referencedColumnName = "uuid", nullable = false)},
+					@JoinColumn(name = "fp1", referencedColumnName = "id", nullable = false)},
 			inverseJoinColumns = {
-					@JoinColumn(name = "fp2", referencedColumnName = "uuid", nullable = false)})
+					@JoinColumn(name = "fp2", referencedColumnName = "id", nullable = false)})
 	@ManyToMany
     Set<Footprint> seeAlso;
 

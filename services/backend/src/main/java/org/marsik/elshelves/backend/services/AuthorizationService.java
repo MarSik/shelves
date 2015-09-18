@@ -33,7 +33,7 @@ public class AuthorizationService extends AbstractRestService<AuthorizationRepos
 
     @Override
     protected Iterable<Authorization> getAllEntities(User currentUser) {
-        return currentUser.getAuthorizations();
+        return getRepository().findByOwner(currentUser);
     }
 
     @Override

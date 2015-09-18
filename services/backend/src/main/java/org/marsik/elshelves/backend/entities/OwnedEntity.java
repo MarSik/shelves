@@ -6,11 +6,17 @@ import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
@@ -20,15 +26,15 @@ import java.util.UUID;
 @EqualsAndHashCode(of = {"uuid"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "uuid"))
 public abstract class OwnedEntity {
 	@ManyToOne
-	@NotNull
 	User owner;
 
+    @Id
+    @GeneratedValue
+    Long id;
 
-    //Long id;
-
-	@Id
 	UUID uuid;
 
     /**
@@ -37,9 +43,6 @@ public abstract class OwnedEntity {
      */
 	@LastModifiedDate
     DateTime lastModified;
-
-	// Provided by AspectJ-ized NodeEntity
-	// public abstract Long getNodeId();
 
 	@PartOfUpdate
 	public User getOwner() {

@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
+@Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
 	@ManyToOne

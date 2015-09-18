@@ -48,9 +48,9 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@JoinTable(name = "type_type_see_also",
 			joinColumns = {
-					@JoinColumn(name = "type1", referencedColumnName = "uuid", nullable = false)},
+					@JoinColumn(name = "type1", referencedColumnName = "id", nullable = false)},
 			inverseJoinColumns = {
-					@JoinColumn(name = "type2", referencedColumnName = "uuid", nullable = false)})
+					@JoinColumn(name = "type2", referencedColumnName = "id", nullable = false)})
 	@ManyToMany
     Set<Type> seeAlso;
 
