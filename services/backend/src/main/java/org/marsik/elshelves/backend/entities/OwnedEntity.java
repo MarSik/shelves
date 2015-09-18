@@ -37,6 +37,7 @@ public abstract class OwnedEntity {
     @GeneratedValue
     Long id;
 
+	@Column(columnDefinition = "BINARY(16)")
 	UUID uuid;
 
     /**

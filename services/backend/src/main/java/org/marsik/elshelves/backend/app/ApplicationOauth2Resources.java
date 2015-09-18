@@ -53,6 +53,6 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/test/**").permitAll()
 
                     // The rest of the API requires valid token
-                    .anyRequest().hasAuthority("USER");
+                    .anyRequest().hasAuthority("ROLE_USER");
     }
 }
