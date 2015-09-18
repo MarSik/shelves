@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -20,16 +22,17 @@ import java.util.Set;
 @Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Group parent;
 
-	@OneToMany(mappedBy = "parent")
+	@OneToMany(mappedBy = "parent",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Group> groups;
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> types;
 
-    @OneToMany
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<NumericProperty> showProperties;
 
 	@PartOfUpdate

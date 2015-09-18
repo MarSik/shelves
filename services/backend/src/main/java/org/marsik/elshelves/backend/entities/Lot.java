@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -108,26 +109,27 @@ public class Lot extends LotBase implements StickerCapable {
         setLocation(location);
     }
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Lot previous;
 
-	@OneToMany(mappedBy = "previous")
+	@OneToMany(mappedBy = "previous",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Lot> next;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	User performedBy;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Purchase purchase;
 
 	@NotNull
 	LotAction action;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Box location;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Requirement usedBy;
 
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")

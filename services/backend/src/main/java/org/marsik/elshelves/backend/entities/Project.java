@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -17,7 +18,8 @@ import java.util.Set;
 @DefaultEmberModel(ProjectApiModel.class)
 @Entity
 public class Project extends NamedEntity implements StickerCapable {
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Requirement> requires;
 
 	public boolean canBeDeleted() {

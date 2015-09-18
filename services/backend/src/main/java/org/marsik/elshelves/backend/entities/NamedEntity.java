@@ -8,6 +8,7 @@ import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -32,16 +33,19 @@ public class NamedEntity extends OwnedEntity {
 
 	String description;
 
-	@OneToMany(mappedBy = "describes")
+	@OneToMany(mappedBy = "describes",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Document> describedBy;
 
-	@OneToMany(mappedBy = "entity")
+	@OneToMany(mappedBy = "entity",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<NumericPropertyValue> properties;
 
     /**
      * Barcode associated with this entity
      */
-	@OneToMany(mappedBy = "reference")
+	@OneToMany(mappedBy = "reference",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Code> codes;
 
 	@PartOfUpdate

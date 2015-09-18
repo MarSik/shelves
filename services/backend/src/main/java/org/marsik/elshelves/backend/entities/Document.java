@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -34,7 +35,8 @@ public class Document extends NamedEntity implements StickerCapable {
 
     URL url;
 
-	@ManyToOne(targetEntity = NamedEntity.class)
+	@ManyToOne(targetEntity = NamedEntity.class,
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<NamedEntity> describes;
 
 	@PartOfUpdate

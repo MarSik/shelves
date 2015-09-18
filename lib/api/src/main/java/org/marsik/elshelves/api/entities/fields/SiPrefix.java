@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 
 @JsonFormat(shape= JsonFormat.Shape.OBJECT)
 @EmberModelName("siprefix")
-@Embeddable
 @Entity
 public enum SiPrefix {
     // SI base 10 prefixes

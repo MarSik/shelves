@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -37,7 +38,8 @@ public class Footprint extends NamedEntity {
 	 */
 	Integer npth;
 
-	@ManyToMany(mappedBy = "footprints")
+	@ManyToMany(mappedBy = "footprints",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Type> types;
 
 	@JoinTable(name = "fp_fp_see_also",
@@ -45,7 +47,7 @@ public class Footprint extends NamedEntity {
 					@JoinColumn(name = "fp1", referencedColumnName = "id", nullable = false)},
 			inverseJoinColumns = {
 					@JoinColumn(name = "fp2", referencedColumnName = "id", nullable = false)})
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Footprint> seeAlso;
 
     FootprintType type;

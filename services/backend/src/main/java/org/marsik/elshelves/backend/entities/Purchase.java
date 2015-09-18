@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Purchase extends LotBase {
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Type type;
 
 	Double singlePrice;
@@ -28,10 +29,11 @@ public class Purchase extends LotBase {
 	Boolean vatIncluded;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Transaction transaction;
 
-    @OneToMany(mappedBy = "purchase")
+    @OneToMany(mappedBy = "purchase",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> rawLots;
 
 	@PartOfUpdate

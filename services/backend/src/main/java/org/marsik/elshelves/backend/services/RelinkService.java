@@ -88,7 +88,7 @@ public class RelinkService {
 
                     if (value != null && setter != null) {
                         // Potentially existing UUID but unconnected entity
-                        if (value.getUuid() != null && value.getUuid() == null) {
+                        if (value.getUuid() != null && value.getId() == null) {
                             OwnedEntity v = getRelinked(value, known);
                             // Entity does exist in DB, replace the reference with
                             // the connected entity
@@ -114,6 +114,10 @@ public class RelinkService {
                 try {
                     Collection<Object> newItems = new ArrayList<Object>();
                     Collection<Object> items = (Collection<Object>)getter.invoke(entity);
+                    if (items == null) {
+                        continue;
+                    }
+
                     for (Object item0: items) {
                         if (item0 instanceof OwnedEntity) {
                             // OwnedEntity, relink
@@ -125,7 +129,7 @@ public class RelinkService {
                                 item.setUuid(uuidGenerator.generate());
                                 relink(item, user, known, false);
                                 // Connected existing entity
-                            } else if (item.getUuid() != null) {
+                            } else if (item.getId() != null) {
                                 newItems.add(item);
                                 // Disconnected potentially existing entity
                             } else {

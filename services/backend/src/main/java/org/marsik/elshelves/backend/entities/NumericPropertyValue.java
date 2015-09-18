@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,10 +16,10 @@ public class NumericPropertyValue {
     @Id
     Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     NamedEntity entity;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     NumericProperty property;
 
     @NotNull

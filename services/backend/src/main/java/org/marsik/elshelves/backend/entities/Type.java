@@ -8,6 +8,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -34,16 +35,19 @@ public class Type extends NamedEntity implements StickerCapable {
     // Should serial numbers be tracked?
     Boolean serials;
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Footprint> footprints;
 
-	@ManyToMany(mappedBy = "types")
+	@ManyToMany(mappedBy = "types",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Group> groups;
 
-	@OneToMany(mappedBy = "type")
+	@OneToMany(mappedBy = "type",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Purchase> purchases;
 
-	@ManyToMany(mappedBy = "type")
+	@ManyToMany(mappedBy = "type",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Requirement> usedIn;
 
 	@JoinTable(name = "type_type_see_also",
@@ -51,7 +55,7 @@ public class Type extends NamedEntity implements StickerCapable {
 					@JoinColumn(name = "type1", referencedColumnName = "id", nullable = false)},
 			inverseJoinColumns = {
 					@JoinColumn(name = "type2", referencedColumnName = "id", nullable = false)})
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Type> seeAlso;
 
 	@PartOfUpdate

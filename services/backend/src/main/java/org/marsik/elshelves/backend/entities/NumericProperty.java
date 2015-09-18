@@ -7,7 +7,7 @@ import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,7 +21,7 @@ import java.util.Collection;
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @NotNull
     Unit unit;
 
@@ -33,7 +33,8 @@ public class NumericProperty extends NamedEntity {
 
     String symbol;
 
-    @OneToMany(mappedBy = "property")
+    @OneToMany(mappedBy = "property",
+            cascade = { CascadeType.ALL })
     Collection<NumericPropertyValue> propertyUses;
 
     @PartOfUpdate

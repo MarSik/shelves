@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -18,13 +19,14 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Requirement extends OwnedEntity {
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Project project;
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> type;
 
-	@OneToMany(mappedBy = "usedBy")
+	@OneToMany(mappedBy = "usedBy",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> rawLots;
 
     String name;

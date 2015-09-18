@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -19,13 +20,15 @@ import java.util.Set;
 @DefaultEmberModel(BoxApiModel.class)
 public class Box extends NamedEntity implements StickerCapable {
 
-	@OneToMany(mappedBy = "parent")
+	@OneToMany(mappedBy = "parent",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Box> contains;
 
 	@ManyToOne
     Box parent;
 
-	@OneToMany(mappedBy = "location")
+	@OneToMany(mappedBy = "location",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> lots;
 
 	@PartOfUpdate

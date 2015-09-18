@@ -8,6 +8,7 @@ import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,10 +26,11 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime date;
 
-	@OneToMany(mappedBy = "transaction")
+	@OneToMany(mappedBy = "transaction",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Purchase> items;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Source source;
 
 	@Override
