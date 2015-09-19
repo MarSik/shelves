@@ -3,6 +3,8 @@ package org.marsik.elshelves.backend.services;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 public class MailgunService {
+	private static final Logger log = LoggerFactory.getLogger(MailgunService.class);
+
     @Autowired
     MailgunConfiguration configuration;
 
@@ -107,8 +111,12 @@ public class MailgunService {
 
 		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
 
-		rest.postForObject(configuration.getUrl(),
-				request, MailgunResponse.class);
+		if (configuration.getKey().isEmpty()) {
+			log.debug("Trying to send email through Mailgun: {}", params);
+		} else {
+			rest.postForObject(configuration.getUrl(),
+					request, MailgunResponse.class);
+		}
 
         return true;
     }

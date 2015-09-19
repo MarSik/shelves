@@ -49,7 +49,6 @@ import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.backend.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -184,40 +183,59 @@ public class BackupService {
     NumericPropertyRepository numericPropertyRepository;
 
 
-	protected <T, F extends OwnedEntity>  void restore(Iterable<T> items,
-								   CachingConverter<T, F, UUID> converter,
+	protected <F extends OwnedEntity>  void restore(Iterable<F> allItems,
 								   User currentUser,
-								   Map<UUID, Object> conversionCache,
-                                   Map<UUID, Object> relinkCache) {
-		if (items == null) {
+                                   Map<UUID, OwnedEntity> relinkCache) {
+		if (allItems == null) {
 			return;
 		}
 
-		for (T i0: items) {
-			F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
+		for (F i: allItems) {
 			relinkService.relink(i, currentUser, relinkCache, false);
-			i.setOwner(currentUser);
-			ownedEntityRepository.save(i);
 		}
+
+        for (F i: allItems) {
+            ownedEntityRepository.save(i);
+        }
 	}
+
+    protected <T, F extends OwnedEntity>  void prepare(Iterable<T> items,
+                                                       CachingConverter<T, F, UUID> converter,
+                                                       User currentUser,
+                                                       Map<UUID, Object> conversionCache,
+                                                       Map<UUID, OwnedEntity> relinkCache,
+                                                       Set<OwnedEntity> pool) {
+        if (items == null) {
+            return;
+        }
+
+        for (T i0: items) {
+            F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
+            i = relinkService.fixUuidAndOwner(i, currentUser, relinkCache);
+            pool.add(i);
+        }
+    }
 
 	public boolean restoreFromBackup(BackupApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
-        Map<UUID, Object> relinkCache = new THashMap<>();
+        Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
+        Set<OwnedEntity> pool = new THashSet<>();
 
-        restore(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache);
-        restore(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache);
-		restore(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache);
-		restore(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache);
-		restore(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache);
-		restore(backup.getTypes(), emberToType, currentUser, conversionCache, relinkCache);
-		restore(backup.getProjects(), emberToProject, currentUser, conversionCache, relinkCache);
-		restore(backup.getSources(), emberToSource, currentUser, conversionCache, relinkCache);
-        restore(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkCache);
-        restore(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkCache);
-		restore(backup.getLots(), emberToLot, currentUser, conversionCache, relinkCache);
-		restore(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkCache);
+        prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getTypes(), emberToType, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getProjects(), emberToProject, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getSources(), emberToSource, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkCache, pool);
+
+        restore(pool, currentUser, relinkCache);
 
 		return true;
 	}
