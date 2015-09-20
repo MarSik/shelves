@@ -2,11 +2,13 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.BackupApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
@@ -53,6 +55,8 @@ import org.marsik.elshelves.backend.repositories.SourceRepository;
 import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.backend.repositories.UnitRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -63,6 +67,8 @@ import java.util.UUID;
 
 @Service
 public class BackupService {
+    private static final Logger log = LoggerFactory.getLogger(BackupService.class);
+
 	@Autowired
     OwnedEntityRepository ownedEntityRepository;
 
@@ -200,6 +206,7 @@ public class BackupService {
 		}
 
 		for (F i: allItems) {
+            log.debug("Relinking {} uuid {}", i.getClass().getName(), i.getUuid());
 			relinkService.relink(i, currentUser, relinkCache, false);
 		}
 	}
@@ -212,6 +219,7 @@ public class BackupService {
         }
 
         for (F i: allItems) {
+            log.debug("Saving {} uuid {}", i.getClass().getName(), i.getUuid());
             ownedEntityRepository.save(i);
         }
     }
@@ -239,6 +247,12 @@ public class BackupService {
         Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
         Set<OwnedEntity> pool = new THashSet<>();
 
+        // Everything will be owned by the current user
+        if (backup.getUser() != null
+            && backup.getUser().getId() != null) {
+            relinkCache.put(backup.getUser().getId(), currentUser);
+        }
+
         prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache, pool);
@@ -256,12 +270,28 @@ public class BackupService {
         relink(pool, currentUser, relinkCache);
 
         upgradeTransactions(pool, relinkCache);
+        upgradeEntities(pool, relinkCache);
         upgradeDocuments(pool, relinkCache);
 
         save(pool, currentUser, relinkCache);
 
 		return true;
 	}
+
+    private void upgradeEntities(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+        for (OwnedEntity d0 : pool) {
+            if (!(d0 instanceof NamedEntity)) {
+                continue;
+            }
+
+            NamedEntity d = (NamedEntity) d0;
+
+            if (d.getName() == null
+                    || d.getName().isEmpty()) {
+                d.setName("unknown");
+            }
+        }
+    }
 
     /**
      * Make sure all the required fields are present. Old versions made it possible to delete name
@@ -290,6 +320,10 @@ public class BackupService {
 
            if (d.getSize() == null) {
                d.setSize(0L);
+           }
+
+           if (d.getCreated() == null) {
+               d.setCreated(new DateTime());
            }
        }
     }

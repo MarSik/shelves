@@ -4,6 +4,8 @@ import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.UUID;
 
 @Service
 public class RelinkService {
+    Logger log = LoggerFactory.getLogger(RelinkService.class);
+
     @Autowired
     UuidGenerator uuidGenerator;
 
@@ -54,6 +58,11 @@ public class RelinkService {
      */
     @SuppressWarnings("unchecked")
     public <E extends OwnedEntity> E fixUuidAndOwner(E value, User user, Map<UUID, OwnedEntity> cache)  {
+        if (value.getUuid() == null) {
+            value.setUuid(uuidGenerator.generate());
+            log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getUuid().toString());
+        }
+
         if (cache.containsKey(value.getUuid())) {
             return (E)cache.get(value.getUuid());
         }

@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,6 +33,8 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "uuid"))
 public abstract class OwnedEntity {
+	Logger log = LoggerFactory.getLogger(OwnedEntity.class);
+
 	@ManyToOne
 	User owner;
 
@@ -54,4 +59,17 @@ public abstract class OwnedEntity {
 	}
 
 	public abstract boolean canBeDeleted();
+
+	@Override
+	public String toString() {
+		return getClass().getName() + "{" +
+				"id=" + id +
+				", uuid=" + uuid +
+				'}';
+	}
+
+	@PrePersist
+	void prePersist() {
+		log.debug("Saving "+toString());
+	}
 }

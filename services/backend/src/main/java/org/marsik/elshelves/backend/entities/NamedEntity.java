@@ -33,7 +33,7 @@ public class NamedEntity extends OwnedEntity {
 
 	String description;
 
-	@OneToMany(mappedBy = "describes",
+	@ManyToMany(mappedBy = "describes",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Document> describedBy;
 
@@ -97,4 +97,13 @@ public class NamedEntity extends OwnedEntity {
     public Set<Code> getCodes() {
         return codes;
     }
+
+	@Override
+	public String toString() {
+		return getClass().getName() + "{" +
+				"id=" + id +
+				", uuid=" + uuid +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

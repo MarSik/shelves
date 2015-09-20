@@ -9,7 +9,10 @@ import org.marsik.elshelves.backend.entities.fields.ShippingCalculator;
 import org.marsik.elshelves.backend.entities.fields.SourceDownloader;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Collection;
@@ -22,7 +25,12 @@ import java.util.Collection;
 public class Source extends NamedEntity {
 	String url;
 
+	@ElementCollection(targetClass = SourceDownloader.class)
+	@Enumerated(EnumType.STRING)
 	SourceDownloader sourceDownloader;
+
+	@ElementCollection(targetClass = ShippingCalculator.class)
+	@Enumerated(EnumType.STRING)
 	ShippingCalculator shippingCalculator;
 
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,

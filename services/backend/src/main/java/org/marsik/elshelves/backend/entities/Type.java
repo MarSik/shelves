@@ -33,7 +33,7 @@ public class Type extends NamedEntity implements StickerCapable {
     Long buyMultiple;
 
     // Should serial numbers be tracked?
-    Boolean serials;
+    Boolean serials = false;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Footprint> footprints;
