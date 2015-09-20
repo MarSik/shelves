@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToBox;
+import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
@@ -62,6 +63,9 @@ public class BackupService {
 
 	@Autowired
 	RelinkService relinkService;
+
+    @Autowired
+    EmberToDocument emberToDocument;
 
 	@Autowired
 	EmberToLot emberToLot;
@@ -207,6 +211,7 @@ public class BackupService {
 
         restore(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache);
         restore(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache);
+        restore(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache);
 		restore(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache);
 		restore(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache);
 		restore(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache);
@@ -248,7 +253,9 @@ public class BackupService {
         backup.setPurchases(backup(purchaseRepository.findByOwner(currentUser), purchaseToEmber, cache));
         backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
         backup.setRequirements(backup(requirementRepository.findByOwner(currentUser), requirementToEmber, cache));
+        backup.setDocuments(backup(documentRepository.findByOwner(currentUser), documentToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
+
 
         return backup;
 	}

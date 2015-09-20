@@ -15,6 +15,7 @@ public class BackupApiModel {
 	Set<PurchaseApiModel> purchases;
     Set<UnitApiModel> units;
     Set<NumericPropertyApiModel> properties;
+	Set<DocumentApiModel> documents;
 	UserApiModel user;
 
 	public Set<FootprintApiModel> getFootprints() {
@@ -119,5 +120,13 @@ public class BackupApiModel {
 
 	public void setUser(UserApiModel user) {
 		this.user = user;
+	}
+
+	public Set<DocumentApiModel> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<DocumentApiModel> documents) {
+		this.documents = documents;
 	}
 }
