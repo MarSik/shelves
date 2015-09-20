@@ -4,12 +4,18 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.BackupApiModel;
+import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToBox;
+import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
@@ -62,6 +68,9 @@ public class BackupService {
 
 	@Autowired
 	RelinkService relinkService;
+
+    @Autowired
+    EmberToDocument emberToDocument;
 
 	@Autowired
 	EmberToLot emberToLot;
@@ -183,7 +192,7 @@ public class BackupService {
     NumericPropertyRepository numericPropertyRepository;
 
 
-	protected <F extends OwnedEntity>  void restore(Iterable<F> allItems,
+	protected <F extends OwnedEntity>  void relink(Iterable<F> allItems,
 								   User currentUser,
                                    Map<UUID, OwnedEntity> relinkCache) {
 		if (allItems == null) {
@@ -193,11 +202,19 @@ public class BackupService {
 		for (F i: allItems) {
 			relinkService.relink(i, currentUser, relinkCache, false);
 		}
+	}
+
+    protected <F extends OwnedEntity>  void save(Iterable<F> allItems,
+                                                 User currentUser,
+                                                 Map<UUID, OwnedEntity> relinkCache) {
+        if (allItems == null) {
+            return;
+        }
 
         for (F i: allItems) {
             ownedEntityRepository.save(i);
         }
-	}
+    }
 
     protected <T, F extends OwnedEntity>  void prepare(Iterable<T> items,
                                                        CachingConverter<T, F, UUID> converter,
@@ -223,6 +240,7 @@ public class BackupService {
         Set<OwnedEntity> pool = new THashSet<>();
 
         prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache, pool);
@@ -235,10 +253,71 @@ public class BackupService {
         prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkCache, pool);
 
-        restore(pool, currentUser, relinkCache);
+        relink(pool, currentUser, relinkCache);
+
+        upgradeTransactions(pool, relinkCache);
+        upgradeDocuments(pool, relinkCache);
+
+        save(pool, currentUser, relinkCache);
 
 		return true;
 	}
+
+    /**
+     * Make sure all the required fields are present. Old versions made it possible to delete name
+     * or content-type.
+     *
+     * @param pool Objects that are to be saved and might contain Document instances
+     * @param relinkCache Relink cache that already contains all document instances
+     */
+    private void upgradeDocuments(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+       for (OwnedEntity d0: pool) {
+           if (!(d0 instanceof Document)) {
+               continue;
+           }
+
+           Document d = (Document)d0;
+
+           if (d.getName() == null
+                   || d.getName().isEmpty()) {
+               d.setName("unknown");
+           }
+
+           if (d.getContentType() == null
+                   || d.getContentType().isEmpty()) {
+               d.setContentType("application/octet-stream");
+           }
+
+           if (d.getSize() == null) {
+               d.setSize(0L);
+           }
+       }
+    }
+
+    /**
+     * Make sure transactions have name. It became necessary and old backups might still not have it
+     * @param pool list of entities to be saved that might contain Transaction instances
+     * @param relinkCache relink cache that has to contain all the transactions and sources
+     */
+    private void upgradeTransactions(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+        int seq = 0;
+
+        for (OwnedEntity t0: pool) {
+            if (!(t0 instanceof Transaction)) {
+                continue;
+            }
+
+            Transaction t = (Transaction)t0;
+            if (t.getName() != null
+                    && !t.getName().isEmpty()) {
+                continue;
+            }
+
+            Source source = (Source)relinkCache.get(t.getSource().getUuid());
+            t.setName(source.getName() + " "
+                    + (t.getDate() != null ? t.getDate().toString() : Integer.toString(seq++)));
+        }
+    }
 
     protected <T extends OwnedEntity, E extends AbstractEntityApiModel, R extends JpaRepository<T, UUID>> Set<E> backup(Iterable<T> items,
                                                                                                                     CachingConverter<T, E, UUID> convertor,
@@ -256,6 +335,7 @@ public class BackupService {
         Map<UUID, Object> cache = new THashMap<>();
 
         backup.setUnits(backup(unitRepository.findByOwner(currentUser), unitToEmber, cache));
+        backup.setDocuments(backup(documentRepository.findByOwner(currentUser), documentToEmber, cache));
         backup.setProperties(backup(numericPropertyRepository.findByOwner(currentUser), numericPropertyToEmber, cache));
         backup.setBoxes(backup(boxRepository.findByOwner(currentUser), boxToEmber, cache));
         backup.setGroups(backup(groupRepository.findByOwner(currentUser), groupToEmber, cache));

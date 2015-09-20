@@ -21,5 +21,6 @@ public class BackupApiModel {
 	Set<PurchaseApiModel> purchases;
     Set<UnitApiModel> units;
     Set<NumericPropertyApiModel> properties;
+	Set<DocumentApiModel> documents;
 	UserApiModel user;
 }
