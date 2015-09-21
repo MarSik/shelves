@@ -61,6 +61,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -310,7 +312,13 @@ public class BackupService {
 
            if (d.getName() == null
                    || d.getName().isEmpty()) {
-               d.setName("unknown");
+               if (d.getUrl() != null
+                       && d.getUrl().getPath() != null
+                       && !d.getUrl().getPath().isEmpty()) {
+                   d.setName(Paths.get(d.getUrl().getPath()).getFileName().toString());
+               } else {
+                   d.setName("unknown");
+               }
            }
 
            if (d.getContentType() == null
