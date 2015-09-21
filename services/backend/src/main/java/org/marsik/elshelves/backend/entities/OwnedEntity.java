@@ -33,7 +33,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "uuid"))
 public abstract class OwnedEntity {
-	Logger log = LoggerFactory.getLogger(OwnedEntity.class);
+	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
 	@ManyToOne
 	User owner;

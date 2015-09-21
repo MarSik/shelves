@@ -1,8 +1,11 @@
 package org.marsik.elshelves.backend.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.services.StorageManager;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,5 +41,14 @@ public enum SourceDownloader {
 	SourceDownloader(PriceDownloader priceDownloader, DataDownloader dataDownloader) {
 		this.priceDownloader = priceDownloader;
 		this.dataDownloader = dataDownloader;
+	}
+
+	public String getId() {
+		return name();
+	}
+
+	@JsonCreator
+	public static SourceDownloader forValue(String s) {
+		return SourceDownloader.valueOf(s);
 	}
 }

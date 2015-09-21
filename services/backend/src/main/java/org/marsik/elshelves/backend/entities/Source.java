@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Collection;
 
@@ -25,11 +26,9 @@ import java.util.Collection;
 public class Source extends NamedEntity {
 	String url;
 
-	@ElementCollection(targetClass = SourceDownloader.class)
 	@Enumerated(EnumType.STRING)
 	SourceDownloader sourceDownloader;
 
-	@ElementCollection(targetClass = ShippingCalculator.class)
 	@Enumerated(EnumType.STRING)
 	ShippingCalculator shippingCalculator;
 

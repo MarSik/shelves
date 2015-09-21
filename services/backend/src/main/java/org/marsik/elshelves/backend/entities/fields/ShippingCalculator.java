@@ -1,6 +1,10 @@
 package org.marsik.elshelves.backend.entities.fields;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.marsik.elshelves.backend.entities.Type;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 public enum ShippingCalculator {
 	NONE(null),
@@ -19,4 +23,14 @@ public enum ShippingCalculator {
 	ShippingCalculator(Shipping shipping) {
 		this.shipping = shipping;
 	}
+
+	public String getId() {
+		return name();
+	}
+
+	@JsonCreator
+	public static ShippingCalculator forValue(String s) {
+		return ShippingCalculator.valueOf(s);
+	}
+
 }
