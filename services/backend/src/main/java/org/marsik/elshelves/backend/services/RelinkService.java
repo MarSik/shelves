@@ -111,7 +111,7 @@ public class RelinkService {
         return relink(entity, user, cache, true);
     }
 
-    protected <E extends Object> void relinkImpl(E entity, User user, Map<UUID, OwnedEntity> known) {
+    protected <E> void relinkImpl(E entity, User user, Map<UUID, OwnedEntity> known) {
         PropertyDescriptor[] properties;
         try {
             properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
@@ -122,6 +122,7 @@ public class RelinkService {
 
         for (PropertyDescriptor f: properties) {
             Method getter = f.getReadMethod();
+
             if (getter == null) {
                 continue;
             }
@@ -132,29 +133,32 @@ public class RelinkService {
                     OwnedEntity value = (OwnedEntity) getter.invoke(entity);
                     Method setter = f.getWriteMethod();
 
-                    if (value != null && setter != null) {
-                        // Potentially existing UUID but unconnected entity
-                        if (value.getUuid() != null && value.getId() == null) {
-                            OwnedEntity v = getByUuid(value, known);
+                    if (value == null || setter == null) {
+                        continue;
+                    }
 
-                            // Entity does exist in DB or cache, replace the reference with
-                            // the connected entity
-                            if (v != null) {
-                                setter.invoke(entity, v);
-                            } else {
-                                // New entity, perform deep relinking
-                                known.put(value.getUuid(), value);
-                                relink(value, user, known, false);
-                            }
+                    // Potentially existing UUID but unconnected entity
+                    if (value.getUuid() != null && value.getId() == null) {
+                        OwnedEntity v = getByUuid(value, known);
 
-                        } else if (value.getUuid() == null) {
-                            // Missing UUID meaning new entity
-                            // create an UUID for it and perform deep relinking
-                            value.setUuid(uuidGenerator.generate());
+                        // Entity does exist in DB or cache, replace the reference with
+                        // the connected entity
+                        if (v != null) {
+                            setter.invoke(entity, v);
+                        } else {
+                            // New entity, perform deep relinking
                             known.put(value.getUuid(), value);
                             relink(value, user, known, false);
                         }
+
+                    } else if (value.getUuid() == null) {
+                        // Missing UUID meaning new entity
+                        // create an UUID for it and perform deep relinking
+                        value.setUuid(uuidGenerator.generate());
+                        known.put(value.getUuid(), value);
+                        relink(value, user, known, false);
                     }
+
                 } catch (InvocationTargetException | IllegalAccessException ex) {
                     ex.printStackTrace();
                 }
@@ -164,6 +168,7 @@ public class RelinkService {
                 try {
                     Collection<Object> newItems = new ArrayList<Object>();
                     Collection<Object> items = (Collection<Object>)getter.invoke(entity);
+
                     if (items == null) {
                         continue;
                     }
