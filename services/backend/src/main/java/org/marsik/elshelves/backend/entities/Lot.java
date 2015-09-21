@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class Lot extends LotBase implements StickerCapable {
 	public Lot() {

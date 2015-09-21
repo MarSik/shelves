@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public abstract class LotBase extends OwnedEntity {

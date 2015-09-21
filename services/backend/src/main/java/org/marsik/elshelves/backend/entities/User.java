@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
+@ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class User extends OwnedEntity implements StickerCapable {

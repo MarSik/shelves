@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @DefaultEmberModel(ProjectApiModel.class)
 @Entity

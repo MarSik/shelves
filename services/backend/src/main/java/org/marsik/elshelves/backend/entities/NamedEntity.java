@@ -23,8 +23,8 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class NamedEntity extends OwnedEntity {
-	@NotEmpty
-	@NotNull
+	//@NotEmpty
+	//@NotNull
 	String name;
 
 	String summary;
