@@ -66,6 +66,7 @@ Router.map(function() {
   });
 
   this.route("stickers");
+  this.route("backup");
 
   this.route("units", function() {
     this.route("show", {

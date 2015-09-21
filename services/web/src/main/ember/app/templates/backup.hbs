@@ -1,0 +1,11 @@
+<h2>Download backup</h2>
+
+<p>Click the button to download the JSON file with all your metadata. You will have to download the stored files (documents) separately.</p>
+
+{{#view 'backup-link'}}Download backup{{/view}}
+
+<h2>Restore from file</h2>
+
+<p>Upload a previously downloaded backup and it will be inserted into the application (possibly changing the UUIDs and ownership to prevent conflicts with existing data!).</p>
+
+{{upload-attachments endpoint='/backup' multiple=false entity="" uploadFinished='restoreFinished'}}

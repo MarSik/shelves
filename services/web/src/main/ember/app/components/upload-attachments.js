@@ -33,7 +33,8 @@ export default Ember.Component.extend({
                     access_token: token
                 };
 
-                if (!Ember.isEmpty(entity.get('id'))) {
+                if (!Ember.isEmpty(entity)
+                      && !Ember.isEmpty(entity.get('id'))) {
                     params["entity"] = entity.get('id');
                 }
 
@@ -42,8 +43,9 @@ export default Ember.Component.extend({
         }
     },
     url: function () {
-        return ENV.APP.API_ENDPOINT + '/upload';
-    }.property(),
+        return ENV.APP.API_ENDPOINT + this.get("endpoint");
+    }.property("endpoint"),
+    endpoint: "/upload",
     disabled: function () {
         return Ember.isEmpty(this.get('files'));
     }.property('files'),
