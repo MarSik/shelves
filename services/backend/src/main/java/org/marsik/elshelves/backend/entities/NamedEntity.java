@@ -12,10 +12,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
@@ -23,14 +25,17 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class NamedEntity extends OwnedEntity {
-	//@NotEmpty
-	//@NotNull
+	@NotEmpty
+	@NotNull
+	@Size(max = 255)
 	String name;
 
+	@Size(max = 255)
 	String summary;
 
     boolean flagged = false;
 
+	@Lob
 	String description;
 
 	@ManyToMany(mappedBy = "describes",

@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -23,6 +24,7 @@ import java.util.Date;
 public class Authorization extends OwnedEntity {
     @NotEmpty
     @NotNull
+    @Size(min = 1, max = 255)
     String name;
 
     /**
@@ -36,6 +38,7 @@ public class Authorization extends OwnedEntity {
      * The client sends P = crypt(ISU) as a password.
      */
     @NotEmpty
+    @Size(max = 255)
     String secret;
 
     @CreatedDate

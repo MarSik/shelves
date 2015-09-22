@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -30,10 +31,12 @@ import java.util.UUID;
 @Entity
 public class User extends OwnedEntity implements StickerCapable {
     @NotNull
+    @Size(max = 255)
     String name;
 
     @NotNull
     @Email
+    @Size(max = 255)
     String email;
     String password;
 
