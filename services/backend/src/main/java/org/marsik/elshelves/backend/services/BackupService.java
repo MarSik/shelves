@@ -209,7 +209,7 @@ public class BackupService {
 
 		for (F i: allItems) {
             log.debug("Relinking {} uuid {}", i.getClass().getName(), i.getUuid());
-			relinkService.relink(i, currentUser, relinkCache, false);
+			relinkService.relink(i, currentUser, relinkCache, true);
 		}
 	}
 

@@ -45,6 +45,7 @@
         <lombok.version>1.16.6</lombok.version>
         <modelmapper.version>0.7.5</modelmapper.version>
         <flyway.version>3.2.1</flyway.version>
+        <assertj.version>3.2.0</assertj.version>
 
         <!-- computer vision libs //-->
 
@@ -119,6 +120,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
