@@ -78,6 +78,10 @@ public class Requirement extends OwnedEntity {
      */
     public Set<Lot> getLots() {
         Set<Lot> assigned = new THashSet<>();
+		if (getRawLots() == null) {
+			return assigned;
+		}
+
         for (Lot l: getRawLots()) {
             if (l.isValid()) {
                 assigned.add(l);
