@@ -22,6 +22,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -72,5 +73,10 @@ public abstract class OwnedEntity {
 	@PrePersist
 	void prePersist() {
 		log.debug("Saving "+toString());
+	}
+
+	@Transient
+	public boolean isNew() {
+		return id == null;
 	}
 }
