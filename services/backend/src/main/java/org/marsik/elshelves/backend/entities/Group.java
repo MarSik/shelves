@@ -34,7 +34,7 @@ public class Group extends NamedEntity {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> types;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<NumericProperty> showProperties;
 
 	@PartOfUpdate
