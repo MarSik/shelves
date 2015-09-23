@@ -5,11 +5,11 @@ import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.BackupApiModel;
-import org.marsik.elshelves.api.entities.DocumentApiModel;
-import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.User;
@@ -61,7 +61,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
@@ -220,7 +219,13 @@ public class BackupService {
             return;
         }
 
+
         for (F i: allItems) {
+            if (!i.isNew()) {
+                log.debug("Skipping already saved {} uuid {}", i.getClass().getName(), i.getUuid());
+                continue;
+            }
+
             log.debug("Saving {} uuid {}", i.getClass().getName(), i.getUuid());
             ownedEntityRepository.save(i);
         }
@@ -274,6 +279,7 @@ public class BackupService {
         upgradeTransactions(pool, relinkCache);
         upgradeEntities(pool, relinkCache);
         upgradeDocuments(pool, relinkCache);
+        upgradePurchases(pool, relinkCache);
 
         save(pool, currentUser, relinkCache);
 
@@ -358,6 +364,32 @@ public class BackupService {
             Source source = (Source)relinkCache.get(t.getSource().getUuid());
             t.setName(source.getName() + " "
                     + (t.getDate() != null ? t.getDate().toString() : Integer.toString(seq++)));
+        }
+    }
+
+    /**
+     * Make sure Purchases have created time
+     * @param pool list of entities to be saved that might contain Purchase instances
+     * @param relinkCache relink cache that has to contain all the purchases and lots
+     */
+    private void upgradePurchases(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+        int seq = 0;
+
+        for (OwnedEntity p0 : pool) {
+            if (!(p0 instanceof Purchase)) {
+                continue;
+            }
+
+            Purchase p = (Purchase) p0;
+            if (p.getCreated() != null) {
+                continue;
+            } else if (p.getRawLots().isEmpty()) {
+                p.setCreated(new DateTime());
+                continue;
+            }
+
+            Lot source = (Lot)relinkCache.get(p.getRawLots().iterator().next().getUuid());
+            p.setCreated(source.getCreated());
         }
     }
 
