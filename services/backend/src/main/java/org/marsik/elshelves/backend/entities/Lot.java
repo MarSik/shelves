@@ -26,7 +26,7 @@ import java.util.UUID;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class Lot extends LotBase implements StickerCapable {
-	protected Lot() {
+	public Lot() {
 	}
 
     protected Lot(UUID uuid, User performedBy, Lot previous) {

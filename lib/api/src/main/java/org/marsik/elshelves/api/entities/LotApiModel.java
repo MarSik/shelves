@@ -55,6 +55,8 @@ public class LotApiModel extends LotBaseApiModel {
     boolean canBeMoved;
     boolean valid;
 
+	String serial;
+
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
         return location;

@@ -41,6 +41,7 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		}
 
         entity.setExpiration(new DateTime(object.getExpiration()));
+		entity.setSerial(object.getSerial());
 		entity.setAction(object.getAction());
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
 		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));
@@ -53,9 +54,9 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setCanBeUnassigned(object.isCanBeUnassigned());
 		entity.setCanBeSoldered(object.isCanBeSoldered());
 		entity.setCanBeUnsoldered(object.isCanBeUnsoldered());
-        entity.setCanBeSplit(object.isCanBeSplit());
-        entity.setCanBeMoved(object.isCanBeMoved());
-        entity.setValid(object.isValid());
+		entity.setCanBeSplit(object.isCanBeSplit());
+		entity.setCanBeMoved(object.isCanBeMoved());
+		entity.setValid(object.isValid());
 
 		return entity;
 	}
