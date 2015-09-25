@@ -17,5 +17,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class AbstractEntityApiModel implements EmberEntity {
+    public AbstractEntityApiModel(UUID id) {
+        this.id = id;
+    }
+
     UUID id;
+
+    UserApiModel belongsTo;
 }

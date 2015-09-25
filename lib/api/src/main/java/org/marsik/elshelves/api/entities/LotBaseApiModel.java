@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
-public class LotBaseApiModel extends AbstractEntityApiModel {
+public class LotBaseApiModel extends AbstractOwnedEntityApiModel {
 	public LotBaseApiModel(UUID id) {
 		super(id);
 	}
@@ -27,18 +27,11 @@ public class LotBaseApiModel extends AbstractEntityApiModel {
 
 	Set<LotApiModel> next;
 
-    UserApiModel belongsTo;
-
 	UserApiModel performedBy;
 
 	@JsonIdentityReference(alwaysAsId = true)
 	public Set<LotApiModel> getNext() {
 		return next;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)

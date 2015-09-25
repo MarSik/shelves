@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
-public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
+public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 	public AbstractNamedEntityApiModel(UUID id) {
 		super(id);
 	}
@@ -28,19 +28,12 @@ public class AbstractNamedEntityApiModel extends AbstractEntityApiModel {
     boolean flagged = false;
     boolean canBeDeleted = false;
 
-	UserApiModel belongsTo;
-
 	Set<DocumentApiModel> describedBy;
 
     Map<UUID, Long> values;
     Set<NumericPropertyApiModel> properties;
 
     Set<CodeApiModel> codes;
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
-	}
 
 	@JsonIdentityReference(alwaysAsId = true)
 	public Set<DocumentApiModel> getDescribedBy() {
