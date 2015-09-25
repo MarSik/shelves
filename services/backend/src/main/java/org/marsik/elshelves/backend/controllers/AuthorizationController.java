@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authorizations")
+@RequestMapping("/v1/authorizations")
 public class AuthorizationController extends AbstractRestController<Authorization, AuthorizationApiModel, AuthorizationService> {
     @Autowired
     public AuthorizationController(AuthorizationService service) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/types")
+@RequestMapping("/v1/types")
 public class TypeController extends AbstractRestController<Type, PartTypeApiModel, TypeService> {
 	@Autowired
 	public TypeController(TypeService service) {

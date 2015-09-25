@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/codes")
+@RequestMapping("/v1/codes")
 public class CodeController extends AbstractRestController<Code, CodeApiModel, CodeService> {
     @Autowired
     NamedEntityRepository namedEntityRepository;

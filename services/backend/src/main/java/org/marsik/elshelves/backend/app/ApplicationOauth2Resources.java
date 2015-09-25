@@ -34,17 +34,17 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/status", "/favicon.ico").permitAll()
 
                     // Mail api is verified using HMAC
-                    .antMatchers("/mail/**").permitAll()
+                    .antMatchers("/*/mail/**").permitAll()
 
                     // Schema is needed for clients to start properly
-                    .antMatchers("/schema").permitAll()
+                    .antMatchers("/*/schema").permitAll()
 
                     // User registration is open
-                    .antMatchers(HttpMethod.POST, "/users").permitAll()
+                    .antMatchers(HttpMethod.POST, "/v1/users").permitAll()
 
                     // Verification of registration emails is open
-                    .antMatchers(HttpMethod.POST, "/users/verify/**").permitAll()
-				    .antMatchers(HttpMethod.POST, "/users/reverify/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/v1/users/verify/**").permitAll()
+				    .antMatchers(HttpMethod.POST, "/v1/users/reverify/**").permitAll()
 
                     // OPTIONS calls must be open for CORS to work properly
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

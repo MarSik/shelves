@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/boxes")
+@RequestMapping("/v1/boxes")
 public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxService> {
     BoxService boxService;
 

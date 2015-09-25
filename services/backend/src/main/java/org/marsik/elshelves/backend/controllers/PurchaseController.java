@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/purchases")
+@RequestMapping("/v1/purchases")
 public class PurchaseController extends AbstractRestController<Purchase, PurchaseApiModel, PurchaseService> {
 	@Autowired
 	public PurchaseController(PurchaseService service) {

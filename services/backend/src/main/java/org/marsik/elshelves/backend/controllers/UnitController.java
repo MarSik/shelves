@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/units")
+@RequestMapping("/v1/units")
 public class UnitController extends AbstractRestController<Unit, UnitApiModel, UnitService> {
 	@Autowired
 	public UnitController(UnitService service) {

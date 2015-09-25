@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/documents")
+@RequestMapping("/v1/documents")
 public class DocumentController extends AbstractRestController<Document, DocumentApiModel, DocumentService> {
 	@Autowired
 	StorageManager storageManager;

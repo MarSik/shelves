@@ -35,7 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/backup")
+@RequestMapping("/v1/backup")
 public class BackupController {
 	@Autowired
 	BackupService backupService;

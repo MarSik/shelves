@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/mail")
+@RequestMapping("/v1/mail")
 public class MailgunController {
     static final private Logger logger = LoggerFactory.getLogger(MailgunController.class);
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/v1/transactions")
 public class TransactionController extends AbstractRestController<Transaction, TransactionApiModel, TransactionService> {
 	@Autowired
 	public TransactionController(TransactionService service) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("/v1/groups")
 public class GroupController extends AbstractRestController<Group, PartGroupApiModel, GroupService> {
 	@Autowired
 	public GroupController(GroupService service) {

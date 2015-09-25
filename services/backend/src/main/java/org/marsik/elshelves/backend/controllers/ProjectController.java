@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/v1/projects")
 public class ProjectController extends AbstractRestController<Project, ProjectApiModel, ProjectService> {
 	@Autowired
 	public ProjectController(ProjectService service) {

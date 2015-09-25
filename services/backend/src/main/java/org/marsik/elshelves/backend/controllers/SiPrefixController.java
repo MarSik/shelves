@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/siprefixes")
+@RequestMapping("/v1/siprefixes")
 public class SiPrefixController {
     @RequestMapping
     @ResponseBody

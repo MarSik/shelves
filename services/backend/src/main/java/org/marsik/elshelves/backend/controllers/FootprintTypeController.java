@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/footprinttypes")
+@RequestMapping("/v1/footprinttypes")
 public class FootprintTypeController {
     @RequestMapping
     @ResponseBody

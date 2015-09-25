@@ -39,7 +39,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/lots")
+@RequestMapping("/v1/lots")
 public class LotController {
 	@Autowired
 	LotService lotService;

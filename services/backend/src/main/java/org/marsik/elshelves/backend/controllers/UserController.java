@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 public class UserController extends AbstractRestController<User, UserApiModel, UserService> {
     @Autowired
     MailgunService mailgunService;

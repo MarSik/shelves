@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/sources")
+@RequestMapping("/v1/sources")
 public class SourceController extends AbstractRestController<Source, SourceApiModel, SourceService> {
 	final SourceService sourceService;
 

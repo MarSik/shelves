@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/stickers")
+@RequestMapping("/v1/stickers")
 public class StickerController {
 	@Autowired
 	StickerService stickerService;

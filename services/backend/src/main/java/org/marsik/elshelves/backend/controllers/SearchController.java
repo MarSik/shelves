@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RequestMapping("/searches")
+@RequestMapping("/v1/searches")
 @RestController
 public class SearchController {
     @Autowired

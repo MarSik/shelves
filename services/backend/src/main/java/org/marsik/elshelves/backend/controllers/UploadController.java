@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/v1/upload")
 public class UploadController {
 	@Autowired
 	DocumentService documentService;
