@@ -52,6 +52,7 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 		model.setVendor(object.getVendor());
 		model.setCustomId(object.getCustomId());
         model.setSerials(object.getSerials());
+		model.setManufacturable(object.getManufacturable());
 
         model.setBuyMultiple(object.getBuyMultiple());
         model.setMinimumCount(object.getMinimumCount());

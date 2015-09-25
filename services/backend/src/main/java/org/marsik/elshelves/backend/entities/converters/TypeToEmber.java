@@ -60,6 +60,7 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		model.setVendor(object.getVendor());
 		model.setCustomId(object.getCustomId());
         model.setSerials(object.getSerials());
+		model.setManufacturable(object.getManufacturable());
 
         model.setMinimumCount(object.getMinimumCount());
         model.setBuyMultiple(object.getBuyMultiple());

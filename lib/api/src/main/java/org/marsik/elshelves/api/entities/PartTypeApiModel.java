@@ -38,6 +38,7 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     Set<PartTypeApiModel> seeAlso;
 
     Boolean serials;
+    Boolean manufacturable;
 
     // Parts in store
     Long available;

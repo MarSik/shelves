@@ -8,6 +8,7 @@ var attr = DS.attr,
 export default NamedBase.extend({
   vendor: attr("string"),
   serials: attr("boolean"),
+  manufacturable: attr("boolean"),
   customId: attr('string'),
 
   minimumCount: attr('number'),

@@ -37,6 +37,13 @@ public class Type extends NamedEntity implements StickerCapable {
     // Should serial numbers be tracked?
     Boolean serials = false;
 
+	/**
+	 * Enable manufacturability of this type, When this is set to true
+	 * it will allow tracking of separate items with requirements, sub-components'
+	 * placement and solder status and so no
+	 */
+	Boolean manufacturable = false;
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Footprint> footprints;
 
