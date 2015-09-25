@@ -7,7 +7,6 @@ var app = new EmberApp({
         'handlebars.js': null
     },
     'ember-cli-foundation-sass': {
-        'modernizr': true,
         'fastclick': true,
         'foundationJs': 'all'
     },
