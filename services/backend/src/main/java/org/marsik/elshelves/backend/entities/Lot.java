@@ -26,21 +26,7 @@ import java.util.UUID;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class Lot extends LotBase implements StickerCapable {
-	public Lot() {
-	}
-
-	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, DateTime expiration, User performedBy) {
-		Lot l = new Lot();
-		l.setOwner(purchase.getOwner());
-		l.setAction(LotAction.DELIVERY);
-		l.setUuid(uuid);
-		l.setLocation(location);
-		l.setCount(count);
-		l.setPurchase(purchase);
-		l.setCreated(new DateTime());
-		l.setPerformedBy(performedBy);
-        l.setExpiration(expiration);
-		return l;
+	protected Lot() {
 	}
 
     protected Lot(UUID uuid, User performedBy, Lot previous) {
@@ -137,6 +123,8 @@ public class Lot extends LotBase implements StickerCapable {
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime expiration;
 
+	String serial;
+
     public Long usedCount() {
         long count = 0;
         for (Lot l: getNext()) {
@@ -224,6 +212,20 @@ public class Lot extends LotBase implements StickerCapable {
 
 	public Lot unassign(User performedBy, UuidGenerator uuidGenerator) {
 		return new Lot(uuidGenerator.generate(), performedBy, (Requirement)null, this);
+	}
+
+	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, DateTime expiration, User performedBy) {
+		Lot l = new Lot();
+		l.setOwner(purchase.getOwner());
+		l.setAction(LotAction.DELIVERY);
+		l.setUuid(uuid);
+		l.setLocation(location);
+		l.setCount(count);
+		l.setPurchase(purchase);
+		l.setCreated(new DateTime());
+		l.setPerformedBy(performedBy);
+		l.setExpiration(expiration);
+		return l;
 	}
 
 	public boolean isCanBeSoldered() {
