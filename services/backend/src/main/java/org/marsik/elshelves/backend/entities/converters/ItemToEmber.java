@@ -1,9 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
-import org.marsik.elshelves.backend.entities.Project;
+import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,24 +13,24 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class ProjectToEmber implements CachingConverter<Project, ProjectApiModel, UUID> {
+public class ItemToEmber implements CachingConverter<Item, ItemApiModel, UUID> {
 	@Autowired
-	NamedObjectToEmber namedObjectToEmber;
+	LotToEmber lotToEmber;
 
 	@Autowired
 	RequirementToEmber requirementToEmber;
 
 	@Override
-	public ProjectApiModel convert(Project object, int nested, Map<UUID, Object> cache) {
+	public ItemApiModel convert(Item object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
 			return null;
 		}
 
 		if (cache.containsKey(object.getUuid())) {
-			return (ProjectApiModel)cache.get(object.getUuid());
+			return (ItemApiModel)cache.get(object.getUuid());
 		}
 
-		ProjectApiModel model = new ProjectApiModel();
+		ItemApiModel model = new ItemApiModel();
 		if (nested > 0
 				&& object.getUuid() != null) {
 			cache.put(object.getUuid(), model);
@@ -38,8 +39,8 @@ public class ProjectToEmber implements CachingConverter<Project, ProjectApiModel
 	}
 
 	@Override
-	public ProjectApiModel convert(Project object, ProjectApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(object, model, nested, cache);
+	public ItemApiModel convert(Item object, ItemApiModel model, int nested, Map<UUID, Object> cache) {
+		lotToEmber.convert(object, model, nested, cache);
 
 		if (nested == 0) {
 			return model;

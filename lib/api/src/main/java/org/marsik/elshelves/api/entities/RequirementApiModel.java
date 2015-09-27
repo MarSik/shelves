@@ -27,7 +27,13 @@ public class RequirementApiModel extends AbstractEntityApiModel {
     String name;
     String summary;
 
+	/**
+	 * Deprecated
+	 * Used only for reading old backups
+	 */
 	ProjectApiModel project;
+
+	ItemApiModel item;
 
 	Set<PartTypeApiModel> type;
 

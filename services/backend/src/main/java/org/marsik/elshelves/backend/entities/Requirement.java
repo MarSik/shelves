@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
@@ -22,7 +21,7 @@ import java.util.Set;
 @Entity
 public class Requirement extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Project project;
+	Item item;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> type;
@@ -38,8 +37,8 @@ public class Requirement extends OwnedEntity {
 	Long count;
 
 	@PartOfUpdate
-	public Project getProject() {
-		return project;
+	public Item getItem() {
+		return item;
 	}
 
 	@PartOfUpdate
@@ -54,7 +53,7 @@ public class Requirement extends OwnedEntity {
 
 	@Override
 	public User getOwner() {
-		return getProject() != null ? getProject().getOwner() : null;
+		return getItem() != null ? getItem().getOwner() : null;
 	}
 
 	@Override
@@ -93,5 +92,10 @@ public class Requirement extends OwnedEntity {
 
 	public boolean canBeDeleted() {
 		return getLots().isEmpty();
+	}
+
+	@Override
+	public boolean canBeUpdated() {
+		return false;
 	}
 }

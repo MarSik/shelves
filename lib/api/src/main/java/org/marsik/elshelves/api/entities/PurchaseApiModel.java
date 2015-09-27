@@ -19,13 +19,15 @@ import java.util.UUID;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = PurchaseIdResolver.class)
 @EmberModelName("purchase")
-public class PurchaseApiModel extends LotBaseApiModel {
+public class PurchaseApiModel extends AbstractEntityApiModel {
 	public PurchaseApiModel(UUID id) {
 		super(id);
 	}
 
 	public PurchaseApiModel() {
 	}
+
+	Long count;
 
 	Double singlePrice;
     Double totalPrice;

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.marsik.elshelves.backend.app.ApplicationLauncher;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
@@ -69,7 +70,8 @@ public class RelinkServiceTest {
 
         Lot lot = new Lot();
         lot.setUuid(uuidGenerator.generate());
-        lot.setPerformedBy(oldUser);
+        lot.setHistory(new LotHistory());
+        lot.getHistory().setPerformedBy(oldUser);
         lot.setOwner(newUser);
 
         Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
@@ -78,56 +80,10 @@ public class RelinkServiceTest {
 
         relinkService.relink(lot, newUser, relinkCache, false);
 
-        assertThat(lot.getPerformedBy())
+        assertThat(lot.getHistory().getPerformedBy())
                 .isNotNull()
                 .isEqualTo(newUser);
-        assertThat(lot.getPerformedBy().getName())
-                .isEqualTo(newUser.getName());
-    }
-
-    @Test
-    public void testLotNextPerformedBy() {
-        User oldUser = new User();
-        oldUser.setName("old user");
-        oldUser.setUuid(uuidGenerator.generate());
-
-        User newUser = new User();
-        newUser.setName("new user");
-        newUser.setUuid(uuidGenerator.generate());
-
-        Lot lot = new Lot();
-        lot.setUuid(uuidGenerator.generate());
-        lot.setPerformedBy(oldUser);
-        lot.setOwner(newUser);
-
-        Lot lot2 = new Lot();
-        lot2.setUuid(uuidGenerator.generate());
-        lot2.setPerformedBy(oldUser);
-        lot2.setOwner(newUser);
-        lot2.setPrevious(lot);
-
-        lot.setNext(new HashSet<>());
-        lot.getNext().add(lot2);
-
-        Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
-        relinkCache.put(newUser.getUuid(), newUser);
-        relinkCache.put(oldUser.getUuid(), newUser);
-
-        relinkService.relink(lot, newUser, relinkCache, true);
-        assertThat(relinkCache.get(oldUser.getUuid())).isEqualTo(newUser);
-
-        relinkService.relink(lot2, newUser, relinkCache, true);
-
-        assertThat(lot.getPerformedBy())
-                .isNotNull()
-                .isEqualTo(newUser);
-        assertThat(lot.getPerformedBy().getName())
-                .isEqualTo(newUser.getName());
-
-        assertThat(lot2.getPerformedBy())
-                .isNotNull()
-                .isEqualTo(newUser);
-        assertThat(lot2.getPerformedBy().getName())
+        assertThat(lot.getHistory().getPerformedBy().getName())
                 .isEqualTo(newUser.getName());
     }
 }

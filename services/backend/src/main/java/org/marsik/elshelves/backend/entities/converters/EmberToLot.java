@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,6 @@ import java.util.UUID;
 
 @Service
 public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
-	@Autowired
-	EmberToLotBase emberToLotBase;
-
 	@Autowired
 	EmberToBox emberToBox;
 
@@ -44,16 +42,23 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 
 	@Override
 	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
-		emberToLotBase.convert(object, model, nested, cache);
+		model.setCount(object.getCount());
 
         model.setExpiration(object.getExpiration());
-		model.setAction(object.getAction());
+		model.setStatus(object.getStatus());
 		model.setLocation(emberToBox.convert(object.getLocation(), nested, cache));
 		model.setPurchase(emberToPurchase.convert(object.getPurchase(), nested, cache));
-		model.setPrevious(convert(object.getPrevious(), nested, cache));
-		model.setPerformedBy(emberToUser.convert(object.getPerformedBy(), nested, cache));
 		model.setUsedBy(emberToRequirement.convert(object.getUsedBy(), nested, cache));
-		model.setSerial(object.getSerial());
+		model.setSerials(object.getSerials());
+
+		if (model.getSerials() == null) {
+			model.setSerials(new THashSet<>());
+		}
+
+		if (object.getSerial() != null
+				&& !object.getSerial().isEmpty()) {
+			model.getSerials().add(object.getSerial());
+		}
 
 		return model;
 	}

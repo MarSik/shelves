@@ -1,15 +1,8 @@
 package org.marsik.elshelves.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectReader;
-import gnu.trove.set.hash.THashSet;
-import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.BackupApiModel;
-import org.marsik.elshelves.api.entities.DocumentApiModel;
-import org.marsik.elshelves.api.entities.PolymorphicRecord;
-import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
-import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
-import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.entities.NamedEntity;
+import org.marsik.elshelves.api.entities.RestoreApiModel;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BackupService;
@@ -31,8 +24,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/backup")
@@ -55,7 +46,7 @@ public class BackupController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	@Transactional
-	public void restoreBackup(@RequestBody BackupApiModel backup,
+	public void restoreBackup(@RequestBody RestoreApiModel backup,
 							  @CurrentUser User currentUser) {
 		backupService.restoreFromBackup(backup, currentUser);
 	}
@@ -73,12 +64,12 @@ public class BackupController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
+    @Transactional
     public void upload(@CurrentUser User currentUser,
-            @RequestParam("files[]") MultipartFile[] files,
-            HttpServletRequest request) throws IOException {
+            @RequestParam("files[]") MultipartFile[] files) throws IOException {
         for (MultipartFile file: files) {
-            ObjectReader reader = converter.getObjectMapper().reader().forType(BackupApiModel.class);
-            BackupApiModel backup = reader.readValue(file.getInputStream());
+            ObjectReader reader = converter.getObjectMapper().reader().forType(RestoreApiModel.class);
+            RestoreApiModel backup = reader.readValue(file.getInputStream());
             restoreBackup(backup, currentUser);
         }
     }

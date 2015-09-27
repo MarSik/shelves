@@ -4,6 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Service
 public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiModel, UUID> {
 	@Autowired
-	LotBaseToEmber lotBaseToEmber;
+	NamedObjectToEmber namedObjectToEmber;
 
 	@Autowired
 	LotToEmber lotToEmber;
@@ -45,7 +46,7 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 
 	@Override
 	public PurchaseApiModel convert(Purchase object, PurchaseApiModel model, int nested, Map<UUID, Object> cache) {
-		lotBaseToEmber.convert(object, model, nested, cache);
+		model.setCount(object.getCount());
 
 		if (nested == 0) {
 			return model;

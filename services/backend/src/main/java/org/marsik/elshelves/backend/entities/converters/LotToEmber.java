@@ -24,9 +24,6 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 	PurchaseToEmber purchaseToEmber;
 
 	@Autowired
-	LotBaseToEmber lotBaseToEmber;
-
-	@Autowired
 	RequirementToEmber requirementToEmber;
 
 	protected LotApiModel createEntity() {
@@ -34,21 +31,19 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 	}
 
 	public LotApiModel convert(Lot object, LotApiModel entity, int nested, Map<UUID, Object> cache) {
-		lotBaseToEmber.convert(object, entity, nested, cache);
+		entity.setId(object.getUuid());
+		entity.setCount(object.getCount());
 
 		if (nested == 0) {
 			return entity;
 		}
 
-        entity.setExpiration(new DateTime(object.getExpiration()));
-		entity.setSerial(object.getSerial());
-		entity.setAction(object.getAction());
+        entity.setExpiration(object.getExpiration());
+		entity.setSerials(object.getSerials());
+		entity.setAction(object.getStatus());
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
-		entity.setPerformedBy(userToEmber.convert(object.getPerformedBy(), nested - 1, cache));
 		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested - 1, cache));
-
 		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
-		entity.setPrevious(convert(object.getPrevious(), nested - 1, cache));
 
 		entity.setCanBeAssigned(object.isCanBeAssigned());
 		entity.setCanBeUnassigned(object.isCanBeUnassigned());

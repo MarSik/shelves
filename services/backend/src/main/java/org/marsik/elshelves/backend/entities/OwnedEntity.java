@@ -62,6 +62,8 @@ public abstract class OwnedEntity {
 
 	public abstract boolean canBeDeleted();
 
+	public abstract boolean canBeUpdated();
+
 	@Override
 	public String toString() {
 		return getClass().getName() + "{" +

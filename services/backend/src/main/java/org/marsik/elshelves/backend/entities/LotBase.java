@@ -22,13 +22,9 @@ import java.util.Date;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public abstract class LotBase extends OwnedEntity {
-	@NotNull
-	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	DateTime created;
 
-	@NotNull
-	@Min(1)
-	Long count;
+
+
 
 	public Type getType() {
 		return null;

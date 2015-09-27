@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,110 +10,42 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Entity
 @Data
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
-public class Lot extends LotBase implements StickerCapable {
+public class Lot extends OwnedEntity implements StickerCapable {
 	public Lot() {
 	}
 
-    protected Lot(UUID uuid, User performedBy, Lot previous) {
-        setUuid(uuid);
-        setPerformedBy(performedBy);
-        setPrevious(previous);
-        setCreated(new DateTime());
-        setNext(new ArrayList<Lot>());
-        setAction(LotAction.EVENT);
-
-        setOwner(previous.getOwner());
-        setCount(previous.getCount());
-        setUsedBy(previous.getUsedBy());
-        setLocation(previous.getLocation());
-        setPurchase(previous.getPurchase());
-        setExpiration(previous.getExpiration());
-    }
-
-	protected Lot(UUID uuid, User performedBy, Long count, Lot previous) {
-        this(uuid, performedBy, previous);
-		setCount(count);
-		setAction(LotAction.SPLIT);
-	}
-
-    protected Lot(UUID uuid, User performedBy, Long count, Requirement requirement, Lot previous) {
-        this(uuid, performedBy, previous);
-        setCount(count);
-
-        if (requirement == null) {
-            setUsedBy(previous.getUsedBy());
-            setAction(LotAction.SPLIT);
-        } else {
-            setUsedBy(requirement);
-            setAction(LotAction.ASSIGNED);
-        }
-    }
-
-	protected Lot(UUID uuid, User performedBy, LotAction action, Lot previous) {
-        this(uuid, performedBy, previous);
-		setAction(action);
-	}
-
-    protected Lot(UUID uuid, User performedBy, LotAction action, Requirement requirement, Lot previous) {
-        this(uuid, performedBy, previous);
-        setAction(action);
-
-        if (requirement == null) {
-            setUsedBy(previous.getUsedBy());
-        } else {
-            setUsedBy(requirement);
-        }
-    }
-
-	protected Lot(UUID uuid, User performedBy, Requirement requirement, Lot previous) {
-        this(uuid, performedBy, previous);
-		setUsedBy(requirement);
-
-		if (requirement == null) {
-			setAction(LotAction.UNASSIGNED);
-		} else {
-			setAction(LotAction.ASSIGNED);
-		}
-	}
-
-    protected Lot(UUID uuid, User performedBy, Box location, Lot previous) {
-        this(uuid, performedBy, previous);
-        setAction(LotAction.MOVED);
-        setLocation(location);
-    }
-
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Lot previous;
-
-	@OneToMany(mappedBy = "previous",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Lot> next;
-
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	User performedBy;
+	@NotNull
+	@Min(1)
+	Long count;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	LotAction status;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@NotNull
+	LotHistory history;
+
+	@NotNull
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			fetch = FetchType.EAGER)
 	Purchase purchase;
-
-	@NotNull
-	LotAction action;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Box location;
@@ -123,14 +56,11 @@ public class Lot extends LotBase implements StickerCapable {
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime expiration;
 
-	String serial;
+	@ElementCollection
+	Set<String> serials;
 
     public Long usedCount() {
-        long count = 0;
-        for (Lot l: getNext()) {
-            count += l.getCount();
-        }
-        return count;
+        return isCanBeAssigned() ? 0 : count;
     }
 
     public Long freeCount() {
@@ -155,95 +85,147 @@ public class Lot extends LotBase implements StickerCapable {
 		}
 	}
 
-	public SplitResult split(Long count, User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
-		// Already used
-		if (getNext().iterator().hasNext()) {
-			return null;
-		}
-
+	public Lot take(Long count, User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
 		// Not available for split
 		if (!isCanBeSplit()) {
 			return null;
 		}
 
-        // No assignment required
-		// Not enough elements, use all
-		// No split needed, the exact amount is available
-		if (requirement == null && getCount() <= count) {
-			return new SplitResult(this, null);
-		}
-
-        // Assignment required, use the exact amount or all if
-        // not enough available
+        // Use the exact amount or all if not enough available
         if (getCount() <= count) {
             count = getCount();
         }
 
-		Lot requested = new Lot(uuidGenerator.generate(), performedBy, count, requirement, this);
+		Lot result = null;
 
         // No remainder..
         if (getCount().equals(count)) {
-            return new SplitResult(requested, null);
-        }
+            result = this;
+        } else {
+			// Create the taken Lot and substract the count
+			setCount(getCount() - count);
 
-		Lot remainder = new Lot(uuidGenerator.generate(), performedBy, getCount() - count, this);
-		return new SplitResult(requested, remainder);
+			result = new Lot();
+			result.setUuid(uuidGenerator.generate());
+			result.setHistory(getHistory());
+			result.setCount(count);
+			result.setStatus(getStatus());
+			result.setLocation(getLocation());
+			result.setUsedBy(getUsedBy());
+			result.setExpiration(getExpiration());
+
+			Set<String> serials = new THashSet<>();
+			getSerials().stream().skip(getCount() - count).forEach(new Consumer<String>() {
+				@Override
+				public void accept(String s) {
+					serials.add(s);
+				}
+			});
+
+			result.setSerials(serials); // TODO take a specific serials
+			getSerials().removeAll(result.getSerials());
+		}
+
+		if (requirement != null && result.isCanBeAssigned()) {
+			result.recordChange(LotAction.ASSIGNED, performedBy);
+		}
+
+		return result;
 	}
 
-    public Lot move(User performedBy, UuidGenerator uuidGenerator, Box location) {
-        return new Lot(uuidGenerator.generate(), performedBy, location, this);
+	protected Lot copy(Long count) {
+		Lot l = new Lot();
+		l.setCount(count);
+		return l;
+	}
+
+    public LotHistory move(User performedBy, Box location) {
+		setLocation(location);
+
+		LotHistory h = recordChange(LotAction.MOVED, performedBy);
+		h.setLocation(location);
+
+		return h;
     }
 
-	public Lot solder(User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
-		return new Lot(uuidGenerator.generate(), performedBy, LotAction.SOLDERED, requirement, this);
+	public LotHistory solder(User performedBy, Requirement requirement) {
+		if (requirement != null) {
+			assign(performedBy, requirement);
+		}
+
+		return recordChange(LotAction.SOLDERED, performedBy);
 	}
 
-    public Lot unsolder(User performedBy, UuidGenerator uuidGenerator) {
-        return new Lot(uuidGenerator.generate(), performedBy, LotAction.UNSOLDERED, this);
+    public LotHistory unsolder(User performedBy) {
+		return recordChange(LotAction.UNSOLDERED, performedBy);
     }
 
-	public Lot destroy(User performedBy, UuidGenerator uuidGenerator) {
-		return new Lot(uuidGenerator.generate(), performedBy, LotAction.DESTROYED, this);
+	public LotHistory destroy(User performedBy) {
+		return recordChange(LotAction.DESTROYED, performedBy);
 	}
 
-	public Lot assign(User performedBy, UuidGenerator uuidGenerator, Requirement where) {
-		return new Lot(uuidGenerator.generate(), performedBy, where, this);
+	public LotHistory assign(User performedBy, Requirement where) {
+		setUsedBy(where);
+
+		LotHistory h = recordChange(LotAction.ASSIGNED, performedBy);
+		h.setAssignedTo(where);
+
+		return h;
 	}
 
-	public Lot unassign(User performedBy, UuidGenerator uuidGenerator) {
-		return new Lot(uuidGenerator.generate(), performedBy, (Requirement)null, this);
+	public LotHistory unassign(User performedBy) {
+		setUsedBy(null);
+
+		LotHistory h = recordChange(LotAction.UNASSIGNED, performedBy);
+		h.setAssignedTo(null);
+
+		return h;
 	}
 
-	public static Lot delivery(Purchase purchase, UUID uuid, Long count, Box location, DateTime expiration, User performedBy) {
+	private LotHistory recordChange(LotAction action, User performedBy) {
+		setStatus(action);
+
+		LotHistory h = new LotHistory();
+		h.setPrevious(getHistory());
+		setHistory(h);
+		h.setPerformedBy(performedBy);
+		h.setAction(action);
+
+		return h;
+	}
+
+	public static Lot delivery(Purchase purchase, UUID uuid, Long count,
+							   Box location, DateTime expiration, User performedBy) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
-		l.setAction(LotAction.DELIVERY);
 		l.setUuid(uuid);
 		l.setLocation(location);
 		l.setCount(count);
 		l.setPurchase(purchase);
-		l.setCreated(new DateTime());
-		l.setPerformedBy(performedBy);
 		l.setExpiration(expiration);
+
+		LotHistory h = l.recordChange(LotAction.DELIVERY, performedBy);
+		h.setLocation(location);
+
 		return l;
 	}
 
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
-				&& !getAction().equals(LotAction.DESTROYED)
-				&& !getAction().equals(LotAction.SOLDERED);
+				&& !getStatus().equals(LotAction.DESTROYED)
+				&& !getStatus().equals(LotAction.SOLDERED);
 	}
 
 	public boolean isCanBeUnsoldered() {
 		return isValid()
-                && getAction().equals(LotAction.SOLDERED);
+                && getStatus().equals(LotAction.SOLDERED);
 	}
 
 	public boolean isCanBeAssigned() {
 		return isValid()
                 && getUsedBy() == null
-				&& !getAction().equals(LotAction.DESTROYED);
+				&& !getStatus().equals(LotAction.DESTROYED);
 	}
 
 	public boolean isCanBeUnassigned() {
@@ -252,7 +234,7 @@ public class Lot extends LotBase implements StickerCapable {
 
     public boolean isCanBeSplit() {
         return isValid()
-                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getAction());
+                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getStatus());
     }
 
     public boolean isCanBeMoved() {
@@ -266,7 +248,7 @@ public class Lot extends LotBase implements StickerCapable {
      * represents a historical state only.
      */
     public boolean isValid() {
-        return !getNext().iterator().hasNext() && !getAction().equals(LotAction.DESTROYED);
+        return !getStatus().equals(LotAction.DESTROYED);
     }
 
 	@Override
@@ -282,5 +264,18 @@ public class Lot extends LotBase implements StickerCapable {
 	@Override
 	public String getBaseUrl() {
 		return "lots";
+	}
+
+	public boolean canBeDeleted() {
+		return false;
+	}
+
+	public boolean canBeUpdated() {
+		return false;
+	}
+
+	@Transient
+	public Type getType() {
+		return getPurchase().getType();
 	}
 }

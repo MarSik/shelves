@@ -1,9 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
-import org.marsik.elshelves.backend.entities.Project;
+import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,45 +13,44 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToProject implements CachingConverter<ProjectApiModel, Project, UUID> {
+public class EmberToItem implements CachingConverter<ItemApiModel, Item, UUID> {
     @Autowired
 	EmberToRequirement emberToRequirement;
 
 	@Autowired
-	EmberToNamedObject emberToNamedObject;
+	EmberToLot emberToLot;
 
     @Override
-    public Project convert(ProjectApiModel object, int nested, Map<UUID, Object> cache) {
+    public Item convert(ItemApiModel object, int nested, Map<UUID, Object> cache) {
         if (object == null) {
             return null;
         }
 
         if (cache.containsKey(object.getId())) {
-            return (Project)cache.get(object.getId());
+            return (Item)cache.get(object.getId());
         }
 
-        Project project = new Project();
+        Item item = new Item();
 
 		if (nested > 0
 				&& object.getId() != null) {
-			cache.put(object.getId(), project);
+			cache.put(object.getId(), item);
 		}
 
-		return convert(object, project, nested, cache);
+		return convert(object, item, nested, cache);
     }
 
 	@Override
-	public Project convert(ProjectApiModel object, Project project, int nested, Map<UUID, Object> cache) {
-		emberToNamedObject.convert(object, project, nested, cache);
-		project.setDescription(object.getDescription());
+	public Item convert(ItemApiModel object, Item item, int nested, Map<UUID, Object> cache) {
+		emberToLot.convert(object, item, nested, cache);
 
 		if (object.getRequirements() != null) {
-			project.setRequires(new THashSet<Requirement>());
+			item.setRequires(new THashSet<Requirement>());
 			for (RequirementApiModel r: object.getRequirements()) {
-				project.getRequires().add(emberToRequirement.convert(r, nested, cache));
+				item.getRequires().add(emberToRequirement.convert(r, nested, cache));
 			}
 		}
 
-		return project;
+		return item;
 	}
 }

@@ -17,7 +17,7 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
     EmberToType emberToType;
 
 	@Autowired
-	EmberToProject emberToProject;
+	EmberToItem emberToItem;
 
 	@Autowired
 	EmberToLot emberToLot;
@@ -56,7 +56,7 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 			}
 		}
 
-		model.setProject(emberToProject.convert(object.getProject(), nested, cache));
+		model.setItem(emberToItem.convert(object.getItem(), nested, cache));
 
 		return model;
 	}

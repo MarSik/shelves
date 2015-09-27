@@ -36,6 +36,11 @@ public class Code extends OwnedEntity {
         return true;
     }
 
+    @Override
+    public boolean canBeUpdated() {
+        return false;
+    }
+
     @PartOfUpdate
     public NamedEntity getReference() {
         return reference;

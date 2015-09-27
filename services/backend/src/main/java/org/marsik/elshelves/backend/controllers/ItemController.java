@@ -1,15 +1,15 @@
 package org.marsik.elshelves.backend.controllers;
 
 import org.marsik.elshelves.api.ember.EmberModel;
-import org.marsik.elshelves.api.entities.ProjectApiModel;
+import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.entities.Project;
+import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
-import org.marsik.elshelves.backend.services.ProjectService;
+import org.marsik.elshelves.backend.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,22 +23,22 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/projects")
-public class ProjectController extends AbstractRestController<Project, ProjectApiModel, ProjectService> {
+@RequestMapping("/v1/items")
+public class ItemController extends AbstractRestController<Item, ItemApiModel, ItemService> {
 	@Autowired
-	public ProjectController(ProjectService service) {
-		super(ProjectApiModel.class, service);
+	public ItemController(ItemService service) {
+		super(ItemApiModel.class, service);
 	}
 
     @RequestMapping("/{uuid}/import")
     @Transactional
     public EmberModel importFromSchematics(@CurrentUser User currentUser,
-                                           @PathVariable("uuid") UUID projectId,
+                                           @PathVariable("uuid") UUID itemId,
                                            @RequestParam("document") UUID documentId) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
         List<RequirementApiModel> newRequirements = new ArrayList<>();
-        ProjectApiModel project = service.importRequirements(projectId, documentId, currentUser, newRequirements);
+        ItemApiModel project = service.importRequirements(itemId, documentId, currentUser, newRequirements);
 
-        EmberModel.Builder<ProjectApiModel> builder = new EmberModel.Builder<ProjectApiModel>(project);
+        EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(project);
         sideLoad(project, builder);
 
         //This would be nice, but Ember has an issue in beta 14.1/15 that breaks the model

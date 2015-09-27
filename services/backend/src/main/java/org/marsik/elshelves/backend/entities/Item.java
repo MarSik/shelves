@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -17,9 +18,9 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
-@DefaultEmberModel(ProjectApiModel.class)
+@DefaultEmberModel(ItemApiModel.class)
 @Entity
-public class Project extends NamedEntity implements StickerCapable {
+public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "project",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Requirement> requires;

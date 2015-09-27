@@ -1,17 +1,18 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.entities.Project;
+import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.EmberToProject;
-import org.marsik.elshelves.backend.entities.converters.ProjectToEmber;
-import org.marsik.elshelves.backend.repositories.ProjectRepository;
+import org.marsik.elshelves.backend.entities.converters.EmberToItem;
+import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
+import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class ProjectService extends AbstractRestService<ProjectRepository, Project, ProjectApiModel> {
+public class ItemService extends AbstractRestService<ItemRepository, Item, ItemApiModel> {
 	@Autowired
 	RequirementService requirementService;
 
@@ -29,20 +30,20 @@ public class ProjectService extends AbstractRestService<ProjectRepository, Proje
     DocumentService documentService;
 
 	@Autowired
-	public ProjectService(ProjectRepository repository,
-						  ProjectToEmber dbToRest,
-						  EmberToProject restToDb,
-						  UuidGenerator uuidGenerator) {
+	public ItemService(ItemRepository repository,
+                       ItemToEmber dbToRest,
+                       EmberToItem restToDb,
+                       UuidGenerator uuidGenerator) {
 		super(repository, dbToRest, restToDb, uuidGenerator);
 	}
 
     @Override
-    protected Iterable<Project> getAllEntities(User currentUser) {
+    protected Iterable<Item> getAllEntities(User currentUser) {
         return getRepository().findByOwner(currentUser);
     }
 
 	@Override
-	protected void deleteEntity(Project entity) throws OperationNotPermitted {
+	protected void deleteEntity(Item entity) throws OperationNotPermitted {
 		// Delete requirements
 		for (Requirement r: entity.getRequires()) {
 			requirementService.deleteEntity(r);
@@ -51,14 +52,14 @@ public class ProjectService extends AbstractRestService<ProjectRepository, Proje
 		super.deleteEntity(entity);
 	}
 
-    public ProjectApiModel importRequirements(UUID projectId, UUID document, User currentUser, List<RequirementApiModel> newRequirements) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
-        Project project = getSingleEntity(projectId);
+    public ItemApiModel importRequirements(UUID projectId, UUID document, User currentUser, List<RequirementApiModel> newRequirements) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
+        Item item = getSingleEntity(projectId);
 
-        if (project == null) {
+        if (item == null) {
             throw new EntityNotFound();
         }
 
-        if (!project.getOwner().equals(currentUser)) {
+        if (!item.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
         }
 
@@ -75,6 +76,6 @@ public class ProjectService extends AbstractRestService<ProjectRepository, Proje
             cache.put(newR.getId(), newR);
         }
 
-        return getDbToRest().convert(project, 1, cache);
+        return getDbToRest().convert(item, 1, cache);
     }
 }

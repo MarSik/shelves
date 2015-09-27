@@ -86,7 +86,12 @@ public class User extends OwnedEntity implements StickerCapable {
 		return false;
 	}
 
-	// Sticker info
+    @Override
+    public boolean canBeUpdated() {
+        return true;
+    }
+
+    // Sticker info
 	@Override
 	public String getSummary() {
 		return getEmail();

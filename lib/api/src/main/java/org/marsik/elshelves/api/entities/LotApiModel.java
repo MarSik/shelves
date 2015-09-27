@@ -12,7 +12,9 @@ import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 
+import javax.validation.constraints.Min;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -27,7 +29,7 @@ import java.util.UUID;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = LotIdResolver.class)
 @EmberModelName("lot")
-public class LotApiModel extends LotBaseApiModel {
+public class LotApiModel extends AbstractEntityApiModel {
 	public LotApiModel(UUID id) {
 		super(id);
 	}
@@ -37,15 +39,20 @@ public class LotApiModel extends LotBaseApiModel {
 
     BoxApiModel location;
 
-    LotApiModel previous;
-
-	LotAction action;
+	LotAction status;
 
 	PurchaseApiModel purchase;
 
 	RequirementApiModel usedBy;
 
     DateTime expiration;
+
+	DateTime created;
+
+	@Min(1)
+	Long count;
+
+	Set<String> serials;
 
 	boolean canBeSoldered;
 	boolean canBeUnsoldered;
@@ -55,7 +62,59 @@ public class LotApiModel extends LotBaseApiModel {
     boolean canBeMoved;
     boolean valid;
 
+	/**
+	 * Serial number
+	 * Deprecated: only used for importing older data
+	 */
 	String serial;
+
+	/**
+	 * Previous version of this Lot (history)
+	 * Deprecated: only used for importing older data
+	 */
+	LotApiModel previous;
+
+	/**
+	 * Next version of this Lot (history)
+	 * Deprecated: only used for importing older data
+	 */
+	Set<LotApiModel> next;
+
+	/**
+	 * User responsible for the last change
+	 * Deprecated: only used for importing older data
+	 */
+	UserApiModel performedBy;
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	@JsonIdentityReference(alwaysAsId = true)
+	public Set<LotApiModel> getNext() {
+		return next;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	@JsonIdentityReference(alwaysAsId = true)
+	public UserApiModel getPerformedBy() {
+		return performedBy;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	public LotAction getAction() {
+		return status;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	public void setAction(LotAction action) {
+		status = action;
+	}
 
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {

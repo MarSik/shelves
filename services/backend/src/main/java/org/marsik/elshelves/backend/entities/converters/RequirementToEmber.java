@@ -19,7 +19,7 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 	TypeToEmber typeToEmber;
 
 	@Autowired
-	ProjectToEmber projectToEmber;
+	ItemToEmber itemToEmber;
 
 	@Autowired
 	LotToEmber lotToEmber;
@@ -58,7 +58,7 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 		for (Type t: object.getType()) {
 			model.getType().add(typeToEmber.convert(t, nested, cache));
 		}
-		model.setProject(projectToEmber.convert(object.getProject(), nested, cache));
+		model.setItem(itemToEmber.convert(object.getItem(), nested, cache));
 
 		model.setLots(new THashSet<LotApiModel>());
 		for (Lot l: object.getLots()) {

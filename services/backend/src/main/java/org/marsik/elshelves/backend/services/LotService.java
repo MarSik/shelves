@@ -14,7 +14,6 @@ import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.EmberToLot;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -99,7 +97,7 @@ public class LotService {
 		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser);
 		lotRepository.save(lot);
 
-		purchase.getRawLots().add(lot);
+		purchase.getLots().add(lot);
 
 		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
 	}
@@ -120,10 +118,10 @@ public class LotService {
             throw new PermissionDenied();
         }
 
-        Lot lot = lot0.move(currentUser, uuidGenerator, location);
-        lotRepository.save(lot);
+        lot0.move(currentUser, location);
+        lotRepository.save(lot0);
 
-        return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
+        return lotToEmber.convert(lot0, 1, new THashMap<UUID, Object>());
     }
 
 	public LotSplitResult split(UUID source, Long count, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
@@ -153,18 +151,15 @@ public class LotService {
 
 		Map<UUID, Object> cache = new THashMap<>();
 
-		Lot.SplitResult result = lot.split(count, currentUser, uuidGenerator, requirement);
+		Lot result = lot.take(count, currentUser, uuidGenerator, requirement);
 		if (result == null) {
 			throw new OperationNotPermitted();
 		}
 
-		lotRepository.save(result.getRequested());
-		if (result.getRemainder() != null) {
-			lotRepository.save(result.getRemainder());
-		}
+		lotRepository.save(result);
 
-		return new LotSplitResult(lotToEmber.convert(result.getRequested(), 1, cache),
-				lotToEmber.convert(result.getRemainder(), 1, cache));
+		return new LotSplitResult(lotToEmber.convert(result, 1, cache),
+				lotToEmber.convert(result.equals(lot) ? null : lot, 1, cache));
 	}
 
 	public LotApiModel destroy(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
@@ -180,10 +175,10 @@ public class LotService {
 
 		Map<UUID, Object> cache = new THashMap<>();
 
-		Lot updated = lot.destroy(currentUser, uuidGenerator);
-		lotRepository.save(updated);
+		lot.destroy(currentUser);
+		lotRepository.save(lot);
 
-		return lotToEmber.convert(updated, 1, cache);
+		return lotToEmber.convert(lot, 1, cache);
 	}
 
     public LotApiModel solder(UUID source, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
@@ -211,10 +206,10 @@ public class LotService {
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Lot updated = lot.solder(currentUser, uuidGenerator, requirement);
-        lotRepository.save(updated);
+        lot.solder(currentUser, requirement);
+        lotRepository.save(lot);
 
-        return lotToEmber.convert(updated, 1, cache);
+        return lotToEmber.convert(lot, 1, cache);
     }
 
     public LotApiModel unsolder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
@@ -234,10 +229,10 @@ public class LotService {
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Lot updated = lot.unsolder(currentUser, uuidGenerator);
-        lotRepository.save(updated);
+        lot.unsolder(currentUser);
+        lotRepository.save(lot);
 
-        return lotToEmber.convert(updated, 1, cache);
+        return lotToEmber.convert(lot, 1, cache);
     }
 
     public LotApiModel assign(UUID source, User currentUser, RequirementApiModel requirement0) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
@@ -263,10 +258,10 @@ public class LotService {
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Lot updated = lot.assign(currentUser, uuidGenerator, requirement);
-        lotRepository.save(updated);
+        lot.assign(currentUser, requirement);
+        lotRepository.save(lot);
 
-        return lotToEmber.convert(updated, 1, cache);
+        return lotToEmber.convert(lot, 1, cache);
     }
 
     public LotApiModel unassign(UUID source, User currentUser) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
@@ -286,9 +281,9 @@ public class LotService {
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Lot updated = lot.unassign(currentUser, uuidGenerator);
-        lotRepository.save(updated);
+        lot.unassign(currentUser);
+        lotRepository.save(lot);
 
-        return lotToEmber.convert(updated, 1, cache);
+        return lotToEmber.convert(lot, 1, cache);
     }
 }

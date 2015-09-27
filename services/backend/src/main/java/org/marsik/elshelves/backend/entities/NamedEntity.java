@@ -78,7 +78,12 @@ public class NamedEntity extends OwnedEntity {
 		return false;
 	}
 
-    @PartOfUpdate
+	@Override
+	public boolean canBeUpdated() {
+		return true;
+	}
+
+	@PartOfUpdate
     public Set<NumericPropertyValue> getProperties() {
         return properties;
     }

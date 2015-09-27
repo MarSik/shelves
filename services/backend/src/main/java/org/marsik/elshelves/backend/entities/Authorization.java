@@ -53,6 +53,11 @@ public class Authorization extends OwnedEntity {
         return true;
     }
 
+    @Override
+    public boolean canBeUpdated() {
+        return false;
+    }
+
     @PartOfUpdate
     public String getName() {
         return name;

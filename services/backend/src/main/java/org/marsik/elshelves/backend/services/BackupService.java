@@ -4,7 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
-import org.marsik.elshelves.api.entities.BackupApiModel;
+import org.marsik.elshelves.api.entities.RestoreApiModel;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.NamedEntity;
@@ -22,7 +22,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
 import org.marsik.elshelves.backend.entities.converters.EmberToNumericProperty;
-import org.marsik.elshelves.backend.entities.converters.EmberToProject;
+import org.marsik.elshelves.backend.entities.converters.EmberToItem;
 import org.marsik.elshelves.backend.entities.converters.EmberToPurchase;
 import org.marsik.elshelves.backend.entities.converters.EmberToRequirement;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
@@ -33,7 +33,7 @@ import org.marsik.elshelves.backend.entities.converters.FootprintToEmber;
 import org.marsik.elshelves.backend.entities.converters.GroupToEmber;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.entities.converters.NumericPropertyToEmber;
-import org.marsik.elshelves.backend.entities.converters.ProjectToEmber;
+import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
 import org.marsik.elshelves.backend.entities.converters.PurchaseToEmber;
 import org.marsik.elshelves.backend.entities.converters.RequirementToEmber;
 import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
@@ -48,7 +48,7 @@ import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
-import org.marsik.elshelves.backend.repositories.ProjectRepository;
+import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.marsik.elshelves.backend.repositories.SourceRepository;
@@ -108,7 +108,7 @@ public class BackupService {
 	EmberToRequirement emberToRequirement;
 
 	@Autowired
-	EmberToProject emberToProject;
+    EmberToItem emberToItem;
 
     @Autowired
     EmberToUnit emberToUnit;
@@ -133,7 +133,7 @@ public class BackupService {
     LotToEmber lotToEmber;
 
     @Autowired
-    ProjectToEmber projectToEmber;
+    ItemToEmber itemToEmber;
 
     @Autowired
     PurchaseToEmber purchaseToEmber;
@@ -176,7 +176,7 @@ public class BackupService {
     LotRepository lotRepository;
 
     @Autowired
-    ProjectRepository projectRepository;
+    ItemRepository itemRepository;
 
     @Autowired
     PurchaseRepository purchaseRepository;
@@ -249,7 +249,7 @@ public class BackupService {
         }
     }
 
-	public boolean restoreFromBackup(BackupApiModel backup,
+	public boolean restoreFromBackup(RestoreApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
         Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
@@ -261,6 +261,9 @@ public class BackupService {
             relinkCache.put(backup.getUser().getId(), currentUser);
         }
 
+        // TODO separate lots and lothistory
+        // TODO convert projects to types + items
+
         prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache, pool);
@@ -268,7 +271,7 @@ public class BackupService {
         prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getTypes(), emberToType, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getProjects(), emberToProject, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getSources(), emberToSource, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkCache, pool);
@@ -389,13 +392,13 @@ public class BackupService {
             Purchase p = (Purchase) p0;
             if (p.getCreated() != null) {
                 continue;
-            } else if (p.getRawLots().isEmpty()) {
+            } else if (p.getLots().isEmpty()) {
                 p.setCreated(new DateTime());
                 continue;
             }
 
-            Lot source = (Lot)relinkCache.get(p.getRawLots().iterator().next().getUuid());
-            p.setCreated(source.getCreated());
+            Lot source = (Lot)relinkCache.get(p.getLots().iterator().next().getUuid());
+            p.setCreated(source.getLastModified());
         }
     }
 
@@ -410,8 +413,8 @@ public class BackupService {
         return dtos;
     }
 
-	public BackupApiModel doBackup(User currentUser) {
-        BackupApiModel backup = new BackupApiModel();
+	public RestoreApiModel doBackup(User currentUser) {
+        RestoreApiModel backup = new RestoreApiModel();
         Map<UUID, Object> cache = new THashMap<>();
 
         backup.setUnits(backup(unitRepository.findByOwner(currentUser), unitToEmber, cache));
@@ -421,11 +424,14 @@ public class BackupService {
         backup.setGroups(backup(groupRepository.findByOwner(currentUser), groupToEmber, cache));
         backup.setFootprints(backup(footprintRepository.findByOwner(currentUser), footprintToEmber, cache));
         backup.setTypes(backup(typeRepository.findByOwner(currentUser), typeToEmber, cache));
-        backup.setProjects(backup(projectRepository.findByOwner(currentUser), projectToEmber, cache));
+
         backup.setSources(backup(sourceRepository.findByOwner(currentUser), sourceToEmber, cache));
         backup.setTransactions(backup(transactionRepository.findByOwner(currentUser), transactionToEmber, cache));
         backup.setPurchases(backup(purchaseRepository.findByTransactionOwner(currentUser), purchaseToEmber, cache));
+
         backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
+        backup.setItems(backup(itemRepository.findByOwner(currentUser), itemToEmber, cache));
+
         backup.setRequirements(backup(requirementRepository.findByProjectOwner(currentUser), requirementToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
 

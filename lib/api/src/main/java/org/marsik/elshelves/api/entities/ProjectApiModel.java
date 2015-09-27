@@ -12,6 +12,10 @@ import org.marsik.elshelves.api.entities.idresolvers.ProjectIdResolver;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Deprecated
+ * Used only for importing old backups
+ */
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ProjectIdResolver.class)
