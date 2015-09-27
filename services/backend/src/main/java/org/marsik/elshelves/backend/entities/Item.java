@@ -21,9 +21,11 @@ import java.util.Set;
 @DefaultEmberModel(ItemApiModel.class)
 @Entity
 public class Item extends Lot implements StickerCapable {
-	@OneToMany(mappedBy = "project",
+	@OneToMany(mappedBy = "item",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Requirement> requires;
+
+	Boolean finished;
 
 	public boolean canBeDeleted() {
 		for (Requirement r: getRequires()) {

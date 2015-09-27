@@ -30,6 +30,6 @@ public class RequirementService extends AbstractRestService<RequirementRepositor
 
     @Override
     protected Iterable<Requirement> getAllEntities(User currentUser) {
-        return getRepository().findByProjectOwner(currentUser);
+        return getRepository().findByItemOwner(currentUser);
     }
 }

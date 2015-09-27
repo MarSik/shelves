@@ -1,13 +1,15 @@
 import DS from 'ember-data';
-import NamedBase from './namedbase';
+import Lot from './lot';
 
 var hasMany = DS.hasMany;
+var attr = DS.attr;
 
-export default NamedBase.extend({
+export default Lot.extend({
     requirements: hasMany('requirement', {async: true}),
+    finished: attr('boolean'),
 
     link: function() {
-        return "projects.show";
+        return "items.show";
     }.property(),
 
     icon: function () {

@@ -44,6 +44,8 @@ public class EmberToItem implements CachingConverter<ItemApiModel, Item, UUID> {
 	public Item convert(ItemApiModel object, Item item, int nested, Map<UUID, Object> cache) {
 		emberToLot.convert(object, item, nested, cache);
 
+		item.setFinished(object.getFinished());
+
 		if (object.getRequirements() != null) {
 			item.setRequires(new THashSet<Requirement>());
 			for (RequirementApiModel r: object.getRequirements()) {

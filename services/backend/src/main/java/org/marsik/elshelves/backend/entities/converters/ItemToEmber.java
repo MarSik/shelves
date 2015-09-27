@@ -42,6 +42,8 @@ public class ItemToEmber implements CachingConverter<Item, ItemApiModel, UUID> {
 	public ItemApiModel convert(Item object, ItemApiModel model, int nested, Map<UUID, Object> cache) {
 		lotToEmber.convert(object, model, nested, cache);
 
+		model.setFinished(object.getFinished());
+
 		if (nested == 0) {
 			return model;
 		}

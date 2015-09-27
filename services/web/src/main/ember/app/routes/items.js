@@ -18,18 +18,31 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             req.destroyRecord();
         },
         projectSelected: function (project) {
-            this.transitionTo('projects.show', project);
+            this.transitionTo('items.show', project);
         },
         startProject: function (name) {
-            var project = this.store.createRecord('project', {
+            var type = this.store.createRecord('type', {
                 name: name
             });
+
             console.log("Creating project "+name);
 
-            project.save().then(function (p) {
-                this.transitionTo('projects.show', p);
+            var self = this;
+
+            type.save().then(function (t) {
+                var project = self.store.createRecord('item', {
+                    serial: name,
+                    type: t
+                });
+
+                project.save().then(function (p) {
+                    self.transitionTo('items.show', p);
+                }).catch(function () {
+                    project.rollback();
+                    self.transitionTo('types.show', t);
+                });
             }).catch(function () {
-                project.rollback();
+                type.rollback();
             });
         },
         addRequirement: function (project, type, count) {

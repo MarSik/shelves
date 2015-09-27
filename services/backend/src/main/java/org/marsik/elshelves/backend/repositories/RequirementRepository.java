@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface RequirementRepository extends BaseOwnedEntityRepository<Requirement> {
-	Iterable<Requirement> findByProjectOwner(User owner);
+	Iterable<Requirement> findByItemOwner(User owner);
 }

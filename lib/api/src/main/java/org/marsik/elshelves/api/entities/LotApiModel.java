@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -70,8 +72,9 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	/**
 	 * Previous version of this Lot (history)
-	 * Deprecated: only used for importing older data
+	 * Only used for importing older data and requesting a partial Lot
 	 */
+	@Setter(value = AccessLevel.PRIVATE)
 	LotApiModel previous;
 
 	/**

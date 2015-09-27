@@ -27,9 +27,9 @@ Router.map(function() {
     this.route("new");
   });
 
-  this.resource("projects", function() {
+  this.resource("items", function() {
     this.route("show", {
-      path: "/:project_id"
+      path: "/:item_id"
     });
 
     this.route("new");

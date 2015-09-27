@@ -432,7 +432,7 @@ public class BackupService {
         backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
         backup.setItems(backup(itemRepository.findByOwner(currentUser), itemToEmber, cache));
 
-        backup.setRequirements(backup(requirementRepository.findByProjectOwner(currentUser), requirementToEmber, cache));
+        backup.setRequirements(backup(requirementRepository.findByItemOwner(currentUser), requirementToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
 
         return backup;
