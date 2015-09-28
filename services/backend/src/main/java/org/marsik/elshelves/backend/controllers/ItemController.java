@@ -4,9 +4,11 @@ import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
+import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -76,6 +78,15 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
             item.getPurchase().getTransaction().setItems(new THashSet<>());
             item.getPurchase().getTransaction().getItems().add(item.getPurchase());
         }
+
+        item.setHistory(new LotHistoryApiModel());
+        item.getHistory().setCreated(new DateTime());
+        item.getHistory().setAction(LotAction.DELIVERY);
+        item.getHistory().setPerformedById(currentUser.getId());
+
+        item.setCount(1L);
+        item.setAction(LotAction.DELIVERY);
+
         return super.create(currentUser, item);
     }
 }

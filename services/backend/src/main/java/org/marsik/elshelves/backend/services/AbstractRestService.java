@@ -180,6 +180,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
     public E create(E dto, User currentUser) throws OperationNotPermitted {
         T created = createEntity(dto, currentUser);
+        created.setCreated(new DateTime());
         created = repository.save(created);
         return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());
     }
@@ -234,6 +235,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 			// provided by the URL
 			update.setId(uuid);
             one = updateEntity(one, update, currentUser);
+            one.setLastModified(new DateTime());
 
             // Introspection based updater breaks the aspected behaviour
             // so it is necessary to resave the updated object here

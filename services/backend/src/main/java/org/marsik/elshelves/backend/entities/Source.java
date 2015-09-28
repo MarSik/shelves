@@ -8,10 +8,12 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.ShippingCalculator;
 import org.marsik.elshelves.backend.entities.fields.SourceDownloader;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -27,6 +29,7 @@ import java.util.Collection;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(SourceApiModel.class)
+@EntityListeners({AuditingEntityListener.class})
 public class Source extends NamedEntity {
 	String url;
 

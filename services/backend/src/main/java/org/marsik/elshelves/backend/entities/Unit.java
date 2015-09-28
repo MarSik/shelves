@@ -8,10 +8,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.UnitApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
@@ -27,6 +29,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(UnitApiModel.class)
+@EntityListeners({AuditingEntityListener.class})
 public class Unit extends NamedEntity {
 
     @NotNull

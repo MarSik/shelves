@@ -5,8 +5,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -19,6 +21,7 @@ import javax.persistence.UniqueConstraint;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntityInterface {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 

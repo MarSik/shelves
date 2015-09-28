@@ -7,9 +7,11 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -24,6 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(FootprintApiModel.class)
+@EntityListeners({AuditingEntityListener.class})
 public class Footprint extends NamedEntity {
 	String kicad;
 

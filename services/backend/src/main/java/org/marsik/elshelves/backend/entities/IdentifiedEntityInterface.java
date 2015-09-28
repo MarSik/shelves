@@ -11,5 +11,7 @@ public interface IdentifiedEntityInterface {
 
     void setLastModified(org.joda.time.DateTime lastModified);
 
+    void setCreated(org.joda.time.DateTime lastModified);
+
     boolean isNew();
 }

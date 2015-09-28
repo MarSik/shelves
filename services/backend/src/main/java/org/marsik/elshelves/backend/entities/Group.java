@@ -6,10 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
@@ -25,6 +27,7 @@ import java.util.Set;
 @Entity
 @Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
+@EntityListeners({AuditingEntityListener.class})
 public class Group extends NamedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Group parent;

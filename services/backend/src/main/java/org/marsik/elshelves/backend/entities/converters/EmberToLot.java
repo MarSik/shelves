@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.LotHistory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 
 	@Autowired
 	EmberToRequirement emberToRequirement;
+
+	@Autowired
+	ModelMapper modelMapper;
 
 	@Override
 	public Lot convert(LotApiModel object, int nested, Map<UUID, Object> cache) {
@@ -51,6 +55,7 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 		model.setPurchase(emberToPurchase.convert(object.getPurchase(), nested, cache));
 		model.setUsedBy(emberToRequirement.convert(object.getUsedBy(), nested, cache));
 		model.setSerials(object.getSerials());
+		model.setHistory(modelMapper.map(object.getHistory(), LotHistory.class));
 
 		if (model.getSerials() == null) {
 			model.setSerials(new THashSet<>());

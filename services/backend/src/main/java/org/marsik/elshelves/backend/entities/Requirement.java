@@ -6,9 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
@@ -23,6 +25,7 @@ import java.util.function.Predicate;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 public class Requirement extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Item item;

@@ -121,6 +121,8 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
 		user.setVerificationStartTime(new DateTime());
 		user.setRegistrationDate(new DateTime());
+        user.setCreated(new DateTime());
+        user.setLastModified(user.getCreated());
 
         userRepository.save(user);
 

@@ -7,9 +7,11 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -23,6 +25,7 @@ import java.util.Collection;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
+@EntityListeners({AuditingEntityListener.class})
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })

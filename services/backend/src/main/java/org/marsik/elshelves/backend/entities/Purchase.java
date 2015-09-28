@@ -7,9 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.joda.time.DateTime;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -23,6 +25,7 @@ import java.util.Set;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 public class Purchase extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Type type;
