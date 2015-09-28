@@ -140,7 +140,7 @@ public class RelinkService {
             // One-to-* relationship
             if (IdentifiedEntityInterface.class.isAssignableFrom(f.getPropertyType())) {
                 try {
-                    OwnedEntityInterface value = (OwnedEntityInterface) getter.invoke(entity);
+                    IdentifiedEntityInterface value = (IdentifiedEntityInterface) getter.invoke(entity);
                     Method setter = f.getWriteMethod();
 
                     if (value == null || setter == null) {
@@ -149,7 +149,7 @@ public class RelinkService {
 
                     // Potentially existing UUID but unconnected entity
                     if (value.getId() != null && value.getDbId() == null) {
-                        OwnedEntityInterface v = getByUuid(value, known);
+                        IdentifiedEntityInterface v = getByUuid(value, known);
 
                         // Entity does exist in DB or cache, replace the reference with
                         // the connected entity
