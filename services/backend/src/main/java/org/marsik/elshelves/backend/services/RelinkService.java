@@ -121,7 +121,7 @@ public class RelinkService {
         return relink(entity, user, cache, true);
     }
 
-    protected void relinkImpl(IdentifiedEntityInterface entity, User user, Map<UUID, IdentifiedEntityInterface> known) {
+    protected void relinkImpl(Object entity, User user, Map<UUID, IdentifiedEntityInterface> known) {
         PropertyDescriptor[] properties;
         try {
             properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
@@ -189,7 +189,7 @@ public class RelinkService {
                     for (Object item0: items) {
                         if (item0 instanceof IdentifiedEntityInterface) {
                             // OwnedEntity, relink
-                            OwnedEntityInterface item = (OwnedEntityInterface)item0;
+                            OwnedEntityInterface item = (OwnedEntityInterface) item0;
 
                             if (item.getId() == null) {
                                 // New entity, create UUID and perform deep relinking
@@ -227,7 +227,7 @@ public class RelinkService {
                             // Not owned entity, probably relationship entity
                             // keep it as it is and relink the internal properties
                             newItems.add(item0);
-                            relinkImpl((IdentifiedEntityInterface)item0, user, known);
+                            relinkImpl(item0, user, known);
                         }
                     }
 

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
@@ -19,6 +20,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableJpaRepositories(basePackages = "org.marsik.elshelves.backend.repositories")
 @EntityScan(basePackages = "org.marsik.elshelves.backend.entities")
 @EnableTransactionManagement
+@EnableJpaAuditing
 public class ApplicationData {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationData.class);
 

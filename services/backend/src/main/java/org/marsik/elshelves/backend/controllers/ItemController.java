@@ -57,6 +57,7 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
     }
 
     @Override
+    @Transactional
     public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item) throws OperationNotPermitted {
         if (item.getPurchase() == null) {
             item.setPurchase(new PurchaseApiModel());

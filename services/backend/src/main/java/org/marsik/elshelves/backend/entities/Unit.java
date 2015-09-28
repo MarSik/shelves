@@ -53,6 +53,6 @@ public class Unit extends NamedEntity {
 
     @Override
     public boolean canBeDeleted() {
-        return !getUnitUses().iterator().hasNext();
+        return getUnitUses() == null || !getUnitUses().iterator().hasNext();
     }
 }

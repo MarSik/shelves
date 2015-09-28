@@ -31,10 +31,6 @@ public class Purchase extends OwnedEntity {
 	@Min(1)
 	Long count;
 
-	@NotNull
-	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	DateTime created;
-
 	Double singlePrice;
 	Double totalPrice;
 	Double vat;

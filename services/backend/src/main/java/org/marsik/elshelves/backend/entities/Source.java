@@ -46,6 +46,6 @@ public class Source extends NamedEntity {
 	}
 
 	public boolean canBeDeleted() {
-		return !getTransactions().iterator().hasNext();
+		return getTransactions() == null || !getTransactions().iterator().hasNext();
 	}
 }

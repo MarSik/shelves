@@ -78,7 +78,7 @@ public class Footprint extends NamedEntity {
 
 	@Override
 	public boolean canBeDeleted() {
-		return !getTypes().iterator().hasNext();
+		return getTypes() == null || !getTypes().iterator().hasNext();
 	}
 
     @PartOfUpdate

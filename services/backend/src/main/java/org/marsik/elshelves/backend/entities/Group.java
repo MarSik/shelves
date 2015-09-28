@@ -60,14 +60,20 @@ public class Group extends NamedEntity {
     }
 
     public Long getCount() {
-		return (long) getTypes().size();
+		return getTypes() == null ? 0 : (long) getTypes().size();
 	}
 
 	public Long getNestedCount() {
 		Long count = getCount();
+
+		if (getGroups() == null) {
+			return count;
+		}
+
 		for (Group t: getGroups()) {
 			count += t.getCount();
 		}
+
 		return count;
 	}
 }

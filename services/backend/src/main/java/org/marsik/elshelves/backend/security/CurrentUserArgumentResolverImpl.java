@@ -65,7 +65,7 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
             return null;
         } else {
             UserRepository userRepository =
-                    applicationContext.getBean("baseIdentifiedEntityRepository", UserRepository.class);
+                    applicationContext.getBean("userRepository", UserRepository.class);
 
             return userRepository.getUserByEmail(principal.getName());
         }

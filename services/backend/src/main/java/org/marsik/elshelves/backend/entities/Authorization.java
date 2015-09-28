@@ -7,8 +7,10 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -25,6 +27,7 @@ import java.util.Date;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.JOINED)
+@EntityListeners({AuditingEntityListener.class})
 public class Authorization extends IdentifiedEntity implements OwnedEntityInterface {
     @NotEmpty
     @NotNull

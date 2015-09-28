@@ -180,7 +180,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
     public E create(E dto, User currentUser) throws OperationNotPermitted {
         T created = createEntity(dto, currentUser);
-        repository.save(created);
+        created = repository.save(created);
         return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());
     }
 
@@ -237,7 +237,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
             // Introspection based updater breaks the aspected behaviour
             // so it is necessary to resave the updated object here
-            repository.save(one);
+            one = repository.save(one);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }

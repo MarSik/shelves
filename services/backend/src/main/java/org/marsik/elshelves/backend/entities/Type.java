@@ -91,6 +91,11 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	public Iterable<Lot> getLots() {
 		List<Lot> lots = new ArrayList<>();
+
+		if (getPurchases() == null) {
+			return lots;
+		}
+
 		for (Purchase p: getPurchases()) {
 			for (Lot l: p.getLots()) {
 				lots.add(l);
@@ -102,7 +107,8 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@Override
 	public boolean canBeDeleted() {
-		return !(getPurchases().iterator().hasNext() || getUsedIn().iterator().hasNext());
+		return (getPurchases() == null || !(getPurchases().iterator().hasNext())
+				|| (getUsedIn() == null || getUsedIn().iterator().hasNext()));
 	}
 
     public PartCount getAvailable() {

@@ -9,8 +9,10 @@ import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -24,6 +26,7 @@ import javax.persistence.UniqueConstraint;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@EntityListeners({AuditingEntityListener.class})
 public class LotHistory extends IdentifiedEntity {
     @Builder(toBuilder = true)
     protected LotHistory(LotHistory previous, User performedBy, DateTime created, LotAction action, Box location, Requirement assignedTo) {
