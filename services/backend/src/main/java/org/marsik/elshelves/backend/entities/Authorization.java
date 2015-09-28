@@ -24,7 +24,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Authorization extends IdentifiedEntity implements OwnedEntityInterface {
     @NotEmpty
     @NotNull

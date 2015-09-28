@@ -10,6 +10,8 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Set;

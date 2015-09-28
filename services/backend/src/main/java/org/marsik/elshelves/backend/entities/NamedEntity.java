@@ -10,9 +10,13 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -21,6 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class NamedEntity extends OwnedEntity {
 	@NotEmpty
 	@NotNull

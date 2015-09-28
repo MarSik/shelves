@@ -5,6 +5,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.UUID;
 
+@NoRepositoryBean
 public interface BaseIdentifiedEntityRepository<T> extends JpaRepository<T, Long> {
     T findById(UUID id);
 }

@@ -10,6 +10,8 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -46,9 +48,9 @@ public class Footprint extends NamedEntity {
 
 	@JoinTable(name = "fp_fp_see_also",
 			joinColumns = {
-					@JoinColumn(name = "fp1", referencedColumnName = "id", nullable = false)},
+					@JoinColumn(name = "fp1", nullable = false)},
 			inverseJoinColumns = {
-					@JoinColumn(name = "fp2", referencedColumnName = "id", nullable = false)})
+					@JoinColumn(name = "fp2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Footprint> seeAlso;
 

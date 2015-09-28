@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
@@ -26,6 +28,7 @@ import java.util.function.Consumer;
 @Data
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Lot extends OwnedEntity implements StickerCapable {
 	public Lot() {
 	}

@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.security;
 
 import org.marsik.elshelves.backend.entities.Authorization;
-import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.AuthorizationRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +65,7 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
             return null;
         } else {
             UserRepository userRepository =
-                    applicationContext.getBean("userRepository", UserRepository.class);
+                    applicationContext.getBean("baseIdentifiedEntityRepository", UserRepository.class);
 
             return userRepository.getUserByEmail(principal.getName());
         }

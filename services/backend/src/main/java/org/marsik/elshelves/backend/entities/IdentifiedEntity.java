@@ -6,15 +6,22 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import java.util.UUID;
 
-@MappedSuperclass
+@Entity
 @EqualsAndHashCode(of = {"id"})
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class IdentifiedEntity implements IdentifiedEntityInterface {
     @Id
     @GeneratedValue
@@ -30,7 +37,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
 	@LastModifiedDate
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime lastModified;
-
 
     @Transient
     public boolean isNew() {

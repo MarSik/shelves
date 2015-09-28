@@ -11,6 +11,8 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -61,9 +63,9 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@JoinTable(name = "type_type_see_also",
 			joinColumns = {
-					@JoinColumn(name = "type1", referencedColumnName = "id", nullable = false)},
+					@JoinColumn(name = "type1", nullable = false)},
 			inverseJoinColumns = {
-					@JoinColumn(name = "type2", referencedColumnName = "id", nullable = false)})
+					@JoinColumn(name = "type2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Type> seeAlso;
 

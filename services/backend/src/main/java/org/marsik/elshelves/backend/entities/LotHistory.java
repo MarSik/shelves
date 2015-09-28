@@ -21,10 +21,9 @@ import javax.persistence.UniqueConstraint;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class LotHistory extends IdentifiedEntity {
     @Builder(toBuilder = true)
     protected LotHistory(LotHistory previous, User performedBy, DateTime created, LotAction action, Box location, Requirement assignedTo) {

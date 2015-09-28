@@ -5,7 +5,7 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
+import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class RelinkService {
     OwnedEntityRepository ownedEntityRepository;
 
     @Autowired
-    BaseIdentifiedEntityRepository identifiedEntityRepository;
+    IdentifiedEntityRepository identifiedEntityRepository;
 
 	protected <E extends IdentifiedEntityInterface> E getByUuid(E value, Map<UUID, IdentifiedEntityInterface> cache)  {
 		// Consult the relink cache first
@@ -65,7 +65,7 @@ public class RelinkService {
      * @return The value entity prepared for import
      */
     @SuppressWarnings("unchecked")
-    public <E extends OwnedEntityInterface> E fixUuidAndOwner(E value, User user, Map<UUID, IdentifiedEntityInterface> cache)  {
+    public <E extends IdentifiedEntityInterface> E fixUuidAndOwner(E value, User user, Map<UUID, IdentifiedEntityInterface> cache)  {
         if (value.getId() == null) {
             value.setId(uuidGenerator.generate());
             log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
@@ -83,7 +83,9 @@ public class RelinkService {
             updateCache(cache, value);
         }
 
-        value.setOwner(user);
+        if (value instanceof OwnedEntityInterface) {
+            ((OwnedEntityInterface)value).setOwner(user);
+        }
         return value;
     }
 
