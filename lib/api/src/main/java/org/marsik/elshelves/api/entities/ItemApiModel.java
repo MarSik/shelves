@@ -18,8 +18,18 @@ public class ItemApiModel extends LotApiModel {
     Set<RequirementApiModel> requirements;
     Boolean finished;
 
+    /**
+     * Only used when new project is started. Can't be changed.
+     */
+    PartTypeApiModel type;
+
     @JsonIdentityReference(alwaysAsId = true)
     public Set<RequirementApiModel> getRequirements() {
         return requirements;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public PartTypeApiModel getType() {
+        return type;
     }
 }

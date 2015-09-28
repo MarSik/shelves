@@ -18,7 +18,7 @@ public class DocumentAnalysisDoneService implements FileAnalysisDoneHandler {
 	@Override
 	@Transactional
 	public void downloadFinished(UUID uuid, Path path, Long size, String contentType, Metadata metadata) {
-		Document d = documentRepository.findByUuid(uuid);
+		Document d = documentRepository.findById(uuid);
 		if (d == null) {
 			return;
 		}

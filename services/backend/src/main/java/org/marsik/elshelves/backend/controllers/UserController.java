@@ -63,7 +63,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @Transactional
     @RequestMapping("/whoami")
     public EmberModel getCurrentUser(@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-        return new EmberModel.Builder<UserApiModel>(getService().get(currentUser.getUuid(), currentUser)).build();
+        return new EmberModel.Builder<UserApiModel>(getService().get(currentUser.getId(), currentUser)).build();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
         }
 
         for (UUID id: ids) {
-            if (!id.equals(currentUser.getUuid())) {
+            if (!id.equals(currentUser.getId())) {
                 throw new PermissionDenied();
             }
         }

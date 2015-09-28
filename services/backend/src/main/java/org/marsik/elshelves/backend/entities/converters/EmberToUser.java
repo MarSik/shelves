@@ -32,7 +32,7 @@ public class EmberToUser implements CachingConverter<UserApiModel, User, UUID> {
 		u.setEmail(dto.getEmail());
 		u.setName(dto.getName());
 		u.setPassword(dto.getPassword());
-		u.setUuid(dto.getId());
+		u.setId(dto.getId());
 		return u;
 	}
 }

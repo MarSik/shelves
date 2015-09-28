@@ -15,7 +15,7 @@ public class EmberToAuthorization extends AbstractEmberToEntity<AuthorizationApi
 
     @Override
     public Authorization convert(AuthorizationApiModel object, Authorization model, int nested, Map<UUID, Object> cache) {
-        model.setUuid(object.getId());
+        model.setId(object.getId());
         model.setName(object.getName());
         model.setSecret(object.getSecret());
         return model;

@@ -19,8 +19,8 @@ public abstract class AbstractEntityToEmber<F extends OwnedEntity, T extends Abs
             return null;
         }
 
-        if (cache.containsKey(object.getUuid())) {
-            return (T)cache.get(object.getUuid());
+        if (cache.containsKey(object.getId())) {
+            return (T)cache.get(object.getId());
         }
 
         T model;
@@ -33,8 +33,8 @@ public abstract class AbstractEntityToEmber<F extends OwnedEntity, T extends Abs
         }
 
         if (nested > 0
-                && object.getUuid() != null) {
-            cache.put(object.getUuid(), model);
+                && object.getId() != null) {
+            cache.put(object.getId(), model);
         }
         return convert(object, model, nested, cache);
     }

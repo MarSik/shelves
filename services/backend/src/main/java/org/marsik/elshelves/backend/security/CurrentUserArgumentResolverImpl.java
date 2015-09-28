@@ -58,7 +58,7 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
         if (mobileDevice) {
             AuthorizationRepository authRepository =
                     applicationContext.getBean("authorizationRepository", AuthorizationRepository.class);
-            Authorization auth = authRepository.findByUuid(UUID.fromString(principal.getName()));
+            Authorization auth = authRepository.findById(UUID.fromString(principal.getName()));
             if (auth != null) {
                 return auth.getOwner();
             }

@@ -16,8 +16,6 @@ import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public class TransactionService extends AbstractRestService<TransactionRepository, Transaction, TransactionApiModel> {
 	@Autowired
@@ -56,8 +54,8 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 				p.setOwner(currentUser);
 			}
 
-			if (p.getUuid() == null) {
-				p.setUuid(getUuidGenerator().generate());
+			if (p.getId() == null) {
+				p.setId(getUuidGenerator().generate());
 			}
 		}
 

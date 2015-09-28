@@ -43,7 +43,7 @@ public class SanityService {
 
             if (!orphanGroups.containsKey(u)) {
                 Group group = new Group();
-                group.setUuid(uuidGenerator.generate());
+                group.setId(uuidGenerator.generate());
                 group.setOwner(u);
                 group.setName("Orphaned types - " + date);
                 orphanGroups.put(u, group);

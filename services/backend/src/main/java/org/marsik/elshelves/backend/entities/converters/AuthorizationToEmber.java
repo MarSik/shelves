@@ -15,7 +15,7 @@ public class AuthorizationToEmber extends AbstractEntityToEmber<Authorization, A
 
     @Override
     public AuthorizationApiModel convert(Authorization object, AuthorizationApiModel model, int nested, Map<UUID, Object> cache) {
-        model.setId(object.getUuid());
+        model.setId(object.getId());
         model.setName(object.getName());
         return model;
     }

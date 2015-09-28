@@ -2,7 +2,6 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +33,7 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
     }
 
     public PartGroupApiModel(UUID id, String name) {
-        this.id = id;
+        this(id);
         setName(name);
     }
 

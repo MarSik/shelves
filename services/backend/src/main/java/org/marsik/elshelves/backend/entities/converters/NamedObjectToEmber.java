@@ -6,7 +6,6 @@ import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
-import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
@@ -32,7 +31,7 @@ public class NamedObjectToEmber {
     CodeToEmber codeToEmber;
 
 	public AbstractNamedEntityApiModel convert(NamedEntity object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getUuid());
+		model.setId(object.getId());
 
 		if (nested == 0) {
 			return model;
@@ -66,7 +65,7 @@ public class NamedObjectToEmber {
             model.setProperties(new THashSet<NumericPropertyApiModel>());
 
             for (NumericPropertyValue v: object.getProperties()) {
-                model.getValues().put(v.getProperty().getUuid(), v.getValue());
+                model.getValues().put(v.getProperty().getId(), v.getValue());
                 model.getProperties().add(numericPropertyToEmber.convert(v.getProperty(), nested - 1, cache));
             }
         }

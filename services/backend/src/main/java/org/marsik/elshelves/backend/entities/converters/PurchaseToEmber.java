@@ -4,7 +4,6 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
-import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,14 +31,14 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (PurchaseApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (PurchaseApiModel)cache.get(object.getId());
 		}
 
 		PurchaseApiModel model = new PurchaseApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

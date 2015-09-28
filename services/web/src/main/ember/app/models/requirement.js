@@ -10,7 +10,7 @@ export default DS.Model.extend({
     summary: attr('string'),
     count: attr('number'),
     type: hasMany('type', {inverse: null, async: true}),
-    project: belongsTo('project', {async: true}),
+    item: belongsTo('item', {async: true}),
     lots: hasMany('lot', {async: true}),
 
     typeCanBeRemoved: function () {

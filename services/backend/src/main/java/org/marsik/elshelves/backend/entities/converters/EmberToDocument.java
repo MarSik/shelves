@@ -36,7 +36,7 @@ public class EmberToDocument implements CachingConverter<DocumentApiModel, Docum
 
 	@Override
 	public Document convert(DocumentApiModel object, Document model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
+		model.setId(object.getId());
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
@@ -52,7 +52,7 @@ public class EmberToDocument implements CachingConverter<DocumentApiModel, Docum
 			model.setDescribes(new THashSet<NamedEntity>());
 			for (final PolymorphicRecord r: object.getDescribes()) {
 				NamedEntity entity = new NamedEntity();
-				entity.setUuid(r.getId());
+				entity.setId(r.getId());
 				model.getDescribes().add(entity);
 			}
 		}

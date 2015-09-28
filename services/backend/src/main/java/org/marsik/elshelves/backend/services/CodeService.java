@@ -5,7 +5,6 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.CodeToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToCode;
 import org.marsik.elshelves.backend.repositories.CodeRepository;
@@ -33,6 +32,6 @@ public class CodeService extends AbstractRestService<CodeRepository, Code, CodeA
             throw new EntityNotFound();
         }
 
-        return get(c.getUuid(), currentUser);
+        return get(c.getId(), currentUser);
     }
 }

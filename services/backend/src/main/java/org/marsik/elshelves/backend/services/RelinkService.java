@@ -31,12 +31,12 @@ public class RelinkService {
 
 	protected <E extends OwnedEntity> E getByUuid(E value, Map<UUID, OwnedEntity> cache)  {
 		// Consult the relink cache first
-        if (cache.containsKey(value.getUuid())) {
-			return (E)cache.get(value.getUuid());
+        if (cache.containsKey(value.getId())) {
+			return (E)cache.get(value.getId());
 		}
 
         // Try getting the instance from database
-		E entity = (E)ownedEntityRepository.findByUuid(value.getUuid());
+		E entity = (E)ownedEntityRepository.findById(value.getId());
         if (entity != null) {
             updateCache(cache, entity);
             return entity;
@@ -48,7 +48,7 @@ public class RelinkService {
 
     /**
      * Make sure the object won't collide with an already existing entity, but
-     * make sure the cache still knows the old uuid for relinking purposes.
+     * make sure the cache still knows the old id for relinking purposes.
      *
      * This method also sets the owner for the entity.
      *
@@ -60,20 +60,20 @@ public class RelinkService {
      */
     @SuppressWarnings("unchecked")
     public <E extends OwnedEntity> E fixUuidAndOwner(E value, User user, Map<UUID, OwnedEntity> cache)  {
-        if (value.getUuid() == null) {
-            value.setUuid(uuidGenerator.generate());
-            log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getUuid().toString());
+        if (value.getId() == null) {
+            value.setId(uuidGenerator.generate());
+            log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
         }
 
-        if (cache.containsKey(value.getUuid())) {
-            return (E)cache.get(value.getUuid());
+        if (cache.containsKey(value.getId())) {
+            return (E)cache.get(value.getId());
         }
 
         updateCache(cache, value);
 
-        OwnedEntity e = ownedEntityRepository.findByUuid(value.getUuid());
+        OwnedEntity e = ownedEntityRepository.findById(value.getId());
         if (e != null) {
-            value.setUuid(uuidGenerator.generate());
+            value.setId(uuidGenerator.generate());
             updateCache(cache, value);
         }
 
@@ -85,13 +85,13 @@ public class RelinkService {
 	 * This method is used to realign entities coming from external sources
 	 * like REST based web application with the entities stored in the database.
 	 *
-	 * The linking is done using the uuid property values.
+	 * The linking is done using the id property values.
 	 *
 	 * Modus operandi:
 	 *
 	 * Find all relationship properties and make sure they reference existing
-	 * database entities by querying the uuid index.
-	 * If the property does not contain uuid (happens with
+	 * database entities by querying the id index.
+	 * If the property does not contain id (happens with
 	 * nested rest fields), call relink on the the property contents to relink
 	 * the nested properties.
 	 *
@@ -140,7 +140,7 @@ public class RelinkService {
                     }
 
                     // Potentially existing UUID but unconnected entity
-                    if (value.getUuid() != null && value.getId() == null) {
+                    if (value.getId() != null && value.getDbId() == null) {
                         OwnedEntity v = getByUuid(value, known);
 
                         // Entity does exist in DB or cache, replace the reference with
@@ -151,15 +151,15 @@ public class RelinkService {
                             // New entity, perform deep relinking
                             log.info("Deep relinking of {}.{} ({})",
                                     value.getClass().getName(), f.getName(),
-                                    value.getUuid().toString());
+                                    value.getId().toString());
                             updateCache(known, value);
                             relink(value, user, known, false);
                         }
 
-                    } else if (value.getUuid() == null) {
+                    } else if (value.getId() == null) {
                         // Missing UUID meaning new entity
                         // create an UUID for it and perform deep relinking
-                        value.setUuid(uuidGenerator.generate());
+                        value.setId(uuidGenerator.generate());
                         updateCache(known, value);
                         relink(value, user, known, false);
                     }
@@ -183,14 +183,14 @@ public class RelinkService {
                             // OwnedEntity, relink
                             OwnedEntity item = (OwnedEntity)item0;
 
-                            if (item.getUuid() == null) {
+                            if (item.getId() == null) {
                                 // New entity, create UUID and perform deep relinking
                                 newItems.add(item);
-                                item.setUuid(uuidGenerator.generate());
+                                item.setId(uuidGenerator.generate());
                                 updateCache(known, item);
                                 relink(item, user, known, false);
 
-                            } else if (item.getId() != null) {
+                            } else if (item.getDbId() != null) {
                                 // Connected existing entity
                                 newItems.add(item);
 
@@ -204,11 +204,11 @@ public class RelinkService {
                                     newItems.add(v);
 
                                 } else {
-                                    // New entity with uuid, perform deep relinking
+                                    // New entity with id, perform deep relinking
                                     // New entity, perform deep relinking
                                     log.info("Deep relinking of {}.{} ({})",
                                             item.getClass().getName(), f.getName(),
-                                            item.getUuid().toString());
+                                            item.getId().toString());
 
                                     newItems.add(item);
                                     updateCache(known, item);
@@ -236,22 +236,22 @@ public class RelinkService {
     }
 
     private static void updateCache(Map<UUID, OwnedEntity> known, OwnedEntity value) {
-        if (known.containsKey(value.getUuid())) {
-            log.warn("Replacing cached {} with {}", value.getUuid(), value.toString());
+        if (known.containsKey(value.getId())) {
+            log.warn("Replacing cached {} with {}", value.getId(), value.toString());
         }
 
-        known.put(value.getUuid(), value);
+        known.put(value.getId(), value);
     }
 
     protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, OwnedEntity> known, boolean forceRelink) {
         if (!forceRelink
-                && entity.getUuid() != null
-                && known.containsKey(entity.getUuid())) {
+                && entity.getId() != null
+                && known.containsKey(entity.getId())) {
             return entity;
         }
 
         if (!forceRelink
-                && entity.getUuid() != null) {
+                && entity.getId() != null) {
             updateCache(known, entity);
         }
 

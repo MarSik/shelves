@@ -1,10 +1,8 @@
 package org.marsik.elshelves.backend.entities.converters;
 
-import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Code;
-import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
 
     @Override
     public CodeApiModel convert(Code object, CodeApiModel model, int nested, Map<UUID, Object> cache) {
-        model.setId(object.getUuid());
+        model.setId(object.getId());
 
         if (nested == 0) {
             return model;
@@ -35,7 +33,7 @@ public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
 
         if (object.getReference() != null) {
             PolymorphicRecord r = new PolymorphicRecord();
-            r.setId(object.getReference().getUuid());
+            r.setId(object.getReference().getId());
             r.setType(object.getReference().getEmberType());
             model.setReference(r);
         }

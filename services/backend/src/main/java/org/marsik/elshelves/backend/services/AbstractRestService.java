@@ -12,9 +12,7 @@ import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
-import org.marsik.elshelves.backend.repositories.BaseOwnedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -22,7 +20,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -65,7 +62,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 	protected abstract Iterable<T> getAllEntities(User currentUser);
 
     protected T getSingleEntity(UUID uuid) {
-        return repository.findByUuid(uuid);
+        return repository.findById(uuid);
     }
 
 	protected int conversionDepth() {
@@ -75,7 +72,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     protected T createEntity(E dto, User currentUser) {
         T created = restToDb.convert(dto, conversionDepth(), new THashMap<UUID, Object>());
 		created = relinkService.relink(created);
-        created.setUuid(uuidGenerator.generate());
+        created.setId(uuidGenerator.generate());
         created.setOwner(currentUser);
         created.setLastModified(new DateTime());
         return created;
@@ -234,7 +231,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 			T update = restToDb.convert(dto, 2, new THashMap<UUID, Object>());
 			// The REST entity does not contain id during PUT, because that is
 			// provided by the URL
-			update.setUuid(uuid);
+			update.setId(uuid);
             one = updateEntity(one, update, currentUser);
 
             // Introspection based updater breaks the aspected behaviour

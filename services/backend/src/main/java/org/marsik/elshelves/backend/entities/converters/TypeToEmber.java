@@ -36,14 +36,14 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (PartTypeApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (PartTypeApiModel)cache.get(object.getId());
 		}
 
 		PartTypeApiModel model = new PartTypeApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

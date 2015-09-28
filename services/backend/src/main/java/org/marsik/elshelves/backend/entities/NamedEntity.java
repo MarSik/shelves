@@ -10,11 +10,8 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -111,8 +108,8 @@ public class NamedEntity extends OwnedEntity {
 	@Override
 	public String toString() {
 		return getClass().getName() + "{" +
-				"id=" + id +
-				", uuid=" + uuid +
+				"id=" + dbId +
+				", id=" + id +
 				", name='" + name + '\'' +
 				'}';
 	}

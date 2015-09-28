@@ -51,7 +51,7 @@ public class SearchService {
 
         for (NamedEntity n: result) {
             PolymorphicRecord record = new PolymorphicRecord();
-            record.setId(n.getUuid());
+            record.setId(n.getId());
             record.setType(n.getEmberType());
             searchResult.getItems().add(record);
         }

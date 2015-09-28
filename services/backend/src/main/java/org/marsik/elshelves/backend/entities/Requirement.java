@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import java.util.Set;
+import java.util.function.Predicate;
 
 @Data
 @NoArgsConstructor
@@ -91,7 +93,12 @@ public class Requirement extends OwnedEntity {
     }
 
 	public boolean canBeDeleted() {
-		return getLots().isEmpty();
+		return getLots().stream().allMatch(new Predicate<Lot>() {
+			@Override
+			public boolean test(Lot lot) {
+				return !lot.getStatus().equals(LotAction.SOLDERED);
+			}
+		});
 	}
 
 	@Override

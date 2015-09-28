@@ -7,5 +7,5 @@ import java.util.UUID;
 
 @NoRepositoryBean
 public interface BaseIdentifiedEntityRepository<T> extends JpaRepository<T, Long> {
-    T findByUuid(UUID uuid);
+    T findById(UUID id);
 }

@@ -3,7 +3,6 @@ package org.marsik.elshelves.backend.entities.converters;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.NamedEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,7 +21,7 @@ public class EmberToCode extends AbstractEmberToEntity<CodeApiModel, Code> {
 
         if (object.getReference() != null) {
             NamedEntity e = new NamedEntity();
-            e.setUuid(object.getReference().getId());
+            e.setId(object.getReference().getId());
             model.setReference(e);
         }
 

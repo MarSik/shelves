@@ -4,24 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.http.auth.AUTH;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -52,12 +42,12 @@ public class User extends OwnedEntity implements StickerCapable {
     //@OneToMany
     //Set<Authorization> authorizations;
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(UUID uuid) {
+        this.id = uuid;
     }
 
 	@PartOfUpdate

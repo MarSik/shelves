@@ -32,7 +32,7 @@ public class EmberToNamedObject {
     EmberToNumericProperty emberToNumericProperty;
 
 	public NamedEntity convert(AbstractNamedEntityApiModel object, NamedEntity model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
+		model.setId(object.getId());
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
@@ -61,8 +61,8 @@ public class EmberToNamedObject {
                 v.setEntity(model);
                 v.setProperty(p);
 
-                if (object.getValues() != null && object.getValues().get(p.getUuid()) != null) {
-                    v.setValue(object.getValues().get(p.getUuid()));
+                if (object.getValues() != null && object.getValues().get(p.getId()) != null) {
+                    v.setValue(object.getValues().get(p.getId()));
                 } else {
                     v.setValue(0L);
                 }

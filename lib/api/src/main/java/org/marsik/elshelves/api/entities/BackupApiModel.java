@@ -10,6 +10,7 @@ public class BackupApiModel {
     Set<SourceApiModel> sources;
     Set<PartTypeApiModel> types;
     Set<LotApiModel> lots;
+    Set<LotHistoryApiModel> history;
     Set<ItemApiModel> items;
     Set<PartGroupApiModel> groups;
     Set<BoxApiModel> boxes;

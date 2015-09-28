@@ -47,7 +47,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         },
         addRequirement: function (project, type, count) {
             var requirement = this.store.createRecord('requirement', {
-                project: project,
+                item: project,
                 count: count
             });
 
@@ -59,6 +59,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Projects');
     },
     model: function () {
-        return this.store.all('project');
+        return this.store.all('item');
     }
 });

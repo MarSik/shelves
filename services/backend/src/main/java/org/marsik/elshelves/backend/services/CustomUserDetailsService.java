@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jadira.usertype.dateandtime.legacyjdk.columnmapper.TimestampColumnDateMapper;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -22,9 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +55,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         // Try fetching Authorization object with the email as ID
         // use it for logging in when it exists (mobile device logging in)
         try {
-            Authorization auth = authorizationRepository.findByUuid(UUID.fromString(email));
+            Authorization auth = authorizationRepository.findById(UUID.fromString(email));
             if (auth != null) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new GrantedAuthority() {
@@ -76,7 +72,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
                 });
 
                 return new org.springframework.security.core.userdetails.User(
-                        auth.getUuid().toString(),
+                        auth.getId().toString(),
                         auth.getSecret(),
                         authorities);
             }
@@ -121,7 +117,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 		}
 
         User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
-        user.setUuid(uuidGenerator.generate());
+        user.setId(uuidGenerator.generate());
 		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
 		user.setVerificationStartTime(new DateTime());
 		user.setRegistrationDate(new DateTime());

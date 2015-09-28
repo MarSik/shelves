@@ -20,14 +20,14 @@ public class  FootprintToEmber implements CachingConverter<Footprint, FootprintA
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (FootprintApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (FootprintApiModel)cache.get(object.getId());
 		}
 
 		FootprintApiModel model = new FootprintApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

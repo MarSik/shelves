@@ -51,6 +51,8 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	DateTime created;
 
+	LotHistoryApiModel history;
+
 	@Min(1)
 	Long count;
 
@@ -137,5 +139,10 @@ public class LotApiModel extends AbstractEntityApiModel {
 	@JsonIdentityReference(alwaysAsId = true)
 	public RequirementApiModel getUsedBy() {
 		return usedBy;
+	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public LotHistoryApiModel getHistory() {
+		return history;
 	}
 }

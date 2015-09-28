@@ -4,7 +4,16 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.api.entities.ItemApiModel;
+import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.LotHistoryApiModel;
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.ProjectApiModel;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
+import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.NamedEntity;
@@ -55,6 +64,7 @@ import org.marsik.elshelves.backend.repositories.SourceRepository;
 import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.marsik.elshelves.backend.repositories.UnitRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +73,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -70,6 +81,12 @@ import java.util.UUID;
 @Service
 public class BackupService {
     private static final Logger log = LoggerFactory.getLogger(BackupService.class);
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Autowired
+    UuidGenerator uuidGenerator;
 
 	@Autowired
     OwnedEntityRepository ownedEntityRepository;
@@ -208,7 +225,7 @@ public class BackupService {
 		}
 
 		for (F i: allItems) {
-            log.debug("Relinking {} uuid {}", i.getClass().getName(), i.getUuid());
+            log.debug("Relinking {} id {}", i.getClass().getName(), i.getId());
 			relinkService.relink(i, currentUser, relinkCache, true);
 		}
 	}
@@ -223,11 +240,11 @@ public class BackupService {
 
         for (F i: allItems) {
             if (!i.isNew()) {
-                log.debug("Skipping already saved {} uuid {}", i.getClass().getName(), i.getUuid());
+                log.debug("Skipping already saved {} id {}", i.getClass().getName(), i.getId());
                 continue;
             }
 
-            log.debug("Saving {} uuid {}", i.getClass().getName(), i.getUuid());
+            log.debug("Saving {} id {}", i.getClass().getName(), i.getId());
             ownedEntityRepository.save(i);
         }
     }
@@ -262,7 +279,10 @@ public class BackupService {
         }
 
         // TODO separate lots and lothistory
-        // TODO convert projects to types + items
+        separateLotsFromHistory(backup.getLots(), backup);
+
+        // convert projects to types + items
+        convertProjects(backup.getProjects(), backup);
 
         prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
         prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache, pool);
@@ -289,6 +309,85 @@ public class BackupService {
 
 		return true;
 	}
+
+    private void separateLotsFromHistory(Set<LotApiModel> lots, RestoreApiModel backup) {
+        for (Iterator<LotApiModel> it = lots.iterator(); it.hasNext(); ) {
+            LotApiModel lot = it.next();
+
+            if (lot.getHistory() != null && lot.getPrevious() == null && lot.getNext() == null) {
+                // Proper new style Lot
+                continue;
+            }
+
+            if (lot.getNext() != null) {
+                // Remove history from lots
+                it.remove();
+            } else {
+                // Relink history to real lots
+
+                if (lot.getAction() != LotAction.SPLIT) {
+                    // Use the last lot as history when the last operation was split
+                    lot.setHistory(new LotHistoryApiModel());
+                    lot.getHistory().setId(lot.getPrevious().getId());
+                } else {
+                    // Prepare a history record
+                    LotHistoryApiModel history = new LotHistoryApiModel();
+                    history.setAction(lot.getAction());
+                    history.setId(uuidGenerator.generate());
+                    history.setCreated(lot.getCreated());
+
+                    if (lot.getPrevious() != null) {
+                        history.setPreviousId(lot.getPrevious().getId());
+                    }
+                }
+            }
+        }
+    }
+
+    private void convertProjects(Set<ProjectApiModel> projects, RestoreApiModel backup) {
+        LotHistoryApiModel history = new LotHistoryApiModel();
+        history.setId(uuidGenerator.generate());
+        history.setAction(LotAction.DELIVERY);
+        history.setCreated(new DateTime());
+        backup.getHistory().add(history);
+
+        SourceApiModel source = new SourceApiModel();
+        source.setName("Backup restore " + new DateTime().toString());
+        source.setId(uuidGenerator.generate());
+        backup.getSources().add(source);
+
+        for (ProjectApiModel project: projects) {
+            PartTypeApiModel type = modelMapper.map(project, PartTypeApiModel.class);
+            backup.getTypes().add(type);
+
+
+            ItemApiModel item = modelMapper.map(project, ItemApiModel.class);
+            item.setId(uuidGenerator.generate());
+            item.setCount(1L);
+            item.setFinished(false);
+            item.setHistory(history);
+            item.setType(type);
+            backup.getItems().add(item);
+
+            type.setLots(new THashSet<>());
+            type.getLots().add(item);
+
+            PurchaseApiModel purchase = new PurchaseApiModel();
+            purchase.setId(uuidGenerator.generate());
+            purchase.setLots(new THashSet<>());
+            purchase.getLots().add(item);
+            backup.getPurchases().add(purchase);
+
+            TransactionApiModel transaction = new TransactionApiModel();
+            transaction.setId(uuidGenerator.generate());
+            transaction.setItems(new THashSet<>());
+            transaction.getItems().add(purchase);
+            transaction.setName(project.getName());
+            transaction.setDate(new DateTime());
+            transaction.setSource(source);
+            backup.getTransactions().add(transaction);
+        }
+    }
 
     private void upgradeEntities(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
         for (OwnedEntity d0 : pool) {
@@ -370,7 +469,7 @@ public class BackupService {
                 continue;
             }
 
-            Source source = (Source)relinkCache.get(t.getSource().getUuid());
+            Source source = (Source)relinkCache.get(t.getSource().getId());
             t.setName(source.getName() + " "
                     + (t.getDate() != null ? t.getDate().toString() : Integer.toString(seq++)));
         }
@@ -397,7 +496,7 @@ public class BackupService {
                 continue;
             }
 
-            Lot source = (Lot)relinkCache.get(p.getLots().iterator().next().getUuid());
+            Lot source = (Lot)relinkCache.get(p.getLots().iterator().next().getId());
             p.setCreated(source.getLastModified());
         }
     }

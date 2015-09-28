@@ -19,14 +19,14 @@ public class SourceToEmber implements CachingConverter<Source, SourceApiModel, U
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (SourceApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (SourceApiModel)cache.get(object.getId());
 		}
 
 		SourceApiModel model = new SourceApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

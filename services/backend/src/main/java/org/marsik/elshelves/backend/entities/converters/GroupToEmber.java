@@ -30,14 +30,14 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (PartGroupApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (PartGroupApiModel)cache.get(object.getId());
 		}
 
 		PartGroupApiModel model = new PartGroupApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 
 		return convert(object, model, nested, cache);

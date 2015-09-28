@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.UUID;
@@ -106,7 +105,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 			setCount(getCount() - count);
 
 			result = new Lot();
-			result.setUuid(uuidGenerator.generate());
+			result.setId(uuidGenerator.generate());
 			result.setHistory(getHistory());
 			result.setCount(count);
 			result.setStatus(getStatus());
@@ -127,7 +126,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		}
 
 		if (requirement != null && result.isCanBeAssigned()) {
-			result.recordChange(LotAction.ASSIGNED, performedBy);
+			result.recordChange(LotAction.ASSIGNED, performedBy, uuidGenerator);
 		}
 
 		return result;
@@ -139,53 +138,54 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		return l;
 	}
 
-    public LotHistory move(User performedBy, Box location) {
+    public LotHistory move(User performedBy, Box location, UuidGenerator uuidGenerator) {
 		setLocation(location);
 
-		LotHistory h = recordChange(LotAction.MOVED, performedBy);
+		LotHistory h = recordChange(LotAction.MOVED, performedBy, uuidGenerator);
 		h.setLocation(location);
 
 		return h;
     }
 
-	public LotHistory solder(User performedBy, Requirement requirement) {
+	public LotHistory solder(User performedBy, Requirement requirement, UuidGenerator uuidGenerator) {
 		if (requirement != null) {
-			assign(performedBy, requirement);
+			assign(performedBy, requirement, uuidGenerator);
 		}
 
-		return recordChange(LotAction.SOLDERED, performedBy);
+		return recordChange(LotAction.SOLDERED, performedBy, uuidGenerator);
 	}
 
-    public LotHistory unsolder(User performedBy) {
-		return recordChange(LotAction.UNSOLDERED, performedBy);
+    public LotHistory unsolder(User performedBy, UuidGenerator uuidGenerator) {
+		return recordChange(LotAction.UNSOLDERED, performedBy, uuidGenerator);
     }
 
-	public LotHistory destroy(User performedBy) {
-		return recordChange(LotAction.DESTROYED, performedBy);
+	public LotHistory destroy(User performedBy, UuidGenerator uuidGenerator) {
+		return recordChange(LotAction.DESTROYED, performedBy, uuidGenerator);
 	}
 
-	public LotHistory assign(User performedBy, Requirement where) {
+	public LotHistory assign(User performedBy, Requirement where, UuidGenerator uuidGenerator) {
 		setUsedBy(where);
 
-		LotHistory h = recordChange(LotAction.ASSIGNED, performedBy);
+		LotHistory h = recordChange(LotAction.ASSIGNED, performedBy, uuidGenerator);
 		h.setAssignedTo(where);
 
 		return h;
 	}
 
-	public LotHistory unassign(User performedBy) {
+	public LotHistory unassign(User performedBy, UuidGenerator uuidGenerator) {
 		setUsedBy(null);
 
-		LotHistory h = recordChange(LotAction.UNASSIGNED, performedBy);
+		LotHistory h = recordChange(LotAction.UNASSIGNED, performedBy, uuidGenerator);
 		h.setAssignedTo(null);
 
 		return h;
 	}
 
-	private LotHistory recordChange(LotAction action, User performedBy) {
+	private LotHistory recordChange(LotAction action, User performedBy, UuidGenerator uuidGenerator) {
 		setStatus(action);
 
 		LotHistory h = new LotHistory();
+		h.setId(uuidGenerator.generate());
 		h.setPrevious(getHistory());
 		setHistory(h);
 		h.setPerformedBy(performedBy);
@@ -195,16 +195,16 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	}
 
 	public static Lot delivery(Purchase purchase, UUID uuid, Long count,
-							   Box location, DateTime expiration, User performedBy) {
+							   Box location, DateTime expiration, User performedBy, UuidGenerator uuidGenerator) {
 		Lot l = new Lot();
 		l.setOwner(purchase.getOwner());
-		l.setUuid(uuid);
+		l.setId(uuid);
 		l.setLocation(location);
 		l.setCount(count);
 		l.setPurchase(purchase);
 		l.setExpiration(expiration);
 
-		LotHistory h = l.recordChange(LotAction.DELIVERY, performedBy);
+		LotHistory h = l.recordChange(LotAction.DELIVERY, performedBy, uuidGenerator);
 		h.setLocation(location);
 
 		return l;

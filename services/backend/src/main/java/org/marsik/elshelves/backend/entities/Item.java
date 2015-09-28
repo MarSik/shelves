@@ -22,7 +22,7 @@ import java.util.Set;
 @Entity
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	Set<Requirement> requires;
 
 	Boolean finished;

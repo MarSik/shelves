@@ -59,7 +59,7 @@ public class SourceService extends AbstractRestService<SourceRepository, Source,
 
 	@Async
 	protected void refreshFavicon(UUID uuid) {
-		Source s = getRepository().findByUuid(uuid);
+		Source s = getRepository().findById(uuid);
 
 		if (s.getUrl() == null
 				|| s.getUrl().isEmpty()) {

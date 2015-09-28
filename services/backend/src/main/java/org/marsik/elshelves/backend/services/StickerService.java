@@ -242,7 +242,7 @@ public class StickerService {
 
     protected static PDImageXObject getQRImage(PDDocument document, StickerCapable object, Float size) throws IOException {
         ByteArrayOutputStream os = QRCode
-                .from("shv://" + object.getBaseUrl() + "/" + object.getUuid())
+                .from("shv://" + object.getBaseUrl() + "/" + object.getId())
                 .withSize(size.intValue(), size.intValue())
                 .to(ImageType.PNG)
                 .withErrorCorrection(ErrorCorrectionLevel.M)

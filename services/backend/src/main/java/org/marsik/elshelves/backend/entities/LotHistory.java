@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -12,12 +13,19 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-@Entity
 @Data
 @NoArgsConstructor
-public class LotHistory {
+@EqualsAndHashCode(of = {"id"})
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
+public class LotHistory extends IdentifiedEntity {
     @Builder(toBuilder = true)
     protected LotHistory(LotHistory previous, User performedBy, DateTime created, LotAction action, Box location, Requirement assignedTo) {
         this.previous = previous;
@@ -27,10 +35,6 @@ public class LotHistory {
         this.location = location;
         this.assignedTo = assignedTo;
     }
-
-    @Id
-    @GeneratedValue
-    Long id;
 
     @ManyToOne
     LotHistory previous;

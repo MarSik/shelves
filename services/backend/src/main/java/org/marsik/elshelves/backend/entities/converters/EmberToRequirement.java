@@ -44,7 +44,7 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 
 	@Override
 	public Requirement convert(RequirementApiModel object, Requirement model, int nested, Map<UUID, Object> cache) {
-		model.setUuid(object.getId());
+		model.setId(object.getId());
 		model.setCount(object.getCount());
         model.setName(object.getName());
         model.setSummary(object.getSummary());

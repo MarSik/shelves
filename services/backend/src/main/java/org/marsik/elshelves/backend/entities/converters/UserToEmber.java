@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.AuthorizationApiModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
-import org.marsik.elshelves.backend.entities.Authorization;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +21,14 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
             return null;
         }
 
-        if (cache.containsKey(entity.getUuid())) {
-            return (UserApiModel)cache.get(entity.getUuid());
+        if (cache.containsKey(entity.getId())) {
+            return (UserApiModel)cache.get(entity.getId());
         }
 
         UserApiModel user = new UserApiModel();
 		if (nested > 0
-				&& entity.getUuid() != null) {
-			cache.put(entity.getUuid(), user);
+				&& entity.getId() != null) {
+			cache.put(entity.getId(), user);
 		}
 
 		return convert(entity, user, nested, cache);
@@ -37,7 +36,7 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
 
 	@Override
 	public UserApiModel convert(User entity, UserApiModel user, int nested, Map<UUID, Object> cache) {
-		user.setId(entity.getUuid());
+		user.setId(entity.getId());
 
 		if (nested == 0) {
 			return user;

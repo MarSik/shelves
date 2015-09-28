@@ -86,6 +86,14 @@ public class LotController {
 		return modelBuilder.build();
 	}
 
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
+    @Transactional
+    public EmberModel updateLot(@CurrentUser User currentUser,
+                                @RequestBody @Validated LotApiModel lot) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        return splitOrDeliver(currentUser, lot);
+    }
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional

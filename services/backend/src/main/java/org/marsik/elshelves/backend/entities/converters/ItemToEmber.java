@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.ItemApiModel;
-import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
@@ -26,14 +25,14 @@ public class ItemToEmber implements CachingConverter<Item, ItemApiModel, UUID> {
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (ItemApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (ItemApiModel)cache.get(object.getId());
 		}
 
 		ItemApiModel model = new ItemApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

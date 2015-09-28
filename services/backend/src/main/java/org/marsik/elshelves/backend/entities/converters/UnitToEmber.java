@@ -5,7 +5,6 @@ import org.marsik.elshelves.backend.entities.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,14 +19,14 @@ public class UnitToEmber implements CachingConverter<Unit, UnitApiModel, UUID> {
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (UnitApiModel) cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (UnitApiModel) cache.get(object.getId());
 		}
 
 		UnitApiModel model = new UnitApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}

@@ -1,14 +1,10 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.joda.time.DateTime;
-import org.marsik.elshelves.api.ember.EmberModelName;
-import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
-import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +25,21 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 			return null;
 		}
 
-		if (cache.containsKey(object.getUuid())) {
-			return (DocumentApiModel)cache.get(object.getUuid());
+		if (cache.containsKey(object.getId())) {
+			return (DocumentApiModel)cache.get(object.getId());
 		}
 
 		DocumentApiModel model = new DocumentApiModel();
 		if (nested > 0
-				&& object.getUuid() != null) {
-			cache.put(object.getUuid(), model);
+				&& object.getId() != null) {
+			cache.put(object.getId(), model);
 		}
 		return convert(object, model, nested, cache);
 	}
 
 	@Override
 	public DocumentApiModel convert(Document object, DocumentApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getUuid());
+		model.setId(object.getId());
 
 		if (nested == 0) {
 			return model;
@@ -61,7 +57,7 @@ public class DocumentToEmber implements CachingConverter<Document, DocumentApiMo
 			model.setDescribes(new THashSet<PolymorphicRecord>());
 			for (final NamedEntity n: object.getDescribes()) {
 				PolymorphicRecord r = new PolymorphicRecord();
-				r.setId(n.getUuid());
+				r.setId(n.getId());
 				r.setType(n.getEmberType());
 				model.getDescribes().add(r);
 			}

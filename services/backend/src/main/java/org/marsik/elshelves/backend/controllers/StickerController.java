@@ -52,7 +52,7 @@ public class StickerController {
 
 		List<StickerCapable> objects = new ArrayList<>();
 		for (UUID uuid: uuids) {
-			OwnedEntity e = ownedEntityRepository.findByUuid(uuid);
+			OwnedEntity e = ownedEntityRepository.findById(uuid);
 			if (e == null) {
 				throw new EntityNotFound();
 			}
