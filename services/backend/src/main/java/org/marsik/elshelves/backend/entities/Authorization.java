@@ -9,6 +9,9 @@ import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
@@ -21,11 +24,15 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
-public class Authorization extends OwnedEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Authorization extends IdentifiedEntity implements OwnedEntityInterface {
     @NotEmpty
     @NotNull
     @Size(min = 1, max = 255)
     String name;
+
+    @ManyToOne
+    User owner;
 
     /**
      * The client device contains the UUID (I) of this entity,
@@ -48,16 +55,6 @@ public class Authorization extends OwnedEntity {
     @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime lastUsed;
 
-    @Override
-    public boolean canBeDeleted() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeUpdated() {
-        return false;
-    }
-
     @PartOfUpdate
     public String getName() {
         return name;
@@ -66,5 +63,15 @@ public class Authorization extends OwnedEntity {
     @PartOfUpdate
     public String getSecret() {
         return secret;
+    }
+
+    @Override
+    public boolean canBeDeleted() {
+        return true;
+    }
+
+    @Override
+    public boolean canBeUpdated() {
+        return false;
     }
 }

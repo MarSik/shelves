@@ -1,8 +1,11 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +32,17 @@ public class RelinkService {
     @Autowired
     OwnedEntityRepository ownedEntityRepository;
 
-	protected <E extends OwnedEntity> E getByUuid(E value, Map<UUID, OwnedEntity> cache)  {
+    @Autowired
+    BaseIdentifiedEntityRepository identifiedEntityRepository;
+
+	protected <E extends IdentifiedEntityInterface> E getByUuid(E value, Map<UUID, IdentifiedEntityInterface> cache)  {
 		// Consult the relink cache first
         if (cache.containsKey(value.getId())) {
 			return (E)cache.get(value.getId());
 		}
 
         // Try getting the instance from database
-		E entity = (E)ownedEntityRepository.findById(value.getId());
+		E entity = (E)identifiedEntityRepository.findById(value.getId());
         if (entity != null) {
             updateCache(cache, entity);
             return entity;
@@ -59,7 +65,7 @@ public class RelinkService {
      * @return The value entity prepared for import
      */
     @SuppressWarnings("unchecked")
-    public <E extends OwnedEntity> E fixUuidAndOwner(E value, User user, Map<UUID, OwnedEntity> cache)  {
+    public <E extends OwnedEntityInterface> E fixUuidAndOwner(E value, User user, Map<UUID, IdentifiedEntityInterface> cache)  {
         if (value.getId() == null) {
             value.setId(uuidGenerator.generate());
             log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
@@ -99,21 +105,21 @@ public class RelinkService {
 	 * @return
 	 */
 
-	protected <E extends OwnedEntity> E relink(E entity) {
-		return relink(entity, null, new THashMap<UUID, OwnedEntity>(), false);
+	protected <T extends OwnedEntityInterface> T relink(T entity) {
+		return relink(entity, null, new THashMap<UUID, IdentifiedEntityInterface>(), false);
 	}
 
-    protected <E extends OwnedEntity> E relink(E entity, User user) {
-        return relink(entity, user, new THashMap<UUID, OwnedEntity>(), false);
+    protected <E extends OwnedEntityInterface> E relink(E entity, User user) {
+        return relink(entity, user, new THashMap<UUID, IdentifiedEntityInterface>(), false);
     }
 
-    protected <E extends OwnedEntity> E relink(E entity, User user, OwnedEntity updatedEntity) {
-        Map<UUID, OwnedEntity> cache = new THashMap<>();
+    protected <E extends OwnedEntityInterface> E relink(E entity, User user, E updatedEntity) {
+        Map<UUID, IdentifiedEntityInterface> cache = new THashMap<>();
         updateCache(cache, updatedEntity);
         return relink(entity, user, cache, true);
     }
 
-    protected <E> void relinkImpl(E entity, User user, Map<UUID, OwnedEntity> known) {
+    protected void relinkImpl(IdentifiedEntityInterface entity, User user, Map<UUID, IdentifiedEntityInterface> known) {
         PropertyDescriptor[] properties;
         try {
             properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
@@ -130,9 +136,9 @@ public class RelinkService {
             }
 
             // One-to-* relationship
-            if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
+            if (IdentifiedEntityInterface.class.isAssignableFrom(f.getPropertyType())) {
                 try {
-                    OwnedEntity value = (OwnedEntity) getter.invoke(entity);
+                    OwnedEntityInterface value = (OwnedEntityInterface) getter.invoke(entity);
                     Method setter = f.getWriteMethod();
 
                     if (value == null || setter == null) {
@@ -141,7 +147,7 @@ public class RelinkService {
 
                     // Potentially existing UUID but unconnected entity
                     if (value.getId() != null && value.getDbId() == null) {
-                        OwnedEntity v = getByUuid(value, known);
+                        OwnedEntityInterface v = getByUuid(value, known);
 
                         // Entity does exist in DB or cache, replace the reference with
                         // the connected entity
@@ -179,9 +185,9 @@ public class RelinkService {
                     }
 
                     for (Object item0: items) {
-                        if (item0 instanceof OwnedEntity) {
+                        if (item0 instanceof IdentifiedEntityInterface) {
                             // OwnedEntity, relink
-                            OwnedEntity item = (OwnedEntity)item0;
+                            OwnedEntityInterface item = (OwnedEntityInterface)item0;
 
                             if (item.getId() == null) {
                                 // New entity, create UUID and perform deep relinking
@@ -196,7 +202,7 @@ public class RelinkService {
 
                             } else {
                                 // Disconnected potentially existing entity
-                                OwnedEntity v = getByUuid(item, known);
+                                IdentifiedEntityInterface v = getByUuid(item, known);
 
                                 if (v != null) {
                                     // Entity known in the database or cache
@@ -219,7 +225,7 @@ public class RelinkService {
                             // Not owned entity, probably relationship entity
                             // keep it as it is and relink the internal properties
                             newItems.add(item0);
-                            relinkImpl(item0, user, known);
+                            relinkImpl((IdentifiedEntityInterface)item0, user, known);
                         }
                     }
 
@@ -235,7 +241,7 @@ public class RelinkService {
         }
     }
 
-    private static void updateCache(Map<UUID, OwnedEntity> known, OwnedEntity value) {
+    private static void updateCache(Map<UUID, IdentifiedEntityInterface> known, IdentifiedEntityInterface value) {
         if (known.containsKey(value.getId())) {
             log.warn("Replacing cached {} with {}", value.getId(), value.toString());
         }
@@ -243,7 +249,7 @@ public class RelinkService {
         known.put(value.getId(), value);
     }
 
-    protected <E extends OwnedEntity> E relink(E entity, User user, Map<UUID, OwnedEntity> known, boolean forceRelink) {
+    protected <E extends IdentifiedEntityInterface> E relink(E entity, User user, Map<UUID, IdentifiedEntityInterface> known, boolean forceRelink) {
         if (!forceRelink
                 && entity.getId() != null
                 && known.containsKey(entity.getId())) {

@@ -7,7 +7,9 @@ import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -24,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntity, E extends AbstractEntityApiModel> {
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntityInterface, E extends AbstractEntityApiModel> {
     final R repository;
     final CachingConverter<T, E, UUID> dbToRest;
     final CachingConverter<E, T, UUID> restToDb;

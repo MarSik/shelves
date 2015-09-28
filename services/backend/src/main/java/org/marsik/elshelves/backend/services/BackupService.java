@@ -15,9 +15,12 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
@@ -50,6 +53,7 @@ import org.marsik.elshelves.backend.entities.converters.TransactionToEmber;
 import org.marsik.elshelves.backend.entities.converters.TypeToEmber;
 import org.marsik.elshelves.backend.entities.converters.UnitToEmber;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
+import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.DocumentRepository;
 import org.marsik.elshelves.backend.repositories.FootprintRepository;
@@ -90,6 +94,9 @@ public class BackupService {
 
 	@Autowired
     OwnedEntityRepository ownedEntityRepository;
+
+    @Autowired
+    BaseIdentifiedEntityRepository identifiedEntityRepository;
 
 	@Autowired
 	RelinkService relinkService;
@@ -217,9 +224,9 @@ public class BackupService {
     NumericPropertyRepository numericPropertyRepository;
 
 
-	protected <F extends OwnedEntity>  void relink(Iterable<F> allItems,
+	protected <F extends IdentifiedEntityInterface>  void relink(Iterable<F> allItems,
 								   User currentUser,
-                                   Map<UUID, OwnedEntity> relinkCache) {
+                                   Map<UUID, IdentifiedEntityInterface> relinkCache) {
 		if (allItems == null) {
 			return;
 		}
@@ -230,9 +237,9 @@ public class BackupService {
 		}
 	}
 
-    protected <F extends OwnedEntity>  void save(Iterable<F> allItems,
-                                                 User currentUser,
-                                                 Map<UUID, OwnedEntity> relinkCache) {
+    protected <F extends IdentifiedEntityInterface>  void save(Iterable<F> allItems,
+                                                               User currentUser,
+                                                               Map<UUID, IdentifiedEntityInterface> relinkCache) {
         if (allItems == null) {
             return;
         }
@@ -245,16 +252,16 @@ public class BackupService {
             }
 
             log.debug("Saving {} id {}", i.getClass().getName(), i.getId());
-            ownedEntityRepository.save(i);
+            identifiedEntityRepository.save(i);
         }
     }
 
-    protected <T, F extends OwnedEntity>  void prepare(Iterable<T> items,
+    protected <T, F extends OwnedEntityInterface>  void prepare(Iterable<T> items,
                                                        CachingConverter<T, F, UUID> converter,
                                                        User currentUser,
                                                        Map<UUID, Object> conversionCache,
-                                                       Map<UUID, OwnedEntity> relinkCache,
-                                                       Set<OwnedEntity> pool) {
+                                                       Map<UUID, IdentifiedEntityInterface> relinkCache,
+                                                       Set<IdentifiedEntityInterface> pool) {
         if (items == null) {
             return;
         }
@@ -269,8 +276,8 @@ public class BackupService {
 	public boolean restoreFromBackup(RestoreApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
-        Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
-        Set<OwnedEntity> pool = new THashSet<>();
+        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
+        Set<IdentifiedEntityInterface> pool = new THashSet<>();
 
         // Everything will be owned by the current user
         if (backup.getUser() != null
@@ -389,8 +396,8 @@ public class BackupService {
         }
     }
 
-    private void upgradeEntities(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
-        for (OwnedEntity d0 : pool) {
+    private void upgradeEntities(Set<IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+        for (IdentifiedEntityInterface d0 : pool) {
             if (!(d0 instanceof NamedEntity)) {
                 continue;
             }
@@ -411,8 +418,8 @@ public class BackupService {
      * @param pool Objects that are to be saved and might contain Document instances
      * @param relinkCache Relink cache that already contains all document instances
      */
-    private void upgradeDocuments(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
-       for (OwnedEntity d0: pool) {
+    private void upgradeDocuments(Set<IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+       for (IdentifiedEntityInterface d0: pool) {
            if (!(d0 instanceof Document)) {
                continue;
            }
@@ -455,10 +462,10 @@ public class BackupService {
      * @param pool list of entities to be saved that might contain Transaction instances
      * @param relinkCache relink cache that has to contain all the transactions and sources
      */
-    private void upgradeTransactions(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+    private void upgradeTransactions(Set<IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
         int seq = 0;
 
-        for (OwnedEntity t0: pool) {
+        for (IdentifiedEntityInterface t0: pool) {
             if (!(t0 instanceof Transaction)) {
                 continue;
             }
@@ -480,10 +487,10 @@ public class BackupService {
      * @param pool list of entities to be saved that might contain Purchase instances
      * @param relinkCache relink cache that has to contain all the purchases and lots
      */
-    private void upgradePurchases(Set<OwnedEntity> pool, Map<UUID, OwnedEntity> relinkCache) {
+    private void upgradePurchases(Set<IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
         int seq = 0;
 
-        for (OwnedEntity p0 : pool) {
+        for (IdentifiedEntityInterface p0 : pool) {
             if (!(p0 instanceof Purchase)) {
                 continue;
             }

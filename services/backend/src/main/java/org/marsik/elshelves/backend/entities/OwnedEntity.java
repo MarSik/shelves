@@ -17,16 +17,17 @@ import javax.persistence.UniqueConstraint;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
-public abstract class OwnedEntity extends IdentifiedEntity {
+public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntityInterface {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
 	@ManyToOne
 	User owner;
 
+	@Override
 	@PartOfUpdate
 	public User getOwner() {
 		return owner;
@@ -40,17 +41,12 @@ public abstract class OwnedEntity extends IdentifiedEntity {
 	public String toString() {
 		return getClass().getName() + "{" +
 				"id=" + dbId +
-				", id=" + id +
+				", uuid=" + id +
 				'}';
 	}
 
 	@PrePersist
 	void prePersist() {
 		log.debug("Saving "+toString());
-	}
-
-	@Transient
-	public boolean isNew() {
-		return dbId == null;
 	}
 }

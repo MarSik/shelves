@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
@@ -71,7 +72,7 @@ public class RelinkServiceTest {
         lot.getHistory().setPerformedBy(oldUser);
         lot.setOwner(newUser);
 
-        Map<UUID, OwnedEntity> relinkCache = new THashMap<>();
+        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
         relinkCache.put(newUser.getId(), newUser);
         relinkCache.put(oldUser.getId(), newUser);
 

@@ -1,12 +1,13 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class AbstractEntityToEmber<F extends OwnedEntity, T extends AbstractEntityApiModel> implements CachingConverter<F, T, UUID> {
+public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extends AbstractEntityApiModel> implements CachingConverter<F, T, UUID> {
     final Class<T> type;
 
     protected AbstractEntityToEmber(Class<T> type) {

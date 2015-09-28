@@ -11,6 +11,8 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ import java.util.Set;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @DefaultEmberModel(ItemApiModel.class)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Entity
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",

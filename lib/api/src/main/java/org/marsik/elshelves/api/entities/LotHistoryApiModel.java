@@ -18,6 +18,10 @@ import java.util.UUID;
 public class LotHistoryApiModel extends AbstractEntityApiModel {
     @JsonProperty("previous")
     UUID previousId;
+
     DateTime created;
     LotAction action;
+
+    @JsonProperty("performedBy")
+    UUID performedById;
 }
