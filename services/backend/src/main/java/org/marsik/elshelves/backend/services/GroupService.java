@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GroupService extends AbstractRestService<GroupRepository, Group, PartGroupApiModel> {
+public class GroupService extends AbstractRestService<GroupRepository, Group> {
 	@Autowired
 	public GroupService(GroupRepository repository,
-						GroupToEmber dbToRest,
-						EmberToGroup restToDb,
 						UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override

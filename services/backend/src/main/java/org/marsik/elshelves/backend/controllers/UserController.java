@@ -7,6 +7,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.EmberToUser;
+import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.MailgunService;
@@ -34,8 +36,10 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
 	ElshelvesUserDetailsService userDetailsService;
 
     @Autowired
-    public UserController(ElshelvesUserDetailsService service, UserService userService) {
-        super(UserApiModel.class, userService);
+    public UserController(ElshelvesUserDetailsService service, UserService userService,
+                          UserToEmber dbToRest,
+                          EmberToUser restToDb) {
+        super(UserApiModel.class, userService, dbToRest, restToDb);
 		this.userDetailsService = service;
     }
 

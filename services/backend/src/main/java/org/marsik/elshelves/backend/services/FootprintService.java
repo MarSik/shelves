@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FootprintService extends AbstractRestService<FootprintRepository, Footprint, FootprintApiModel> {
+public class FootprintService extends AbstractRestService<FootprintRepository, Footprint> {
 	@Autowired
 	public FootprintService(FootprintRepository repository,
-							FootprintToEmber dbToRest,
-							EmberToFootprint restToDb,
+
 							UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override

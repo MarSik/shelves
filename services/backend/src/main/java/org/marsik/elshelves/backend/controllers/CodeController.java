@@ -9,6 +9,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.CodeToEmber;
+import org.marsik.elshelves.backend.entities.converters.EmberToCode;
 import org.marsik.elshelves.backend.entities.converters.NamedObjectToEmber;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
@@ -33,8 +35,10 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
     NamedObjectToEmber namedObjectToEmber;
 
     @Autowired
-    public CodeController(CodeService service) {
-        super(CodeApiModel.class, service);
+    public CodeController(CodeService service,
+                          CodeToEmber dbToRest,
+                          EmberToCode restToDb) {
+        super(CodeApiModel.class, service, dbToRest, restToDb);
     }
 
     @Transactional(readOnly = true)
@@ -42,8 +46,9 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
     public EmberModel getByTypeAndCode(@CurrentUser User user,
                               @PathVariable("code") String code,
                               @PathVariable("type") String type) throws PermissionDenied, EntityNotFound {
-        CodeApiModel c = getService().getByTypeAndCode(type, code, user);
-        EmberModel.Builder<CodeApiModel> builder = new EmberModel.Builder<CodeApiModel>(c);
+        Code c = getService().getByTypeAndCode(type, code, user);
+        CodeApiModel res = getDbToRest().convert(c, 1, new THashMap<>());
+        EmberModel.Builder<CodeApiModel> builder = new EmberModel.Builder<>(res);
         return builder.build();
     }
 }

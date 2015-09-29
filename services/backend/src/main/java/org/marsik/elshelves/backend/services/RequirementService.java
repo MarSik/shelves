@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RequirementService extends AbstractRestService<RequirementRepository, Requirement, RequirementApiModel> {
+public class RequirementService extends AbstractRestService<RequirementRepository, Requirement> {
 	@Autowired
 	TypeRepository typeRepository;
 
@@ -21,11 +21,9 @@ public class RequirementService extends AbstractRestService<RequirementRepositor
 
 	@Autowired
 	public RequirementService(RequirementRepository repository,
-							  RequirementToEmber dbToRest,
-							  EmberToRequirement restToDb,
 							  UuidGenerator uuidGenerator) {
 
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override

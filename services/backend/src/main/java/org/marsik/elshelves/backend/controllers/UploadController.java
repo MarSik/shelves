@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
@@ -7,8 +8,11 @@ import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.DocumentService;
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,6 +48,9 @@ public class UploadController {
 
 	@Autowired
 	NamedEntityRepository namedEntityRepository;
+
+	@Autowired
+	DocumentToEmber documentToEmber;
 
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
@@ -65,9 +73,9 @@ public class UploadController {
 			}
 		}
 
-		Set<DocumentApiModel> documents = new THashSet<>();
+		Set<Document> documents = new THashSet<>();
 
-		PolymorphicRecord describesRecord = new PolymorphicRecord();
+		NamedEntity describesRecord = new NamedEntity();
 		describesRecord.setId(entity);
 
 		for (MultipartFile file: files) {
@@ -78,16 +86,24 @@ public class UploadController {
             processUpload(currentUser, documents, describesRecord, webcam);
         }
 
-		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(DocumentApiModel.class, documents);
+		Set<DocumentApiModel> result = new THashSet<>();
+		Map<UUID, Object> cache = new THashMap<>();
+
+		for (Document d: documents) {
+			result.add(documentToEmber.convert(d, 1, cache));
+		}
+
+
+		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(DocumentApiModel.class, result);
 		return b.build();
 	}
 
-    private void processUpload(User currentUser, Set<DocumentApiModel> documents, PolymorphicRecord describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
-        DocumentApiModel d = new DocumentApiModel();
+    private void processUpload(User currentUser, Set<Document> documents, NamedEntity describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+        Document d = new Document();
         d.setName(file.getOriginalFilename());
         d.setSize(file.getSize());
         d.setContentType(file.getContentType());
-        d.setDescribes(new THashSet<PolymorphicRecord>());
+        d.setDescribes(new THashSet<>());
         d.getDescribes().add(describesRecord);
 
         d = documentService.create(d, currentUser);

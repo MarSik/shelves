@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class ItemService extends AbstractRestService<ItemRepository, Item, ItemApiModel> {
+public class ItemService extends AbstractRestService<ItemRepository, Item> {
 	@Autowired
 	RequirementService requirementService;
 
@@ -31,10 +31,8 @@ public class ItemService extends AbstractRestService<ItemRepository, Item, ItemA
 
 	@Autowired
 	public ItemService(ItemRepository repository,
-                       ItemToEmber dbToRest,
-                       EmberToItem restToDb,
                        UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override
@@ -52,7 +50,7 @@ public class ItemService extends AbstractRestService<ItemRepository, Item, ItemA
 		super.deleteEntity(entity);
 	}
 
-    public ItemApiModel importRequirements(UUID projectId, UUID document, User currentUser, List<RequirementApiModel> newRequirements) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
+    public Item importRequirements(UUID projectId, UUID document, User currentUser, List<Requirement> newRequirements) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
         Item item = getSingleEntity(projectId);
 
         if (item == null) {
@@ -63,19 +61,16 @@ public class ItemService extends AbstractRestService<ItemRepository, Item, ItemA
             throw new PermissionDenied();
         }
 
-        ProjectApiModel dummyProject = new ProjectApiModel();
+        Item dummyProject = new Item();
         dummyProject.setId(projectId);
 
-        Map<UUID, Object> cache = new THashMap<>();
-
-        List<RequirementApiModel> requirements = documentService.analyzeSchematics(document, currentUser);
-        for (RequirementApiModel r: requirements) {
-            r.setProject(dummyProject);
-            RequirementApiModel newR = requirementService.create(r, currentUser);
+        List<Requirement> requirements = documentService.analyzeSchematics(document, currentUser);
+        for (Requirement r: requirements) {
+            r.setItem(dummyProject);
+            Requirement newR = requirementService.create(r, currentUser);
             newRequirements.add(newR);
-            cache.put(newR.getId(), newR);
         }
 
-        return getDbToRest().convert(item, 1, cache);
+        return item;
     }
 }

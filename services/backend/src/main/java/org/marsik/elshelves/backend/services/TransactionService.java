@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TransactionService extends AbstractRestService<TransactionRepository, Transaction, TransactionApiModel> {
+public class TransactionService extends AbstractRestService<TransactionRepository, Transaction> {
 	@Autowired
 	SourceRepository sourceRepository;
 
@@ -35,14 +35,12 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 	@Autowired
 	public TransactionService(TransactionRepository repository,
-							  TransactionToEmber dbToRest,
-							  EmberToTransaction restToDb,
 							  UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
 	@Override
-	protected Transaction createEntity(TransactionApiModel dto, User currentUser) {
+	protected Transaction createEntity(Transaction dto, User currentUser) {
 		if (dto.getDate() == null) {
 			dto.setDate(new DateTime());
 		}

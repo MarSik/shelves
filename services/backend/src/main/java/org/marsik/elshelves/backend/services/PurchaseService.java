@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 
 @Service
-public class PurchaseService extends AbstractRestService<PurchaseRepository, Purchase, PurchaseApiModel> {
+public class PurchaseService extends AbstractRestService<PurchaseRepository, Purchase> {
 	@Autowired
 	TypeRepository typeRepository;
 
@@ -28,10 +28,8 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
 
 	@Autowired
 	public PurchaseService(PurchaseRepository repository,
-						   PurchaseToEmber dbToRest,
-						   EmberToPurchase restToDb,
 						   UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
 	@Override

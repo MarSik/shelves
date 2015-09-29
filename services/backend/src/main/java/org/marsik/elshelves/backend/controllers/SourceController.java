@@ -8,6 +8,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.EmberToSource;
+import org.marsik.elshelves.backend.entities.converters.SourceToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.SourceService;
 import org.marsik.elshelves.backend.services.StorageManager;
@@ -36,8 +38,10 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 	StorageManager storageManager;
 
 	@Autowired
-	public SourceController(SourceService service) {
-		super(SourceApiModel.class, service);
+	public SourceController(SourceService service,
+							SourceToEmber dbToRest,
+							EmberToSource restToDb) {
+		super(SourceApiModel.class, service, dbToRest, restToDb);
 		this.sourceService = service;
 	}
 
@@ -47,7 +51,7 @@ public class SourceController extends AbstractRestController<Source, SourceApiMo
 						@PathVariable("uuid") UUID uuid,
 						@RequestParam(value = "size", required = false) Integer size,
 						HttpServletResponse response) throws PermissionDenied, EntityNotFound, IOException {
-		SourceApiModel s = getService().get(uuid, currentUser);
+		Source s = getService().get(uuid, currentUser);
 
         BufferedImage imgToSend = null;
 

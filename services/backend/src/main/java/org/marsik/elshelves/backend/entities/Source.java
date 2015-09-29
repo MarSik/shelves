@@ -22,6 +22,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.Collection;
 
 @Data
@@ -42,6 +43,9 @@ public class Source extends NamedEntity {
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Transaction> transactions = new THashSet<>();
+
+	@Transient
+	private boolean hasIcon;
 
 	@PartOfUpdate
 	public String getUrl() {

@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
@@ -34,7 +35,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class DocumentService extends AbstractRestService<DocumentRepository, Document, DocumentApiModel> {
+public class DocumentService extends AbstractRestService<DocumentRepository, Document> {
     @Autowired
     StorageManager storageManager;
 
@@ -46,10 +47,8 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 
 	@Autowired
 	public DocumentService(DocumentRepository repository,
-						   DocumentToEmber dbToRest,
-						   EmberToDocument restToDb,
 						   UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override
@@ -82,8 +81,8 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
     }
 
     @Override
-    public DocumentApiModel update(UUID uuid, DocumentApiModel dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
-        DocumentApiModel doc = super.update(uuid, dto, currentUser);
+    public Document update(Document dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+        Document doc = super.update(dto, currentUser);
         if (doc != null && doc.getId() != null && doc.getUrl() != null) {
             downloadDoc(doc.getId(), doc.getUrl());
         }
@@ -91,7 +90,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
     }
 
     @Override
-    public DocumentApiModel create(DocumentApiModel dto, User currentUser) throws OperationNotPermitted {
+    public Document create(Document dto, User currentUser) throws OperationNotPermitted {
 		if (dto != null
 				&& (dto.getName() == null || dto.getName().isEmpty())
 				&& dto.getUrl() != null) {
@@ -102,7 +101,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 			}
 		}
 
-        DocumentApiModel doc = super.create(dto, currentUser);
+        Document doc = super.create(dto, currentUser);
 
         if (doc != null && doc.getId() != null && doc.getUrl() != null) {
             downloadDoc(doc.getId(), doc.getUrl());
@@ -110,9 +109,9 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
         return doc;
     }
 
-    public List<RequirementApiModel> analyzeSchematics(UUID uuid, User currentUser) throws EntityNotFound, PermissionDenied, IOException {
+    public List<Requirement> analyzeSchematics(UUID uuid, User currentUser) throws EntityNotFound, PermissionDenied, IOException {
         Document document = getSingleEntity(uuid);
-        List<RequirementApiModel> requirements = new ArrayList<>();
+        List<Requirement> requirements = new ArrayList<>();
 
         if (document == null) {
             throw new EntityNotFound();
@@ -127,7 +126,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 
         Map<String, List<String>> bom = new THashMap<>();
         Map<String, Long> bomCount = new THashMap<>();
-        Map<String, PartTypeApiModel> bomType = new THashMap<>();
+        Map<String, Type> bomType = new THashMap<>();
 
         for (Map.Entry<String, List<SchemaComponents.Component>> e: components.entrySet()) {
             SchemaComponents.Component c = e.getValue().get(0);
@@ -150,7 +149,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
                         && !c.type.isEmpty()
                         && c.footprint != null
                         && !c.footprint.isEmpty()) {
-                    PartTypeApiModel type = typeService.getUniqueTypeByNameAndFootprint(c.type, c.footprint, currentUser);
+                    Type type = typeService.getUniqueTypeByNameAndFootprint(c.type, c.footprint, currentUser);
                     if (type != null) {
                         bomType.put(summary, type);
                     }
@@ -162,13 +161,13 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
         }
 
         for (Map.Entry<String, List<String>> e: bom.entrySet()) {
-            RequirementApiModel r = new RequirementApiModel();
+            Requirement r = new Requirement();
             r.setName(StringUtils.join(e.getValue(), ", "));
             r.setSummary(e.getKey());
             r.setCount(bomCount.get(e.getKey()));
 
             if (bomType.containsKey(e.getKey())) {
-                r.setType(new THashSet<PartTypeApiModel>());
+                r.setType(new THashSet<Type>());
                 r.getType().add(bomType.get(e.getKey()));
             }
 

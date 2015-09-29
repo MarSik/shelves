@@ -8,6 +8,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
+import org.marsik.elshelves.backend.entities.converters.EmberToBox;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BoxService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,12 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxS
     BoxService boxService;
 
     @Autowired
-    public BoxController(BoxService boxService) {
+    public BoxController(BoxService boxService,
+                         BoxToEmber boxToEmber,
+                         EmberToBox emberToBox) {
         super(BoxApiModel.class,
-              boxService);
+                boxService,
+                boxToEmber, emberToBox);
         this.boxService = boxService;
     }
 
@@ -38,7 +43,7 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxS
     public void generateQr(HttpServletResponse response,
                            @CurrentUser User currentUser,
                            @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
-        BoxApiModel box = boxService.get(uuid, currentUser);
+        Box box = boxService.get(uuid, currentUser);
 
         response.setContentType("image/jpg");
         response.setHeader("Content-Disposition", "attachment; filename=" + box.getName() + ".png");

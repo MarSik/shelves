@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 @Service
-public class TypeService extends AbstractRestService<TypeRepository, Type, PartTypeApiModel> {
+public class TypeService extends AbstractRestService<TypeRepository, Type> {
 	@Autowired
 	FootprintRepository footprintRepository;
 
@@ -26,10 +26,8 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
 
 	@Autowired
 	public TypeService(TypeRepository repository,
-					   TypeToEmber dbToRest,
-					   EmberToType restToDb,
 					   UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
     @Override
@@ -37,17 +35,17 @@ public class TypeService extends AbstractRestService<TypeRepository, Type, PartT
         return getRepository().findByOwner(currentUser);
     }
 
-    public PartTypeApiModel getUniqueTypeByNameAndFootprint(String name, String footprint, User currentUser) throws PermissionDenied {
+    public Type getUniqueTypeByNameAndFootprint(String name, String footprint, User currentUser) throws PermissionDenied {
         /* If there is only one type matching the description, save a reference to it */
         Iterable<Type> res = getRepository().findByNameAndFootprintName(name, footprint, currentUser);
-        PartTypeApiModel ret = null;
+        Type ret = null;
 
         Iterator<Type> iterator = res.iterator();
         if (iterator.hasNext()) {
             Type t = iterator.next();
 
             if (!iterator.hasNext()) {
-                ret = dbToRest.convert(t, 1, new THashMap<UUID, Object>());
+                ret = t;
             }
         }
 

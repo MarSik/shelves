@@ -10,17 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends AbstractRestService<UserRepository, User, UserApiModel> {
+public class UserService extends AbstractRestService<UserRepository, User> {
 	@Autowired
 	public UserService(UserRepository repository,
-					   UserToEmber dbToRest,
-					   EmberToUser restToDb,
 					   UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
 	@Override
-	public UserApiModel create(UserApiModel dto, User currentUser) throws OperationNotPermitted {
+	public User create(User dto, User currentUser) throws OperationNotPermitted {
 		throw new OperationNotPermitted();
 	}
 

@@ -18,17 +18,15 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class AuthorizationService extends AbstractRestService<AuthorizationRepository, Authorization, AuthorizationApiModel> {
+public class AuthorizationService extends AbstractRestService<AuthorizationRepository, Authorization> {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthorizationService(AuthorizationRepository repository,
-                                AuthorizationToEmber dbToRest,
-                                EmberToAuthorization restToDb,
                                 UuidGenerator uuidGenerator) {
-        super(repository, dbToRest, restToDb, uuidGenerator);
+        super(repository, uuidGenerator);
     }
 
     @Override
@@ -37,12 +35,12 @@ public class AuthorizationService extends AbstractRestService<AuthorizationRepos
     }
 
     @Override
-    public AuthorizationApiModel update(UUID uuid, AuthorizationApiModel dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+    public Authorization update(Authorization dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         throw new OperationNotPermitted();
     }
 
     @Override
-    protected Authorization createEntity(AuthorizationApiModel dto, User currentUser) {
+    protected Authorization createEntity(Authorization dto, User currentUser) {
         String hashed = passwordEncoder.encode(dto.getSecret());
         dto.setSecret(hashed);
         return super.createEntity(dto, currentUser);

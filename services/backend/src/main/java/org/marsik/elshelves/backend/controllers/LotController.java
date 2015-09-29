@@ -14,6 +14,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
+import org.marsik.elshelves.backend.entities.Purchase;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BoxService;
@@ -181,9 +183,10 @@ public class LotController {
 
     private void prepareSideloadedUpdates(LotApiModel result, User currentUser, EmberModel.Builder<LotApiModel> modelBuilder) throws PermissionDenied, EntityNotFound {
         // Sideload cache updates for all relevant objects
-        PurchaseApiModel purchaseApiModel = purchaseService.get(result.getPurchase().getId(), currentUser);
-        modelBuilder.purge(purchaseApiModel);
-        modelBuilder.purge(typeService.get(purchaseApiModel.getType().getId(), currentUser));
+        Purchase purchase = purchaseService.get(result.getPurchase().getId(), currentUser);
+
+        modelBuilder.purge(purchase);
+        modelBuilder.purge(typeService.get(purchase.getType().getId(), currentUser));
 
         if (result.getLocation() != null) {
             modelBuilder.purge(boxService.get(result.getLocation().getId(), currentUser));
@@ -215,8 +218,8 @@ public class LotController {
 						   @CurrentUser User currentUser,
 						   @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
 		LotApiModel lot = lotService.get(uuid, currentUser);
-		PurchaseApiModel purchase = purchaseService.get(lot.getPurchase().getId(), currentUser);
-		PartTypeApiModel type = typeService.get(purchase.getType().getId(), currentUser);
+		Purchase purchase = purchaseService.get(lot.getPurchase().getId(), currentUser);
+		Type type = typeService.get(purchase.getType().getId(), currentUser);
 
 		response.setContentType("image/jpg");
 		response.setHeader("Content-Disposition", "attachment; filename=" + type.getName() + "-" + lot.getId().toString() + ".png");

@@ -19,21 +19,19 @@ import java.net.URL;
 import java.util.UUID;
 
 @Service
-public class SourceService extends AbstractRestService<SourceRepository, Source, SourceApiModel> {
+public class SourceService extends AbstractRestService<SourceRepository, Source> {
 	@Autowired
 	StorageManager storageManager;
 
 	@Autowired
 	public SourceService(SourceRepository repository,
-						 SourceToEmber dbToRest,
-						 EmberToSource restToDb,
 						 UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
 	@Override
-	public SourceApiModel get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
-		SourceApiModel s = super.get(uuid, currentUser);
+	public Source get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
+		Source s = super.get(uuid, currentUser);
 		try {
 			s.setHasIcon(storageManager.exists(uuid));
 		} catch (IOException ex) {
@@ -85,8 +83,8 @@ public class SourceService extends AbstractRestService<SourceRepository, Source,
 	}
 
 	@Override
-	public SourceApiModel create(SourceApiModel dto, User currentUser) throws OperationNotPermitted {
-		SourceApiModel s = super.create(dto, currentUser);
+	public Source create(Source dto, User currentUser) throws OperationNotPermitted {
+		Source s = super.create(dto, currentUser);
 		if (s != null && s.getId() != null) {
 			refreshFavicon(s.getId());
 		}
@@ -94,8 +92,8 @@ public class SourceService extends AbstractRestService<SourceRepository, Source,
 	}
 
 	@Override
-	public SourceApiModel update(UUID uuid, SourceApiModel dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
-		SourceApiModel s = super.update(uuid, dto, currentUser);
+	public Source update(Source dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+		Source s = super.update(dto, currentUser);
 		if (s != null && s.getId() != null) {
 			refreshFavicon(s.getId());
 		}

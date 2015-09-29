@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModel;
@@ -13,7 +14,10 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Item;
+import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.EmberToItem;
+import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ItemService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
@@ -35,8 +39,10 @@ import java.util.UUID;
 @RequestMapping("/v1/items")
 public class ItemController extends AbstractRestController<Item, ItemApiModel, ItemService> {
 	@Autowired
-	public ItemController(ItemService service) {
-		super(ItemApiModel.class, service);
+	public ItemController(ItemService service,
+                          ItemToEmber dbToRest,
+                          EmberToItem restToDb) {
+		super(ItemApiModel.class, service, dbToRest, restToDb);
 	}
 
     @Autowired
@@ -47,11 +53,13 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
     public EmberModel importFromSchematics(@CurrentUser User currentUser,
                                            @PathVariable("uuid") UUID itemId,
                                            @RequestParam("document") UUID documentId) throws OperationNotPermitted, EntityNotFound, PermissionDenied, IOException {
-        List<RequirementApiModel> newRequirements = new ArrayList<>();
-        ItemApiModel project = service.importRequirements(itemId, documentId, currentUser, newRequirements);
+        List<Requirement> newRequirements = new ArrayList<>();
+        Item project = service.importRequirements(itemId, documentId, currentUser, newRequirements);
 
-        EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(project);
-        sideLoad(project, builder);
+        ItemApiModel itemApiModel = getDbToRest().convert(project, 1, new THashMap<>());
+
+        EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
+        sideLoad(itemApiModel, builder);
 
         //This would be nice, but Ember has an issue in beta 14.1/15 that breaks the model
         //builder.sideLoad(RequirementApiModel.class, newRequirements);

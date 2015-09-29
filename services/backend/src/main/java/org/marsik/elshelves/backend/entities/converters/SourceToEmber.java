@@ -39,6 +39,7 @@ public class SourceToEmber implements CachingConverter<Source, SourceApiModel, U
 			return model;
 		}
 
+		model.setHasIcon(object.isHasIcon());
 		model.setUrl(object.getUrl());
 
 		return model;

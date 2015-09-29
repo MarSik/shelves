@@ -6,6 +6,8 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
+import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.StorageManager;
@@ -29,8 +31,10 @@ public class DocumentController extends AbstractRestController<Document, Documen
 	StorageManager storageManager;
 
 	@Autowired
-	public DocumentController(DocumentService service) {
-		super(DocumentApiModel.class, service);
+	public DocumentController(DocumentService service,
+							  DocumentToEmber dbToRest,
+							  EmberToDocument restToDb) {
+		super(DocumentApiModel.class, service, dbToRest, restToDb);
 	}
 
 	@Transactional(readOnly = true)
@@ -39,7 +43,7 @@ public class DocumentController extends AbstractRestController<Document, Documen
 	public void download(@CurrentUser User currentUser,
 						 @PathVariable("uuid") UUID uuid,
 						 HttpServletResponse response) throws EntityNotFound, PermissionDenied, IOException, FileNotFoundException {
-		DocumentApiModel d = getService().get(uuid, currentUser);
+		Document d = getService().get(uuid, currentUser);
 		String name = d.getName() != null ? d.getName() : d.getId().toString();
 
 		response.setContentType(d.getContentType());

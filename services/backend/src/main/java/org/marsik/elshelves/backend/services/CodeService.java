@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CodeService extends AbstractRestService<CodeRepository, Code, CodeApiModel> {
+public class CodeService extends AbstractRestService<CodeRepository, Code> {
     @Autowired
     public CodeService(CodeRepository repository,
-                       CodeToEmber dbToRest,
-                       EmberToCode restToDb,
                        UuidGenerator uuidGenerator) {
-        super(repository, dbToRest, restToDb, uuidGenerator);
+        super(repository, uuidGenerator);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class CodeService extends AbstractRestService<CodeRepository, Code, CodeA
         return getRepository().findByOwner(currentUser);
     }
 
-    public CodeApiModel getByTypeAndCode(String type, String code, User currentUser) throws EntityNotFound, PermissionDenied {
+    public Code getByTypeAndCode(String type, String code, User currentUser) throws EntityNotFound, PermissionDenied {
         Code c = getRepository().findByTypeAndCodeAndOwner(type, code, currentUser);
         if (c == null) {
             throw new EntityNotFound();

@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UnitService extends AbstractRestService<UnitRepository, Unit, UnitApiModel> {
+public class UnitService extends AbstractRestService<UnitRepository, Unit> {
 	@Autowired
 	public UnitService(UnitRepository repository,
-					   UnitToEmber dbToRest,
-					   EmberToUnit restToDb,
 					   UuidGenerator uuidGenerator) {
-		super(repository, dbToRest, restToDb, uuidGenerator);
+		super(repository, uuidGenerator);
 	}
 
 	@Override

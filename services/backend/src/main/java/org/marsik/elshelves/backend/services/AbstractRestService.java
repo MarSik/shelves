@@ -3,7 +3,6 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
-import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -11,7 +10,6 @@ import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,40 +19,25 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntityInterface, E extends AbstractEntityApiModel> {
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntityInterface> {
     final R repository;
-    final CachingConverter<T, E, UUID> dbToRest;
-    final CachingConverter<E, T, UUID> restToDb;
     final UuidGenerator uuidGenerator;
 
 	@Autowired
 	RelinkService relinkService;
 
     public AbstractRestService(R repository,
-                               CachingConverter<T, E, UUID> dbToRest,
-                               CachingConverter<E, T, UUID> restToDb,
                                UuidGenerator uuidGenerator) {
         this.repository = repository;
-        this.dbToRest = dbToRest;
-        this.restToDb = restToDb;
         this.uuidGenerator = uuidGenerator;
     }
 
     public R getRepository() {
         return repository;
     }
-
-	public CachingConverter<T, E, UUID> getDbToRest() {
-		return dbToRest;
-	}
-
-	public CachingConverter<E, T, UUID> getRestToDb() {
-		return restToDb;
-	}
 
 	public UuidGenerator getUuidGenerator() {
 		return uuidGenerator;
@@ -70,13 +53,12 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 		return 1;
 	}
 
-    protected T createEntity(E dto, User currentUser) {
-        T created = restToDb.convert(dto, conversionDepth(), new THashMap<UUID, Object>());
-		created = relinkService.relink(created);
-        created.setId(uuidGenerator.generate());
-        created.setOwner(currentUser);
-        created.setLastModified(new DateTime());
-        return created;
+    protected T createEntity(T entity, User currentUser) {
+		entity = relinkService.relink(entity);
+        entity.setId(uuidGenerator.generate());
+        entity.setOwner(currentUser);
+        entity.setLastModified(new DateTime());
+        return entity;
     }
 
 	protected void deleteEntity(T entity) throws OperationNotPermitted {
@@ -169,23 +151,22 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
-    public Collection<E> getAllItems(User currentUser) {
-        Set<E> dtos = new THashSet<>();
-        Map<UUID, Object> cache = new THashMap<>();
+    public Collection<T> getAllItems(User currentUser) {
+        Set<T> dtos = new THashSet<>();
         for (T entity: getAllEntities(currentUser)) {
-            dtos.add(dbToRest.convert(entity, conversionDepth(), cache));
+            dtos.add(entity);
         }
         return dtos;
     }
 
-    public E create(E dto, User currentUser) throws OperationNotPermitted {
-        T created = createEntity(dto, currentUser);
-        created.setCreated(new DateTime());
-        created = repository.save(created);
-        return dbToRest.convert(created, conversionDepth(), new THashMap<UUID, Object>());
+    public T create(T entity, User currentUser) throws OperationNotPermitted {
+        entity = createEntity(entity, currentUser);
+        entity.setCreated(new DateTime());
+        entity = repository.save(entity);
+        return entity;
     }
 
-    public E get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
+    public T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
         T one = getSingleEntity(uuid);
 
 		if (one == null) {
@@ -196,7 +177,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
             throw new PermissionDenied();
         }
 
-        return dbToRest.convert(one, conversionDepth(), new THashMap<UUID, Object>());
+        return one;
     }
 
     public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
@@ -218,8 +199,8 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return true;
     }
 
-    public E update(UUID uuid, E dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
-        T one = getSingleEntity(uuid);
+    public T update(T update, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+        T one = getSingleEntity(update.getId());
 
 		if (one == null) {
 			throw new EntityNotFound();
@@ -230,10 +211,9 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         }
 
         try {
-			T update = restToDb.convert(dto, 2, new THashMap<UUID, Object>());
 			// The REST entity does not contain id during PUT, because that is
 			// provided by the URL
-			update.setId(uuid);
+
             one = updateEntity(one, update, currentUser);
             one.setLastModified(new DateTime());
 
@@ -244,6 +224,6 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
             ex.printStackTrace();
         }
 
-        return dbToRest.convert(one, conversionDepth(), new THashMap<UUID, Object>());
+        return one;
     }
 }

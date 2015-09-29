@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NumericPropertyService extends AbstractRestService<NumericPropertyRepository, NumericProperty, NumericPropertyApiModel> {
+public class NumericPropertyService extends AbstractRestService<NumericPropertyRepository, NumericProperty> {
     @Autowired
     public NumericPropertyService(NumericPropertyRepository repository,
-                                  NumericPropertyToEmber dbToRest,
-                                  EmberToNumericProperty restToDb,
                                   UuidGenerator uuidGenerator) {
-        super(repository, dbToRest, restToDb, uuidGenerator);
+        super(repository, uuidGenerator);
     }
 
     @Override

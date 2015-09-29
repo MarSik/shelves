@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoxService extends AbstractRestService<BoxRepository, Box, BoxApiModel> {
+public class BoxService extends AbstractRestService<BoxRepository, Box> {
     @Autowired
     public BoxService(BoxRepository boxRepository,
-                      BoxToEmber boxToEmber,
-                      EmberToBox emberToBox,
                       UuidGenerator uuidGenerator) {
-        super(boxRepository, boxToEmber, emberToBox, uuidGenerator);
+        super(boxRepository, uuidGenerator);
     }
 
     @Override
