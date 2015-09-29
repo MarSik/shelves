@@ -17,17 +17,23 @@ public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel,
 
     @Override
     public LotHistory convert(LotHistoryApiModel object, LotHistory model, int nested, Map<UUID, Object> cache) {
-        model.setLocation(new Box());
-        model.getLocation().setId(object.getLocationId());
+        if (object.getLocationId() != null) {
+            model.setLocation(new Box());
+            model.getLocation().setId(object.getLocationId());
+        }
 
         model.setCreated(object.getCreated());
         model.setId(object.getId());
 
-        model.setPrevious(new LotHistory());
-        model.getPrevious().setId(object.getPreviousId());
+        if (object.getPreviousId() != null) {
+            model.setPrevious(new LotHistory());
+            model.getPrevious().setId(object.getPreviousId());
+        }
 
-        model.setPerformedBy(new User());
-        model.getPerformedBy().setId(object.getPerformedById());
+        if (object.getPerformedById() != null) {
+            model.setPerformedBy(new User());
+            model.getPerformedBy().setId(object.getPerformedById());
+        }
 
         model.setAction(object.getAction());
 
