@@ -282,6 +282,6 @@ public class Lot extends OwnedEntity implements StickerCapable {
 
 	@Transient
 	public Type getType() {
-		return getPurchase().getType();
+		return getPurchase() == null ? null : getPurchase().getType();
 	}
 }
