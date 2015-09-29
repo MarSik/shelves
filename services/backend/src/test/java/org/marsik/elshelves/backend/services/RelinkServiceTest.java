@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,6 +37,9 @@ public class RelinkServiceTest {
     @Mock
     OwnedEntityRepository ownedEntityRepository;
 
+    @Mock
+    IdentifiedEntityRepository identifiedEntityRepository;
+
     @Configuration
     static class TestConfig {
         @Bean
@@ -56,6 +60,7 @@ public class RelinkServiceTest {
 
         // Simulate empty database
         doReturn(null).when(ownedEntityRepository).findById(any(UUID.class));
+        doReturn(null).when(identifiedEntityRepository).findById(any(UUID.class));
     }
 
     @Test
@@ -67,6 +72,7 @@ public class RelinkServiceTest {
         User newUser = new User();
         newUser.setName("new user");
         newUser.setId(uuidGenerator.generate());
+        newUser.setDbId(5L);
 
         Lot lot = new Lot();
         lot.setId(uuidGenerator.generate());
@@ -78,7 +84,7 @@ public class RelinkServiceTest {
         relinkCache.put(newUser.getId(), newUser);
         relinkCache.put(oldUser.getId(), newUser);
 
-        relinkService.relink(lot, newUser, relinkCache, false);
+        relinkService.relink(lot, newUser, relinkCache, true);
 
         assertThat(lot.getHistory().getPerformedBy())
                 .isNotNull()

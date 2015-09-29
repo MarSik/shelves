@@ -77,7 +77,7 @@ public class RelinkService {
 
         updateCache(cache, value);
 
-        OwnedEntity e = ownedEntityRepository.findById(value.getId());
+        IdentifiedEntityInterface e = identifiedEntityRepository.findById(value.getId());
         if (e != null) {
             value.setId(uuidGenerator.generate());
             updateCache(cache, value);
