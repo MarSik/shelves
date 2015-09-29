@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,7 @@ public class Purchase extends OwnedEntity {
 
     @OneToMany(mappedBy = "purchase",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Lot> lots;
+	Set<Lot> lots = new THashSet<>();
 
 	@PartOfUpdate
 	public Double getSinglePrice() {

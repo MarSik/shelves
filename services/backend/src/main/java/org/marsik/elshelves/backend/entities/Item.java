@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.Set;
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
-	Set<Requirement> requires;
+	Set<Requirement> requires = new THashSet<>();
 
 	Boolean finished;
 

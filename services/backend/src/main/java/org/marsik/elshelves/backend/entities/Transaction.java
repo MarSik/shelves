@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 	@OneToMany(mappedBy = "transaction",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Purchase> items;
+	Set<Purchase> items = new THashSet<>();
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Source source;

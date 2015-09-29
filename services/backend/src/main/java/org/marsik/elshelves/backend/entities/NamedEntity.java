@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -44,18 +45,18 @@ public class NamedEntity extends OwnedEntity {
 
 	@ManyToMany(mappedBy = "describes",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Document> describedBy;
+	Set<Document> describedBy = new THashSet<>();
 
 	@OneToMany(mappedBy = "entity",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<NumericPropertyValue> properties;
+    Set<NumericPropertyValue> properties = new THashSet<>();
 
     /**
      * Barcode associated with this entity
      */
 	@OneToMany(mappedBy = "reference",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<Code> codes;
+    Set<Code> codes = new THashSet<>();
 
 	@PartOfUpdate
 	public String getName() {

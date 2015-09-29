@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -46,7 +47,7 @@ public class Footprint extends NamedEntity {
 
 	@ManyToMany(mappedBy = "footprints",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Type> types;
+	Collection<Type> types = new THashSet<>();
 
 	@JoinTable(name = "fp_fp_see_also",
 			joinColumns = {
@@ -54,7 +55,7 @@ public class Footprint extends NamedEntity {
 			inverseJoinColumns = {
 					@JoinColumn(name = "fp2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<Footprint> seeAlso;
+    Set<Footprint> seeAlso = new THashSet<>();
 
     FootprintType type;
 
@@ -80,7 +81,7 @@ public class Footprint extends NamedEntity {
 
 	@Override
 	public boolean canBeDeleted() {
-		return getTypes() == null || !getTypes().iterator().hasNext();
+		return !getTypes().iterator().hasNext();
 	}
 
     @PartOfUpdate

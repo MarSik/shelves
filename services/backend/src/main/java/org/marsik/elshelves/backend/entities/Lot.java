@@ -62,7 +62,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
     DateTime expiration;
 
 	@ElementCollection
-	Set<String> serials;
+	Set<String> serials = new THashSet<>();
 
     public Long usedCount() {
         return isCanBeAssigned() ? 0 : count;

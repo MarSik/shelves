@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,7 @@ public class Source extends NamedEntity {
 
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Transaction> transactions;
+	Collection<Transaction> transactions = new THashSet<>();
 
 	@PartOfUpdate
 	public String getUrl() {
@@ -48,6 +49,6 @@ public class Source extends NamedEntity {
 	}
 
 	public boolean canBeDeleted() {
-		return getTransactions() == null || !getTransactions().iterator().hasNext();
+		return !getTransactions().iterator().hasNext();
 	}
 }

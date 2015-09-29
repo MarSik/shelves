@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,13 +34,13 @@ public class Group extends NamedEntity {
 
 	@OneToMany(mappedBy = "parent",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Group> groups;
+	Set<Group> groups = new THashSet<>();
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Type> types;
+	Set<Type> types = new THashSet<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<NumericProperty> showProperties;
+    Set<NumericProperty> showProperties = new THashSet<>();
 
 	@PartOfUpdate
 	public Group getParent() {
@@ -62,15 +63,11 @@ public class Group extends NamedEntity {
     }
 
     public Long getCount() {
-		return getTypes() == null ? 0 : (long) getTypes().size();
+		return (long) getTypes().size();
 	}
 
 	public Long getNestedCount() {
 		Long count = getCount();
-
-		if (getGroups() == null) {
-			return count;
-		}
 
 		for (Group t: getGroups()) {
 			count += t.getCount();

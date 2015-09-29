@@ -30,11 +30,11 @@ public class Requirement extends OwnedEntity {
 	Item item;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Type> type;
+	Set<Type> type = new THashSet<>();
 
 	@OneToMany(mappedBy = "usedBy",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Lot> rawLots;
+	Set<Lot> rawLots = new THashSet<>();
 
     String name;
     String summary;

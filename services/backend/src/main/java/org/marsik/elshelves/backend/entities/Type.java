@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -49,19 +50,19 @@ public class Type extends NamedEntity implements StickerCapable {
 	Boolean manufacturable = false;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Footprint> footprints;
+	Set<Footprint> footprints = new THashSet<>();
 
 	@ManyToMany(mappedBy = "types",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Group> groups;
+	Set<Group> groups = new THashSet<>();
 
 	@OneToMany(mappedBy = "type",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Purchase> purchases;
+	Collection<Purchase> purchases = new THashSet<>();
 
 	@ManyToMany(mappedBy = "type",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Requirement> usedIn;
+	Collection<Requirement> usedIn = new THashSet<>();
 
 	@JoinTable(name = "type_type_see_also",
 			joinColumns = {
@@ -69,7 +70,7 @@ public class Type extends NamedEntity implements StickerCapable {
 			inverseJoinColumns = {
 					@JoinColumn(name = "type2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<Type> seeAlso;
+    Set<Type> seeAlso = new THashSet<>();
 
 	@PartOfUpdate
 	public String getVendor() {
@@ -109,8 +110,7 @@ public class Type extends NamedEntity implements StickerCapable {
 
 	@Override
 	public boolean canBeDeleted() {
-		return (getPurchases() == null || !(getPurchases().iterator().hasNext())
-				|| (getUsedIn() == null || getUsedIn().iterator().hasNext()));
+		return !(getPurchases().iterator().hasNext() || getUsedIn().iterator().hasNext());
 	}
 
     public PartCount getAvailable() {

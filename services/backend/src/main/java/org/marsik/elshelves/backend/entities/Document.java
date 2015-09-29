@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,7 @@ public class Document extends NamedEntity implements StickerCapable {
     URL url;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<NamedEntity> describes;
+	Collection<NamedEntity> describes = new THashSet<>();
 
 	@PartOfUpdate
 	public String getContentType() {

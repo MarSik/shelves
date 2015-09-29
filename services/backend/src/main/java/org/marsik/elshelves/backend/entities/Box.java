@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,14 +29,14 @@ public class Box extends NamedEntity implements StickerCapable {
 
 	@OneToMany(mappedBy = "parent",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    Set<Box> contains;
+    Set<Box> contains = new THashSet<>();
 
 	@ManyToOne
     Box parent;
 
 	@OneToMany(mappedBy = "location",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Lot> lots;
+	Set<Lot> lots = new THashSet<>();
 
 	@PartOfUpdate
     public Box getParent() {

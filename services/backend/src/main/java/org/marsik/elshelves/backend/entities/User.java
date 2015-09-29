@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -47,7 +48,7 @@ public class User extends OwnedEntity implements StickerCapable {
     DateTime registrationDate;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    Set<Authorization> authorizations;
+    Set<Authorization> authorizations = new THashSet<>();
 
 	@PartOfUpdate
     public String getName() {

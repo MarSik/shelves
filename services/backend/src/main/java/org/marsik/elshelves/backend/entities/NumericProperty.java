@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public class NumericProperty extends NamedEntity {
 
     @OneToMany(mappedBy = "property",
             cascade = { CascadeType.ALL })
-    Collection<NumericPropertyValue> propertyUses;
+    Collection<NumericPropertyValue> propertyUses = new THashSet<>();
 
     @PartOfUpdate
     public Unit getUnit() {

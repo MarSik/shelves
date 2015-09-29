@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -37,11 +38,11 @@ public class Unit extends NamedEntity {
     @NotNull
     @ElementCollection(targetClass = SiPrefix.class)
     @Enumerated(EnumType.STRING)
-    Set<SiPrefix> prefixes;
+    Set<SiPrefix> prefixes = new THashSet<>();
 
     @OneToMany(mappedBy = "unit",
             cascade = { CascadeType.ALL })
-    Collection<NumericProperty> unitUses;
+    Collection<NumericProperty> unitUses = new THashSet<>();
 
     @PartOfUpdate
 	public String getSymbol() {
