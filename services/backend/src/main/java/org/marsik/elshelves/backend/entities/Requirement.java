@@ -25,7 +25,6 @@ import java.util.function.Predicate;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-@EntityListeners({AuditingEntityListener.class})
 public class Requirement extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Item item;

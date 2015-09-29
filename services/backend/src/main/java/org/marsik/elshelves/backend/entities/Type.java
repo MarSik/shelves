@@ -31,7 +31,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(PartTypeApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Type extends NamedEntity implements StickerCapable {
 	String vendor;
 	String customId;

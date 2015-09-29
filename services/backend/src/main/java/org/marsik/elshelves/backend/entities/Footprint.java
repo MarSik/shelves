@@ -26,7 +26,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(FootprintApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Footprint extends NamedEntity {
 	String kicad;
 

@@ -27,7 +27,6 @@ import java.util.Set;
 @Entity
 @Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Group extends NamedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Group parent;

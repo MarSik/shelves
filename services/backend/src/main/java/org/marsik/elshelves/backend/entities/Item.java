@@ -24,7 +24,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @DefaultEmberModel(ItemApiModel.class)
 @Entity
-@EntityListeners({AuditingEntityListener.class})
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })

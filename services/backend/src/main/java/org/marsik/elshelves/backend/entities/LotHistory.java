@@ -26,7 +26,6 @@ import javax.persistence.UniqueConstraint;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@EntityListeners({AuditingEntityListener.class})
 public class LotHistory extends IdentifiedEntity {
     @Builder(toBuilder = true)
     protected LotHistory(LotHistory previous, User performedBy, DateTime created, LotAction action, Box location, Requirement assignedTo) {

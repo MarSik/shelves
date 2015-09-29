@@ -23,7 +23,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(CodeApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Code extends OwnedEntity {
     @NotNull
     @NotEmpty

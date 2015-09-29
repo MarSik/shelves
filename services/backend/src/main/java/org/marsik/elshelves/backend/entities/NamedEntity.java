@@ -28,7 +28,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@EntityListeners({AuditingEntityListener.class})
 public class NamedEntity extends OwnedEntity {
 	@NotEmpty
 	@NotNull

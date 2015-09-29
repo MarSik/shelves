@@ -29,7 +29,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(UnitApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Unit extends NamedEntity {
 
     @NotNull

@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@EntityListeners({AuditingEntityListener.class})
 public class Lot extends OwnedEntity implements StickerCapable {
 	public Lot() {
 	}

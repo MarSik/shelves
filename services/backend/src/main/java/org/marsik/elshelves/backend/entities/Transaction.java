@@ -28,7 +28,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(TransactionApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Transaction extends NamedEntity implements StickerCapable {
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime date;

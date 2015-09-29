@@ -25,7 +25,6 @@ import java.util.Collection;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })

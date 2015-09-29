@@ -24,4 +24,7 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
 
     @JsonProperty("performedBy")
     UUID performedById;
+
+    @JsonProperty("location")
+    UUID locationId;
 }

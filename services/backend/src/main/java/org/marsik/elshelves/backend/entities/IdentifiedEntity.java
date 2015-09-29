@@ -25,7 +25,7 @@ import java.util.UUID;
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
-@EntityListeners({AuditingEntityListener.class})
+@EntityListeners(AuditingEntityListener.class)
 public class IdentifiedEntity implements IdentifiedEntityInterface {
     @Id
     @GeneratedValue

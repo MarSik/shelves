@@ -27,7 +27,6 @@ import java.util.Date;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.JOINED)
-@EntityListeners({AuditingEntityListener.class})
 public class Authorization extends IdentifiedEntity implements OwnedEntityInterface {
     @NotEmpty
     @NotNull

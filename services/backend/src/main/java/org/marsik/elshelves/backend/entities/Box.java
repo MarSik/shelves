@@ -24,7 +24,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(BoxApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Box extends NamedEntity implements StickerCapable {
 
 	@OneToMany(mappedBy = "parent",

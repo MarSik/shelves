@@ -29,7 +29,6 @@ import java.util.Collection;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(SourceApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Source extends NamedEntity {
 	String url;
 

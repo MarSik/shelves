@@ -25,7 +25,6 @@ import java.util.Set;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-@EntityListeners({AuditingEntityListener.class})
 public class Purchase extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Type type;

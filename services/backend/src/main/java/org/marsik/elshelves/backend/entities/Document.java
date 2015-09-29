@@ -30,7 +30,6 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(DocumentApiModel.class)
-@EntityListeners({AuditingEntityListener.class})
 public class Document extends NamedEntity implements StickerCapable {
 	@NotEmpty
 	String contentType;

@@ -21,7 +21,6 @@ import javax.persistence.UniqueConstraint;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-@EntityListeners({AuditingEntityListener.class})
 public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntityInterface {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
