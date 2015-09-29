@@ -52,6 +52,8 @@ public class RelinkServiceTest {
         // Init mocks
         MockitoAnnotations.initMocks(this);
 
+        relinkService.uuidGenerator = uuidGenerator;
+
         // Simulate empty database
         doReturn(null).when(ownedEntityRepository).findById(any(UUID.class));
     }
