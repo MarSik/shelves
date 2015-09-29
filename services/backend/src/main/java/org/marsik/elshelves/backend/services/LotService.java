@@ -32,39 +32,29 @@ public class LotService {
 	LotRepository lotRepository;
 	PurchaseRepository purchaseRepository;
 	BoxRepository boxRepository;
-	LotToEmber lotToEmber;
-	//EmberToLot emberToLot;
 	UuidGenerator uuidGenerator;
     RequirementRepository requirementRepository;
 
     @Autowired
     public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository,
-                      LotToEmber lotToEmber, /*EmberToLot emberToLot,*/ UuidGenerator uuidGenerator,
+                      UuidGenerator uuidGenerator,
                       RequirementRepository requirementRepository) {
         this.lotRepository = lotRepository;
         this.purchaseRepository = purchaseRepository;
         this.boxRepository = boxRepository;
-        this.lotToEmber = lotToEmber;
-        //this.emberToLot = emberToLot;
         this.uuidGenerator = uuidGenerator;
         this.requirementRepository = requirementRepository;
     }
 
-    protected Iterable<Lot> getAllEntities(User currentUser) {
+    protected Collection<Lot> getAllEntities(User currentUser) {
         return lotRepository.findByOwner(currentUser);
     }
 
-	public Collection<LotApiModel> getAll(User currentUser) {
-		Collection<LotApiModel> lots = new ArrayList<>();
-		Map<UUID, Object> cache = new THashMap<>();
-		for (Lot l: getAllEntities(currentUser)) {
-			lots.add(lotToEmber.convert(l, 1, cache));
-		}
-
-		return lots;
+	public Collection<Lot> getAll(User currentUser) {
+		return getAllEntities(currentUser);
 	}
 
-	public LotApiModel get(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {
+	public Lot get(UUID id, User currentUser) throws PermissionDenied, EntityNotFound {
 		Lot lot = lotRepository.findById(id);
 
 		if (lot == null) {
@@ -75,10 +65,10 @@ public class LotService {
 			throw new PermissionDenied();
 		}
 
-		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
+		return lot;
 	}
 
-	public LotApiModel delivery(LotApiModel newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+	public Lot delivery(Lot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.findById(newLot0.getPurchase().getId());
 		Box location = boxRepository.findById(newLot0.getLocation().getId());
 
@@ -99,10 +89,10 @@ public class LotService {
 
 		purchase.getLots().add(lot);
 
-		return lotToEmber.convert(lot, 1, new THashMap<UUID, Object>());
+		return lot;
 	}
 
-    public LotApiModel move(UUID previous, BoxApiModel location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+    public Lot move(UUID previous, Box location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
         Box location = boxRepository.findById(location0.getId());
         Lot lot0 = lotRepository.findById(previous);
 
@@ -121,10 +111,10 @@ public class LotService {
         lot0.move(currentUser, location, uuidGenerator);
         lotRepository.save(lot0);
 
-        return lotToEmber.convert(lot0, 1, new THashMap<UUID, Object>());
+        return lot0;
     }
 
-	public LotSplitResult split(UUID source, Long count, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+	public LotSplitResult split(UUID source, Long count, User currentUser, Requirement requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
 		Lot lot = lotRepository.findById(source);
         Requirement requirement = null;
 
@@ -158,11 +148,10 @@ public class LotService {
 
 		lotRepository.save(result);
 
-		return new LotSplitResult(lotToEmber.convert(result, 1, cache),
-				lotToEmber.convert(result.equals(lot) ? null : lot, 1, cache));
+		return new LotSplitResult(result, result.equals(lot) ? null : lot);
 	}
 
-	public LotApiModel destroy(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
+	public Lot destroy(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
 		Lot lot = lotRepository.findById(source);
 
 		if (lot == null) {
@@ -178,10 +167,10 @@ public class LotService {
 		lot.destroy(currentUser, uuidGenerator);
 		lotRepository.save(lot);
 
-		return lotToEmber.convert(lot, 1, cache);
+		return lot;
 	}
 
-    public LotApiModel solder(UUID source, User currentUser, RequirementApiModel requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+    public Lot solder(UUID source, User currentUser, Requirement requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
         Lot lot = lotRepository.findById(source);
         Requirement requirement = null;
 
@@ -209,10 +198,10 @@ public class LotService {
         lot.solder(currentUser, requirement, uuidGenerator);
         lotRepository.save(lot);
 
-        return lotToEmber.convert(lot, 1, cache);
+        return lot;
     }
 
-    public LotApiModel unsolder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
+    public Lot unsolder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
         Lot lot = lotRepository.findById(source);
 
         if (lot == null) {
@@ -232,10 +221,10 @@ public class LotService {
         lot.unsolder(currentUser, uuidGenerator);
         lotRepository.save(lot);
 
-        return lotToEmber.convert(lot, 1, cache);
+        return lot;
     }
 
-    public LotApiModel assign(UUID source, User currentUser, RequirementApiModel requirement0) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    public Lot assign(UUID source, User currentUser, Requirement requirement0) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
         Lot lot = lotRepository.findById(source);
         Requirement requirement = requirementRepository.findById(requirement0.getId());
 
@@ -261,10 +250,10 @@ public class LotService {
         lot.assign(currentUser, requirement, uuidGenerator);
         lotRepository.save(lot);
 
-        return lotToEmber.convert(lot, 1, cache);
+        return lot;
     }
 
-    public LotApiModel unassign(UUID source, User currentUser) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    public Lot unassign(UUID source, User currentUser) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
         Lot lot = lotRepository.findById(source);
 
         if (lot == null) {
@@ -284,6 +273,6 @@ public class LotService {
         lot.unassign(currentUser, uuidGenerator);
         lotRepository.save(lot);
 
-        return lotToEmber.convert(lot, 1, cache);
+        return lot;
     }
 }

@@ -4,7 +4,9 @@ import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.Collection;
+
 @NoRepositoryBean
 public interface BaseOwnedEntityRepository<T extends OwnedEntity> extends BaseIdentifiedEntityRepository<T> {
-    Iterable<T> findByOwner(User owner);
+    Collection<T> findByOwner(User owner);
 }

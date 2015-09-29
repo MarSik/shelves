@@ -4,6 +4,7 @@ import com.google.common.base.CaseFormat;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.atteo.evo.inflector.English;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -50,7 +51,7 @@ public final class EmberModel extends HashMap<String, Object> {
         private final Object payload;
 
         // Set of objects to purge from client's cache
-        private final Set<Object> purge = new THashSet<>();
+        private final Set<AbstractEntityApiModel> purge = new THashSet<>();
 
 		// used to avoid recursion during sideloading
 		private final Set<Object> knownObjects = new THashSet<>();
@@ -198,7 +199,7 @@ public final class EmberModel extends HashMap<String, Object> {
 			}
 		}
 
-        public Builder<T> purge(Object entity) {
+        public Builder<T> purge(AbstractEntityApiModel entity) {
             purge.add(entity);
             return this;
         }
@@ -210,8 +211,8 @@ public final class EmberModel extends HashMap<String, Object> {
 
             List<EmberPurge> purges = new ArrayList<>();
 
-            for (Object entity: purge) {
-                purges.add(new EmberPurge(getSingularName(entity.getClass()), entity));
+            for (AbstractEntityApiModel entity: purge) {
+                purges.add(new EmberPurge(getSingularName(entity.getClass()), entity.getId()));
             }
 
             if (!purges.isEmpty()) {
