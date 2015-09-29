@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
@@ -48,6 +49,7 @@ public class BackupServiceTest {
     @Autowired
     ModelMapper modelMapper;
 
+    @Ignore
     @Test
     public void testHistoryToPrevious() {
         LotHistoryApiModel history = new LotHistoryApiModel();
@@ -88,6 +90,7 @@ public class BackupServiceTest {
         UUID previousId;
     }
 
+    @Ignore
     @Test
     public void testPreviousLink() {
         ActionDTO dto = new ActionDTO();

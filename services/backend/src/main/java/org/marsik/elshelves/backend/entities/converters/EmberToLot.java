@@ -28,6 +28,9 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 	@Autowired
 	ModelMapper modelMapper;
 
+	@Autowired
+	EmberToLotHistory emberToLotHistory;
+
 	@Override
 	public Lot convert(LotApiModel object, int nested, Map<UUID, Object> cache) {
 		if (object == null) {
@@ -55,7 +58,7 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 		model.setPurchase(emberToPurchase.convert(object.getPurchase(), nested, cache));
 		model.setUsedBy(emberToRequirement.convert(object.getUsedBy(), nested, cache));
 		model.setSerials(object.getSerials());
-		model.setHistory(modelMapper.map(object.getHistory(), LotHistory.class));
+		model.setHistory(emberToLotHistory.convert(object.getHistory(), nested, cache));
 
 		if (model.getSerials() == null) {
 			model.setSerials(new THashSet<>());
