@@ -27,7 +27,8 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Purchase extends OwnedEntity {
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			optional = false)
 	Type type;
 
 	@NotNull
@@ -40,7 +41,8 @@ public class Purchase extends OwnedEntity {
 	Boolean vatIncluded;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			optional = false)
 	Transaction transaction;
 
     @OneToMany(mappedBy = "purchase",

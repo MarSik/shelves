@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.marsik.elshelves.api.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
+import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
@@ -69,6 +70,16 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
     @Override
     @Transactional
     public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item) throws OperationNotPermitted {
+        if (item.getType() == null) {
+            item.setType(new PartTypeApiModel());
+            item.getType().setName(item.getSerial());
+            item.getType().setLots(new THashSet<>());
+            item.getType().getLots().add(item);
+            item.getType().setManufacturable(true);
+            item.getType().setSerials(true);
+            item.getType().setId(uuidGenerator.generate());
+        }
+
         if (item.getPurchase() == null) {
             item.setPurchase(new PurchaseApiModel());
             item.getPurchase().setCount(1L);
@@ -94,6 +105,7 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
 
         item.setCount(1L);
         item.setAction(LotAction.DELIVERY);
+        item.setId(uuidGenerator.generate());
 
         return super.create(currentUser, item);
     }
