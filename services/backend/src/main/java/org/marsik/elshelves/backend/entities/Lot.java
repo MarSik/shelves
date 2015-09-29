@@ -64,8 +64,8 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	@ElementCollection
 	Set<String> serials = new THashSet<>();
 
-    public Long usedCount() {
-        return isCanBeAssigned() ? 0 : count;
+    public long usedCount() {
+        return isCanBeAssigned() ? 0L : count;
     }
 
     public Long freeCount() {

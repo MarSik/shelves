@@ -138,9 +138,6 @@ public class LotService {
             throw new OperationNotPermitted();
         }
 
-
-		Map<UUID, Object> cache = new THashMap<>();
-
 		Lot result = lot.take(count, currentUser, uuidGenerator, requirement);
 		if (result == null) {
 			throw new OperationNotPermitted();
@@ -161,8 +158,6 @@ public class LotService {
 		if (!lot.getOwner().equals(currentUser)) {
 			throw new PermissionDenied();
 		}
-
-		Map<UUID, Object> cache = new THashMap<>();
 
 		lot.destroy(currentUser, uuidGenerator);
 		lotRepository.save(lot);
@@ -193,8 +188,6 @@ public class LotService {
             throw new OperationNotPermitted();
         }
 
-        Map<UUID, Object> cache = new THashMap<>();
-
         lot.solder(currentUser, requirement, uuidGenerator);
         lotRepository.save(lot);
 
@@ -215,8 +208,6 @@ public class LotService {
         if (!lot.isCanBeUnsoldered()) {
             throw new OperationNotPermitted();
         }
-
-        Map<UUID, Object> cache = new THashMap<>();
 
         lot.unsolder(currentUser, uuidGenerator);
         lotRepository.save(lot);
@@ -245,8 +236,6 @@ public class LotService {
             throw new OperationNotPermitted();
         }
 
-        Map<UUID, Object> cache = new THashMap<>();
-
         lot.assign(currentUser, requirement, uuidGenerator);
         lotRepository.save(lot);
 
@@ -267,8 +256,6 @@ public class LotService {
         if (!lot.isCanBeUnassigned()) {
             throw new OperationNotPermitted();
         }
-
-        Map<UUID, Object> cache = new THashMap<>();
 
         lot.unassign(currentUser, uuidGenerator);
         lotRepository.save(lot);
