@@ -169,7 +169,7 @@ public class RelinkService {
                         // create an UUID for it and perform deep relinking
                         value.setId(uuidGenerator.generate());
                         updateCache(known, value);
-                        relink(value, user, known, false);
+                        relink(value, user, known, true);
                     }
 
                 } catch (InvocationTargetException | IllegalAccessException ex) {
@@ -196,7 +196,7 @@ public class RelinkService {
                                 newItems.add(item);
                                 item.setId(uuidGenerator.generate());
                                 updateCache(known, item);
-                                relink(item, user, known, false);
+                                relink(item, user, known, true);
 
                             } else if (item.getDbId() != null) {
                                 // Connected existing entity
