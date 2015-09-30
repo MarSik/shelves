@@ -160,16 +160,16 @@ public class RelinkService {
                             log.info("Deep relinking of {}.{} ({})",
                                     value.getClass().getName(), f.getName(),
                                     value.getId().toString());
-                            updateCache(known, value);
                             relink(value, user, known, false);
+                            updateCache(known, value);
                         }
 
                     } else if (value.getId() == null) {
                         // Missing UUID meaning new entity
                         // create an UUID for it and perform deep relinking
                         value.setId(uuidGenerator.generate());
+                        relink(value, user, known, false);
                         updateCache(known, value);
-                        relink(value, user, known, true);
                     }
 
                 } catch (InvocationTargetException | IllegalAccessException ex) {
@@ -195,8 +195,8 @@ public class RelinkService {
                                 // New entity, create UUID and perform deep relinking
                                 newItems.add(item);
                                 item.setId(uuidGenerator.generate());
+                                relink(item, user, known, false);
                                 updateCache(known, item);
-                                relink(item, user, known, true);
 
                             } else if (item.getDbId() != null) {
                                 // Connected existing entity
@@ -219,8 +219,8 @@ public class RelinkService {
                                             item.getId().toString());
 
                                     newItems.add(item);
-                                    updateCache(known, item);
                                     relink(item, user, known, false);
+                                    updateCache(known, item);
                                 }
                             }
                         } else {
@@ -264,6 +264,11 @@ public class RelinkService {
         }
 
         relinkImpl(entity, user, known);
+
+        if (entity instanceof OwnedEntityInterface
+                && ((OwnedEntityInterface)entity).getOwner() == null) {
+            ((OwnedEntityInterface)entity).setOwner(user);
+        }
 
         return entity;
 	}

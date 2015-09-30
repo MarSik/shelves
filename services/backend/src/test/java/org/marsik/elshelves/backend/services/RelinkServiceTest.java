@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
@@ -91,5 +92,43 @@ public class RelinkServiceTest {
                 .isEqualTo(newUser);
         assertThat(lot.getHistory().getPerformedBy().getName())
                 .isEqualTo(newUser.getName());
+    }
+
+    @Test
+    public void testLotOwned() {
+        User newUser = new User();
+        newUser.setName("new user");
+        newUser.setId(uuidGenerator.generate());
+        newUser.setDbId(5L);
+
+        Lot lot = new Lot();
+        lot.setId(uuidGenerator.generate());
+        lot.setHistory(new LotHistory());
+        lot.getHistory().setPerformedBy(newUser);
+
+        Box box = new Box();
+        lot.setLocation(box);
+        lot.getHistory().setLocation(box);
+
+        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
+        relinkCache.put(newUser.getId(), newUser);
+
+        relinkService.relink(lot, newUser, relinkCache, true);
+
+        assertThat(lot.getOwner())
+                .isNotNull()
+                .isEqualTo(newUser);
+        assertThat(lot.getHistory().getPerformedBy().getName())
+                .isEqualTo(newUser.getName());
+
+        assertThat(box.getId())
+                .isNotNull();
+        assertThat(lot.getHistory().getLocation())
+                .isNotNull()
+                .isEqualTo(box);
+
+        assertThat(box.getOwner())
+                .isNotNull()
+                .isEqualTo(newUser);
     }
 }
