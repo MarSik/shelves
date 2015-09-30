@@ -102,9 +102,9 @@ public class NamedEntity extends OwnedEntity
 		update(update.getDescription(), this::setDescription);
 		update(update.getFlagged(), this::setFlagged);
 
-		update(update.getDescribedBy(), this::setDescribedBy);
-		update(update.getCodes(), this::setCodes);
-		update(update.getProperties(), this::setProperties);
+		updateManyToMany(update.getDescribedBy(), this::getDescribedBy, Document::getDescribes, this);
+		updateOneToMany(update.getCodes(), this::getCodes, Code::setReference, this);
+		updateOneToMany(update.getProperties(), this::getProperties, NumericPropertyValue::setEntity, this);
 
 		super.updateFrom(update);
 	}

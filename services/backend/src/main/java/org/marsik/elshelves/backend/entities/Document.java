@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -39,7 +40,7 @@ public class Document extends NamedEntity implements StickerCapable {
     URL url;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<NamedEntity> describes = new THashSet<>();
+	Set<NamedEntity> describes = new THashSet<>();
 
 	@Override
 	public boolean canBeDeleted() {
@@ -62,6 +63,8 @@ public class Document extends NamedEntity implements StickerCapable {
 		update(update.getContentType(), this::setContentType);
 		update(update.getSize(), this::setSize);
 		update(update.getUrl(), this::setUrl);
+
+		updateManyToMany(update.getDescribes(), this::getDescribes, NamedEntity::getDescribedBy, this);
 
 		super.updateFrom(update0);
 	}
