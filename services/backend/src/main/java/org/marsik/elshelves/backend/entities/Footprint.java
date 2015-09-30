@@ -49,48 +49,36 @@ public class Footprint extends NamedEntity {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Type> types = new THashSet<>();
 
-	@JoinTable(name = "fp_fp_see_also",
-			joinColumns = {
-					@JoinColumn(name = "fp1", nullable = false)},
-			inverseJoinColumns = {
-					@JoinColumn(name = "fp2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Footprint> seeAlso = new THashSet<>();
 
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			mappedBy = "see_also")
+	Set<Footprint> seeAlsoIncoming = new THashSet<>();
+
     FootprintType type;
-
-	@PartOfUpdate
-	public String getKicad() {
-		return kicad;
-	}
-
-	@PartOfUpdate
-	public Integer getPads() {
-		return pads;
-	}
-
-	@PartOfUpdate
-	public Integer getHoles() {
-		return holes;
-	}
-
-	@PartOfUpdate
-	public Integer getNpth() {
-		return npth;
-	}
 
 	@Override
 	public boolean canBeDeleted() {
 		return !getTypes().iterator().hasNext();
 	}
 
-    @PartOfUpdate
-    public Set<Footprint> getSeeAlso() {
-        return seeAlso;
-    }
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Footprint)) {
+			throw new IllegalArgumentException();
+		}
 
-    @PartOfUpdate
-    public FootprintType getType() {
-        return type;
-    }
+		Footprint update = (Footprint)update0;
+
+		update(update.getKicad(), this::setKicad);
+		update(update.getPads(), this::setPads);
+		update(update.getHoles(), this::setHoles);
+		update(update.getNpth(), this::setNpth);
+
+		update(update.getSeeAlso(), this::setSeeAlso);
+		update(update.getType(), this::setType);
+
+		super.updateFrom(update0);
+	}
 }

@@ -51,6 +51,9 @@ public class  FootprintToEmber implements CachingConverter<Footprint, FootprintA
             for (Footprint t: object.getSeeAlso()) {
                 model.getSeeAlso().add(convert(t, nested - 1, cache));
             }
+			for (Footprint t: object.getSeeAlsoIncoming()) {
+				model.getSeeAlso().add(convert(t, nested - 1, cache));
+			}
         }
 
 		return model;

@@ -29,7 +29,8 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class NamedEntity extends OwnedEntity {
+public class NamedEntity extends OwnedEntity
+		implements UpdateableEntity {
 	@NotEmpty
 	@NotNull
 	@Size(max = 255)
@@ -58,26 +59,6 @@ public class NamedEntity extends OwnedEntity {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Code> codes = new THashSet<>();
 
-	@PartOfUpdate
-	public String getName() {
-		return name;
-	}
-
-	@PartOfUpdate
-	public String getSummary() {
-		return summary;
-	}
-
-    @PartOfUpdate
-	public String getDescription() {
-		return description;
-	}
-
-	@PartOfUpdate
-	public Set<Document> getDescribedBy() {
-		return describedBy;
-	}
-
 	@Override
 	public boolean canBeDeleted() {
 		return false;
@@ -87,11 +68,6 @@ public class NamedEntity extends OwnedEntity {
 	public boolean canBeUpdated() {
 		return true;
 	}
-
-	@PartOfUpdate
-    public Set<NumericPropertyValue> getProperties() {
-        return properties;
-    }
 
     public String getEmberType() {
         String type = "unknown";
@@ -108,11 +84,6 @@ public class NamedEntity extends OwnedEntity {
         return type;
     }
 
-    @PartOfUpdate
-    public Set<Code> getCodes() {
-        return codes;
-    }
-
 	@Override
 	public String toString() {
 		return getClass().getName() + "{" +
@@ -120,5 +91,24 @@ public class NamedEntity extends OwnedEntity {
 				", id=" + id +
 				", name='" + name + '\'' +
 				'}';
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof NamedEntity)) {
+			throw new IllegalArgumentException();
+		}
+
+		NamedEntity update = (NamedEntity)update0;
+
+		update(update.getName(), this::setName);
+		update(update.getSummary(), this::setSummary);
+		update(update.getDescription(), this::setDescription);
+
+		update(update.getDescribedBy(), this::setDescribedBy);
+		update(update.getCodes(), this::setCodes);
+		update(update.getProperties(), this::setProperties);
+
+		super.updateFrom(update);
 	}
 }

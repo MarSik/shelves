@@ -64,13 +64,12 @@ public class Type extends NamedEntity implements StickerCapable {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Requirement> usedIn = new THashSet<>();
 
-	@JoinTable(name = "type_type_see_also",
-			joinColumns = {
-					@JoinColumn(name = "type1", nullable = false)},
-			inverseJoinColumns = {
-					@JoinColumn(name = "type2", nullable = false)})
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Type> seeAlso = new THashSet<>();
+
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			mappedBy = "see_also")
+	Set<Type> seeAlsoIncoming = new THashSet<>();
 
 	@PartOfUpdate
 	public String getVendor() {

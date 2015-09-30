@@ -47,21 +47,6 @@ public class Document extends NamedEntity implements StickerCapable {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<NamedEntity> describes = new THashSet<>();
 
-	@PartOfUpdate
-	public String getContentType() {
-		return contentType;
-	}
-
-	@PartOfUpdate
-	public Long getSize() {
-		return size;
-	}
-
-	@PartOfUpdate
-	public DateTime getCreated() {
-		return created;
-	}
-
 	@Override
 	public boolean canBeDeleted() {
 		return true;
@@ -72,8 +57,18 @@ public class Document extends NamedEntity implements StickerCapable {
 		return "/documents";
 	}
 
-    @PartOfUpdate
-    public URL getUrl() {
-        return url;
-    }
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Document)) {
+			throw new IllegalArgumentException();
+		}
+
+		Document update = (Document)update0;
+
+		update(update.getContentType(), this::setContentType);
+		update(update.getSize(), this::setSize);
+		update(update.getUrl(), this::setUrl);
+
+		super.updateFrom(update0);
+	}
 }

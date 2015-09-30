@@ -25,7 +25,8 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(BoxApiModel.class)
-public class Box extends NamedEntity implements StickerCapable {
+public class Box extends NamedEntity
+		implements StickerCapable, UpdateableEntity {
 
 	@OneToMany(mappedBy = "parent",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -38,11 +39,6 @@ public class Box extends NamedEntity implements StickerCapable {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> lots = new THashSet<>();
 
-	@PartOfUpdate
-    public Box getParent() {
-        return parent;
-    }
-
 	@Override
 	public boolean canBeDeleted() {
 		return true;
@@ -51,5 +47,18 @@ public class Box extends NamedEntity implements StickerCapable {
 	@Override
 	public String getBaseUrl() {
 		return "boxes";
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Box)) {
+			throw new IllegalArgumentException();
+		}
+
+		Box update = (Box)update0;
+
+		update(update.getParent(), this::setParent);
+
+		super.updateFrom(update);
 	}
 }

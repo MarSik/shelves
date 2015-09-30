@@ -21,7 +21,8 @@ import javax.persistence.UniqueConstraint;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntityInterface {
+public abstract class OwnedEntity extends IdentifiedEntity
+		implements OwnedEntityInterface, UpdateableEntity {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
 	@ManyToOne(optional = false)
@@ -48,5 +49,14 @@ public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntit
 	@PrePersist
 	void prePersist() {
 		log.debug("Saving "+toString());
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update) {
+		if (!(update instanceof OwnedEntity)) {
+			throw new IllegalArgumentException();
+		}
+
+		update(update.getOwner(), this::setOwner);
 	}
 }

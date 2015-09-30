@@ -23,7 +23,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(CodeApiModel.class)
-public class Code extends OwnedEntity {
+public class Code extends OwnedEntity implements UpdateableEntity {
     @NotNull
     @NotEmpty
     String type;
@@ -45,9 +45,16 @@ public class Code extends OwnedEntity {
         return false;
     }
 
-    @PartOfUpdate
-    public NamedEntity getReference() {
-        return reference;
-    }
+    @Override
+    public void updateFrom(UpdateableEntity update0) {
+        if (!(update0 instanceof Code)) {
+            throw new IllegalArgumentException();
+        }
 
+        Code update = (Code) update0;
+
+        update(update.getReference(), this::setReference);
+
+        super.updateFrom(update);
+    }
 }

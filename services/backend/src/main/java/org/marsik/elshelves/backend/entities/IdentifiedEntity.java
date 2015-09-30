@@ -50,4 +50,14 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     public boolean isNew() {
         return dbId == null;
     }
+
+    protected interface Updater<T> {
+        void update(T value);
+    }
+
+    protected static <T> void update(T value, Updater<T> cb) {
+        if (value != null) {
+            cb.update(value);
+        }
+    }
 }

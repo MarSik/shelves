@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.PartOfUpdate;
+import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends OwnedEntityInterface> {
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> {
     final R repository;
     final UuidGenerator uuidGenerator;
 
@@ -65,88 +66,14 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 		repository.delete(entity);
 	}
 
+    @SuppressWarnings("unchecked")
     protected T updateEntity(T entity, T update, User currentUser) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted {
-		update = relinkService.relink(update, currentUser, entity);
-        Set<Object> modified = new THashSet<>();
-
-		PropertyDescriptor[] properties;
-		try {
-			properties = Introspector.getBeanInfo(update.getClass()).getPropertyDescriptors();
-		} catch (IntrospectionException ex) {
-			ex.printStackTrace();
-			return entity;
-		}
-
-		// For all update properties with getter..
-		for (PropertyDescriptor f: properties) {
-			Method getter = f.getReadMethod();
-			if (getter == null) {
-				continue;
-			}
-
-			if (getter.getAnnotation(PartOfUpdate.class) == null) {
-				continue;
-			}
-
-			// Update all writable collections in entity using
-			// entity.clear(); entity.addAll(items) so the aspected
-			// neo4j relationships are maintained properly
-			if (Collection.class.isAssignableFrom(f.getPropertyType())) {
-				try {
-					Collection<Object> items = (Collection<Object>)getter.invoke(update);
-
-                    // Track modifications
-                    for (Object item: items) {
-                        if (OwnedEntity.class.isAssignableFrom(item.getClass())) {
-                            modified.add(item);
-                        }
-                    }
-                    for (Object item: (Collection<Object>) getter.invoke(entity)) {
-                        if (OwnedEntity.class.isAssignableFrom(item.getClass())) {
-                            modified.add(item);
-                        }
-                    }
-
-					((Collection<Object>)getter.invoke(entity)).clear();
-					((Collection<Object>)getter.invoke(entity)).addAll(items);
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-
-			// Skip read-only collections
-			} else if (Iterable.class.isAssignableFrom(f.getPropertyType())) {
-				continue;
-
-			// Update all scalar properties
-			} else {
-				try {
-					Object value = getter.invoke(update);
-					Method setter = f.getWriteMethod();
-
-                    // Track modifications
-                    if (OwnedEntity.class.isAssignableFrom(f.getPropertyType())) {
-                        modified.add(value);
-                        modified.add(getter.invoke(entity));
-                    }
-
-					if (setter != null) {
-						setter.invoke(entity, value);
-					}
-				} catch (InvocationTargetException | IllegalAccessException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-
-        // Mark all old and new elements as modified
-        DateTime modificationDate = new DateTime();
-        modified.add(entity);
-        for (Object m: modified) {
-            if (m != null && m instanceof OwnedEntity) {
-                ((OwnedEntity) m).setLastModified(modificationDate);
-            }
+        if (!(entity instanceof UpdateableEntity)) {
+            throw new OperationNotPermitted();
         }
+
+		update = relinkService.relink(update, currentUser, entity);
+        ((UpdateableEntity)entity).updateFrom(update);
 
         return entity;
     }

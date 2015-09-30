@@ -97,6 +97,9 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
             for (Type t: object.getSeeAlso()) {
                 model.getSeeAlso().add(convert(t, nested - 1, cache));
             }
+			for (Type t: object.getSeeAlsoIncoming()) {
+				model.getSeeAlso().add(convert(t, nested - 1, cache));
+			}
         }
 
 		return model;

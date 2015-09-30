@@ -57,16 +57,6 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime lastUsed;
 
-    @PartOfUpdate
-    public String getName() {
-        return name;
-    }
-
-    @PartOfUpdate
-    public String getSecret() {
-        return secret;
-    }
-
     @Override
     public boolean canBeDeleted() {
         return true;
