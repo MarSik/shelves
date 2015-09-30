@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
@@ -22,6 +23,9 @@ public class SanityService {
 
     @Autowired
     SanityRepository sanityRepository;
+
+    @Autowired
+    GroupService groupService;
 
     @Autowired
     UuidGenerator uuidGenerator;
@@ -52,7 +56,15 @@ public class SanityService {
             Group g = orphanGroups.get(u);
             logger.info("Adding type {} to orphan group {} for user {}", t, g, u);
             t.getGroups().add(g);
-            //neo4jTemplate.save(t);
+        }
+
+        for (Map.Entry<User, Group> e: orphanGroups.entrySet()) {
+            try {
+                groupService.create(e.getValue(), e.getKey());
+            } catch (OperationNotPermitted operationNotPermitted) {
+                // This should not ever happen for groups and types
+                operationNotPermitted.printStackTrace();
+            }
         }
     }
 }
