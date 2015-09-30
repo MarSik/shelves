@@ -7,19 +7,13 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Entity
 @Data
@@ -27,7 +21,7 @@ import java.util.Date;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Authorization extends IdentifiedEntity implements OwnedEntityInterface {
+public class Authorization extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
     @NotEmpty
     @NotNull
     @Size(min = 1, max = 255)
@@ -64,6 +58,17 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
 
     @Override
     public boolean canBeUpdated() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public void updateFrom(UpdateableEntity update0) {
+        if (!(update0 instanceof Authorization)) {
+            return;
+        }
+
+        Authorization update = (Authorization) update0;
+
+        update(update.getName(), this::setName);
     }
 }

@@ -40,7 +40,7 @@ public class NamedObjectToEmber {
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
-        model.setFlagged(object.isFlagged());
+        model.setFlagged(object.getFlagged());
         model.setCanBeDeleted(object.canBeDeleted());
 
         if (object.getCodes() != null) {
