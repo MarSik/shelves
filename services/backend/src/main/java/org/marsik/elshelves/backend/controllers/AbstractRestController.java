@@ -128,6 +128,9 @@ public class AbstractRestController<T extends OwnedEntityInterface, E extends Ab
                              @PathVariable("id") UUID uuid,
                              @Valid @RequestBody E item) throws IllegalAccessException, InvocationTargetException, OperationNotPermitted, PermissionDenied, EntityNotFound {
         T update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
+
+        // The REST entity does not contain id during PUT, because that is
+        // provided by the URL
         update.setId(uuid);
         T entity = service.update(update, currentUser);
 

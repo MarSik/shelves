@@ -211,9 +211,6 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         }
 
         try {
-			// The REST entity does not contain id during PUT, because that is
-			// provided by the URL
-
             one = updateEntity(one, update, currentUser);
             one.setLastModified(new DateTime());
 
