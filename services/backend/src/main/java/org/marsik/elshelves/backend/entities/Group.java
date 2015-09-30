@@ -42,25 +42,10 @@ public class Group extends NamedEntity {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<NumericProperty> showProperties = new THashSet<>();
 
-	@PartOfUpdate
-	public Group getParent() {
-		return parent;
-	}
-
-	@PartOfUpdate
-	public Set<Type> getTypes() {
-		return types;
-	}
-
 	@Override
 	public boolean canBeDeleted() {
 		return true;
 	}
-
-    @PartOfUpdate
-    public Set<NumericProperty> getShowProperties() {
-        return showProperties;
-    }
 
     public Long getCount() {
 		return (long) getTypes().size();
@@ -74,5 +59,20 @@ public class Group extends NamedEntity {
 		}
 
 		return count;
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Group)) {
+			throw new IllegalArgumentException();
+		}
+
+		Group update = (Group)update0;
+
+		update(update.getParent(), this::setParent);
+		update(update.getShowProperties(), this::setShowProperties);
+		update(update.getTypes(), this::setTypes);
+
+		super.updateFrom(update0);
 	}
 }

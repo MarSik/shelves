@@ -58,4 +58,18 @@ public class Unit extends NamedEntity {
     public boolean canBeDeleted() {
         return getUnitUses() == null || !getUnitUses().iterator().hasNext();
     }
+
+    @Override
+    public void updateFrom(UpdateableEntity update0) {
+        if (!(update0 instanceof Unit)) {
+            throw new IllegalArgumentException();
+        }
+
+        Unit update = (Unit)update0;
+
+        update(update.getSymbol(), this::setSymbol);
+        update(update.getPrefixes(), this::setPrefixes);
+
+        super.updateFrom(update0);
+    }
 }

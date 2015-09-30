@@ -56,4 +56,19 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	public String getBaseUrl() {
 		return "transactions";
 	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Transaction)) {
+			throw new IllegalArgumentException();
+		}
+
+		Transaction update = (Transaction)update0;
+
+		update(update.getDate(), this::setDate);
+		update(update.getSource(), this::setSource);
+
+
+		super.updateFrom(update0);
+	}
 }

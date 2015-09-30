@@ -45,4 +45,17 @@ public class Item extends Lot implements StickerCapable {
 	public String getBaseUrl() {
 		return "projects";
 	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Item)) {
+			throw new IllegalArgumentException();
+		}
+
+		Item update = (Item)update0;
+
+		update(update.getFinished(), this::setFinished);
+
+		super.updateFrom(update0);
+	}
 }

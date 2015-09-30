@@ -13,6 +13,7 @@ import java.util.UUID;
  * Supported implementations of price downloaders
  */
 public enum SourceDownloader {
+	NONE(null, null),
 	FARNELL(null, null),
 	DIGIKEY(null, null),
 	MOUSER(null, null);

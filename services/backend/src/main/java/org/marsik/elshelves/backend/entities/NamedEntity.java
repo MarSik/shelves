@@ -39,7 +39,7 @@ public class NamedEntity extends OwnedEntity
 	@Size(max = 255)
 	String summary;
 
-    boolean flagged = false;
+    Boolean flagged = false;
 
 	@Lob
 	String description;
@@ -104,6 +104,7 @@ public class NamedEntity extends OwnedEntity
 		update(update.getName(), this::setName);
 		update(update.getSummary(), this::setSummary);
 		update(update.getDescription(), this::setDescription);
+		update(update.getFlagged(), this::setFlagged);
 
 		update(update.getDescribedBy(), this::setDescribedBy);
 		update(update.getCodes(), this::setCodes);

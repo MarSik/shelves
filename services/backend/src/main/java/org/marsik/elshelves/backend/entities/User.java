@@ -27,7 +27,7 @@ import java.util.UUID;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-public class User extends IdentifiedEntity implements OwnedEntityInterface, StickerCapable {
+public class User extends IdentifiedEntity implements OwnedEntityInterface, StickerCapable, UpdateableEntity {
     @NotNull
     @Size(max = 255)
     String name;
@@ -91,4 +91,15 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
 	public String getBaseUrl() {
 		return "users";
 	}
+
+    public void updateFrom(UpdateableEntity update0) {
+        if (!(update0 instanceof User)) {
+            throw new IllegalArgumentException();
+        }
+
+        User update = (User)update0;
+
+        update(update.getName(), this::setName);
+        update(update.getEmail(), this::setEmail);
+    }
 }

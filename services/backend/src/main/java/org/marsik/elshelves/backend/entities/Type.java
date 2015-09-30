@@ -71,26 +71,6 @@ public class Type extends NamedEntity implements StickerCapable {
 			mappedBy = "see_also")
 	Set<Type> seeAlsoIncoming = new THashSet<>();
 
-	@PartOfUpdate
-	public String getVendor() {
-		return vendor;
-	}
-
-	@PartOfUpdate
-	public String getCustomId() {
-		return customId;
-	}
-
-	@PartOfUpdate
-	public Set<Footprint> getFootprints() {
-		return footprints;
-	}
-
-	@PartOfUpdate
-	public Set<Group> getGroups() {
-		return groups;
-	}
-
 	public Iterable<Lot> getLots() {
 		List<Lot> lots = new ArrayList<>();
 
@@ -135,23 +115,25 @@ public class Type extends NamedEntity implements StickerCapable {
 		return "types";
 	}
 
-    @PartOfUpdate
-    public Boolean getSerials() {
-        return serials;
-    }
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Type)) {
+			throw new IllegalArgumentException();
+		}
 
-    @PartOfUpdate
-    public Set<Type> getSeeAlso() {
-        return seeAlso;
-    }
+		Type update = (Type)update0;
 
-    @PartOfUpdate
-    public Long getMinimumCount() {
-        return minimumCount;
-    }
+		update(update.getVendor(), this::setVendor);
+		update(update.getCustomId(), this::setCustomId);
+		update(update.getFootprints(), this::setFootprints);
+		update(update.getGroups(), this::setGroups);
 
-    @PartOfUpdate
-    public Long getBuyMultiple() {
-        return buyMultiple;
-    }
+		update(update.getSeeAlso(), this::setSeeAlso);
+		update(update.getSerials(), this::setSerials);
+		update(update.getMinimumCount(), this::setMinimumCount);
+		update(update.getBuyMultiple(), this::setBuyMultiple);
+		update(update.getManufacturable(), this::setManufacturable);
+
+		super.updateFrom(update0);
+	}
 }

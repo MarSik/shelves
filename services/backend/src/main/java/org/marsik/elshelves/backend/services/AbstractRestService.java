@@ -1,24 +1,16 @@
 package org.marsik.elshelves.backend.services;
 
-import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.backend.entities.OwnedEntity;
-import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
-import org.marsik.elshelves.backend.entities.PartOfUpdate;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;

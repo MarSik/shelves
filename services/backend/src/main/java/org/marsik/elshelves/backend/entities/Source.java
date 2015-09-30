@@ -23,6 +23,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Data
@@ -34,11 +35,13 @@ import java.util.Collection;
 public class Source extends NamedEntity {
 	String url;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
-	SourceDownloader sourceDownloader;
+	SourceDownloader sourceDownloader = SourceDownloader.NONE;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
-	ShippingCalculator shippingCalculator;
+	ShippingCalculator shippingCalculator = ShippingCalculator.NONE;
 
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -54,5 +57,20 @@ public class Source extends NamedEntity {
 
 	public boolean canBeDeleted() {
 		return !getTransactions().iterator().hasNext();
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Source)) {
+			throw new IllegalArgumentException();
+		}
+
+		Source update = (Source)update0;
+
+		update(update.getUrl(), this::setUrl);
+		update(update.getSourceDownloader(), this::setSourceDownloader);
+		update(update.getShippingCalculator(), this::setShippingCalculator);
+
+		super.updateFrom(update0);
 	}
 }

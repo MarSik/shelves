@@ -27,7 +27,6 @@ import java.util.Collection;
 @Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
-    @PartOfUpdate
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
             optional = false)
     @NotNull
@@ -45,23 +44,23 @@ public class NumericProperty extends NamedEntity {
             cascade = { CascadeType.ALL })
     Collection<NumericPropertyValue> propertyUses = new THashSet<>();
 
-    @PartOfUpdate
-    public Unit getUnit() {
-        return unit;
-    }
-
-    @PartOfUpdate
-    public SiPrefix getBase() {
-        return base;
-    }
-
     @Override
     public boolean canBeDeleted() {
         return !propertyUses.iterator().hasNext();
     }
 
-    @PartOfUpdate
-    public String getSymbol() {
-        return symbol;
+    @Override
+    public void updateFrom(UpdateableEntity update0) {
+        if (!(update0 instanceof NumericProperty)) {
+            throw new IllegalArgumentException();
+        }
+
+        NumericProperty update = (NumericProperty)update0;
+
+        update(update.getUnit(), this::setUnit);
+        update(update.getBase(), this::setBase);
+        update(update.getSymbol(), this::setSymbol);
+
+        super.updateFrom(update0);
     }
 }

@@ -49,39 +49,9 @@ public class Purchase extends OwnedEntity {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> lots = new THashSet<>();
 
-	@PartOfUpdate
-	public Double getSinglePrice() {
-		return singlePrice;
-	}
-
-	@PartOfUpdate
-	public Double getTotalPrice() {
-		return totalPrice;
-	}
-
-	@PartOfUpdate
-	public Double getVat() {
-		return vat;
-	}
-
-	@PartOfUpdate
-	public Boolean getVatIncluded() {
-		return vatIncluded;
-	}
-
 	public Source getSource() {
 		Transaction transaction1 = getTransaction();
 		return (transaction1 == null) ? null : transaction1.getSource();
-	}
-
-	@PartOfUpdate
-	public Transaction getTransaction() {
-		return transaction;
-	}
-
-	@PartOfUpdate
-	public Type getType() {
-		return type;
 	}
 
 	@Override
@@ -106,4 +76,21 @@ public class Purchase extends OwnedEntity {
 
         return count;
     }
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Purchase)) {
+			throw new IllegalArgumentException();
+		}
+
+		Purchase update = (Purchase)update0;
+
+		update(update.getSinglePrice(), this::setSinglePrice);
+		update(update.getTotalPrice(), this::setTotalPrice);
+		update(update.getVat(), this::setVat);
+		update(update.getVatIncluded(), this::setVatIncluded);
+		update(update.getType(), this::setType);
+
+		super.updateFrom(update0);
+	}
 }

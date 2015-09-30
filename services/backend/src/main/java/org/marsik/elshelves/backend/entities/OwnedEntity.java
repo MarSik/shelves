@@ -28,12 +28,6 @@ public abstract class OwnedEntity extends IdentifiedEntity
 	@ManyToOne(optional = false)
 	User owner;
 
-	@Override
-	@PartOfUpdate
-	public User getOwner() {
-		return owner;
-	}
-
 	public abstract boolean canBeDeleted();
 
 	public abstract boolean canBeUpdated();

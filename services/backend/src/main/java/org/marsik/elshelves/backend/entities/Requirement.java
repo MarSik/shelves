@@ -43,21 +43,6 @@ public class Requirement extends OwnedEntity {
 	@Min(1)
 	Long count;
 
-	@PartOfUpdate
-	public Item getItem() {
-		return item;
-	}
-
-	@PartOfUpdate
-	public Set<Type> getType() {
-		return type;
-	}
-
-	@PartOfUpdate
-	public Long getCount() {
-		return count;
-	}
-
 	@Override
 	public User getOwner() {
 		return getItem() != null ? getItem().getOwner() : null;
@@ -67,16 +52,6 @@ public class Requirement extends OwnedEntity {
 	public void setOwner(User user) {
 		// NOP
 	}
-
-    @PartOfUpdate
-    public String getName() {
-        return name;
-    }
-
-    @PartOfUpdate
-    public String getSummary() {
-        return summary;
-    }
 
     /**
      * Return all active lots that are assigned to this
