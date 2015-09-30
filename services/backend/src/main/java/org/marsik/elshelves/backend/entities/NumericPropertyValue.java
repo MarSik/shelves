@@ -18,10 +18,12 @@ public class NumericPropertyValue {
     @GeneratedValue
     Long id;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+            optional = false)
     NamedEntity entity;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+            optional = false)
     NumericProperty property;
 
     @NotNull

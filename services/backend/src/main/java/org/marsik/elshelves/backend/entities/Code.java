@@ -32,7 +32,7 @@ public class Code extends OwnedEntity {
     @NotEmpty
     String code;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     NamedEntity reference;
 
     @Override

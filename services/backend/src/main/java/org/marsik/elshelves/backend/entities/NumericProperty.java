@@ -28,7 +28,8 @@ import java.util.Collection;
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
     @PartOfUpdate
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+            optional = false)
     @NotNull
     Unit unit;
 

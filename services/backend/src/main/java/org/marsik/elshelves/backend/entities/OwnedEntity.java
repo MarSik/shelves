@@ -24,7 +24,7 @@ import javax.persistence.UniqueConstraint;
 public abstract class OwnedEntity extends IdentifiedEntity implements OwnedEntityInterface {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	User owner;
 
 	@Override

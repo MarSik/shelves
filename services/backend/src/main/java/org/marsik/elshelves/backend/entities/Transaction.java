@@ -37,7 +37,8 @@ public class Transaction extends NamedEntity implements StickerCapable {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Purchase> items = new THashSet<>();
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			optional = false)
 	Source source;
 
 	@Override

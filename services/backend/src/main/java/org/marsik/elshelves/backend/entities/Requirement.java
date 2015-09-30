@@ -26,7 +26,8 @@ import java.util.function.Predicate;
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Requirement extends OwnedEntity {
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			optional = false)
 	Item item;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })

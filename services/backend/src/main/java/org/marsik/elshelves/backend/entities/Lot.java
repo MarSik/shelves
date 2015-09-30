@@ -43,13 +43,15 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	LotAction status;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			fetch = FetchType.EAGER)
+			fetch = FetchType.EAGER,
+	        optional = false)
 	@NotNull
 	LotHistory history;
 
 	@NotNull
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			fetch = FetchType.EAGER)
+			fetch = FetchType.EAGER,
+			optional = false)
 	Purchase purchase;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })

@@ -33,7 +33,7 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     @Size(min = 1, max = 255)
     String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     User owner;
 
     /**

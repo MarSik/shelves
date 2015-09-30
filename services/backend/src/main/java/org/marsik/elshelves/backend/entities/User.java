@@ -27,7 +27,7 @@ import java.util.UUID;
 @ToString(of = {}, callSuper = true)
 @EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
-public class User extends OwnedEntity implements StickerCapable {
+public class User extends IdentifiedEntity implements OwnedEntityInterface, StickerCapable {
     @NotNull
     @Size(max = 255)
     String name;
