@@ -1,9 +1,9 @@
 package org.marsik.elshelves.backend.controllers;
 
+import org.marsik.elshelves.api.StickerSettings;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
-import org.marsik.elshelves.api.StickerSettings;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;

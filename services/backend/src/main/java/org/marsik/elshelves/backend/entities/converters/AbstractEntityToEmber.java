@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
-import org.marsik.elshelves.backend.entities.OwnedEntity;
 
 import java.util.Map;
 import java.util.UUID;

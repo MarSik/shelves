@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
-import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;

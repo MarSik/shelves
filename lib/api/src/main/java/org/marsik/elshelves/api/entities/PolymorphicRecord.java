@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.marsik.elshelves.api.ember.EmberModel;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)

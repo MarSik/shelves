@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
 @JsonFormat(shape= JsonFormat.Shape.OBJECT)

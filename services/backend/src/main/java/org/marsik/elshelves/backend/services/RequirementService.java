@@ -1,10 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
-import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.EmberToRequirement;
-import org.marsik.elshelves.backend.entities.converters.RequirementToEmber;
 import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;

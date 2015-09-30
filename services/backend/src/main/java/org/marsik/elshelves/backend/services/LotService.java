@@ -1,10 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
-import gnu.trove.map.hash.THashMap;
 import org.joda.time.DateTime;
-import org.marsik.elshelves.api.entities.BoxApiModel;
-import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -14,7 +10,6 @@ import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
@@ -22,9 +17,7 @@ import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 
 @Service

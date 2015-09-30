@@ -1,12 +1,9 @@
 package org.marsik.elshelves.backend.services;
 
-import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.EmberToPurchase;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
-import org.marsik.elshelves.backend.entities.converters.PurchaseToEmber;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.services.StorageManager;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Map;
 import java.util.UUID;
 

@@ -2,7 +2,6 @@ package org.marsik.elshelves.api.entities.idresolvers;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.jackson.CreateObjectIdResolver;
 

@@ -1,13 +1,10 @@
 package org.marsik.elshelves.backend.services;
 
 import org.joda.time.DateTime;
-import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.EmberToTransaction;
-import org.marsik.elshelves.backend.entities.converters.TransactionToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.SourceRepository;

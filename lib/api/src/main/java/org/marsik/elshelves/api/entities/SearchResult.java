@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import org.marsik.elshelves.api.ember.EmberModelName;
 
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
