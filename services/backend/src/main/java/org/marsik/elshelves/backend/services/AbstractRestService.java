@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -78,6 +79,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return dtos;
     }
 
+    @HystrixCommand
     public T create(T entity, User currentUser) throws OperationNotPermitted {
         entity = createEntity(entity, currentUser);
         entity.setCreated(new DateTime());
@@ -85,6 +87,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
+    @HystrixCommand
     public T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
         T one = getSingleEntity(uuid);
 
@@ -99,6 +102,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return one;
     }
 
+    @HystrixCommand
     public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         T one = getSingleEntity(uuid);
 
@@ -118,6 +122,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return true;
     }
 
+    @HystrixCommand
     public T update(T update, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
         T one = getSingleEntity(update.getId());
 

@@ -32,6 +32,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
 
                     // Status and website icon are open
                     .antMatchers("/status", "/favicon.ico").permitAll()
+                    .antMatchers("/hystrix.stream").permitAll()
 
                     // Mail api is verified using HMAC
                     .antMatchers("/*/mail/**").permitAll()
