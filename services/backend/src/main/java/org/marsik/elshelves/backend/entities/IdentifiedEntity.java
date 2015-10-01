@@ -76,7 +76,9 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
     protected static <T, L> void updateManyToOne(T value, Updater<T> cb, Getter<T> local, RemoteGetter<T, L> remote, L th) {
-        if (value.equals(local.get())) {
+        if (value == local.get()
+                || (value != null && value.equals(local.get()))
+                || (local.get() != null && local.get().equals(value))) {
             return;
         }
 
