@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.app.spring.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Authorization;
@@ -44,12 +45,14 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 	@Autowired
 	UserToEmber userToEmber;
 
+    @CircuitBreaker
     @Transactional(readOnly = true)
     public User getUser(String email) {
         return userRepository.getUserByEmail(email);
     }
 
     @Override
+    @CircuitBreaker
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Try fetching Authorization object with the email as ID
@@ -111,6 +114,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
+    @CircuitBreaker
     public String createUser(UserApiModel userInfo) throws OperationNotPermitted {
 		if (userRepository.getUserByEmail(userInfo.getEmail()) != null) {
 			throw new OperationNotPermitted();
@@ -130,6 +134,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
 	@Override
+    @CircuitBreaker
 	public String startNewVerification(String email) {
 		User u = userRepository.getUserByEmail(email);
 		if (u == null) {
@@ -151,6 +156,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 	}
 
     @Override
+    @CircuitBreaker
     public UserApiModel verifyUser(String code) throws PermissionDenied {
         User u = userRepository.getUserByVerificationCode(code);
 

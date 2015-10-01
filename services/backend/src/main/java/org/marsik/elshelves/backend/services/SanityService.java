@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.backend.app.spring.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;
@@ -31,6 +32,7 @@ public class SanityService {
     UuidGenerator uuidGenerator;
 
     @Transactional
+    @CircuitBreaker
     @Scheduled(cron = "0 */5 * * * *")
     public void collectOrphanedTypes() {
         Iterable<Type> types = sanityRepository.findOrphanedTypes();
