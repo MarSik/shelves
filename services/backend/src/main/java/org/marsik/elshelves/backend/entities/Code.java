@@ -48,7 +48,7 @@ public class Code extends OwnedEntity implements UpdateableEntity {
 
         Code update = (Code) update0;
 
-        update(update.getReference(), this::setReference);
+        updateManyToOne(update.getReference(), this::setReference, this::getReference, NamedEntity::getCodes, this);
 
         super.updateFrom(update);
     }

@@ -47,7 +47,7 @@ public class Footprint extends NamedEntity {
     Set<Footprint> seeAlso = new THashSet<>();
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			mappedBy = "see_also")
+			mappedBy = "seeAlso")
 	Set<Footprint> seeAlsoIncoming = new THashSet<>();
 
     FootprintType type;

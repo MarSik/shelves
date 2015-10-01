@@ -54,6 +54,7 @@ public class Box extends NamedEntity
 		Box update = (Box)update0;
 
 		updateManyToOne(update.getParent(), this::setParent, this::getParent, Box::getContains, this);
+		updateOneToMany(update.getContains(), this::getContains, Box::setParent, this);
 
 		super.updateFrom(update);
 	}

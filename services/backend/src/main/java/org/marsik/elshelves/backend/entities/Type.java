@@ -61,7 +61,7 @@ public class Type extends NamedEntity implements StickerCapable {
     Set<Type> seeAlso = new THashSet<>();
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			mappedBy = "see_also")
+			mappedBy = "seeAlso")
 	Set<Type> seeAlsoIncoming = new THashSet<>();
 
 	public Iterable<Lot> getLots() {
