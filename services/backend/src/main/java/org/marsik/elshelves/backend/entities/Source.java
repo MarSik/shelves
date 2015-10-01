@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -39,7 +40,15 @@ public class Source extends NamedEntity {
 
 	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Transaction> transactions = new THashSet<>();
+	Set<Transaction> transactions = new THashSet<>();
+
+	public void addTransaction(Transaction t) {
+		t.setSource(this);
+	}
+
+	public void removeTransaction(Transaction t) {
+		t.unsetSource(this);
+	}
 
 	@Transient
 	private boolean hasIcon;

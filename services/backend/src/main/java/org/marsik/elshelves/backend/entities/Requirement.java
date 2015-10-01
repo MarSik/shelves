@@ -26,12 +26,41 @@ public class Requirement extends OwnedEntity {
 			optional = false)
 	Item item;
 
+	public void setItem(Item i) {
+		if (item != null) item.getRequires().remove(this);
+		item = i;
+		if (item != null) item.getRequires().add(this);
+	}
+
+	public void unsetItem(Item i) {
+		assert i.equals(item);
+		setItem(null);
+	}
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> type = new THashSet<>();
 
+	public void addType(Type t) {
+		type.add(t);
+		t.getUsedIn().add(this);
+	}
+
+	public void removeType(Type t) {
+		type.remove(t);
+		t.getUsedIn().remove(this);
+	}
+
 	@OneToMany(mappedBy = "usedBy",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Set<Lot> rawLots = new THashSet<>();
+	Set<Lot> lots = new THashSet<>();
+
+	public void addLot(Lot l) {
+		l.setUsedBy(this);
+	}
+
+	public void removeLot(Lot l) {
+		l.setUsedBy(null);
+	}
 
     String name;
     String summary;
@@ -49,25 +78,6 @@ public class Requirement extends OwnedEntity {
 		// NOP
 	}
 
-    /**
-     * Return all active lots that are assigned to this
-     * requirement.
-     */
-    public Set<Lot> getLots() {
-        Set<Lot> assigned = new THashSet<>();
-		if (getRawLots() == null) {
-			return assigned;
-		}
-
-        for (Lot l: getRawLots()) {
-            if (l.isValid()) {
-                assigned.add(l);
-            }
-        }
-
-        return assigned;
-    }
-
 	public boolean canBeDeleted() {
 		return getLots().stream().allMatch(new Predicate<Lot>() {
 			@Override
@@ -80,5 +90,20 @@ public class Requirement extends OwnedEntity {
 	@Override
 	public boolean canBeUpdated() {
 		return false;
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof Requirement)) {
+			throw new IllegalArgumentException();
+		}
+
+		Requirement update = (Requirement)update0;
+
+		update(update.getName(), this::setName);
+		update(update.getSummary(), this::setSummary);
+		update(update.getCount(), this::setCount);
+
+		super.updateFrom(update);
 	}
 }

@@ -28,12 +28,34 @@ public class Box extends NamedEntity
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Box> contains = new THashSet<>();
 
+	public void addBox(Box b) {
+		b.setParent(this);
+	}
+
+	public void removeBox(Box b) {
+		b.setParent(null);
+	}
+
 	@ManyToOne
     Box parent;
+
+	public void setParent(Box b) {
+		if (parent != null) parent.getContains().remove(this);
+		parent = b;
+		if (parent != null) parent.getContains().add(this);
+	}
 
 	@OneToMany(mappedBy = "location",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> lots = new THashSet<>();
+
+	public void addLot(Lot l) {
+		l.setLocation(this);
+	}
+
+	public void removeLot(Lot l) {
+		l.setLocation(null);
+	}
 
 	@Override
 	public boolean canBeDeleted() {
@@ -53,8 +75,8 @@ public class Box extends NamedEntity
 
 		Box update = (Box)update0;
 
-		updateManyToOne(update.getParent(), this::setParent, this::getParent, Box::getContains, this);
-		updateOneToMany(update.getContains(), this::getContains, Box::setParent, this);
+		update(update.getParent(), this::setParent);
+		reconcileLists(this, update, Box::getContains, Box::addBox, Box::removeBox);
 
 		super.updateFrom(update);
 	}

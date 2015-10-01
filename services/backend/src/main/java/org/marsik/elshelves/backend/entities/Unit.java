@@ -36,18 +36,9 @@ public class Unit extends NamedEntity {
     Set<SiPrefix> prefixes = new THashSet<>();
 
     @OneToMany(mappedBy = "unit",
-            cascade = { CascadeType.ALL })
-    Collection<NumericProperty> unitUses = new THashSet<>();
-
-    @PartOfUpdate
-	public String getSymbol() {
-		return symbol;
-	}
-
-    @PartOfUpdate
-	public Set<SiPrefix> getPrefixes() {
-		return prefixes;
-	}
+            cascade = { CascadeType.ALL },
+            orphanRemoval = true)
+    Set<NumericProperty> unitUses = new THashSet<>();
 
     @Override
     public boolean canBeDeleted() {

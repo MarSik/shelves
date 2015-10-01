@@ -27,12 +27,32 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	DateTime date;
 
 	@OneToMany(mappedBy = "transaction",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+			cascade = { CascadeType.ALL },
+			orphanRemoval = true)
 	Set<Purchase> items = new THashSet<>();
+
+	public void addItem(Purchase p) {
+		p.setTransaction(this);
+	}
+
+	public void removeItem(Purchase p) {
+		p.unsetTransaction(this);
+	}
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			optional = false)
 	Source source;
+
+	public void setSource(Source s) {
+		if (source != null) source.getTransactions().remove(this);
+		source = s;
+		if (source != null) source.getTransactions().add(this);
+	}
+
+	public void unsetSource(Source s) {
+		assert s.equals(source);
+		setSource(null);
+	}
 
 	@Override
 	public boolean canBeDeleted() {

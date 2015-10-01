@@ -30,6 +30,17 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @ManyToOne(optional = false)
     NamedEntity reference;
 
+    public void setReference(NamedEntity n) {
+        if (reference != null) reference.getCodes().remove(this);
+        reference = n;
+        if (reference != null) reference.getCodes().add(this);
+    }
+
+    public void unsetReference(NamedEntity v) {
+        assert v.equals(reference);
+        setReference(null);
+    }
+
     @Override
     public boolean canBeDeleted() {
         return true;
@@ -38,18 +49,5 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @Override
     public boolean canBeUpdated() {
         return false;
-    }
-
-    @Override
-    public void updateFrom(UpdateableEntity update0) {
-        if (!(update0 instanceof Code)) {
-            throw new IllegalArgumentException();
-        }
-
-        Code update = (Code) update0;
-
-        updateManyToOne(update.getReference(), this::setReference, this::getReference, NamedEntity::getCodes, this);
-
-        super.updateFrom(update);
     }
 }

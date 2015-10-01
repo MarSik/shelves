@@ -22,6 +22,17 @@ public class NumericPropertyValue {
             optional = false)
     NamedEntity entity;
 
+    public void setEntity(NamedEntity v) {
+        if (entity != null) entity.removeProperty(this);
+        entity = v;
+        if (entity != null) entity.addProperty(this);
+    }
+
+    public void unsetEntity(NamedEntity v) {
+        assert  v.equals(entity);
+        setEntity(null);
+    }
+
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
             optional = false)
     NumericProperty property;

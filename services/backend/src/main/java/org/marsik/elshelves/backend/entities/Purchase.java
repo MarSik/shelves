@@ -24,6 +24,17 @@ public class Purchase extends OwnedEntity {
 			optional = false)
 	Type type;
 
+	public void setType(Type t) {
+		if (type != null) type.getPurchases().remove(this);
+		type = t;
+		if (type != null) type.getPurchases().add(this);
+	}
+
+	public void unsetType(Type t) {
+		assert t.equals(type);
+		setType(null);
+	}
+
 	@NotNull
 	@Min(1)
 	Long count;
@@ -38,9 +49,28 @@ public class Purchase extends OwnedEntity {
 			optional = false)
 	Transaction transaction;
 
+	public void setTransaction(Transaction t) {
+		if (transaction != null) t.getItems().remove(this);
+		transaction = t;
+		if (transaction != null) t.getItems().add(this);
+	}
+
+	public void unsetTransaction(Transaction t) {
+		assert t.equals(transaction);
+		setTransaction(null);
+	}
+
     @OneToMany(mappedBy = "purchase",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Lot> lots = new THashSet<>();
+
+	public void addLot(Lot l) {
+		l.setPurchase(this);
+	}
+
+	public void removeLot(Lot l) {
+		l.setPurchase(null);
+	}
 
 	public Source getSource() {
 		Transaction transaction1 = getTransaction();

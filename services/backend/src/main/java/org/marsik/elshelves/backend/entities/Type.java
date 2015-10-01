@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -45,17 +44,51 @@ public class Type extends NamedEntity implements StickerCapable {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Footprint> footprints = new THashSet<>();
 
+	public void addFootprint(Footprint fp) {
+		footprints.add(fp);
+		fp.getTypes().add(this);
+	}
+
+	public void removeFootprint(Footprint fp) {
+		footprints.remove(fp);
+		fp.getTypes().remove(this);
+	}
+
 	@ManyToMany(mappedBy = "types",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Group> groups = new THashSet<>();
 
+	public void addGroup(Group g) {
+		g.addType(this);
+	}
+
+	public void removeGroup(Group g) {
+		g.removeType(this);
+	}
+
 	@OneToMany(mappedBy = "type",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Purchase> purchases = new THashSet<>();
+	Set<Purchase> purchases = new THashSet<>();
+
+	public void addPurchase(Purchase p) {
+		p.setType(this);
+	}
+
+	public void removePurchase(Purchase p) {
+		p.unsetType(this);
+	}
 
 	@ManyToMany(mappedBy = "type",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	Collection<Requirement> usedIn = new THashSet<>();
+	Set<Requirement> usedIn = new THashSet<>();
+
+	public void addUsedIn(Requirement r) {
+		r.addType(this);
+	}
+
+	public void removeUsedIn(Requirement r) {
+		r.removeType(this);
+	}
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Type> seeAlso = new THashSet<>();
@@ -63,6 +96,20 @@ public class Type extends NamedEntity implements StickerCapable {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			mappedBy = "seeAlso")
 	Set<Type> seeAlsoIncoming = new THashSet<>();
+
+	public void addSeeAlso(Type t) {
+		seeAlso.add(t);
+		seeAlsoIncoming.add(t);
+		t.getSeeAlso().add(t);
+		t.getSeeAlsoIncoming().add(t);
+	}
+
+	public void removeSeeAlso(Type t) {
+		seeAlso.remove(t);
+		seeAlsoIncoming.remove(t);
+		t.getSeeAlso().remove(t);
+		t.getSeeAlsoIncoming().remove(t);
+	}
 
 	public Iterable<Lot> getLots() {
 		List<Lot> lots = new ArrayList<>();
@@ -118,14 +165,15 @@ public class Type extends NamedEntity implements StickerCapable {
 
 		update(update.getVendor(), this::setVendor);
 		update(update.getCustomId(), this::setCustomId);
-		update(update.getFootprints(), this::setFootprints);
-		update(update.getGroups(), this::setGroups);
 
-		update(update.getSeeAlso(), this::setSeeAlso);
 		update(update.getSerials(), this::setSerials);
 		update(update.getMinimumCount(), this::setMinimumCount);
 		update(update.getBuyMultiple(), this::setBuyMultiple);
 		update(update.getManufacturable(), this::setManufacturable);
+
+		reconcileLists(this, update, Type::getSeeAlso, Type::addSeeAlso, Type::removeSeeAlso);
+		reconcileLists(this, update, Type::getFootprints, Footprint::addType, Footprint::removeType);
+		reconcileLists(this, update, Type::getGroups, Group::addType, Group::removeType);
 
 		super.updateFrom(update0);
 	}

@@ -30,6 +30,17 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     @ManyToOne(optional = false)
     User owner;
 
+    public void setOwner(User u) {
+        if (owner != null) owner.getAuthorizations().add(this);
+        owner = u;
+        if (owner != null) owner.getAuthorizations().remove(this);
+    }
+
+    public void unsetOwner(User u) {
+        assert u.equals(owner);
+        setOwner(null);
+    }
+
     /**
      * The client device contains the UUID (I) of this entity,
      * secret code used to generate the bcrypt sequence (S)

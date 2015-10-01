@@ -61,10 +61,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         void update(T value);
     }
 
-    protected interface Getter<T> {
-        T get();
-    }
-
     protected interface RemoteGetter<T, L> {
         Collection<L> get(T instance);
     }
@@ -75,53 +71,21 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         }
     }
 
-    protected static <T, L> void updateManyToOne(T value, Updater<T> cb, Getter<T> local, RemoteGetter<T, L> remote, L th) {
-        if (value == local.get()
-                || (value != null && value.equals(local.get()))
-                || (local.get() != null && local.get().equals(value))) {
+    // XXX Why remote updater? Isn't local enough?
+    protected static <L extends IdentifiedEntity,T> void reconcileLists(L self, L update, RemoteGetter<L, T> local, RemoteUpdater<T, ? super L> adder, RemoteUpdater<T, ? super L> remover) {
+        if (local.get(update) == null) {
             return;
         }
 
-        if (local.get() != null) {
-            remote.get(local.get()).remove(th);
-        }
-
-        if (value != null) {
-            cb.update(value);
-            remote.get(value).add(th);
-        }
-    }
-
-    protected static <L extends IdentifiedEntity,T> void updateManyToMany(Set<T> value, Getter<Set<T>> local, RemoteGetter<T, L> remote, L th) {
-        for (Iterator<T> it = local.get().iterator(); it.hasNext() ;) {
-            T el = it.next();
-            if (!value.contains(el)) {
-                it.remove();
-                remote.get(el).remove(th);
+        for (T el : (T[])local.get(self).toArray()) {
+            if (!local.get(update).contains(el)) {
+                remover.update(el, self);
             }
         }
 
-        for (T el: value) {
-            if (!local.get().contains(el)) {
-                local.get().add(el);
-                remote.get(el).add(th);
-            }
-        }
-    }
-
-    protected static <L extends IdentifiedEntity,T> void updateOneToMany(Set<T> value, Getter<Set<T>> local, RemoteUpdater<T, L> remote, L th) {
-        for (Iterator<T> it = local.get().iterator(); it.hasNext() ;) {
-            T el = it.next();
-            if (!value.contains(el)) {
-                it.remove();
-                remote.update(el, null);
-            }
-        }
-
-        for (T el: value) {
-            if (!local.get().contains(el)) {
-                local.get().add(el);
-                remote.update(el, th);
+        for (T el: (T[])local.get(update).toArray()) {
+            if (!local.get(self).contains(el)) {
+                adder.update(el, self);
             }
         }
     }

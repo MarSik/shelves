@@ -27,15 +27,47 @@ public class Group extends NamedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Group parent;
 
+	public void setParent(Group b) {
+		if (parent != null) parent.getGroups().remove(this);
+		parent = b;
+		if (parent != null) parent.getGroups().add(this);
+	}
+
 	@OneToMany(mappedBy = "parent",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Group> groups = new THashSet<>();
 
+	public void addGroup(Group b) {
+		b.setParent(this);
+	}
+
+	public void removeGroup(Group b) {
+		b.setParent(null);
+	}
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Type> types = new THashSet<>();
 
+	public void addType(Type t) {
+		types.add(t);
+		t.getGroups().add(this);
+	}
+
+	public void removeType(Type t) {
+		types.remove(t);
+		t.getGroups().remove(this);
+	}
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<NumericProperty> showProperties = new THashSet<>();
+
+	public void addShowProperty(NumericProperty p) {
+		showProperties.add(p);
+	}
+
+	public void removeShowProperty(NumericProperty p) {
+		showProperties.remove(p);
+	}
 
 	@Override
 	public boolean canBeDeleted() {
@@ -66,7 +98,9 @@ public class Group extends NamedEntity {
 
 		update(update.getParent(), this::setParent);
 		update(update.getShowProperties(), this::setShowProperties);
-		update(update.getTypes(), this::setTypes);
+
+		reconcileLists(this, update, Group::getTypes, Type::addGroup, Type::removeGroup);
+		reconcileLists(this, update, Group::getGroups, Group::addGroup, Group::removeGroup);
 
 		super.updateFrom(update0);
 	}

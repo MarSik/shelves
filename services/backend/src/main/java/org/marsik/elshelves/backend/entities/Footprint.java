@@ -43,12 +43,35 @@ public class Footprint extends NamedEntity {
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Collection<Type> types = new THashSet<>();
 
+	public void addType(Type t) {
+		t.addFootprint(this);
+	}
+
+	public void removeType(Type t) {
+		t.removeFootprint(this);
+	}
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Footprint> seeAlso = new THashSet<>();
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			mappedBy = "seeAlso")
 	Set<Footprint> seeAlsoIncoming = new THashSet<>();
+
+	public void addSeeAlso(Footprint fp) {
+		seeAlso.add(fp);
+		seeAlsoIncoming.add(fp);
+		fp.getSeeAlso().add(fp);
+		fp.getSeeAlsoIncoming().add(fp);
+	}
+
+	public void removeSeeAlso(Footprint fp) {
+		seeAlso.remove(fp);
+		seeAlsoIncoming.remove(fp);
+		fp.getSeeAlso().remove(fp);
+		fp.getSeeAlsoIncoming().remove(fp);
+	}
+
 
     FootprintType type;
 
@@ -69,9 +92,9 @@ public class Footprint extends NamedEntity {
 		update(update.getPads(), this::setPads);
 		update(update.getHoles(), this::setHoles);
 		update(update.getNpth(), this::setNpth);
-
-		update(update.getSeeAlso(), this::setSeeAlso);
 		update(update.getType(), this::setType);
+
+		reconcileLists(this, update, Footprint::getTypes, Type::addFootprint, Type::removeFootprint);
 
 		super.updateFrom(update0);
 	}

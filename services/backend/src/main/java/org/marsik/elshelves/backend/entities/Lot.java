@@ -52,11 +52,29 @@ public class Lot extends OwnedEntity implements StickerCapable {
 			optional = false)
 	Purchase purchase;
 
+	public void setPurchase(Purchase p) {
+		if (purchase != null) purchase.getLots().add(this);
+		purchase = p;
+		if (purchase != null) purchase.getLots().add(this);
+	}
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Box location;
 
+	public void setLocation(Box l) {
+		if (location != null) location.getLots().remove(this);
+		location = l;
+		if (location != null) location.getLots().add(this);
+	}
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Requirement usedBy;
+
+	public void setUsedBy(Requirement r) {
+		if (usedBy != null) usedBy.getLots().remove(this);
+		usedBy = r;
+		if (usedBy != null) usedBy.getLots().add(this);
+	}
 
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime expiration;

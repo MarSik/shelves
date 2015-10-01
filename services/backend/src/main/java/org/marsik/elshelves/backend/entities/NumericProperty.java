@@ -28,6 +28,17 @@ public class NumericProperty extends NamedEntity {
     @NotNull
     Unit unit;
 
+    public void setUnit(Unit u) {
+        if (unit != null) u.getUnitUses().remove(this);
+        unit = u;
+        if (unit != null) u.getUnitUses().add(this);
+    }
+
+    public void unsetUnit(Unit u) {
+        assert u.equals(unit);
+        setUnit(null);
+    }
+
     /**
      * The value is scaled to base units.
      */
@@ -37,7 +48,8 @@ public class NumericProperty extends NamedEntity {
     String symbol;
 
     @OneToMany(mappedBy = "property",
-            cascade = { CascadeType.ALL })
+            cascade = { CascadeType.ALL },
+            orphanRemoval = true)
     Collection<NumericPropertyValue> propertyUses = new THashSet<>();
 
     @Override

@@ -42,8 +42,16 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
     @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime registrationDate;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Authorization> authorizations = new THashSet<>();
+
+    public void addAuthorization(Authorization a) {
+        a.setOwner(this);
+    }
+
+    public void removeAuthorization(Authorization a) {
+        a.setOwner(null);
+    }
 
 	@PartOfUpdate
     public String getName() {
@@ -96,5 +104,7 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
 
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
+
+        reconcileLists(this, update, User::getAuthorizations, Authorization::setOwner, Authorization::unsetOwner);
     }
 }

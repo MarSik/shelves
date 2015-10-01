@@ -22,8 +22,17 @@ import java.util.Set;
 @Entity
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
+			orphanRemoval = true)
 	Set<Requirement> requires = new THashSet<>();
+
+	public void addRequirement(Requirement r) {
+		r.setItem(this);
+	}
+
+	public void removeRequirement(Requirement r) {
+		r.setItem(null);
+	}
 
 	Boolean finished;
 
@@ -50,6 +59,7 @@ public class Item extends Lot implements StickerCapable {
 		Item update = (Item)update0;
 
 		update(update.getFinished(), this::setFinished);
+		reconcileLists(this, update, Item::getRequires, Requirement::setItem, Requirement::unsetItem);
 
 		super.updateFrom(update0);
 	}

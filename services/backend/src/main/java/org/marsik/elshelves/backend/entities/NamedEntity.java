@@ -44,16 +44,42 @@ public class NamedEntity extends OwnedEntity
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<Document> describedBy = new THashSet<>();
 
+	public void addDescribedBy(Document d) {
+		d.addDescribes(this);
+	}
+
+	public void removeDescribedBy(Document d) {
+		d.removeDescribes(this);
+	}
+
 	@OneToMany(mappedBy = "entity",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			orphanRemoval = true)
     Set<NumericPropertyValue> properties = new THashSet<>();
+
+	public void addProperty(NumericPropertyValue v) {
+		v.setEntity(this);
+	}
+
+	public void removeProperty(NumericPropertyValue v) {
+		v.setEntity(null);
+	}
 
     /**
      * Barcode associated with this entity
      */
 	@OneToMany(mappedBy = "reference",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			orphanRemoval = true)
     Set<Code> codes = new THashSet<>();
+
+	public void addCode(Code c) {
+		c.setReference(this);
+	}
+
+	public void removeCode(Code c) {
+		c.setReference(null);
+	}
 
 	@Override
 	public boolean canBeDeleted() {
@@ -102,9 +128,9 @@ public class NamedEntity extends OwnedEntity
 		update(update.getDescription(), this::setDescription);
 		update(update.getFlagged(), this::setFlagged);
 
-		updateManyToMany(update.getDescribedBy(), this::getDescribedBy, Document::getDescribes, this);
-		updateOneToMany(update.getCodes(), this::getCodes, Code::setReference, this);
-		updateOneToMany(update.getProperties(), this::getProperties, NumericPropertyValue::setEntity, this);
+		reconcileLists(this, update, NamedEntity::getDescribedBy, Document::addDescribes, Document::removeDescribes);
+		reconcileLists(this, update, NamedEntity::getCodes, Code::setReference, Code::unsetReference);
+		reconcileLists(this, update, NamedEntity::getProperties, NumericPropertyValue::setEntity, NumericPropertyValue::unsetEntity);
 
 		super.updateFrom(update);
 	}

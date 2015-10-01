@@ -42,6 +42,16 @@ public class Document extends NamedEntity implements StickerCapable {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	Set<NamedEntity> describes = new THashSet<>();
 
+	public void addDescribes(NamedEntity n) {
+		describes.add(n);
+		n.getDescribedBy().add(this);
+	}
+
+	public void removeDescribes(NamedEntity n) {
+		describes.remove(n);
+		n.getDescribedBy().remove(this);
+	}
+
 	@Override
 	public boolean canBeDeleted() {
 		return true;
@@ -64,7 +74,7 @@ public class Document extends NamedEntity implements StickerCapable {
 		update(update.getSize(), this::setSize);
 		update(update.getUrl(), this::setUrl);
 
-		updateManyToMany(update.getDescribes(), this::getDescribes, NamedEntity::getDescribedBy, this);
+		reconcileLists(this, update, Document::getDescribes, NamedEntity::addDescribedBy, NamedEntity::removeDescribedBy);
 
 		super.updateFrom(update0);
 	}
