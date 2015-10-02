@@ -23,9 +23,9 @@ public class NumericPropertyValue {
     NamedEntity entity;
 
     public void setEntity(NamedEntity v) {
-        if (entity != null) entity.removeProperty(this);
+        if (entity != null) entity.getProperties().remove(this);
         entity = v;
-        if (entity != null) entity.addProperty(this);
+        if (entity != null) entity.getProperties().add(this);
     }
 
     public void unsetEntity(NamedEntity v) {

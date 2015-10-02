@@ -1,24 +1,25 @@
 package org.marsik.elshelves.api.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 
 import java.util.Set;
 
 @Data
 public class BackupApiModel {
-    Set<FootprintApiModel> footprints;
-    Set<SourceApiModel> sources;
-    Set<PartTypeApiModel> types;
-    Set<LotApiModel> lots;
-    Set<LotHistoryApiModel> history;
-    Set<ItemApiModel> items;
-    Set<PartGroupApiModel> groups;
-    Set<BoxApiModel> boxes;
-    Set<RequirementApiModel> requirements;
-    Set<TransactionApiModel> transactions;
-    Set<PurchaseApiModel> purchases;
-    Set<UnitApiModel> units;
-    Set<NumericPropertyApiModel> properties;
-    Set<DocumentApiModel> documents;
+    Set<FootprintApiModel> footprints = new THashSet<>();
+    Set<SourceApiModel> sources = new THashSet<>();
+    Set<PartTypeApiModel> types = new THashSet<>();
+    Set<LotApiModel> lots = new THashSet<>();
+    Set<LotHistoryApiModel> history = new THashSet<>();
+    Set<ItemApiModel> items = new THashSet<>();
+    Set<PartGroupApiModel> groups = new THashSet<>();
+    Set<BoxApiModel> boxes = new THashSet<>();
+    Set<RequirementApiModel> requirements = new THashSet<>();
+    Set<TransactionApiModel> transactions = new THashSet<>();
+    Set<PurchaseApiModel> purchases = new THashSet<>();
+    Set<UnitApiModel> units = new THashSet<>();
+    Set<NumericPropertyApiModel> properties = new THashSet<>();
+    Set<DocumentApiModel> documents = new THashSet<>();
     UserApiModel user;
 }
