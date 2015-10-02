@@ -74,11 +74,14 @@ public class RelinkService {
             return (E)cache.get(value.getId());
         }
 
+        // Save a reference with the old id
         updateCache(cache, value);
 
+        // Remove a collision with an existing object
         IdentifiedEntityInterface e = identifiedEntityRepository.findById(value.getId());
         if (e != null) {
             value.setId(uuidGenerator.generate());
+            // Save a reference with the new id
             updateCache(cache, value);
         }
 
@@ -260,8 +263,7 @@ public class RelinkService {
             return entity;
         }
 
-        if (!forceRelink
-                && entity.getId() != null) {
+        if (entity.getId() != null) {
             updateCache(known, entity);
         }
 
