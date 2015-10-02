@@ -52,7 +52,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
-    @CircuitBreaker
+    @CircuitBreaker("loadUserByUsername")
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Try fetching Authorization object with the email as ID
@@ -114,7 +114,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
     @Override
-    @CircuitBreaker
+    @CircuitBreaker("createUser")
     public String createUser(UserApiModel userInfo) throws OperationNotPermitted {
 		if (userRepository.getUserByEmail(userInfo.getEmail()) != null) {
 			throw new OperationNotPermitted();
@@ -134,7 +134,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     }
 
 	@Override
-    @CircuitBreaker
+    @CircuitBreaker("startUserVerification")
 	public String startNewVerification(String email) {
 		User u = userRepository.getUserByEmail(email);
 		if (u == null) {
@@ -156,7 +156,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 	}
 
     @Override
-    @CircuitBreaker
+    @CircuitBreaker("verifyUser")
     public UserApiModel verifyUser(String code) throws PermissionDenied {
         User u = userRepository.getUserByVerificationCode(code);
 

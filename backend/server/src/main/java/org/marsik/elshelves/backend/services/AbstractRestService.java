@@ -72,6 +72,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
+    @CircuitBreaker
     public Collection<T> getAllItems(User currentUser) {
         Set<T> dtos = new THashSet<>();
         for (T entity: getAllEntities(currentUser)) {
