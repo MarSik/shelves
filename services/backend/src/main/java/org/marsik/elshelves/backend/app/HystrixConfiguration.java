@@ -23,12 +23,6 @@ class HystrixConfiguration {
     HystrixProperties hystrixProperties;
 
     @Bean
-    @ConditionalOnClass(HystrixCommandAspect.class)
-    HystrixCommandAspect hystrixCommandAspect() {
-        return new HystrixCommandAspect();
-    }
-
-    @Bean
     @ConditionalOnClass(HystrixMetricsStreamServlet.class)
     @ConditionalOnExpression("${hystrix.streamEnabled:false}")
     public ServletRegistrationBean hystrixStreamServlet(){

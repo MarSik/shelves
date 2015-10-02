@@ -15,10 +15,13 @@ import rx.Observable;
 public class CircuitBreakerAspect {
     @Around("@annotation(org.marsik.elshelves.backend.app.spring.CircuitBreaker)")
     public Object circuitBreakerAround(final ProceedingJoinPoint aJoinPoint) throws Throwable {
-        String theShortName = aJoinPoint.getSignature().toShortString();
+        String theGroupName = aJoinPoint.getSignature().toShortString();
+        String theCmdName = aJoinPoint.toShortString();
+
         HystrixCommand.Setter theSetter =
-                HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theShortName));
-        theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theShortName));
+                HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));
+        theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theCmdName));
+
         HystrixCommand hystrixCommand = new HystrixCommand(theSetter) {
             @Override
             protected Object run() throws Exception {
@@ -31,6 +34,7 @@ public class CircuitBreakerAspect {
                 }
             }
         };
+
         return hystrixCommand.execute();
     }
 }
