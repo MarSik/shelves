@@ -121,6 +121,8 @@ public class RelinkService {
     }
 
     protected void relinkImpl(Object entity, User user, Map<UUID, IdentifiedEntityInterface> known) {
+        if (entity == null) return;
+
         PropertyDescriptor[] properties;
         try {
             properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
@@ -185,7 +187,8 @@ public class RelinkService {
                         continue;
                     }
 
-                    for (Object item0: items) {
+                    // Prevent concurrent modification exception
+                    for (Object item0: items.toArray()) {
                         if (item0 instanceof IdentifiedEntityInterface) {
                             // OwnedEntity, relink
                             OwnedEntityInterface item = (OwnedEntityInterface) item0;
