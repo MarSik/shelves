@@ -22,7 +22,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableTransactionManagement
 @EnableJpaAuditing
 public class ApplicationData {
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationData.class);
+    private static final Logger log = LoggerFactory.getLogger(ApplicationData.class);
 
     @Bean
     DatabaseConfiguration getDbConfiguration() {
