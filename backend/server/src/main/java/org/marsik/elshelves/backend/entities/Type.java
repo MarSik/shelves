@@ -172,8 +172,8 @@ public class Type extends NamedEntity implements StickerCapable {
 		update(update.getManufacturable(), this::setManufacturable);
 
 		reconcileLists(this, update, Type::getSeeAlso, Type::addSeeAlso, Type::removeSeeAlso);
-		reconcileLists(this, update, Type::getFootprints, Footprint::addType, Footprint::removeType);
-		reconcileLists(this, update, Type::getGroups, Group::addType, Group::removeType);
+		reconcileLists(this, update, Type::getFootprints, Type::addFootprint, Type::removeFootprint);
+		reconcileLists(this, update, Type::getGroups, Type::addGroup, Type::removeGroup);
 
 		super.updateFrom(update0);
 	}

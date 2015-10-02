@@ -128,9 +128,9 @@ public class NamedEntity extends OwnedEntity
 		update(update.getDescription(), this::setDescription);
 		update(update.getFlagged(), this::setFlagged);
 
-		reconcileLists(this, update, NamedEntity::getDescribedBy, Document::addDescribes, Document::removeDescribes);
-		reconcileLists(this, update, NamedEntity::getCodes, Code::setReference, Code::unsetReference);
-		reconcileLists(this, update, NamedEntity::getProperties, NumericPropertyValue::setEntity, NumericPropertyValue::unsetEntity);
+		reconcileLists(this, update, NamedEntity::getDescribedBy, NamedEntity::addDescribedBy, NamedEntity::removeDescribedBy);
+		reconcileLists(this, update, NamedEntity::getCodes, NamedEntity::addCode, NamedEntity::removeCode);
+		reconcileLists(this, update, NamedEntity::getProperties, NamedEntity::addProperty, NamedEntity::removeProperty);
 
 		super.updateFrom(update);
 	}

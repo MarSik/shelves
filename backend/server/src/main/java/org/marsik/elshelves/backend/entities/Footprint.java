@@ -94,7 +94,8 @@ public class Footprint extends NamedEntity {
 		update(update.getNpth(), this::setNpth);
 		update(update.getType(), this::setType);
 
-		reconcileLists(this, update, Footprint::getTypes, Type::addFootprint, Type::removeFootprint);
+		reconcileLists(this, update, Footprint::getTypes, Footprint::addType, Footprint::removeType);
+		reconcileLists(this, update, Footprint::getSeeAlso, Footprint::addSeeAlso, Footprint::removeSeeAlso);
 
 		super.updateFrom(update0);
 	}

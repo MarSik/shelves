@@ -99,7 +99,7 @@ public class Group extends NamedEntity {
 		update(update.getParent(), this::setParent);
 		update(update.getShowProperties(), this::setShowProperties);
 
-		reconcileLists(this, update, Group::getTypes, Type::addGroup, Type::removeGroup);
+		reconcileLists(this, update, Group::getTypes, Group::addType, Group::removeType);
 		reconcileLists(this, update, Group::getGroups, Group::addGroup, Group::removeGroup);
 
 		super.updateFrom(update0);

@@ -74,7 +74,7 @@ public class Document extends NamedEntity implements StickerCapable {
 		update(update.getSize(), this::setSize);
 		update(update.getUrl(), this::setUrl);
 
-		reconcileLists(this, update, Document::getDescribes, NamedEntity::addDescribedBy, NamedEntity::removeDescribedBy);
+		reconcileLists(this, update, Document::getDescribes, Document::addDescribes, Document::removeDescribes);
 
 		super.updateFrom(update0);
 	}

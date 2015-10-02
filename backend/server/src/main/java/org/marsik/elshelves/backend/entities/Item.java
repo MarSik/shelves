@@ -59,7 +59,7 @@ public class Item extends Lot implements StickerCapable {
 		Item update = (Item)update0;
 
 		update(update.getFinished(), this::setFinished);
-		reconcileLists(this, update, Item::getRequires, Requirement::setItem, Requirement::unsetItem);
+		reconcileLists(this, update, Item::getRequires, Item::addRequirement, Item::removeRequirement);
 
 		super.updateFrom(update0);
 	}

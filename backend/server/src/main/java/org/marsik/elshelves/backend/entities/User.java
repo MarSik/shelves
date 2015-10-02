@@ -105,6 +105,6 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
 
-        reconcileLists(this, update, User::getAuthorizations, Authorization::setOwner, Authorization::unsetOwner);
+        reconcileLists(this, update, User::getAuthorizations, User::addAuthorization, User::removeAuthorization);
     }
 }

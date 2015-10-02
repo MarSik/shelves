@@ -72,20 +72,20 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
     // XXX Why remote updater? Isn't local enough?
-    protected static <L extends IdentifiedEntity,T> void reconcileLists(L self, L update, RemoteGetter<L, T> local, RemoteUpdater<T, ? super L> adder, RemoteUpdater<T, ? super L> remover) {
+    protected static <L extends IdentifiedEntity,T> void reconcileLists(L self, L update, RemoteGetter<L, T> local, RemoteUpdater<L, ? super T> adder, RemoteUpdater<L, ? super T> remover) {
         if (local.get(update) == null) {
             return;
         }
 
         for (T el : (T[])local.get(self).toArray()) {
             if (!local.get(update).contains(el)) {
-                remover.update(el, self);
+                remover.update(self, el);
             }
         }
 
-        for (T el: (T[])local.get(update).toArray()) {
+        for (T el: local.get(update)) {
             if (!local.get(self).contains(el)) {
-                adder.update(el, self);
+                adder.update(self, el);
             }
         }
     }
