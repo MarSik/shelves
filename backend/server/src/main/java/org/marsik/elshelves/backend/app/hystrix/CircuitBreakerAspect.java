@@ -3,6 +3,8 @@ package org.marsik.elshelves.backend.app.hystrix;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixCommandProperties;
+import com.netflix.hystrix.strategy.HystrixPlugins;
 import gnu.trove.map.hash.THashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -70,6 +72,8 @@ public class CircuitBreakerAspect {
         HystrixCommand.Setter theSetter =
                 HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));
         theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theCmdName));
+        theSetter = theSetter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE));
 
         HystrixCommand hystrixCommand = new HystrixCommand(theSetter) {
             @Override
