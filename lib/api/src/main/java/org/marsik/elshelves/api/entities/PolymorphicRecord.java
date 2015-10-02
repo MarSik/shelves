@@ -3,7 +3,7 @@ package org.marsik.elshelves.api.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.marsik.elshelves.api.ember.EmberModel;
+import org.marsik.elshelves.ember.EmberModel;
 
 @Data
 @NoArgsConstructor

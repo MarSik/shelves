@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.marsik.elshelves.api.ember.EmberEntity;
+import org.marsik.elshelves.ember.EmberEntity;
 
 import java.util.UUID;
 

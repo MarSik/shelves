@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.joda.time.DateTime;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.api.entities.idresolvers.UnitIdResolver;
 

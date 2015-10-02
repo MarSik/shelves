@@ -1,0 +1,137 @@
+package org.marsik.elshelves.backend.entities;
+
+import gnu.trove.set.hash.THashSet;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.ember.EmberModelName;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class NamedEntity extends OwnedEntity
+		implements UpdateableEntity {
+	@NotEmpty
+	@NotNull
+	@Size(max = 255)
+	String name;
+
+	@Size(max = 255)
+	String summary;
+
+    Boolean flagged = false;
+
+	@Lob
+	String description;
+
+	@ManyToMany(mappedBy = "describes",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	Set<Document> describedBy = new THashSet<>();
+
+	public void addDescribedBy(Document d) {
+		d.addDescribes(this);
+	}
+
+	public void removeDescribedBy(Document d) {
+		d.removeDescribes(this);
+	}
+
+	@OneToMany(mappedBy = "entity",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			orphanRemoval = true)
+    Set<NumericPropertyValue> properties = new THashSet<>();
+
+	public void addProperty(NumericPropertyValue v) {
+		v.setEntity(this);
+	}
+
+	public void removeProperty(NumericPropertyValue v) {
+		v.setEntity(null);
+	}
+
+    /**
+     * Barcode associated with this entity
+     */
+	@OneToMany(mappedBy = "reference",
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+			orphanRemoval = true)
+    Set<Code> codes = new THashSet<>();
+
+	public void addCode(Code c) {
+		c.setReference(this);
+	}
+
+	public void removeCode(Code c) {
+		c.setReference(null);
+	}
+
+	@Override
+	public boolean canBeDeleted() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeUpdated() {
+		return true;
+	}
+
+    public String getEmberType() {
+        String type = "unknown";
+
+        DefaultEmberModel emberModelAnnotation = getClass().getAnnotation(DefaultEmberModel.class);
+        if (emberModelAnnotation != null) {
+            Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
+            EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
+            if (emberModelName != null) {
+                type = emberModelName.value();
+            }
+        }
+
+        return type;
+    }
+
+	@Override
+	public String toString() {
+		return getClass().getName() + "{" +
+				"id=" + dbId +
+				", id=" + id +
+				", name='" + name + '\'' +
+				'}';
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) {
+		if (!(update0 instanceof NamedEntity)) {
+			throw new IllegalArgumentException();
+		}
+
+		NamedEntity update = (NamedEntity)update0;
+
+		update(update.getName(), this::setName);
+		update(update.getSummary(), this::setSummary);
+		update(update.getDescription(), this::setDescription);
+		update(update.getFlagged(), this::setFlagged);
+
+		reconcileLists(this, update, NamedEntity::getDescribedBy, Document::addDescribes, Document::removeDescribes);
+		reconcileLists(this, update, NamedEntity::getCodes, Code::setReference, Code::unsetReference);
+		reconcileLists(this, update, NamedEntity::getProperties, NumericPropertyValue::setEntity, NumericPropertyValue::unsetEntity);
+
+		super.updateFrom(update);
+	}
+}

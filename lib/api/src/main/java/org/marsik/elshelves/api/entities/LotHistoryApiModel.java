@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 
 import java.util.UUID;
