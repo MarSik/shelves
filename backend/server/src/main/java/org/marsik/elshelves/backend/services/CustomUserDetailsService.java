@@ -4,7 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.UserApiModel;
-import org.marsik.elshelves.backend.app.spring.CircuitBreaker;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Authorization;

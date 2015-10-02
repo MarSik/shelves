@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.spring;
 
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.BusConfiguration;

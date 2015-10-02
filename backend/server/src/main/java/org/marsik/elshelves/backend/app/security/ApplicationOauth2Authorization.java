@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

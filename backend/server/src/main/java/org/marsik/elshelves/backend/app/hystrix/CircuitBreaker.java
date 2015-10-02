@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.hystrix;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

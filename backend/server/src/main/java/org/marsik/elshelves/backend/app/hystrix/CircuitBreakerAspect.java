@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.hystrix;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -10,8 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import rx.Observable;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ public class CircuitBreakerAspect {
     private static Map<String, String> names = new THashMap<>();
     private static Map<String, String> groups = new THashMap<>();
 
-    @Around("@annotation(org.marsik.elshelves.backend.app.spring.CircuitBreaker)")
+    @Around("@annotation(org.marsik.elshelves.backend.app.hystrix.CircuitBreaker)")
     public Object circuitBreakerAround(final ProceedingJoinPoint aJoinPoint) throws Throwable {
         CircuitBreaker annotation = null;
 

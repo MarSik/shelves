@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.hystrix;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,7 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
-import org.marsik.elshelves.backend.app.spring.CircuitBreaker;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;

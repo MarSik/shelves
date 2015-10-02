@@ -1,9 +1,8 @@
 package org.marsik.elshelves.backend.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
-import org.marsik.elshelves.backend.app.spring.CircuitBreaker;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;

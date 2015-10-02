@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;

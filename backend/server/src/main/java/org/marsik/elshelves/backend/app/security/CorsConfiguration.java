@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

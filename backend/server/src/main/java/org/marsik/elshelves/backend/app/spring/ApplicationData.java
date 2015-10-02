@@ -1,8 +1,10 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.spring;
 
 import org.marsik.elshelves.backend.configuration.DatabaseConfiguration;
 import org.marsik.elshelves.backend.configuration.SearchIndexConfiguration;
 import org.marsik.elshelves.backend.configuration.StorageConfiguration;
+import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.services.FileStorageManager;
 import org.marsik.elshelves.backend.services.StorageManager;
 import org.slf4j.Logger;
@@ -17,8 +19,8 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.marsik.elshelves.backend.repositories")
-@EntityScan(basePackages = "org.marsik.elshelves.backend.entities")
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
+@EntityScan(basePackageClasses = User.class)
 @EnableTransactionManagement
 @EnableJpaAuditing
 public class ApplicationData {

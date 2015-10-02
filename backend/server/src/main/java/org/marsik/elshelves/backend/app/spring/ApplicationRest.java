@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.spring;
 
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import net.spy.memcached.ConnectionFactoryBuilder;
@@ -6,15 +6,14 @@ import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
-import org.marsik.elshelves.backend.app.spring.Jackson2CustomContextMapperBuilder;
-import org.marsik.elshelves.backend.app.spring.RenamingProcessor;
+import org.marsik.elshelves.backend.app.jackson.Jackson2CustomContextMapperBuilder;
+import org.marsik.elshelves.backend.app.servlet.WebFormSupportFilter;
+import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -37,12 +36,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-@EnableAutoConfiguration
-@ComponentScan("org.marsik.elshelves.backend")
 @EnableWebMvc
 @Configuration
 @EnableAspectJAutoProxy
-public class BackendApplication extends WebMvcConfigurerAdapter {
+public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Bean
     public Filter getPutDeleteEmulator() {

@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;

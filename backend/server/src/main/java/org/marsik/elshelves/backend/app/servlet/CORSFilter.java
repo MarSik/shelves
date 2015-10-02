@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.servlet;
 
 import org.springframework.stereotype.Component;
 

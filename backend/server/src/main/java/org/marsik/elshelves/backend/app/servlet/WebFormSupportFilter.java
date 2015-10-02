@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.servlet;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;

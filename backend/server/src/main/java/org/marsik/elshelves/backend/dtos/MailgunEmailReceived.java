@@ -2,7 +2,7 @@ package org.marsik.elshelves.backend.dtos;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.SafeHtml;
-import org.marsik.elshelves.backend.app.spring.ParamName;
+import org.marsik.elshelves.backend.app.mvc.ParamName;
 
 import javax.validation.constraints.NotNull;
 

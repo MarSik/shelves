@@ -1,5 +1,6 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.mvc;
 
+import org.marsik.elshelves.backend.app.mvc.ParamName;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;

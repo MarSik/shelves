@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.security;
 
 import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;

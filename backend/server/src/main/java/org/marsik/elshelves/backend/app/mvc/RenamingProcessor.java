@@ -1,5 +1,7 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.mvc;
 
+import org.marsik.elshelves.backend.app.mvc.ParamName;
+import org.marsik.elshelves.backend.app.mvc.ParamNameDataBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

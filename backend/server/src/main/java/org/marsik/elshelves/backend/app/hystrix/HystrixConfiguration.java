@@ -1,6 +1,5 @@
-package org.marsik.elshelves.backend.app;
+package org.marsik.elshelves.backend.app.hystrix;
 
-import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

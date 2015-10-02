@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.app.spring;
+package org.marsik.elshelves.backend.app.mvc;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
