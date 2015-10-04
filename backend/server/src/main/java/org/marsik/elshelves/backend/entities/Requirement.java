@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -104,6 +105,17 @@ public class Requirement extends OwnedEntity {
 		update(update.getSummary(), this::setSummary);
 		update(update.getCount(), this::setCount);
 
+		reconcileLists(update.getType(), this::getType, this::addType, this::removeType);
+		reconcileLists(update.getLots(), this::getLots, this::addLot, this::removeLot);
+
 		super.updateFrom(update);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getType, this::addType, this::removeType);
+		relinkItem(relinker, getItem(), this::setItem);
+		relinkList(relinker, this::getLots, this::addLot, this::removeLot);
+		super.relink(relinker);
 	}
 }

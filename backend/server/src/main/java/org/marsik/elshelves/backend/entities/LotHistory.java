@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
@@ -46,4 +47,14 @@ public class LotHistory extends IdentifiedEntity {
 
     @ManyToOne
     Requirement assignedTo;
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkItem(relinker, getPrevious(), this::setPrevious);
+        relinkItem(relinker, getPerformedBy(), this::setPerformedBy);
+        relinkItem(relinker, getLocation(), this::setLocation);
+        relinkItem(relinker, getAssignedTo(), this::setAssignedTo);
+
+        super.relink(relinker);
+    }
 }

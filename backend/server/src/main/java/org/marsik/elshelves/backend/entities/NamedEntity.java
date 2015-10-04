@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -128,10 +129,22 @@ public class NamedEntity extends OwnedEntity
 		update(update.getDescription(), this::setDescription);
 		update(update.getFlagged(), this::setFlagged);
 
-		reconcileLists(this, update, NamedEntity::getDescribedBy, NamedEntity::addDescribedBy, NamedEntity::removeDescribedBy);
-		reconcileLists(this, update, NamedEntity::getCodes, NamedEntity::addCode, NamedEntity::removeCode);
-		reconcileLists(this, update, NamedEntity::getProperties, NamedEntity::addProperty, NamedEntity::removeProperty);
+		reconcileLists(update.getDescribedBy(), this::getDescribedBy, this::addDescribedBy, this::removeDescribedBy);
+		reconcileLists(update.getCodes(), this::getCodes, this::addCode, this::removeCode);
+		reconcileLists(update.getProperties(), this::getProperties, this::addProperty, this::removeProperty);
 
 		super.updateFrom(update);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getDescribedBy, this::addDescribedBy, this::removeDescribedBy);
+		relinkList(relinker, this::getCodes, this::addCode, this::removeCode);
+
+		for (NumericPropertyValue value: getProperties()) {
+			value.relink(relinker);
+		}
+
+		super.relink(relinker);
 	}
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
@@ -81,5 +82,12 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
         Authorization update = (Authorization) update0;
 
         update(update.getName(), this::setName);
+    }
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkItem(relinker, getOwner(), this::setOwner);
+
+        super.relink(relinker);
     }
 }

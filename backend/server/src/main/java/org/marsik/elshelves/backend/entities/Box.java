@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,10 @@ public class Box extends NamedEntity
 	@OneToMany(mappedBy = "parent",
 			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     Set<Box> contains = new THashSet<>();
+
+	public void setContains(Set<Box> update) {
+		reconcileLists(update, this::getContains, this::addBox, this::removeBox, true);
+	}
 
 	public void addBox(Box b) {
 		b.setParent(this);
@@ -76,8 +81,17 @@ public class Box extends NamedEntity
 		Box update = (Box)update0;
 
 		update(update.getParent(), this::setParent);
-		reconcileLists(this, update, Box::getContains, Box::addBox, Box::removeBox);
+		reconcileLists(update.getContains(), this::getContains, this::addBox, this::removeBox);
 
 		super.updateFrom(update);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkItem(relinker, getParent(), this::setParent);
+		relinkList(relinker, this::getContains, this::addBox, this::removeBox);
+		relinkList(relinker, this::getLots, this::addLot, this::removeLot);
+
+		super.relink(relinker);
 	}
 }

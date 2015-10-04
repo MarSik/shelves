@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
@@ -83,5 +84,12 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkItem(relinker, getSource(), this::setSource);
+		relinkList(relinker, this::getItems, this::addItem, this::removeItem);
+		super.relink(relinker);
 	}
 }

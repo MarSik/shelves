@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,9 +18,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -61,8 +62,8 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         void update(T value);
     }
 
-    protected interface RemoteGetter<T, L> {
-        Collection<L> get(T instance);
+    protected interface Getter<T> {
+        Collection<T> get();
     }
 
     protected static <T> void update(T value, Updater<T> cb) {
@@ -71,22 +72,42 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         }
     }
 
-    // XXX Why remote updater? Isn't local enough?
-    protected static <L extends IdentifiedEntity,T> void reconcileLists(L self, L update, RemoteGetter<L, T> local, RemoteUpdater<L, ? super T> adder, RemoteUpdater<L, ? super T> remover) {
-        if (local.get(update) == null) {
+    protected static <T> void reconcileLists(Collection<T> update, Getter<T> local, Updater<? super T> adder, Updater<? super T> remover) {
+        reconcileLists(update, local, adder, remover, false);
+    }
+
+    protected static <T> void reconcileLists(Collection<T> update, Getter<T> local, Updater<? super T> adder, Updater<? super T> remover, boolean forceRefresh) {
+        if (update == null) {
             return;
         }
 
-        for (T el : (T[])local.get(self).toArray()) {
-            if (!local.get(update).contains(el)) {
-                remover.update(self, el);
+        for (T el : (T[])local.get().toArray()) {
+            if (forceRefresh || !update.contains(el)) {
+                remover.update(el);
             }
         }
 
-        for (T el: local.get(update)) {
-            if (!local.get(self).contains(el)) {
-                adder.update(self, el);
+        for (T el: update) {
+            if (forceRefresh || !local.get().contains(el)) {
+                adder.update(el);
             }
         }
+    }
+
+    public void relink(Relinker relinker) {
+
+    }
+
+    protected <T extends IdentifiedEntity> void relinkItem(Relinker relinker, T item, Updater<T> setter) {
+        setter.update((T)relinker.relink(item));
+    }
+
+    protected <T extends IdentifiedEntity> void relinkList(Relinker relinker, Getter<T> getter, Updater<T> adder, Updater<T> remover) {
+        List<T> updates = new ArrayList<>();
+        for (T el: getter.get()) {
+            updates.add((T)relinker.relink(el));
+        }
+
+        reconcileLists(updates, getter, adder, remover, true);
     }
 }

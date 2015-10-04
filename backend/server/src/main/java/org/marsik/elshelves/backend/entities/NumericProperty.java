@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -70,5 +71,16 @@ public class NumericProperty extends NamedEntity {
         update(update.getSymbol(), this::setSymbol);
 
         super.updateFrom(update0);
+    }
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkItem(relinker, getUnit(), this::setUnit);
+
+        for (NumericPropertyValue value: getPropertyUses()) {
+            value.relink(relinker);
+        }
+
+        super.relink(relinker);
     }
 }

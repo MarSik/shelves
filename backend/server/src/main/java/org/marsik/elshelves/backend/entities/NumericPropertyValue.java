@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @Entity
-public class NumericPropertyValue {
+public class NumericPropertyValue implements RelinkableEntity {
     @Id
     @GeneratedValue
     Long id;
@@ -39,4 +40,10 @@ public class NumericPropertyValue {
 
     @NotNull
     Long value;
+
+    @Override
+    public void relink(Relinker relinker) {
+        setProperty((NumericProperty)relinker.relink(getProperty()));
+        setEntity((NamedEntity)relinker.relink(getEntity()));
+    }
 }

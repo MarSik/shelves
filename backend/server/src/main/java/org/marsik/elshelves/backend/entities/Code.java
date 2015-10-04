@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -49,5 +50,11 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @Override
     public boolean canBeUpdated() {
         return false;
+    }
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkItem(relinker, getReference(), this::setReference);
+        super.relink(relinker);
     }
 }

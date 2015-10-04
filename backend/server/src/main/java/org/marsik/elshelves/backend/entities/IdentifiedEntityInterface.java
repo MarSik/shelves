@@ -1,6 +1,8 @@
 package org.marsik.elshelves.backend.entities;
 
-public interface IdentifiedEntityInterface {
+import org.marsik.elshelves.backend.interfaces.Relinker;
+
+public interface IdentifiedEntityInterface extends RelinkableEntity {
     java.util.UUID getId();
 
     Long getDbId();
@@ -14,4 +16,6 @@ public interface IdentifiedEntityInterface {
     void setCreated(org.joda.time.DateTime lastModified);
 
     boolean isNew();
+
+    void relink(Relinker relinker);
 }

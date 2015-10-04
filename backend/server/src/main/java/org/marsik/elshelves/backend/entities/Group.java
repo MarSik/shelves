@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -99,9 +100,20 @@ public class Group extends NamedEntity {
 		update(update.getParent(), this::setParent);
 		update(update.getShowProperties(), this::setShowProperties);
 
-		reconcileLists(this, update, Group::getTypes, Group::addType, Group::removeType);
-		reconcileLists(this, update, Group::getGroups, Group::addGroup, Group::removeGroup);
+		reconcileLists(update.getTypes(), this::getTypes, this::addType, this::removeType);
+		reconcileLists(update.getGroups(), this::getGroups, this::addGroup, this::removeGroup);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+
+		relinkItem(relinker, getParent(), this::setParent);
+		relinkList(relinker, this::getTypes, this::addType, this::removeType);
+		relinkList(relinker, this::getGroups, this::addGroup, this::removeGroup);
+		relinkList(relinker, this::getShowProperties, this::addShowProperty, this::removeShowProperty);
+
+		super.relink(relinker);
 	}
 }

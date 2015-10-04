@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
@@ -301,5 +302,13 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	@Transient
 	public Type getType() {
 		return getPurchase() == null ? null : getPurchase().getType();
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkItem(relinker, getPurchase(), this::setPurchase);
+		relinkItem(relinker, getLocation(), this::setLocation);
+		relinkItem(relinker, getUsedBy(), this::setUsedBy);
+		super.relink(relinker);
 	}
 }

@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
@@ -171,10 +172,21 @@ public class Type extends NamedEntity implements StickerCapable {
 		update(update.getBuyMultiple(), this::setBuyMultiple);
 		update(update.getManufacturable(), this::setManufacturable);
 
-		reconcileLists(this, update, Type::getSeeAlso, Type::addSeeAlso, Type::removeSeeAlso);
-		reconcileLists(this, update, Type::getFootprints, Type::addFootprint, Type::removeFootprint);
-		reconcileLists(this, update, Type::getGroups, Type::addGroup, Type::removeGroup);
+		reconcileLists(update.getSeeAlso(), this::getSeeAlso, this::addSeeAlso, this::removeSeeAlso);
+		reconcileLists(update.getFootprints(), this::getFootprints, this::addFootprint, this::removeFootprint);
+		reconcileLists(update.getGroups(), this::getGroups, this::addGroup, this::removeGroup);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getFootprints, this::addFootprint, this::removeFootprint);
+		relinkList(relinker, this::getGroups, this::addGroup, this::removeGroup);
+		relinkList(relinker, this::getPurchases, this::addPurchase, this::removePurchase);
+		relinkList(relinker, this::getUsedIn, this::addUsedIn, this::removeUsedIn);
+		relinkList(relinker, this::getSeeAlso, this::addSeeAlso, this::removeSeeAlso);
+
+		super.relink(relinker);
 	}
 }

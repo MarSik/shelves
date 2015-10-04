@@ -20,6 +20,7 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
+import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
@@ -225,20 +226,23 @@ public class BackupService {
 
 	protected <F extends IdentifiedEntityInterface>  void relink(Iterable<F> allItems,
 								   User currentUser,
-                                   Map<UUID, IdentifiedEntityInterface> relinkCache) {
+                                   RelinkService.RelinkContext relinkContext) {
 		if (allItems == null) {
 			return;
 		}
 
+        for (F i: allItems) {
+            relinkContext
+                    .addToCache(i);
+        }
+
 		for (F i: allItems) {
             log.debug("Relinking {} id {}", i.getClass().getName(), i.getId());
-			relinkService.relink(i, currentUser, relinkCache, true);
+			i.relink(relinkContext);
 		}
 	}
 
-    protected <F extends IdentifiedEntity>  void save(Iterable<F> allItems,
-                                                               User currentUser,
-                                                               Map<UUID, IdentifiedEntityInterface> relinkCache) {
+    protected <F extends IdentifiedEntity>  void save(Iterable<F> allItems) {
         if (allItems == null) {
             return;
         }
@@ -259,7 +263,7 @@ public class BackupService {
                                                        CachingConverter<T, F, UUID> converter,
                                                        User currentUser,
                                                        Map<UUID, Object> conversionCache,
-                                                       Map<UUID, IdentifiedEntityInterface> relinkCache,
+                                                       RelinkService.RelinkContext relinkContext,
                                                        Set<IdentifiedEntity> pool) {
         if (items == null) {
             return;
@@ -267,7 +271,14 @@ public class BackupService {
 
         for (T i0: items) {
             F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
-            i = relinkService.fixUuidAndOwner(i, currentUser, relinkCache);
+            relinkContext
+                    .addToCache(i)
+                    .fixUuid(i);
+
+            if (i instanceof OwnedEntityInterface) {
+                relinkContext.fixOwner((OwnedEntityInterface)i, currentUser);
+            }
+
             pool.add(i);
         }
     }
@@ -275,13 +286,13 @@ public class BackupService {
 	public boolean restoreFromBackup(RestoreApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
-        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
         Set<IdentifiedEntity> pool = new THashSet<>();
 
         // Everything will be owned by the current user
         if (backup.getUser() != null
             && backup.getUser().getId() != null) {
-            relinkCache.put(backup.getUser().getId(), currentUser);
+            relinkContext.addToCache(backup.getUser().getId(), currentUser);
         }
 
         // TODO separate lots and lothistory
@@ -290,28 +301,28 @@ public class BackupService {
         // convert projects to types + items
         convertProjects(backup.getProjects(), backup);
 
-        prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getTypes(), emberToType, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getSources(), emberToSource, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkCache, pool);
-        prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkCache, pool);
+        prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getProperties(), emberToNumericProperty, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getBoxes(), emberToBox, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getTypes(), emberToType, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getSources(), emberToSource, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkContext, pool);
 
-        relink(pool, currentUser, relinkCache);
+        relink(pool, currentUser, relinkContext);
 
-        upgradeTransactions(pool, relinkCache);
-        upgradeEntities(pool, relinkCache);
-        upgradeDocuments(pool, relinkCache);
-        upgradePurchases(pool, relinkCache);
+        upgradeTransactions(pool, relinkContext);
+        upgradeEntities(pool, relinkContext);
+        upgradeDocuments(pool, relinkContext);
+        upgradePurchases(pool, relinkContext);
 
-        save(pool, currentUser, relinkCache);
+        save(pool);
 
 		return true;
 	}
@@ -395,7 +406,7 @@ public class BackupService {
         }
     }
 
-    private void upgradeEntities(Set<? extends IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+    private void upgradeEntities(Set<? extends IdentifiedEntityInterface> pool, RelinkService.RelinkContext relinkCache) {
         for (IdentifiedEntityInterface d0 : pool) {
             if (!(d0 instanceof NamedEntity)) {
                 continue;
@@ -417,7 +428,7 @@ public class BackupService {
      * @param pool Objects that are to be saved and might contain Document instances
      * @param relinkCache Relink cache that already contains all document instances
      */
-    private void upgradeDocuments(Set<? extends IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+    private void upgradeDocuments(Set<? extends IdentifiedEntityInterface> pool, RelinkService.RelinkContext relinkCache) {
        for (IdentifiedEntityInterface d0: pool) {
            if (!(d0 instanceof Document)) {
                continue;
@@ -461,7 +472,7 @@ public class BackupService {
      * @param pool list of entities to be saved that might contain Transaction instances
      * @param relinkCache relink cache that has to contain all the transactions and sources
      */
-    private void upgradeTransactions(Set<? extends IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+    private void upgradeTransactions(Set<? extends IdentifiedEntityInterface> pool, RelinkService.RelinkContext relinkCache) {
         int seq = 0;
 
         for (IdentifiedEntityInterface t0: pool) {
@@ -486,7 +497,7 @@ public class BackupService {
      * @param pool list of entities to be saved that might contain Purchase instances
      * @param relinkCache relink cache that has to contain all the purchases and lots
      */
-    private void upgradePurchases(Set<? extends IdentifiedEntityInterface> pool, Map<UUID, IdentifiedEntityInterface> relinkCache) {
+    private void upgradePurchases(Set<? extends IdentifiedEntityInterface> pool, RelinkService.RelinkContext relinkCache) {
         int seq = 0;
 
         for (IdentifiedEntityInterface p0 : pool) {

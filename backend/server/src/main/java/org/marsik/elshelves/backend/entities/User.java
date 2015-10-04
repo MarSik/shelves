@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -105,6 +106,12 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
 
-        reconcileLists(this, update, User::getAuthorizations, User::addAuthorization, User::removeAuthorization);
+        reconcileLists(update.getAuthorizations(), this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
+    }
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkList(relinker, this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
+        super.relink(relinker);
     }
 }

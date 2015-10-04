@@ -9,6 +9,7 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.entities.fields.ShippingCalculator;
 import org.marsik.elshelves.backend.entities.fields.SourceDownloader;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -75,5 +76,11 @@ public class Source extends NamedEntity {
 		update(update.getShippingCalculator(), this::setShippingCalculator);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getTransactions, this::addTransaction, this::removeTransaction);
+		super.relink(relinker);
 	}
 }

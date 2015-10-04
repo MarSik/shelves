@@ -1,9 +1,11 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.slf4j.Logger;
@@ -34,247 +36,110 @@ public class RelinkService {
     @Autowired
     IdentifiedEntityRepository identifiedEntityRepository;
 
-	protected <E extends IdentifiedEntityInterface> E getByUuid(E value, Map<UUID, IdentifiedEntityInterface> cache)  {
-		// Consult the relink cache first
-        if (cache.containsKey(value.getId())) {
-			return (E)cache.get(value.getId());
-		}
+    public static class RelinkContext implements Relinker {
+        final Map<UUID, IdentifiedEntityInterface> cache = new THashMap<>();
+        final IdentifiedEntityRepository identifiedEntityRepository;
+        final UuidGenerator uuidGenerator;
 
-        // Try getting the instance from database
-		E entity = (E)identifiedEntityRepository.findById(value.getId());
-        if (entity != null) {
-            updateCache(cache, entity);
-            return entity;
+        public RelinkContext(IdentifiedEntityRepository identifiedEntityRepository, UuidGenerator uuidGenerator) {
+            this.identifiedEntityRepository = identifiedEntityRepository;
+            this.uuidGenerator = uuidGenerator;
         }
 
-        // Return the entity itself if it does not exist in the DB yet
-		return null;
-	}
-
-    /**
-     * Make sure the object won't collide with an already existing entity, but
-     * make sure the cache still knows the old id for relinking purposes.
-     *
-     * This method also sets the owner for the entity.
-     *
-     * @param value Entity about to be imported
-     * @param user The user who will own the entity
-     * @param cache Id cache for relinking purposes
-     * @param <E> Type of the entity - automatically derived from the value's type
-     * @return The value entity prepared for import
-     */
-    @SuppressWarnings("unchecked")
-    public <E extends IdentifiedEntityInterface> E fixUuidAndOwner(E value, User user, Map<UUID, IdentifiedEntityInterface> cache)  {
-        if (value.getId() == null) {
-            value.setId(uuidGenerator.generate());
-            log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
-        }
-
-        if (cache.containsKey(value.getId())) {
-            return (E)cache.get(value.getId());
-        }
-
-        // Save a reference with the old id
-        updateCache(cache, value);
-
-        // Remove a collision with an existing object
-        IdentifiedEntityInterface e = identifiedEntityRepository.findById(value.getId());
-        if (e != null) {
-            value.setId(uuidGenerator.generate());
-            // Save a reference with the new id
-            updateCache(cache, value);
-        }
-
-        if (value instanceof OwnedEntityInterface) {
-            ((OwnedEntityInterface)value).setOwner(user);
-        }
-        return value;
-    }
-
-	/**
-	 * This method is used to realign entities coming from external sources
-	 * like REST based web application with the entities stored in the database.
-	 *
-	 * The linking is done using the id property values.
-	 *
-	 * Modus operandi:
-	 *
-	 * Find all relationship properties and make sure they reference existing
-	 * database entities by querying the id index.
-	 * If the property does not contain id (happens with
-	 * nested rest fields), call relink on the the property contents to relink
-	 * the nested properties.
-	 *
-	 * @param entity Entity to relink with the daatabase
-	 * @return
-	 */
-
-	protected <T extends OwnedEntityInterface> T relink(T entity) {
-		return relink(entity, null, new THashMap<UUID, IdentifiedEntityInterface>(), false);
-	}
-
-    protected <E extends OwnedEntityInterface> E relink(E entity, User user) {
-        return relink(entity, user, new THashMap<UUID, IdentifiedEntityInterface>(), false);
-    }
-
-    protected <E extends OwnedEntityInterface> E relink(E entity, User user, E updatedEntity) {
-        Map<UUID, IdentifiedEntityInterface> cache = new THashMap<>();
-        updateCache(cache, updatedEntity);
-        return relink(entity, user, cache, true);
-    }
-
-    protected void relinkImpl(Object entity, User user, Map<UUID, IdentifiedEntityInterface> known) {
-        if (entity == null) return;
-
-        PropertyDescriptor[] properties;
-        try {
-            properties = Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors();
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
-            return;
-        }
-
-        for (PropertyDescriptor f: properties) {
-            Method getter = f.getReadMethod();
-
-            if (getter == null) {
-                continue;
+        public RelinkContext addToCache(UUID id, IdentifiedEntityInterface entity) {
+            if (cache.containsKey(id)) {
+                log.warn("Replacing cached {} with {}", entity.getId(), entity.toString());
             }
 
-            // One-to-* relationship
-            if (IdentifiedEntityInterface.class.isAssignableFrom(f.getPropertyType())) {
-                try {
-                    IdentifiedEntityInterface value = (IdentifiedEntityInterface) getter.invoke(entity);
-                    Method setter = f.getWriteMethod();
+            cache.put(id, entity);
+            return this;
+        }
 
-                    if (value == null || setter == null) {
-                        continue;
-                    }
+        public RelinkContext addToCache(IdentifiedEntityInterface entity) {
+            return addToCache(entity.getId(), entity);
+        }
 
-                    // Potentially existing UUID but unconnected entity
-                    if (value.getId() != null && value.getDbId() == null) {
-                        IdentifiedEntityInterface v = getByUuid(value, known);
+        public IdentifiedEntityInterface get(UUID id) {
+            return cache.get(id);
+        }
 
-                        // Entity does exist in DB or cache, replace the reference with
-                        // the connected entity
-                        if (v != null) {
-                            setter.invoke(entity, v);
-                        } else {
-                            // New entity, perform deep relinking
-                            log.info("Deep relinking of {}.{} ({})",
-                                    value.getClass().getName(), f.getName(),
-                                    value.getId().toString());
-                            relink(value, user, known, false);
-                            updateCache(known, value);
-                        }
-
-                    } else if (value.getId() == null) {
-                        // Missing UUID meaning new entity
-                        // create an UUID for it and perform deep relinking
-                        value.setId(uuidGenerator.generate());
-                        relink(value, user, known, false);
-                        updateCache(known, value);
-                    }
-
-                } catch (InvocationTargetException | IllegalAccessException ex) {
-                    ex.printStackTrace();
-                }
-
-                // Many-to-* relationship
-            } else if (Collection.class.isAssignableFrom(f.getPropertyType())) {
-                try {
-                    Collection<Object> newItems = new ArrayList<Object>();
-                    Collection<Object> items = (Collection<Object>)getter.invoke(entity);
-
-                    if (items == null) {
-                        continue;
-                    }
-
-                    // Prevent concurrent modification exception
-                    for (Object item0: items.toArray()) {
-                        if (item0 instanceof IdentifiedEntityInterface) {
-                            // OwnedEntity, relink
-                            OwnedEntityInterface item = (OwnedEntityInterface) item0;
-
-                            if (item.getId() == null) {
-                                // New entity, create UUID and perform deep relinking
-                                newItems.add(item);
-                                item.setId(uuidGenerator.generate());
-                                relink(item, user, known, false);
-                                updateCache(known, item);
-
-                            } else if (item.getDbId() != null) {
-                                // Connected existing entity
-                                newItems.add(item);
-
-                            } else {
-                                // Disconnected potentially existing entity
-                                IdentifiedEntityInterface v = getByUuid(item, known);
-
-                                if (v != null) {
-                                    // Entity known in the database or cache
-                                    // add the connected version to the list
-                                    newItems.add(v);
-
-                                } else {
-                                    // New entity with id, perform deep relinking
-                                    // New entity, perform deep relinking
-                                    log.info("Deep relinking of {}.{} ({})",
-                                            item.getClass().getName(), f.getName(),
-                                            item.getId().toString());
-
-                                    newItems.add(item);
-                                    relink(item, user, known, false);
-                                    updateCache(known, item);
-                                }
-                            }
-                        } else {
-                            // Not owned entity, probably relationship entity
-                            // keep it as it is and relink the internal properties
-                            newItems.add(item0);
-                            relinkImpl(item0, user, known);
-                        }
-                    }
-
-                    // Replace the references with the relinked ones using proper
-                    // add calls so the AspectJ or live mapping on linked entities update
-                    // the database properly
-                    items.clear();
-                    items.addAll(newItems);
-                } catch (InvocationTargetException | IllegalAccessException ex) {
-                    ex.printStackTrace();
-                }
+        public IdentifiedEntityInterface relink(IdentifiedEntityInterface value)  {
+            if (value == null) {
+                return null;
             }
+
+            // Generate UUID if there is none
+            if (value.getId() == null) {
+                value.setId(uuidGenerator.generate());
+                return value;
+            }
+
+            // Consult the relink cache first
+            if (cache.containsKey(value.getId())) {
+                return cache.get(value.getId());
+            }
+
+            // Try getting the instance from database
+            IdentifiedEntity entity = identifiedEntityRepository.findById(value.getId());
+            if (entity != null) {
+                addToCache(entity);
+                return entity;
+            }
+
+            // Return the entity itself if it does not exist in the DB yet
+            return value;
+        }
+
+        /**
+         * Make sure the object won't collide with an already existing entity, but
+         * make sure the cache still knows the old id for relinking purposes.
+         *
+         * This method also sets the owner for the entity.
+         *
+         * @param value Entity about to be imported
+         * @return The value entity prepared for import
+         */
+        @SuppressWarnings("unchecked")
+        public RelinkContext fixUuid(IdentifiedEntity value)  {
+            if (value.getId() == null) {
+                value.setId(uuidGenerator.generate());
+                log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
+            }
+
+            // Save a reference with the old id
+            addToCache(value);
+
+            // Remove a collision with an existing object
+            IdentifiedEntity e = identifiedEntityRepository.findById(value.getId());
+            if (e != null) {
+                value.setId(uuidGenerator.generate());
+                // Save a reference with the new id
+                addToCache(value);
+            }
+
+            return this;
+        }
+
+        public RelinkContext fixOwner(OwnedEntityInterface item, User user) {
+            if (item != null) {
+                ((OwnedEntityInterface)item).setOwner(user);
+            }
+
+            return this;
+        }
+
+        public RelinkContext ensureOwner(OwnedEntityInterface item, User user) {
+            if (item != null
+                    && ((OwnedEntityInterface)item).getOwner() == null) {
+                ((OwnedEntityInterface)item).setOwner(user);
+            }
+
+            return this;
         }
     }
 
-    private static void updateCache(Map<UUID, IdentifiedEntityInterface> known, IdentifiedEntityInterface value) {
-        if (known.containsKey(value.getId())) {
-            log.warn("Replacing cached {} with {}", value.getId(), value.toString());
-        }
 
-        known.put(value.getId(), value);
+    public RelinkContext newRelinker() {
+        return new RelinkContext(identifiedEntityRepository, uuidGenerator);
     }
-
-    protected <E extends IdentifiedEntityInterface> E relink(E entity, User user, Map<UUID, IdentifiedEntityInterface> known, boolean forceRelink) {
-        if (!forceRelink
-                && entity.getId() != null
-                && known.containsKey(entity.getId())) {
-            return entity;
-        }
-
-        if (entity.getId() != null) {
-            updateCache(known, entity);
-        }
-
-        relinkImpl(entity, user, known);
-
-        if (entity instanceof OwnedEntityInterface
-                && ((OwnedEntityInterface)entity).getOwner() == null) {
-            ((OwnedEntityInterface)entity).setOwner(user);
-        }
-
-        return entity;
-	}
-
 }

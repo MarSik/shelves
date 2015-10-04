@@ -48,10 +48,13 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 	}
 
     protected T createEntity(T entity, User currentUser) {
-		entity = relinkService.relink(entity);
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        relinkContext.addToCache(entity);
+        relinkContext.fixOwner(entity, currentUser);
         entity.setId(uuidGenerator.generate());
-        entity.setOwner(currentUser);
         entity.setLastModified(new DateTime());
+        entity.relink(relinkContext);
+
         return entity;
     }
 
@@ -65,8 +68,14 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
             throw new OperationNotPermitted();
         }
 
-		update = relinkService.relink(update, currentUser, entity);
         ((UpdateableEntity)entity).updateFrom(update);
+
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        relinkContext
+                .addToCache(currentUser)
+                .addToCache(entity);
+
+        entity.relink(relinkContext);
 
         return entity;
     }

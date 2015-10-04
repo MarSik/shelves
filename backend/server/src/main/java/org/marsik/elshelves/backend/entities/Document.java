@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -74,8 +75,14 @@ public class Document extends NamedEntity implements StickerCapable {
 		update(update.getSize(), this::setSize);
 		update(update.getUrl(), this::setUrl);
 
-		reconcileLists(this, update, Document::getDescribes, Document::addDescribes, Document::removeDescribes);
+		reconcileLists(update.getDescribes(), this::getDescribes, this::addDescribes, this::removeDescribes);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getDescribes, this::addDescribes, this::removeDescribes);
+		super.relink(relinker);
 	}
 }

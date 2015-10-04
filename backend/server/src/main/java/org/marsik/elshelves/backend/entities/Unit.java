@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.UnitApiModel;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -39,6 +40,14 @@ public class Unit extends NamedEntity {
             orphanRemoval = true)
     Set<NumericProperty> unitUses = new THashSet<>();
 
+    public void addUse(NumericProperty p) {
+        p.setUnit(this);
+    }
+
+    public void removeUse(NumericProperty p) {
+        p.unsetUnit(this);
+    }
+
     @Override
     public boolean canBeDeleted() {
         return getUnitUses() == null || !getUnitUses().iterator().hasNext();
@@ -56,5 +65,11 @@ public class Unit extends NamedEntity {
         update(update.getPrefixes(), this::setPrefixes);
 
         super.updateFrom(update0);
+    }
+
+    @Override
+    public void relink(Relinker relinker) {
+        relinkList(relinker, this::getUnitUses, this::addUse, this::removeUse);
+        super.relink(relinker);
     }
 }

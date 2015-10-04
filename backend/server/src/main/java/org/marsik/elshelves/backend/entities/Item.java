@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.CascadeType;
@@ -59,8 +60,14 @@ public class Item extends Lot implements StickerCapable {
 		Item update = (Item)update0;
 
 		update(update.getFinished(), this::setFinished);
-		reconcileLists(this, update, Item::getRequires, Item::addRequirement, Item::removeRequirement);
+		reconcileLists(update.getRequires(), this::getRequires, this::addRequirement, this::removeRequirement);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkList(relinker, this::getRequires, this::addRequirement, this::removeRequirement);
+		super.relink(relinker);
 	}
 }

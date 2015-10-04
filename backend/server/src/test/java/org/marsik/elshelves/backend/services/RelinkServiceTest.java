@@ -80,11 +80,14 @@ public class RelinkServiceTest {
         lot.getHistory().setPerformedBy(oldUser);
         lot.setOwner(newUser);
 
-        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
-        relinkCache.put(newUser.getId(), newUser);
-        relinkCache.put(oldUser.getId(), newUser);
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        relinkContext.addToCache(newUser);
+        relinkContext.addToCache(oldUser.getId(), newUser);
+        relinkContext.addToCache(lot);
+        relinkContext.addToCache(lot.getHistory());
 
-        relinkService.relink(lot, newUser, relinkCache, true);
+        lot.relink(relinkContext);
+        lot.getHistory().relink(relinkContext);
 
         assertThat(lot.getHistory().getPerformedBy())
                 .isNotNull()
@@ -109,10 +112,19 @@ public class RelinkServiceTest {
         lot.setLocation(box);
         lot.getHistory().setLocation(box);
 
-        Map<UUID, IdentifiedEntityInterface> relinkCache = new THashMap<>();
-        relinkCache.put(newUser.getId(), newUser);
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        relinkContext.addToCache(newUser);
 
-        relinkService.relink(lot, newUser, relinkCache, true);
+        relinkContext
+                .addToCache(lot)
+                .ensureOwner(lot, newUser)
+                .addToCache(lot.getHistory())
+                .addToCache(box)
+                .ensureOwner(box, newUser);
+
+        lot.relink(relinkContext);
+        lot.getHistory().relink(relinkContext);
+        box.relink(relinkContext);
 
         assertThat(lot.getOwner())
                 .isNotNull()

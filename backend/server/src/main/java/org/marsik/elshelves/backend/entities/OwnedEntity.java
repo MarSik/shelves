@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,5 +46,12 @@ public abstract class OwnedEntity extends IdentifiedEntity
 		}
 
 		update(update.getOwner(), this::setOwner);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkItem(relinker, getOwner(), this::setOwner);
+
+		super.relink(relinker);
 	}
 }

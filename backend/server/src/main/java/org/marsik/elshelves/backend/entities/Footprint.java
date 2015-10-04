@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -94,9 +95,18 @@ public class Footprint extends NamedEntity {
 		update(update.getNpth(), this::setNpth);
 		update(update.getType(), this::setType);
 
-		reconcileLists(this, update, Footprint::getTypes, Footprint::addType, Footprint::removeType);
-		reconcileLists(this, update, Footprint::getSeeAlso, Footprint::addSeeAlso, Footprint::removeSeeAlso);
+		reconcileLists(update.getTypes(), this::getTypes, this::addType, this::removeType);
+		reconcileLists(update.getSeeAlso(), this::getSeeAlso, this::addSeeAlso, this::removeSeeAlso);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+
+		relinkList(relinker, this::getTypes, this::addType, this::removeType);
+		relinkList(relinker, this::getSeeAlso, this::addSeeAlso, this::removeSeeAlso);
+
+		super.relink(relinker);
 	}
 }

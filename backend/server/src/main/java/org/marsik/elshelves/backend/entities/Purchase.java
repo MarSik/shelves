@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -115,5 +116,13 @@ public class Purchase extends OwnedEntity {
 		update(update.getType(), this::setType);
 
 		super.updateFrom(update0);
+	}
+
+	@Override
+	public void relink(Relinker relinker) {
+		relinkItem(relinker, getTransaction(), this::setTransaction);
+		relinkItem(relinker, getType(), this::setType);
+		relinkList(relinker, this::getLots, this::addLot, this::removeLot);
+		super.relink(relinker);
 	}
 }
