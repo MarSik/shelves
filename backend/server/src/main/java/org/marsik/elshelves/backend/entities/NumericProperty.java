@@ -30,9 +30,9 @@ public class NumericProperty extends NamedEntity {
     Unit unit;
 
     public void setUnit(Unit u) {
-        if (unit != null) u.getUnitUses().remove(this);
+        if (unit != null) unit.getUnitUses().remove(this);
         unit = u;
-        if (unit != null) u.getUnitUses().add(this);
+        if (unit != null) unit.getUnitUses().add(this);
     }
 
     public void unsetUnit(Unit u) {
@@ -77,7 +77,8 @@ public class NumericProperty extends NamedEntity {
     public void relink(Relinker relinker) {
         relinkItem(relinker, getUnit(), this::setUnit);
 
-        for (NumericPropertyValue value: getPropertyUses()) {
+        // Use a copy of the collection to prevent concurrent modification exception
+        for (NumericPropertyValue value: new ArrayList<>(getPropertyUses())) {
             value.relink(relinker);
         }
 

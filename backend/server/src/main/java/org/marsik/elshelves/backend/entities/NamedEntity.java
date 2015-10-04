@@ -141,7 +141,8 @@ public class NamedEntity extends OwnedEntity
 		relinkList(relinker, this::getDescribedBy, this::addDescribedBy, this::removeDescribedBy);
 		relinkList(relinker, this::getCodes, this::addCode, this::removeCode);
 
-		for (NumericPropertyValue value: getProperties()) {
+		// Make a copy to prefent concurrent modification exception
+		for (NumericPropertyValue value: new ArrayList<>(getProperties())) {
 			value.relink(relinker);
 		}
 

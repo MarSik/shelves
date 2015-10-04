@@ -51,9 +51,9 @@ public class Purchase extends OwnedEntity {
 	Transaction transaction;
 
 	public void setTransaction(Transaction t) {
-		if (transaction != null) t.getItems().remove(this);
+		if (transaction != null) transaction.getItems().remove(this);
 		transaction = t;
-		if (transaction != null) t.getItems().add(this);
+		if (transaction != null) transaction.getItems().add(this);
 	}
 
 	public void unsetTransaction(Transaction t) {
