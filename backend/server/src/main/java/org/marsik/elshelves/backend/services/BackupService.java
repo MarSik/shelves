@@ -384,6 +384,7 @@ public class BackupService {
             item.setFinished(false);
             item.setHistory(history);
             item.setType(type);
+            item.setRequirements(project.getRequirements());
             backup.getItems().add(item);
 
             type.setLots(new THashSet<>());
