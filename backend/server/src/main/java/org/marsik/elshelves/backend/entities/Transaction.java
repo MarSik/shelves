@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
@@ -17,10 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(TransactionApiModel.class)
 public class Transaction extends NamedEntity implements StickerCapable {

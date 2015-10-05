@@ -3,6 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -25,15 +28,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Data
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Lot extends OwnedEntity implements StickerCapable {
-	public Lot() {
-	}
-
 	@NotNull
 	@Min(1)
 	Long count;

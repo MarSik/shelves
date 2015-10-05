@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
@@ -19,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Data
-@ToString(of = {}, callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(PartTypeApiModel.class)
 public class Type extends NamedEntity implements StickerCapable {

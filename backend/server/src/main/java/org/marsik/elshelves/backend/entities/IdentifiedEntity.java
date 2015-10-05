@@ -2,6 +2,9 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,9 +26,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-@Data
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 @EntityListeners(AuditingEntityListener.class)
@@ -99,13 +104,15 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
     protected <T extends IdentifiedEntity> void relinkItem(Relinker relinker, T item, Updater<T> setter) {
-        setter.update((T)relinker.relink(item));
+        final IdentifiedEntityInterface entity = relinker.relink(item);
+        setter.update((T) entity);
     }
 
     protected <T extends IdentifiedEntity> void relinkList(Relinker relinker, Getter<T> getter, Updater<T> adder, Updater<T> remover) {
         List<T> updates = new ArrayList<>();
         for (T el: getter.get()) {
-            updates.add((T)relinker.relink(el));
+            final IdentifiedEntityInterface entity = relinker.relink(el);
+            updates.add((T) entity);
         }
 
         reconcileLists(updates, getter, adder, remover, true);

@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -21,10 +23,9 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(DocumentApiModel.class)
 public class Document extends NamedEntity implements StickerCapable {

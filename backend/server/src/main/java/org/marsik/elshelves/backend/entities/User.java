@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
@@ -18,10 +20,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class User extends IdentifiedEntity implements OwnedEntityInterface, StickerCapable, UpdateableEntity {
     @NotNull

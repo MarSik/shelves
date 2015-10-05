@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.interfaces.Relinker;
@@ -14,9 +16,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class LotHistory extends IdentifiedEntity {

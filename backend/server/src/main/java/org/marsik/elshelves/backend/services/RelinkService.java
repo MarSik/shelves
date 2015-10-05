@@ -47,7 +47,7 @@ public class RelinkService {
         }
 
         public RelinkContext addToCache(UUID id, IdentifiedEntityInterface entity) {
-            if (cache.containsKey(id)) {
+            if (cache.containsKey(id) && cache.get(id) != entity) {
                 log.warn("Replacing cached {} with {}", entity.getId(), entity.toString());
             }
 
@@ -71,6 +71,7 @@ public class RelinkService {
             // Generate UUID if there is none
             if (value.getId() == null) {
                 value.setId(uuidGenerator.generate());
+                log.error("Entity {} without UUID", value.getClass().getName());
                 return value;
             }
 

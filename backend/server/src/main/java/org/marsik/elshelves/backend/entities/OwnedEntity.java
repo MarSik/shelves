@@ -2,7 +2,9 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public abstract class OwnedEntity extends IdentifiedEntity
 		implements OwnedEntityInterface, UpdateableEntity {

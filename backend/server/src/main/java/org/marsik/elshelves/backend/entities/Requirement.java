@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.interfaces.Relinker;
@@ -17,10 +19,9 @@ import javax.validation.constraints.Min;
 import java.util.Set;
 import java.util.function.Predicate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 public class Requirement extends OwnedEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },

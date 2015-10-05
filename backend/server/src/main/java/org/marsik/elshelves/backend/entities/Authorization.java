@@ -2,7 +2,9 @@ package org.marsik.elshelves.backend.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -17,10 +19,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(of = {}, callSuper = true)
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Authorization extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
     @NotEmpty

@@ -272,8 +272,8 @@ public class BackupService {
         for (T i0: items) {
             F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
             relinkContext
-                    .addToCache(i)
-                    .fixUuid(i);
+                    .fixUuid(i)
+                    .addToCache(i);
 
             if (i instanceof OwnedEntityInterface) {
                 relinkContext.fixOwner((OwnedEntityInterface)i, currentUser);

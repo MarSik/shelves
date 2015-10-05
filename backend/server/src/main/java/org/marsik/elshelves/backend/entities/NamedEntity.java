@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.entities;
 import gnu.trove.set.hash.THashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.ember.EmberModelName;
@@ -22,9 +24,9 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class NamedEntity extends OwnedEntity
@@ -112,7 +114,7 @@ public class NamedEntity extends OwnedEntity
 	public String toString() {
 		return getClass().getName() + "{" +
 				"id=" + dbId +
-				", id=" + id +
+				", uuid=" + id +
 				", name='" + name + '\'' +
 				'}';
 	}
