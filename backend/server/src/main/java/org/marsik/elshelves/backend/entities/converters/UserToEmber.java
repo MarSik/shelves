@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.AuthorizationApiModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.entities.Authorization;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,11 +47,11 @@ public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
 		user.setName(entity.getName());
 
         user.setAuthorizations(new ArrayList<AuthorizationApiModel>());
-        /*if (entity.getAuthorizations() != null) {
+        if (entity.getAuthorizations() != null) {
             for (Authorization auth : entity.getAuthorizations()) {
                 user.getAuthorizations().add(authorizationToEmber.convert(auth, nested - 1, cache));
             }
-        }*/
+        }
 
 		return user;
 	}
