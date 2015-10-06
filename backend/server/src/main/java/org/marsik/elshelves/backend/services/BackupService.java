@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
+import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
@@ -15,6 +16,7 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
@@ -404,8 +406,17 @@ public class BackupService {
         source.setId(uuidGenerator.generate());
         backup.getSources().add(source);
 
+        PartGroupApiModel g = new PartGroupApiModel();
+        g.setId(uuidGenerator.generate());
+        g.setName("Imported projects");
+        g.setTypes(new THashSet<>());
+
         for (ProjectApiModel project: projects) {
             PartTypeApiModel type = modelMapper.map(project, PartTypeApiModel.class);
+            type.setManufacturable(true);
+            type.setGroups(new THashSet<>());
+            type.getGroups().add(g);
+            g.getTypes().add(type);
             backup.getTypes().add(type);
 
             ItemApiModel item = modelMapper.map(project, ItemApiModel.class);
