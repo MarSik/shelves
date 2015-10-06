@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -67,7 +68,8 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @Transactional
     @RequestMapping("/whoami")
     public EmberModel getCurrentUser(@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
-        return new EmberModel.Builder<UserApiModel>(getService().get(currentUser.getId(), currentUser)).build();
+        final User user = getService().get(currentUser.getId(), currentUser);
+        return new EmberModel.Builder<UserApiModel>(getDbToRest().convert(user, 1, new THashMap<>())).build();
     }
 
     @Override
