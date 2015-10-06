@@ -34,6 +34,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToItem;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
+import org.marsik.elshelves.backend.entities.converters.EmberToLotHistory;
 import org.marsik.elshelves.backend.entities.converters.EmberToNumericProperty;
 import org.marsik.elshelves.backend.entities.converters.EmberToPurchase;
 import org.marsik.elshelves.backend.entities.converters.EmberToRequirement;
@@ -106,6 +107,9 @@ public class BackupService {
 
 	@Autowired
 	EmberToLot emberToLot;
+
+    @Autowired
+    EmberToLotHistory emberToLotHistory;
 
 	@Autowired
 	EmberToPurchase emberToPurchase;
@@ -295,7 +299,7 @@ public class BackupService {
             relinkContext.addToCache(backup.getUser().getId(), currentUser);
         }
 
-        // TODO separate lots and lothistory
+        // separate lots and lot history
         separateLotsFromHistory(backup.getLots(), backup);
 
         // convert projects to types + items
@@ -314,6 +318,7 @@ public class BackupService {
         prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getHistory(), emberToLotHistory, currentUser, conversionCache, relinkContext, pool);
 
         relink(pool, currentUser, relinkContext);
 
@@ -331,31 +336,56 @@ public class BackupService {
         for (Iterator<LotApiModel> it = lots.iterator(); it.hasNext(); ) {
             LotApiModel lot = it.next();
 
-            if (lot.getHistory() != null && lot.getPrevious() == null && lot.getNext() == null) {
+            if (lot.getHistory() != null && lot.getPrevious() == null
+                    && (lot.getNext() == null || lot.getNext().isEmpty())) {
                 // Proper new style Lot
                 continue;
             }
 
-            if (lot.getNext() != null) {
-                // Remove history from lots
+            if (lot.getNext() != null && !lot.getNext().isEmpty()) {
+                // Remove history objects from lots
                 it.remove();
-            } else {
-                // Relink history to real lots
 
-                if (lot.getAction() != LotAction.SPLIT) {
+                // Create a lot record
+                LotHistoryApiModel history = new LotHistoryApiModel();
+                history.setAction(lot.getAction());
+                history.setId(lot.getId());
+                history.setCreated(lot.getCreated());
+                if (lot.getPerformedBy() != null) {
+                    history.setPerformedById(lot.getPerformedBy().getId());
+                }
+                if (lot.getLocation() != null) {
+                    history.setLocationId(lot.getLocation().getId());
+                }
+
+                if (lot.getPrevious() != null) {
+                    history.setPreviousId(lot.getPrevious().getId());
+                }
+                backup.getHistory().add(history);
+            } else {
+                // Real lot object, relink it to the history
+                if (lot.getAction() == LotAction.SPLIT) {
                     // Use the last lot as history when the last operation was split
                     lot.setHistory(new LotHistoryApiModel());
                     lot.getHistory().setId(lot.getPrevious().getId());
+                    backup.getHistory().add(lot.getHistory());
                 } else {
                     // Prepare a history record
                     LotHistoryApiModel history = new LotHistoryApiModel();
                     history.setAction(lot.getAction());
                     history.setId(uuidGenerator.generate());
                     history.setCreated(lot.getCreated());
+                    if (lot.getPerformedBy() != null) {
+                        history.setPerformedById(lot.getPerformedBy().getId());
+                    }
+                    if (lot.getLocation() != null) {
+                        history.setLocationId(lot.getLocation().getId());
+                    }
 
                     if (lot.getPrevious() != null) {
                         history.setPreviousId(lot.getPrevious().getId());
                     }
+                    backup.getHistory().add(history);
                 }
             }
         }
@@ -376,7 +406,6 @@ public class BackupService {
         for (ProjectApiModel project: projects) {
             PartTypeApiModel type = modelMapper.map(project, PartTypeApiModel.class);
             backup.getTypes().add(type);
-
 
             ItemApiModel item = modelMapper.map(project, ItemApiModel.class);
             item.setId(uuidGenerator.generate());
