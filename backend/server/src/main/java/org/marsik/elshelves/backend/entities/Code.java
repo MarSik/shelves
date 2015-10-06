@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 @Entity
 @DefaultEmberModel(CodeApiModel.class)
 public class Code extends OwnedEntity implements UpdateableEntity {
