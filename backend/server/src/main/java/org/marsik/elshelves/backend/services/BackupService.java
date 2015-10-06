@@ -385,6 +385,7 @@ public class BackupService {
                     if (lot.getPrevious() != null) {
                         history.setPreviousId(lot.getPrevious().getId());
                     }
+                    lot.setHistory(history);
                     backup.getHistory().add(history);
                 }
             }
@@ -413,6 +414,7 @@ public class BackupService {
             item.setFinished(false);
             item.setHistory(history);
             item.setType(type);
+            item.setStatus(LotAction.DELIVERY);
             item.setRequirements(project.getRequirements());
             backup.getItems().add(item);
 
@@ -423,6 +425,8 @@ public class BackupService {
             purchase.setId(uuidGenerator.generate());
             purchase.setLots(new THashSet<>());
             purchase.getLots().add(item);
+            purchase.setCount(1L);
+            purchase.setType(type);
             backup.getPurchases().add(purchase);
 
             TransactionApiModel transaction = new TransactionApiModel();
@@ -548,7 +552,7 @@ public class BackupService {
         }
     }
 
-    protected <T extends OwnedEntity, E extends AbstractEntityApiModel, R extends JpaRepository<T, UUID>> Set<E> backup(Iterable<T> items,
+    protected <T extends IdentifiedEntity, E extends AbstractEntityApiModel, R extends JpaRepository<T, UUID>> Set<E> backup(Iterable<T> items,
                                                                                                                     CachingConverter<T, E, UUID> convertor,
                                                                                                                     Map<UUID, Object> cache) {
         Set<E> dtos = new THashSet<>();

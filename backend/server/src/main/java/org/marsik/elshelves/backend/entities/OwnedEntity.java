@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -22,6 +23,7 @@ public abstract class OwnedEntity extends IdentifiedEntity
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
 	@ManyToOne(optional = false)
+	@NotNull
 	User owner;
 
 	public abstract boolean canBeDeleted();

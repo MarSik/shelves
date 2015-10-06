@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Requirement extends OwnedEntity {
+public class Requirement extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			optional = false)
 	Item item;
@@ -108,8 +108,6 @@ public class Requirement extends OwnedEntity {
 
 		reconcileLists(update.getType(), this::getType, this::addType, this::removeType);
 		reconcileLists(update.getLots(), this::getLots, this::addLot, this::removeLot);
-
-		super.updateFrom(update);
 	}
 
 	@Override
