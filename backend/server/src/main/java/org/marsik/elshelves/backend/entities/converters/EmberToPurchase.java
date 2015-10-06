@@ -17,9 +17,6 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 	EmberToTransaction emberToTransaction;
 
 	@Autowired
-	EmberToNamedObject emberToNamedObject;
-
-	@Autowired
 	EmberToLot emberToLot;
 
 	@Autowired
@@ -44,6 +41,7 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 
 	@Override
 	public Purchase convert(PurchaseApiModel object, Purchase model, int nested, Map<UUID, Object> cache) {
+		model.setId(object.getId());
 		model.setCount(object.getCount());
 		model.setSinglePrice(object.getSinglePrice());
 		model.setTotalPrice(object.getTotalPrice());

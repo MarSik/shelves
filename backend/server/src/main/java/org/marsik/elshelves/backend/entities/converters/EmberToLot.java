@@ -49,6 +49,7 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 
 	@Override
 	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
+		model.setId(object.getId());
 		model.setCount(object.getCount());
 
         model.setExpiration(object.getExpiration());
