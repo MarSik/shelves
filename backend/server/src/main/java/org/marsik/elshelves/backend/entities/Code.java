@@ -59,4 +59,14 @@ public class Code extends OwnedEntity implements UpdateableEntity {
         relinkItem(relinker, getReference(), this::setReference);
         super.relink(relinker);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

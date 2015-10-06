@@ -91,4 +91,14 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
 
         super.relink(relinker);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

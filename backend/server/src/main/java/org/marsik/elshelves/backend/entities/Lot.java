@@ -311,4 +311,14 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		relinkItem(relinker, getUsedBy(), this::setUsedBy);
 		super.relink(relinker);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

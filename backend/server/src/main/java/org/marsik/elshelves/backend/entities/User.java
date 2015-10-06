@@ -115,4 +115,14 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         relinkList(relinker, this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
         super.relink(relinker);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

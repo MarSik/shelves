@@ -73,4 +73,14 @@ public class Unit extends NamedEntity {
         relinkList(relinker, this::getUnitUses, this::addUse, this::removeUse);
         super.relink(relinker);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

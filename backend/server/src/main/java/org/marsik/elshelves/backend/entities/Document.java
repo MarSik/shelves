@@ -86,4 +86,14 @@ public class Document extends NamedEntity implements StickerCapable {
 		relinkList(relinker, this::getDescribes, this::addDescribes, this::removeDescribes);
 		super.relink(relinker);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

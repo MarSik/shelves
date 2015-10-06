@@ -84,4 +84,14 @@ public class Source extends NamedEntity {
 		relinkList(relinker, this::getTransactions, this::addTransaction, this::removeTransaction);
 		super.relink(relinker);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

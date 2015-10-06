@@ -71,4 +71,14 @@ public class Item extends Lot implements StickerCapable {
 		relinkList(relinker, this::getRequires, this::addRequirement, this::removeRequirement);
 		super.relink(relinker);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
