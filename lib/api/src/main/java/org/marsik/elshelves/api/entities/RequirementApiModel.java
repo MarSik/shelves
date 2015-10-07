@@ -54,4 +54,9 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	public Set<LotApiModel> getLots() {
 		return lots;
 	}
+
+	@JsonIdentityReference(alwaysAsId = true)
+	public ItemApiModel getItem() {
+		return item;
+	}
 }
