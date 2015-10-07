@@ -3,6 +3,9 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
@@ -48,6 +51,9 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
     @Autowired
     UuidGenerator uuidGenerator;
 
+    @Autowired
+    EmberToSource emberToSource;
+
     @RequestMapping("/{uuid}/import")
     @Transactional
     public EmberModel importFromSchematics(@CurrentUser User currentUser,
@@ -68,44 +74,18 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
 
     @Override
     @Transactional
-    public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item) throws OperationNotPermitted {
-        if (item.getType() == null) {
-            item.setType(new PartTypeApiModel());
-            item.getType().setName(item.getSerial());
-            item.getType().setLots(new THashSet<>());
-            item.getType().getLots().add(item);
-            item.getType().setManufacturable(true);
-            item.getType().setSerials(true);
-            item.getType().setId(uuidGenerator.generate());
-        }
+    public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
+        SourceApiModel source0 = item0.getSource();
 
-        if (item.getPurchase() == null) {
-            item.setPurchase(new PurchaseApiModel());
-            item.getPurchase().setCount(1L);
-            item.getPurchase().setType(item.getType());
-            item.getPurchase().setId(uuidGenerator.generate());
-            item.getPurchase().setLots(new THashSet<>());
-            item.getPurchase().getLots().add(item);
-        }
+        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, new THashMap<>());
+        Source source = emberToSource.convert(source0, Integer.MAX_VALUE, new THashMap<>());
 
-        if (item.getPurchase().getTransaction() == null) {
-            item.getPurchase().setTransaction(new TransactionApiModel());
-            item.getPurchase().getTransaction().setName(item.getSerial());
-            item.getPurchase().getTransaction().setDate(new DateTime());
-            item.getPurchase().getTransaction().setId(uuidGenerator.generate());
-            item.getPurchase().getTransaction().setItems(new THashSet<>());
-            item.getPurchase().getTransaction().getItems().add(item.getPurchase());
-        }
+        item = getService().startProject(item, source, currentUser);
 
-        item.setHistory(new LotHistoryApiModel());
-        item.getHistory().setCreated(new DateTime());
-        item.getHistory().setAction(LotAction.DELIVERY);
-        item.getHistory().setPerformedById(currentUser.getId());
+        ItemApiModel itemApiModel = getDbToRest().convert(item, 1, new THashMap<>());
 
-        item.setCount(1L);
-        item.setAction(LotAction.DELIVERY);
-        item.setId(uuidGenerator.generate());
-
-        return super.create(currentUser, item);
+        EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
+        sideLoad(itemApiModel, builder);
+        return builder.build();
     }
 }

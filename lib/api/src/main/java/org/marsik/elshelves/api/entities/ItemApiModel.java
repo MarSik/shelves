@@ -19,9 +19,10 @@ public class ItemApiModel extends LotApiModel {
     Boolean finished;
 
     /**
-     * Only used when new project is started. Can't be changed.
+     * Both type and source are only used when new project is started. Can't be changed.
      */
     PartTypeApiModel type;
+    SourceApiModel source;
 
     @JsonIdentityReference(alwaysAsId = true)
     public Set<RequirementApiModel> getRequirements() {
@@ -31,5 +32,10 @@ public class ItemApiModel extends LotApiModel {
     @JsonIdentityReference(alwaysAsId = true)
     public PartTypeApiModel getType() {
         return type;
+    }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public SourceApiModel getSource() {
+        return source;
     }
 }
