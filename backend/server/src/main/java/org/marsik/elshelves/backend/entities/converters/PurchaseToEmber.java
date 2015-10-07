@@ -46,6 +46,7 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 	@Override
 	public PurchaseApiModel convert(Purchase object, PurchaseApiModel model, int nested, Map<UUID, Object> cache) {
 		model.setCount(object.getCount());
+		model.setId(object.getId());
 
 		if (nested == 0) {
 			return model;
