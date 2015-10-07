@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.antlr.v4.runtime.misc.OrderedHashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
@@ -293,7 +294,7 @@ public class BackupService {
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
         RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
-        Set<IdentifiedEntity> pool = new THashSet<>();
+        Set<IdentifiedEntity> pool = new OrderedHashSet<>();
 
         // Everything will be owned by the current user
         if (backup.getUser() != null
