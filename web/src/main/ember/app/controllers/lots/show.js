@@ -4,14 +4,17 @@ export default Ember.Controller.extend({
     _history: null,
     history: function () {
         if (this.get('_history') == null ||
-                this.get('_history')[0].get('id') !== this.get('model.id')) {
-            this.set('_history', [this.get('model')]);
-
-            Ember.run.next(this, 'loadAdditionalHistory');
+                this.get('_history')[0].get('id') !== this.get('model.history.id')) {
+            this.set('_history', []);
+            var self = this;
+            this.get('model.history').then(function (h) {
+                self.set('_history', [h]);
+                Ember.run.next(self, 'loadAdditionalHistory');
+            });
         }
 
         return this.get('_history');
-    }.property('_history', 'model.id'),
+    }.property('_history', 'model.history.id'),
 
     loadAdditionalHistory: function () {
         var history = this.get('_history');
@@ -22,6 +25,7 @@ export default Ember.Controller.extend({
         }
 
         var latest = history[ history.length - 1 ];
+
         latest.get('previous').then(function (p) {
             if (Ember.isEmpty(p)) {
                 return;
@@ -29,6 +33,8 @@ export default Ember.Controller.extend({
 
             history.pushObject(p);
             Ember.run.next(self, 'loadAdditionalHistory');
+        }).catch(function (err) {
+          console.log("Err "+err);
         });
     }
 });

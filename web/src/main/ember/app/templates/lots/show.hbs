@@ -17,23 +17,12 @@
 
 <h2>Chain of changes</h2>
 <table>
-{{#each model.next as |lot|}}
-    <tr>
-        <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
-        <td>{{lot.count}}</td>
-        <td>{{lot.action}}</td>
-        <td>{{lot.location.fullName}}</td>
-        <td>{{lot.usedBy.project.name}}</td>
-        <td>{{lot.performedBy.name}}</td>
-</tr>
-{{/each}}
 <tr>
-    <td colspan="6">History:</td>
+    <td colspan="5">History:</td>
 </tr>
 {{#each history as |lot|}}
     <tr>
-        <td>{{#link-to 'lots.show' lot}}{{lot.created}}{{/link-to}}</td>
-        <td>{{lot.count}}</td>
+        <td>{{lot.created}}</td>
         <td>{{lot.action}}</td>
         <td>{{lot.location.fullName}}</td>
         <td>{{lot.usedBy.project.name}}</td>

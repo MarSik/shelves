@@ -8,14 +8,13 @@ var attr = DS.attr,
 export default LotBase.extend({
   created: attr('date'),
   location: belongsTo("box", {async: true}),
-  previous: belongsTo("lot", {inverse: "next", async: true}),
-  next: hasMany("lot", {inverse: "previous", async: true}),
+  previous: belongsTo("lot", {async: true}),
   action: attr(),
   purchase: belongsTo('purchase', {inverse: null, async: true}),
   expiration: attr('date'),
   serial: attr('string'),
+  history: belongsTo("history", {async: true}),
 
-  performedBy: belongsTo('user', {inverse: null, async: true}),
   usedBy: belongsTo('requirement', {async: true}),
 
   type: function () {
