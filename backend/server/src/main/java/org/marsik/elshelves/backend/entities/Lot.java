@@ -94,24 +94,6 @@ public class Lot extends OwnedEntity implements StickerCapable {
         return getCount() - usedCount();
     }
 
-	public static class SplitResult {
-		final Lot requested;
-		final Lot remainder;
-
-		public SplitResult(Lot requested, Lot remainder) {
-			this.requested = requested;
-			this.remainder = remainder;
-		}
-
-		public Lot getRequested() {
-			return requested;
-		}
-
-		public Lot getRemainder() {
-			return remainder;
-		}
-	}
-
 	public Lot take(Long count, User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
 		// Not available for split
 		if (!isCanBeSplit()) {
