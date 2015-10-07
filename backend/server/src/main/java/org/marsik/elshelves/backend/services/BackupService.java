@@ -410,6 +410,7 @@ public class BackupService {
         g.setId(uuidGenerator.generate());
         g.setName("Imported projects");
         g.setTypes(new THashSet<>());
+        backup.getGroups().add(g);
 
         for (ProjectApiModel project: projects) {
             PartTypeApiModel type = modelMapper.map(project, PartTypeApiModel.class);
