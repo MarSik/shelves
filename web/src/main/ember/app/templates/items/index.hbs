@@ -10,7 +10,7 @@
 
     <ul>
         {{#each this as |project|}}
-            <li><a {{action 'projectSelected' project}}>{{project.name}}</a></li>
+            <li><a {{action 'projectSelected' project}}>{{project.purchase.type.name}}</a></li>
         {{/each}}
     </ul>
 </section>
