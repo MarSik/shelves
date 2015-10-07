@@ -22,8 +22,8 @@ public class NumericPropertyValue implements RelinkableEntity {
     @GeneratedValue
     Long id;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-            optional = false)
+    @ManyToOne(optional = false,
+            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     NamedEntity entity;
 
     public void setEntity(NamedEntity v) {
@@ -37,8 +37,8 @@ public class NumericPropertyValue implements RelinkableEntity {
         setEntity(null);
     }
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-            optional = false)
+    @ManyToOne(optional = false,
+            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     NumericProperty property;
 
     @NotNull

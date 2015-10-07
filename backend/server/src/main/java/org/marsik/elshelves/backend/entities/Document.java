@@ -41,7 +41,7 @@ public class Document extends NamedEntity implements StickerCapable {
 
     URL url;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
 	Set<NamedEntity> describes = new THashSet<>();
 
 	public void addDescribes(NamedEntity n) {

@@ -26,7 +26,7 @@ import java.util.Set;
 @Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne
 	Group parent;
 
 	public void setParent(Group b) {
@@ -35,8 +35,7 @@ public class Group extends NamedEntity {
 		if (parent != null) parent.getGroups().add(this);
 	}
 
-	@OneToMany(mappedBy = "parent",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "parent")
 	Set<Group> groups = new THashSet<>();
 
 	public void addGroup(Group b) {
@@ -47,7 +46,7 @@ public class Group extends NamedEntity {
 		b.setParent(null);
 	}
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
 	Set<Type> types = new THashSet<>();
 
 	public void addType(Type t) {

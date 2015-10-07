@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -22,7 +23,8 @@ public abstract class OwnedEntity extends IdentifiedEntity
 		implements OwnedEntityInterface, UpdateableEntity {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false,
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@NotNull
 	User owner;
 

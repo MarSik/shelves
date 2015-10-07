@@ -24,7 +24,6 @@ import java.util.Set;
 @Entity
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
 			orphanRemoval = true)
 	Set<Requirement> requires = new THashSet<>();
 

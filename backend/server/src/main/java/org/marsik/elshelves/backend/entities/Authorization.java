@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -29,7 +30,9 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     @Size(min = 1, max = 255)
     String name;
 
-    @ManyToOne(optional = false)
+    @NotNull
+    @ManyToOne(optional = false,
+            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     User owner;
 
     public void setOwner(User u) {

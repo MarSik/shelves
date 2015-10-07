@@ -44,8 +44,7 @@ public class NamedEntity extends OwnedEntity
 	@Lob
 	String description;
 
-	@ManyToMany(mappedBy = "describes",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "describes")
 	Set<Document> describedBy = new THashSet<>();
 
 	public void addDescribedBy(Document d) {

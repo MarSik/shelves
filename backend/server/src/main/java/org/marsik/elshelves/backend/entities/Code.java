@@ -11,6 +11,7 @@ import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -29,7 +30,9 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @NotEmpty
     String code;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,
+            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @NotNull
     NamedEntity reference;
 
     public void setReference(NamedEntity n) {

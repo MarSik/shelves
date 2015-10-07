@@ -43,7 +43,7 @@ public class Type extends NamedEntity implements StickerCapable {
 	 */
 	Boolean manufacturable = false;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
 	Set<Footprint> footprints = new THashSet<>();
 
 	public void addFootprint(Footprint fp) {
@@ -56,8 +56,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		fp.getTypes().remove(this);
 	}
 
-	@ManyToMany(mappedBy = "types",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "types")
 	Set<Group> groups = new THashSet<>();
 
 	public void addGroup(Group g) {
@@ -68,8 +67,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		g.removeType(this);
 	}
 
-	@OneToMany(mappedBy = "type",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "type")
 	Set<Purchase> purchases = new THashSet<>();
 
 	public void addPurchase(Purchase p) {
@@ -80,8 +78,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		p.unsetType(this);
 	}
 
-	@ManyToMany(mappedBy = "type",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "type")
 	Set<Requirement> usedIn = new THashSet<>();
 
 	public void addUsedIn(Requirement r) {
@@ -92,11 +89,10 @@ public class Type extends NamedEntity implements StickerCapable {
 		r.removeType(this);
 	}
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
     Set<Type> seeAlso = new THashSet<>();
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			mappedBy = "seeAlso")
+	@ManyToMany(mappedBy = "seeAlso")
 	Set<Type> seeAlsoIncoming = new THashSet<>();
 
 	public void addSeeAlso(Type t) {

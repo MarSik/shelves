@@ -26,8 +26,7 @@ import java.util.Set;
 public class Box extends NamedEntity
 		implements StickerCapable, UpdateableEntity {
 
-	@OneToMany(mappedBy = "parent",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "parent")
     Set<Box> contains = new THashSet<>();
 
 	public void setContains(Set<Box> update) {
@@ -51,8 +50,7 @@ public class Box extends NamedEntity
 		if (parent != null) parent.getContains().add(this);
 	}
 
-	@OneToMany(mappedBy = "location",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "location")
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

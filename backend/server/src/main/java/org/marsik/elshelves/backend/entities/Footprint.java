@@ -41,8 +41,7 @@ public class Footprint extends NamedEntity {
 	 */
 	Integer npth;
 
-	@ManyToMany(mappedBy = "footprints",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "footprints")
 	Collection<Type> types = new THashSet<>();
 
 	public void addType(Type t) {
@@ -53,11 +52,10 @@ public class Footprint extends NamedEntity {
 		t.removeFootprint(this);
 	}
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
     Set<Footprint> seeAlso = new THashSet<>();
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			mappedBy = "seeAlso")
+	@ManyToMany(mappedBy = "seeAlso")
 	Set<Footprint> seeAlsoIncoming = new THashSet<>();
 
 	public void addSeeAlso(Footprint fp) {

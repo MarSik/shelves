@@ -40,8 +40,7 @@ public class Source extends NamedEntity {
 	@Enumerated(EnumType.STRING)
 	ShippingCalculator shippingCalculator = ShippingCalculator.NONE;
 
-	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY,
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
 	Set<Transaction> transactions = new THashSet<>();
 
 	public void addTransaction(Transaction t) {

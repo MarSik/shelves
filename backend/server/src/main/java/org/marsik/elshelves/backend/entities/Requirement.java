@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -24,8 +25,9 @@ import java.util.function.Predicate;
 @NoArgsConstructor
 @Entity
 public class Requirement extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			optional = false)
+	@ManyToOne(optional = false,
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@NotNull
 	Item item;
 
 	public void setItem(Item i) {
@@ -39,7 +41,7 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 		setItem(null);
 	}
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
 	Set<Type> type = new THashSet<>();
 
 	public void addType(Type t) {
@@ -52,8 +54,7 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 		t.getUsedIn().remove(this);
 	}
 
-	@OneToMany(mappedBy = "usedBy",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "usedBy")
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

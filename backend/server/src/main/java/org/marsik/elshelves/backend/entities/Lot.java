@@ -62,7 +62,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		if (purchase != null) purchase.getLots().add(this);
 	}
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne
 	Box location;
 
 	public void setLocation(Box l) {
@@ -71,7 +71,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		if (location != null) location.getLots().add(this);
 	}
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne
 	Requirement usedBy;
 
 	public void setUsedBy(Requirement r) {

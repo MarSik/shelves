@@ -22,8 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Purchase extends OwnedEntity {
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			optional = false)
+	@ManyToOne(optional = false)
 	Type type;
 
 	public void setType(Type t) {
