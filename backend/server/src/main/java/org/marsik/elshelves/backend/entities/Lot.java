@@ -16,6 +16,8 @@ import org.marsik.elshelves.backend.services.UuidGenerator;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -39,6 +41,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	Long count;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	LotAction status;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
