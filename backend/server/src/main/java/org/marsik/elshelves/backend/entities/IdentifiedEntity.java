@@ -85,13 +85,13 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
             return;
         }
 
-        for (T el : (T[])local.get().toArray()) {
+        for (T el :new ArrayList<>(local.get())) {
             if (forceRefresh || !update.contains(el)) {
                 remover.update(el);
             }
         }
 
-        for (T el: update) {
+        for (T el: new ArrayList<>(update)) {
             if (forceRefresh || !local.get().contains(el)) {
                 adder.update(el);
             }
