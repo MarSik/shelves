@@ -5,7 +5,9 @@ import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
+import org.marsik.elshelves.backend.entities.converters.EmberToType;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +39,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -53,6 +57,9 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
 
     @Autowired
     EmberToSource emberToSource;
+
+    @Autowired
+    EmberToType emberToType;
 
     @RequestMapping("/{uuid}/import")
     @Transactional
@@ -73,14 +80,19 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
     }
 
     @Override
+    @RequestMapping(method = RequestMethod.POST)
     @Transactional
     public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
         SourceApiModel source0 = item0.getSource();
+        PartTypeApiModel type0 = item0.getType();
 
-        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, new THashMap<>());
-        Source source = emberToSource.convert(source0, Integer.MAX_VALUE, new THashMap<>());
+        Map<UUID, Object> cache = new THashMap<>();
 
-        item = getService().startProject(item, source, currentUser);
+        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, cache);
+        Source source = emberToSource.convert(source0, Integer.MAX_VALUE, cache);
+        Type type = emberToType.convert(type0, Integer.MAX_VALUE, cache);
+
+        item = getService().startProject(item, type, source, currentUser);
 
         ItemApiModel itemApiModel = getDbToRest().convert(item, 1, new THashMap<>());
 

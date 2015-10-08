@@ -4,5 +4,5 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 
 public interface Relinker {
-    IdentifiedEntityInterface relink(IdentifiedEntityInterface e);
+    <T extends IdentifiedEntityInterface> T findExisting(T e);
 }

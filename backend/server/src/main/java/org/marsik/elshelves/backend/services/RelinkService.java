@@ -63,7 +63,29 @@ public class RelinkService {
             return cache.get(id);
         }
 
-        public IdentifiedEntityInterface relink(IdentifiedEntityInterface value)  {
+        /**
+         * This is a wrapper method that allows a context call to relink
+         * a complex entity with relationships.
+         *
+         * @param value Entity with relationships
+         * @return Relinked entity
+         */
+        public IdentifiedEntityInterface relink(IdentifiedEntityInterface value) {
+            if (value != null) {
+                value.relink(this);
+            }
+
+            return value;
+        }
+
+        /**
+         * This call looks at the value's ID and tries to find an existing version
+         * of it - it first consults the relink cache and then the database.
+         *
+         * @param value Template value used for getting the ID
+         * @return Existing object or the template
+         */
+        public <T extends IdentifiedEntityInterface> T findExisting(T value)  {
             if (value == null) {
                 return null;
             }
@@ -77,14 +99,14 @@ public class RelinkService {
 
             // Consult the relink cache first
             if (cache.containsKey(value.getId())) {
-                return cache.get(value.getId());
+                return (T)cache.get(value.getId());
             }
 
             // Try getting the instance from database
             IdentifiedEntity entity = identifiedEntityRepository.findById(value.getId());
             if (entity != null) {
                 addToCache(entity);
-                return entity;
+                return (T)entity;
             }
 
             // Return the entity itself if it does not exist in the DB yet
@@ -113,8 +135,10 @@ public class RelinkService {
             // Remove a collision with an existing object
             IdentifiedEntity e = identifiedEntityRepository.findById(value.getId());
             if (e != null) {
-                value.setId(uuidGenerator.generate());
+                log.warn("Entity {} with colliding UUID {}", value.getClass().getName(), value.getId().toString());
+
                 // Save a reference with the new id
+                value.setId(uuidGenerator.generate());
                 addToCache(value);
             }
 

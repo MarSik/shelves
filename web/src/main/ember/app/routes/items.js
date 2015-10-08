@@ -22,7 +22,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         },
         startProject: function (name) {
             var type = this.store.createRecord('type', {
-                name: name
+                name: name,
+                manufacturable: true,
+                serials: true
             });
 
             console.log("Creating project "+name);

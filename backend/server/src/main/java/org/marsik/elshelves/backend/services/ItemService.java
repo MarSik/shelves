@@ -90,12 +90,39 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
 
     @Transactional
     public Item startProject(Item item,
+                             Type type,
                              Source source,
                              User currentUser) {
-        Type type = item.getType();
         Purchase purchase = item.getPurchase();
         Transaction transaction = purchase != null ? purchase.getTransaction() : null;
         List<IdentifiedEntity> created = new ArrayList<>();
+
+        item.setId(uuidGenerator.generate());
+
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        relinkContext.addToCache(currentUser);
+
+        if (type == null) {
+            type = new Type();
+            type.setId(uuidGenerator.generate());
+            type.setName(item.getSerials().isEmpty() ? item.getName() : item.getSerials().iterator().next());
+            created.add(type);
+        } else {
+            type = relinkContext.findExisting(type);
+        }
+
+        if (purchase == null) {
+            purchase = new Purchase();
+            purchase.setCount(1L);
+            purchase.setId(uuidGenerator.generate());
+            purchase.addLot(item);
+            purchase.setType(type);
+
+            created.add(purchase);
+            item.setPurchase(purchase);
+        }
+
+        type.addPurchase(purchase);
 
         if (source == null) {
             source = new Source();
@@ -104,37 +131,12 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
             created.add(source);
         }
 
-        if (purchase == null) {
-            purchase = new Purchase();
-            purchase.setCount(1L);
-            purchase.setType(item.getType());
-            purchase.setId(uuidGenerator.generate());
-            purchase.setLots(new THashSet<>());
-            purchase.getLots().add(item);
-
-            created.add(purchase);
-            item.setPurchase(purchase);
-        }
-
-        if (type == null) {
-            type = new Type();
-            type.setName(item.getSerials().isEmpty() ? item.getName() : item.getSerials().iterator().next());
-            type.getPurchases().add(purchase);
-            type.setManufacturable(true);
-            type.setSerials(true);
-            type.setId(uuidGenerator.generate());
-
-            purchase.setType(type);
-            created.add(type);
-        }
-
         if (transaction == null) {
             transaction = new Transaction();
-            transaction.setName(item.getName());
-            transaction.setDate(new DateTime());
             transaction.setId(uuidGenerator.generate());
-            transaction.setItems(new THashSet<>());
-            transaction.getItems().add(purchase);
+            transaction.setName(item.getSerials().isEmpty() ? "Project start" : item.getSerials().iterator().next());
+            transaction.setDate(new DateTime());
+            transaction.addItem(purchase);
             transaction.setSource(source);
 
             created.add(transaction);
@@ -150,14 +152,9 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
 
         item.setCount(1L);
         item.setStatus(LotAction.DELIVERY);
-        item.setId(uuidGenerator.generate());
         item.setHistory(history);
         item.setPurchase(purchase);
         created.add(item);
-
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
-
-        relinkContext.addToCache(currentUser);
 
         for (IdentifiedEntity en: created) {
             if (en instanceof OwnedEntity) {
@@ -169,8 +166,7 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
         }
 
         for (IdentifiedEntity en: created) {
-            relinkContext
-                    .relink(en);
+            en.relink(relinkContext);
         }
 
         identifiedEntityRepository.save(type);

@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.entities;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -104,14 +103,14 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
     protected <T extends IdentifiedEntity> void relinkItem(Relinker relinker, T item, Updater<T> setter) {
-        final IdentifiedEntityInterface entity = relinker.relink(item);
+        final IdentifiedEntityInterface entity = relinker.findExisting(item);
         setter.update((T) entity);
     }
 
     protected <T extends IdentifiedEntity> void relinkList(Relinker relinker, Getter<T> getter, Updater<T> adder, Updater<T> remover) {
         List<T> updates = new ArrayList<>();
         for (T el: getter.get()) {
-            final IdentifiedEntityInterface entity = relinker.relink(el);
+            final IdentifiedEntityInterface entity = relinker.findExisting(el);
             updates.add((T) entity);
         }
 

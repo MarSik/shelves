@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,7 +45,7 @@ public class NumericPropertyValue implements RelinkableEntity {
 
     @Override
     public void relink(Relinker relinker) {
-        setProperty((NumericProperty)relinker.relink(getProperty()));
-        setEntity((NamedEntity)relinker.relink(getEntity()));
+        setProperty((NumericProperty)relinker.findExisting(getProperty()));
+        setEntity((NamedEntity)relinker.findExisting(getEntity()));
     }
 }
