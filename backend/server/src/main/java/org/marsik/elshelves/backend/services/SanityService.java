@@ -57,7 +57,7 @@ public class SanityService {
 
             Group g = orphanGroups.get(u);
             logger.info("Adding type {} to orphan group {} for user {}", t, g, u);
-            t.getGroups().add(g);
+            t.addGroup(g);
         }
 
         for (Map.Entry<User, Group> e: orphanGroups.entrySet()) {
