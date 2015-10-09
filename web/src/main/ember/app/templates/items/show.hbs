@@ -1,3 +1,6 @@
+<h2>{{model.serials}}</h2>
+
+<h3>Type / Project</h3>
 {{entity-header model=model.purchase.type}}
 
 <h3>Required parts</h3>
@@ -14,6 +17,20 @@
     <li><button {{action 'toggleAddRequirement'}} class="{{addRequirementClass}}">Add requirement</button></li>
     {{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="{{importRequirementsClass}}">Import requirements</button></li>{{/if}}
 </ul>
+
+<h3>History</h3>
+
+<table>
+  {{#each history as |lot|}}
+  <tr>
+    <td>{{lot.created}}</td>
+    <td>{{lot.action}}</td>
+    <td>{{lot.location.fullName}}</td>
+    <td>{{lot.usedBy.project.name}}</td>
+    <td>{{lot.performedBy.name}}</td>
+  </tr>
+  {{/each}}
+</table>
 
 {{#if showAddRequirement}}
 <section>

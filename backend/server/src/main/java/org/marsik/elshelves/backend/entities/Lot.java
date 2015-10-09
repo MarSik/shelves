@@ -122,6 +122,8 @@ public class Lot extends OwnedEntity implements StickerCapable {
 			result.setLocation(getLocation());
 			result.setUsedBy(getUsedBy());
 			result.setExpiration(getExpiration());
+			result.setPurchase(getPurchase());
+			result.setOwner(getOwner());
 
 			Set<String> serials = new THashSet<>();
 			getSerials().stream().skip(getCount() - count).forEach(new Consumer<String>() {

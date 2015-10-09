@@ -18,5 +18,9 @@ export default Lot.extend({
 
     icon: function () {
         return "flask";
-    }.property()
+    }.property(),
+
+  endpoint: function () {
+    return "items.show";
+  }.property()
 });

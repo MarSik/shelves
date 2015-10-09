@@ -27,5 +27,13 @@ export default LotBase.extend({
   canBeUnassigned: attr(),
   canBeSplit: attr(),
   canBeMoved: attr(),
-  valid: attr()
+  valid: attr(),
+
+  icon: function () {
+    return "square-o";
+  }.property(),
+
+  endpoint: function () {
+    return "lots.show";
+  }.property()
 });

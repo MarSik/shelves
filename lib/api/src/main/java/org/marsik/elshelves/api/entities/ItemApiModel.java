@@ -9,12 +9,20 @@ import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.ItemIdResolver;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ItemIdResolver.class)
 @EmberModelName("item")
 public class ItemApiModel extends LotApiModel {
+    public ItemApiModel(UUID id) {
+        super(id);
+    }
+
+    public ItemApiModel() {
+    }
+
     Set<RequirementApiModel> requirements;
     Boolean finished;
 
