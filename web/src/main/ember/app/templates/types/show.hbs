@@ -50,45 +50,6 @@
 {{else}}
     <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'bug'}} Manage footprint(s)</button>
 {{/if}}
-
-<h3>Additional properties</h3>
-
-<table>
-    {{#each model.properties as |property|}}
-        <tr>
-            <td>{{property.name}}</td>
-            <td>{{property-value entity=model property=property}}</td>
-            <td width="5ex">{{#if propertyAddingAllowed}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}</td>
-        </tr>
-    {{/each}}
-</table>
-
-{{#if propertyAddingAllowed}}
-<h3>Add property</h3>
-
-{{ember-selectize
-content=sortedProperties
-optionValuePath="content.id"
-optionLabelPath="content.niceName"
-selection=propertyToAdd
-maxItems=1
-placeholder="Select a property" }}
-
-{{input type='text' value=propertyValueToAdd placeholder=unitHint}}
-
-{{ember-selectize
-content=sortedUnitPrefixes
-optionValuePath="content.id"
-optionLabelPath="content.niceName"
-selection=propertyValuePrefixToAdd
-maxItems=1
-placeholder="Select an SI prefix" }}
-
-<button class='small button' disabled={{addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
-<button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
-{{else}}
-    <button class='secondary button' {{action 'enableAddProperty'}}>{{fa-icon 'bar-chart'}} Manage properties</button>
-{{/if}}
 </section>
 
 <section class="list columns large-6">
@@ -146,11 +107,51 @@ placeholder="Select an SI prefix" }}
 <button {{action 'showAddSeeAlso'}} class="button secondary">{{fa-icon 'eye'}} Manage see also links</button>
 {{/if}}
 
+  <h3>Additional properties</h3>
+
+  <table>
+    {{#each model.properties as |property|}}
+    <tr>
+      <td>{{property.name}}</td>
+      <td>{{property-value entity=model property=property}}</td>
+      <td width="5ex">{{#if propertyAddingAllowed}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}</td>
+    </tr>
+    {{/each}}
+  </table>
+
+  {{#if propertyAddingAllowed}}
+  <h3>Add property</h3>
+
+  {{ember-selectize
+  content=sortedProperties
+  optionValuePath="content.id"
+  optionLabelPath="content.niceName"
+  selection=propertyToAdd
+  maxItems=1
+  placeholder="Select a property" }}
+
+  {{input type='text' value=propertyValueToAdd placeholder=unitHint}}
+
+  {{ember-selectize
+  content=sortedUnitPrefixes
+  optionValuePath="content.id"
+  optionLabelPath="content.niceName"
+  selection=propertyValuePrefixToAdd
+  maxItems=1
+  placeholder="Select an SI prefix" }}
+
+  <button class='small button' disabled={{addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+  <button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
+  {{else}}
+  <button class='secondary button' {{action 'enableAddProperty'}}>{{fa-icon 'bar-chart'}} Manage properties</button>
+  {{/if}}
+
 {{#if model.manufacturable}}
 <h3>New project</h3>
 
   {{input value=new_project_serial}}<button {{action 'startProject' model new_project_serial}}>Start new project</button>
 {{/if}}
+</section>
 
 <h3>Available lots</h3>
 <table>
@@ -178,10 +179,10 @@ placeholder="Select an SI prefix" }}
             {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
             {{/if}}
             {{#if lot.canBeSoldered}}
-            {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
+            {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
             {{/if}}
             {{#if lot.canBeUnsoldered}}
-            {{fa-icon 'check-square'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.project.name}}{{/link-to}}
+            {{fa-icon 'check-square'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
             {{/if}}
         </td>
     </tr>
@@ -207,7 +208,6 @@ placeholder="Select an SI prefix" }}
     </tbody>
     {{/each}}
 </table>
-</section>
 </div>
 
 <nav class="actions">
