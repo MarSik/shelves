@@ -10,7 +10,7 @@ export default LotBase.extend({
   location: belongsTo("box", {async: true}),
   previous: belongsTo("lot", {async: true}),
   action: attr(),
-  purchase: belongsTo('purchase', {inverse: null, async: true}),
+  purchase: belongsTo('purchase', {async: true}),
   expiration: attr('date'),
   serial: attr('string'),
   history: belongsTo("history", {async: true}),

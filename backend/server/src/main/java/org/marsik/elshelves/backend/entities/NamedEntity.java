@@ -94,21 +94,6 @@ public class NamedEntity extends OwnedEntity
 		return true;
 	}
 
-    public String getEmberType() {
-        String type = "unknown";
-
-        DefaultEmberModel emberModelAnnotation = getClass().getAnnotation(DefaultEmberModel.class);
-        if (emberModelAnnotation != null) {
-            Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
-            EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
-            if (emberModelName != null) {
-                type = emberModelName.value();
-            }
-        }
-
-        return type;
-    }
-
 	@Override
 	public String toString() {
 		return getClass().getName() + "{" +

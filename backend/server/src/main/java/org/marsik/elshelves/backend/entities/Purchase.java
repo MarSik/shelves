@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
@@ -21,6 +23,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+@DefaultEmberModel(PurchaseApiModel.class)
 public class Purchase extends OwnedEntity {
 	@ManyToOne(optional = false)
 	Type type;

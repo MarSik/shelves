@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -57,6 +60,22 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     public boolean isNew() {
         return dbId == null;
     }
+
+    public String getEmberType() {
+        String type = "unknown";
+
+        DefaultEmberModel emberModelAnnotation = getClass().getAnnotation(DefaultEmberModel.class);
+        if (emberModelAnnotation != null) {
+            Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
+            EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
+            if (emberModelName != null) {
+                type = emberModelName.value();
+            }
+        }
+
+        return type;
+    }
+
 
     protected interface RemoteUpdater<T, L> {
         void update(T inst, L value);

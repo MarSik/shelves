@@ -20,7 +20,7 @@ export default NamedBase.extend({
 
   groups: hasMany("group", {async: true}),
   footprints: hasMany("footprint", {async: true}),
-  lots: hasMany("lot", {async: true, inverse: null}),
+  lots: hasMany("lot", {async: true, inverse: null, polymorphic: true}),
 
   seeAlso: hasMany("type", {async: true, inverse: "seeAlso"}),
 

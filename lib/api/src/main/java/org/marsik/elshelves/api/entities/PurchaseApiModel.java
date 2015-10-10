@@ -38,7 +38,7 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 
 	PartTypeApiModel type;
 
-	Set<LotApiModel> lots;
+	Set<PolymorphicRecord> lots;
 
 	@JsonIdentityReference(alwaysAsId = true)
 	public TransactionApiModel getTransaction() {
@@ -48,10 +48,5 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 	@JsonIdentityReference(alwaysAsId = true)
 	public PartTypeApiModel getType() {
 		return type;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<LotApiModel> getLots() {
-		return lots;
 	}
 }

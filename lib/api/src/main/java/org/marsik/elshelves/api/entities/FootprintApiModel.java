@@ -38,4 +38,9 @@ public class FootprintApiModel extends AbstractNamedEntityApiModel {
     public Set<FootprintApiModel> getSeeAlso() {
         return seeAlso;
     }
+
+    @JsonIdentityReference(alwaysAsId = true)
+    public FootprintType getType() {
+        return type;
+    }
 }

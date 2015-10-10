@@ -5,6 +5,7 @@ import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Lot;
@@ -86,9 +87,12 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 		}
 
 		if (object.getLots() != null) {
-			model.setLots(new THashSet<LotApiModel>());
+			model.setLots(new THashSet<PolymorphicRecord>());
 			for (Lot l: object.getLots()) {
-				model.getLots().add(lotToEmber.convert(l, nested - 1, cache));
+				PolymorphicRecord r = new PolymorphicRecord();
+				r.setId(l.getId());
+				r.setType(l.getEmberType());
+				model.getLots().add(r);
 			}
 		}
 

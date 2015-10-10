@@ -10,6 +10,7 @@ import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
@@ -432,12 +433,12 @@ public class BackupService {
             backup.getItems().add(item);
 
             type.setLots(new THashSet<>());
-            type.getLots().add(item);
+            type.getLots().add(PolymorphicRecord.build(item));
 
             PurchaseApiModel purchase = new PurchaseApiModel();
             purchase.setId(uuidGenerator.generate());
             purchase.setLots(new THashSet<>());
-            purchase.getLots().add(item);
+            purchase.getLots().add(PolymorphicRecord.build(item));
             purchase.setCount(1L);
             purchase.setType(type);
             backup.getPurchases().add(purchase);

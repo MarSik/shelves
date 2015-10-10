@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
@@ -35,7 +37,12 @@ import java.util.function.Consumer;
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DefaultEmberModel(LotApiModel.class)
 public class Lot extends OwnedEntity implements StickerCapable {
+	public Lot(UUID uuid) {
+		setId(uuid);
+	}
+
 	@NotNull
 	@Min(1)
 	Long count;

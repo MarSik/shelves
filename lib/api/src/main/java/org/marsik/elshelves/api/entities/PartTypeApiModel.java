@@ -33,7 +33,7 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 
     Set<FootprintApiModel> footprints;
 	Set<PartGroupApiModel> groups;
-	Set<LotApiModel> lots;
+	Set<PolymorphicRecord> lots;
     Set<PartTypeApiModel> seeAlso;
 
     Boolean serials;
@@ -55,11 +55,6 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     public Set<PartGroupApiModel> getGroups() {
         return groups;
     }
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<LotApiModel> getLots() {
-		return lots;
-	}
 
     @JsonIdentityReference(alwaysAsId = true)
     public Set<PartTypeApiModel> getSeeAlso() {

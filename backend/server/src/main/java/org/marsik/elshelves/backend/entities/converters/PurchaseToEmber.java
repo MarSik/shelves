@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
@@ -62,9 +63,12 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
 
 		if (object.getLots() != null) {
-			model.setLots(new THashSet<LotApiModel>());
+			model.setLots(new THashSet<PolymorphicRecord>());
 			for (Lot l: object.getLots()) {
-				model.getLots().add(lotToEmber.convert(l, nested - 1, cache));
+				PolymorphicRecord r = new PolymorphicRecord();
+				r.setId(l.getId());
+				r.setType(l.getEmberType());
+				model.getLots().add(r);
 			}
 		}
 

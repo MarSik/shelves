@@ -13,7 +13,7 @@ export default LotBase.extend({
   vat: attr("number"),
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction", {async: true}),
-  next: hasMany("lot", {inverse: null, async: true}),
+  lots: hasMany("lot", {inverse: null, async: true, polymorphic: true}),
 
   missing: Ember.computed('delivered', 'count', function () {
       return this.get('count') - this.get('delivered')
@@ -38,12 +38,13 @@ export default LotBase.extend({
   delivered: function () {
       var count = 0;
 
-      this.get('next').forEach(function (lot) {
+      this.get('lots').forEach(function (lot) {
+          console.log("C+");
           count += lot.get('count');
       });
 
       return count;
-  }.property('next.@each.count'),
+  }.property('lots.@each.count'),
 
   fullyDelivered: function() {
       return this.get('missing') === 0;

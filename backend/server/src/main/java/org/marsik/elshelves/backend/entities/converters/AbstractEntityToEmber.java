@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
+import org.marsik.elshelves.ember.EmberModel;
 
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
                 && object.getId() != null) {
             cache.put(object.getId(), model);
         }
+
         return convert(object, model, nested, cache);
     }
 }
