@@ -5,11 +5,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.marsik.elshelves.ember.EmberModel;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class PolymorphicRecord extends AbstractEntityApiModel {
     String type;
+
+    public PolymorphicRecord(UUID uuid) {
+        super(uuid);
+    }
+
+    public PolymorphicRecord(String uuid) {
+        super(UUID.fromString(uuid));
+    }
 
     public static PolymorphicRecord build(AbstractEntityApiModel entity) {
         PolymorphicRecord p = new PolymorphicRecord();
