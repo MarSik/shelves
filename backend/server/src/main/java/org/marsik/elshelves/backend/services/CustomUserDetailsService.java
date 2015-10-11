@@ -21,29 +21,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CustomUserDetailsService implements ElshelvesUserDetailsService {
-    @Autowired
-    UserRepository userRepository;
+public class CustomUserDetailsService implements ElshelvesUserDetailsService, Serializable {
 
     @Autowired
-    AuthorizationRepository authorizationRepository;
+    transient UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    transient AuthorizationRepository authorizationRepository;
 
     @Autowired
-    UuidGenerator uuidGenerator;
+    transient PasswordEncoder passwordEncoder;
 
     @Autowired
-    EmberToUser emberToUser;
+    transient UuidGenerator uuidGenerator;
+
+    @Autowired
+    transient EmberToUser emberToUser;
 
 	@Autowired
-	UserToEmber userToEmber;
+	transient UserToEmber userToEmber;
 
     @CircuitBreaker
     @Transactional(readOnly = true)

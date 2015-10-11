@@ -19,12 +19,15 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class ApplicationOauth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
+    private MemcacheTokenStore memcacheTokenStore;
+
+    @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return memcacheTokenStore;
     }
 
     @Override

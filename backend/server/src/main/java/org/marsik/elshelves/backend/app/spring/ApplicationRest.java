@@ -20,6 +20,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Deserializer;
+import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Serializer;
+import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -69,6 +73,10 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
 		Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
 		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
         builder.modulesToInstall(new JodaModule());
+
+        builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
+        builder.deserializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Deserializer());
+
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         return converter;
     }
