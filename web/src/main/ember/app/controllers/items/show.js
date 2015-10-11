@@ -18,16 +18,12 @@ export default Ember.Controller.extend({
             this.set('assignableLots', lots);
         },
         performAssignment: function (req, lot, count) {
-            var newLot = this.store.createRecord('lot', {
-                previous: lot,
-                usedBy: req,
-                count: count
-            });
+            lot.set('usedBy', req);
+            lot.set('count', count);
 
             var self = this;
 
-            newLot.save().catch(function (e) {
-                newLot.destroy();
+            lot.save().catch(function (e) {
                 lot.rollback();
                 self.growl.error(e);
             }).then(function () {
@@ -44,46 +40,35 @@ export default Ember.Controller.extend({
             this.set('assignableLots', []);
         },
         unassignLot: function (lot) {
-            var newLot = this.store.createRecord('lot', {
-                previous: lot,
-                action: "UNASSIGNED"
-            });
+            lot.set('status', 'UNASSIGNED');
+            lot.set('usedBy', null);
 
             var self = this;
 
-            newLot.save().catch(function (e) {
-                newLot.destroy();
+            lot.save().catch(function (e) {
                 lot.rollback();
                 self.growl.error(e);
             });
         },
         solderLot: function (lot) {
-            var newLot = this.store.createRecord('lot', {
-                previous: lot,
-                action: "SOLDERED"
-            });
+          lot.set('status', 'SOLDERED');
 
-            var self = this;
+          var self = this;
 
-            newLot.save().catch(function (e) {
-                newLot.destroy();
-                lot.rollback();
-                self.growl.error(e);
-            });
+          lot.save().catch(function (e) {
+            lot.rollback();
+            self.growl.error(e);
+          });
         },
         unsolderLot: function (lot) {
-            var newLot = this.store.createRecord('lot', {
-                previous: lot,
-                action: "UNSOLDERED"
-            });
+          lot.set('status', 'UNSOLDERED');
 
-            var self = this;
+          var self = this;
 
-            newLot.save().catch(function (e) {
-                newLot.destroy();
-                lot.rollback();
-                self.growl.error(e);
-            });
+          lot.save().catch(function (e) {
+            lot.rollback();
+            self.growl.error(e);
+          });
         },
         importRequirements: function (document) {
             var url = ENV.APP.API_ENDPOINT + '/projects/' + this.get('model.id') + '/import';
