@@ -3,7 +3,9 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
@@ -28,11 +30,13 @@ import org.marsik.elshelves.backend.services.ItemService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -44,12 +48,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/items")
-public class ItemController extends AbstractRestController<Item, ItemApiModel, ItemService> {
+public class ItemController extends AbstractReadOnlyRestController<Item, ItemApiModel, ItemService> {
+
+    EmberToItem restToDb;
+
 	@Autowired
 	public ItemController(ItemService service,
                           ItemToEmber dbToRest,
                           EmberToItem restToDb) {
-		super(ItemApiModel.class, service, dbToRest, restToDb);
+		super(ItemApiModel.class, dbToRest, service);
+        this.restToDb = restToDb;
 	}
 
     @Autowired
@@ -60,6 +68,9 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
 
     @Autowired
     EmberToType emberToType;
+
+    @Autowired
+    LotController lotController;
 
     @RequestMapping("/{uuid}/import")
     @Transactional
@@ -79,7 +90,15 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
         return builder.build();
     }
 
-    @Override
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    @Transactional
+    public EmberModel updateLot(@CurrentUser User currentUser,
+                                @PathVariable("id") UUID id,
+                                @RequestBody @Validated ItemApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        return lotController.updateLot(currentUser, id, lot0);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
     public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
@@ -99,5 +118,9 @@ public class ItemController extends AbstractRestController<Item, ItemApiModel, I
         EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
         sideLoad(itemApiModel, builder);
         return builder.build();
+    }
+
+    protected EmberToItem getRestToDb() {
+        return restToDb;
     }
 }
