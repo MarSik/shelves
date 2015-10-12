@@ -30,8 +30,12 @@ export default LotBase.extend({
   valid: attr(),
 
   icon: function () {
-    return "square-o";
-  }.property(),
+    if (this.get("canBeUnsoldered")) {
+      return "check-square-o";
+    } else {
+      return "square-o";
+    }
+  }.property("canBeUnsoldered"),
 
   endpoint: function () {
     return "lots.show";

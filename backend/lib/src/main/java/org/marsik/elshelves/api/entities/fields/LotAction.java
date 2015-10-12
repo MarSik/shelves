@@ -11,7 +11,9 @@ public enum LotAction {
 	SOLDERED,
 	UNSOLDERED,
 	DESTROYED,
-    EVENT;
+    EVENT,
+    FINISHED,
+    REOPENED;
 
     @JsonCreator
     public static LotAction forValue(String s) {

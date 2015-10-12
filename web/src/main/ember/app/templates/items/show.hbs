@@ -1,6 +1,14 @@
 <h2>Type / Project {{model.serials}}</h2>
 {{entity-header model=model.purchase.type}}
 
+<h3>Status</h3>
+
+{{#if model.finished}}
+<button {{action 'reopen' model}}>Reopen</button>
+{{else}}
+<button {{action 'finish' model}}>Finish</button>
+{{/if}}
+
 <h3>Required parts</h3>
 <table>
 {{#each displayRequirements as |r|}}

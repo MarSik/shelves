@@ -16,9 +16,15 @@ export default Lot.extend({
         return "items.show";
     }.property(),
 
-    icon: function () {
-        return "flask";
-    }.property(),
+  icon: function () {
+    if (this.get("canBeUnsoldered")) {
+      return "check-square-o";
+    } else if (this.get("finished")) {
+      return "square-o";
+    } else {
+      return "flask";
+    }
+  }.property("canBeUnsoldered", "finished"),
 
   endpoint: function () {
     return "items.show";

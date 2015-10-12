@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.marsik.elshelves.api.entities.ItemApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
+import org.marsik.elshelves.backend.services.UuidGenerator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,7 +37,7 @@ public class Item extends Lot implements StickerCapable {
 		r.setItem(null);
 	}
 
-	Boolean finished;
+	Boolean finished = false;
 
 	public boolean canBeDeleted() {
 		for (Requirement r: getRequires()) {
@@ -79,5 +81,15 @@ public class Item extends Lot implements StickerCapable {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	public LotHistory finishOrReopen(boolean finish, User performedBy, UuidGenerator uuidGenerator) {
+		if (getFinished() != null
+				&& getFinished() == finish) {
+			return getHistory();
+		}
+
+		setFinished(finish);
+		return recordChange(finish ? LotAction.FINISHED : LotAction.REOPENED, performedBy, uuidGenerator);
 	}
 }

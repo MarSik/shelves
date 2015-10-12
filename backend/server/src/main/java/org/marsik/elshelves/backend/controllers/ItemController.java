@@ -96,7 +96,20 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("id") UUID id,
                                 @RequestBody @Validated ItemApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        return lotController.updateLot(currentUser, id, lot0);
+        EmberModel.Builder<? super ItemApiModel> modelBuilder = lotController.performLotAction(currentUser, id, lot0);
+
+        if (modelBuilder == null
+                && lot0.getFinished() != null) {
+            Item item = getService().get(id, currentUser);
+            item.finishOrReopen(lot0.getFinished(), currentUser, uuidGenerator);
+            modelBuilder = new EmberModel.Builder<>(dbToRest.convert(item, 1, new THashMap<>()));
+        }
+
+        if (modelBuilder == null) {
+            throw new InvalidRequest();
+        }
+
+        return modelBuilder.build();
     }
 
     @RequestMapping(method = RequestMethod.POST)

@@ -61,6 +61,26 @@ export default Ember.Controller.extend({
             self.growl.error(e);
           });
         },
+      finish (lot) {
+        lot.set('finished', true);
+
+        var self = this;
+
+        lot.save().catch(function (e) {
+          lot.rollback();
+          self.growl.error(e);
+        });
+      },
+      reopen (lot) {
+        lot.set('finished', false);
+
+        var self = this;
+
+        lot.save().catch(function (e) {
+          lot.rollback();
+          self.growl.error(e);
+        });
+      },
         unsolderLot: function (lot) {
           lot.set('status', 'UNSOLDERED');
 

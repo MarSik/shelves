@@ -200,15 +200,16 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		return h;
 	}
 
-	private LotHistory recordChange(LotAction action, User performedBy, UuidGenerator uuidGenerator) {
+	protected LotHistory recordChange(LotAction action, User performedBy, UuidGenerator uuidGenerator) {
 		setStatus(action);
 
 		LotHistory h = new LotHistory();
 		h.setId(uuidGenerator.generate());
 		h.setPrevious(getHistory());
-		setHistory(h);
 		h.setPerformedBy(performedBy);
 		h.setAction(action);
+
+		setHistory(h);
 
 		return h;
 	}

@@ -128,8 +128,19 @@ public class LotController {
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("uuid") UUID id,
                                 @RequestBody @Validated LotApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        EmberModel.Builder<LotApiModel> modelBuilder;
+        EmberModel.Builder<LotApiModel> modelBuilder = performLotAction(currentUser, id, lot0);
 
+        if (modelBuilder == null) {
+            throw new InvalidRequest();
+        }
+
+        return modelBuilder.build();
+    }
+
+    protected EmberModel.Builder<LotApiModel> performLotAction(@CurrentUser User currentUser,
+            @PathVariable("uuid") UUID id, @RequestBody @Validated LotApiModel lot0)
+            throws PermissionDenied, EntityNotFound, OperationNotPermitted, InvalidRequest {
+        EmberModel.Builder<LotApiModel> modelBuilder = null;
         Lot original = null;
 
         if (id != null) {
@@ -167,18 +178,21 @@ public class LotController {
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getStatus() != null
+                && !lot.getStatus().equals(original.getStatus())
                 && lot.getStatus().equals(LotAction.UNASSIGNED)) {
             // Unassigned
             Lot result = lotService.unassign(original.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getStatus() != null
+                && !lot.getStatus().equals(original.getStatus())
                 && lot.getStatus().equals(LotAction.UNSOLDERED)) {
             // Unsolder
             Lot result = lotService.unsolder(original.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getStatus() != null
+                && !lot.getStatus().equals(original.getStatus())
                 && lot.getStatus().equals(LotAction.SOLDERED)) {
             // Solder and possibly assign as well
             Lot result = lotService.solder(original.getId(), currentUser, lot.getUsedBy());
@@ -190,12 +204,9 @@ public class LotController {
             Lot result = lotService.assign(original.getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
-        } else {
-            // Invalid combination of arguments
-            throw new InvalidRequest();
         }
 
-        return modelBuilder.build();
+        return modelBuilder;
     }
 
     @RequestMapping(method = RequestMethod.POST)
