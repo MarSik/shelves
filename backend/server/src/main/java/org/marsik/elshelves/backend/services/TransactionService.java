@@ -13,6 +13,9 @@ import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TransactionService extends AbstractRestService<TransactionRepository, Transaction> {
 	@Autowired
@@ -42,16 +45,25 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 			dto.setDate(new DateTime());
 		}
 
+		// Create empty transaction, by recording the items and then
+		// clearing the list (we have to give them an UUID first before reinserting)
+		List<Purchase> items = new ArrayList<>(dto.getItems());
+		dto.getItems().clear();
+
 		Transaction t = super.createEntity(dto, currentUser);
 
-		for (Purchase p: t.getItems()) {
-			if (p.getOwner() == null) {
-				p.setOwner(currentUser);
-			}
+		RelinkService.RelinkContext context = relinkService.newRelinker();
+		context.addToCache(t);
+		context.addToCache(currentUser);
 
-			if (p.getId() == null) {
-				p.setId(getUuidGenerator().generate());
-			}
+		// Reinsert all items
+		for (Purchase p: items) {
+			context
+					.fixUuid(p)
+					.ensureOwner(p, currentUser)
+					.relink(p);
+
+			p.setTransaction(t);
 		}
 
 		return t;

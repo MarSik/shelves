@@ -15,6 +15,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -137,5 +138,22 @@ public class Purchase extends OwnedEntity {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	@PrePersist
+	void prePersist() {
+		if (getSinglePrice() == null
+				&& getCount() != null
+				&& getTotalPrice() != null) {
+			setSinglePrice(getTotalPrice() / getCount());
+		}
+
+		if (getTotalPrice() == null
+				&& getCount() != null
+				&& getSinglePrice() != null) {
+			setTotalPrice(getSinglePrice() * getCount());
+		}
+
+		super.prePersist();
 	}
 }

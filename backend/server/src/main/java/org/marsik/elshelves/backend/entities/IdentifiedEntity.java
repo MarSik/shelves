@@ -31,7 +31,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
@@ -134,5 +133,26 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         }
 
         reconcileLists(updates, getter, adder, remover, true);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IdentifiedEntity)) return false;
+
+        IdentifiedEntity that = (IdentifiedEntity) o;
+
+        if (id == null) {
+            return this == o;
+        } else if (that.getId() == null) {
+            return this == o;
+        } else {
+            return this.id.equals(that.getId());
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : super.hashCode();
     }
 }
