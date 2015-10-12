@@ -14,7 +14,7 @@ export default DS.RESTSerializer.extend({
 
         //Remove null values
         Object.keys(serialized).forEach(function(k) {
-            if (!serialized[k]) {
+            if (serialized[k] === null) {
                 delete serialized[k];
             }
         });
