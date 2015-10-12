@@ -27,6 +27,18 @@ export default Ember.Route.extend({
             lot.save().catch(function () {
                 lot.revert();
             });
-        }
+        },
+      finish: function (lot) {
+        lot.set('finished', true);
+        lot.save().catch(function () {
+          lot.revert();
+        });
+      },
+      reopen: function (lot) {
+        lot.set('finished', false);
+        lot.save().catch(function () {
+          lot.revert();
+        });
+      }
     }
 });

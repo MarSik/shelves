@@ -28,5 +28,9 @@ export default Lot.extend({
 
   endpoint: function () {
     return "items.show";
-  }.property()
+  }.property(),
+
+  editable: Ember.computed("finished", function () {
+    return !this.get("finished");
+  })
 });

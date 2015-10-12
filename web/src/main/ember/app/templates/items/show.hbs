@@ -12,7 +12,7 @@
 <h3>Required parts</h3>
 <table>
 {{#each displayRequirements as |r|}}
-  {{project-requirement r=r
+  {{project-requirement readOnly=r.item.finished r=r
     solderLot="solderLot" unsolderLot="unsolderLot" unassignLot="unassignLot" assignLot="assignLot"
     showAddAlternative="showAddAlternative" removeRequirement="removeRequirement"
     removeAlternativePart="removeAlternativePart"}}
