@@ -18,6 +18,7 @@ export default Ember.Controller.extend({
             this.set('assignableLots', lots);
         },
         performAssignment: function (req, lot, count) {
+            lot.set('status', 'ASSIGNED');
             lot.set('usedBy', req);
             lot.set('count', count);
 

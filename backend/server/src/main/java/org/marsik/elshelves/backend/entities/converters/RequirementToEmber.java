@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Requirement;
@@ -60,9 +61,12 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 		}
 		model.setItem(itemToEmber.convert(object.getItem(), nested, cache));
 
-		model.setLots(new THashSet<LotApiModel>());
+		model.setLots(new THashSet<PolymorphicRecord>());
 		for (Lot l: object.getLots()) {
-			model.getLots().add(lotToEmber.convert(l, nested, cache));
+			PolymorphicRecord r = new PolymorphicRecord();
+			r.setId(l.getId());
+			r.setType(l.getEmberType());
+			model.getLots().add(r);
 		}
 
 		return model;

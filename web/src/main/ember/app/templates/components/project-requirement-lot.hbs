@@ -1,5 +1,5 @@
-<td>{{lot.count}}</td>
-<td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
+<td>{{fa-icon lot.icon}} {{lot.count}}</td>
+<td>{{#link-to 'types.show' lot.purchase.type}}{{lot.purchase.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
 {{#if displayActions}}
 <td colspan="2">
   {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count class="tiny alert" action='solderLot' param=lot}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
@@ -11,6 +11,6 @@
 <td>{{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
 <td>
   <a {{action 'showActions'}}>{{fa-icon 'play'}}&nbsp;actions</a>
-  {{#link-to 'lots.show' lot}}{{fa-icon 'history'}}&nbsp;history{{/link-to}}
+  {{#link-to lot.endpoint lot}}{{fa-icon 'history'}}&nbsp;info{{/link-to}}
 </td>
 {{/if}}

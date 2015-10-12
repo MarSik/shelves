@@ -3,29 +3,27 @@ import Ember from 'ember';
 export default Ember.Route.extend({
     actions: {
         assign: function (lot, requirement) {
-            var newLot = this.store.createRecord('lot', {
-                previous: lot,
-                usedBy: requirement,
-                count: requirement.get('missing')
-            });
-            newLot.save().catch(function () {
-                newLot.revert();
-            });
+          lot.set('status', 'ASSIGNED');
+          lot.set('usedBy', requirement);
+          lot.set('count', requirement.get('missing'));
+          lot.save().catch(function () {
+            lot.revert();
+          });
         },
         unassign: function (lot) {
-          lot.set('action', 'UNASSIGNED');
+          lot.set('status', 'UNASSIGNED');
           lot.save().catch(function () {
             lot.revert();
           });
         },
         solder: function (lot) {
-          lot.set('action', 'SOLDERED');
+          lot.set('status', 'SOLDERED');
           lot.save().catch(function () {
             lot.revert();
           });
         },
         unsolder: function (lot) {
-            lot.set('action', 'UNSOLDERED');
+            lot.set('status', 'UNSOLDERED');
             lot.save().catch(function () {
                 lot.revert();
             });

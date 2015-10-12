@@ -38,7 +38,7 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 
 	Long count;
 
-	Set<LotApiModel> lots;
+	Set<PolymorphicRecord> lots;
 
 	@JsonIdentityReference(alwaysAsId = true)
 	public ProjectApiModel getProject() {
@@ -50,8 +50,7 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 		return type;
 	}
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<LotApiModel> getLots() {
+	public Set<PolymorphicRecord> getLots() {
 		return lots;
 	}
 

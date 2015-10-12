@@ -161,7 +161,7 @@ public class LotController {
             }
 
         } else if (lot.getLocation() != null
-                && !original.getLocation().equals(lot.getLocation())) {
+                && !lot.getLocation().equals(original.getLocation())) {
             // Location and previous specified, but no purchase - MOVE operation
             Lot result = lotService.move(original.getId(), lot.getLocation(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
@@ -169,25 +169,25 @@ public class LotController {
         } else if (lot.getStatus() != null
                 && lot.getStatus().equals(LotAction.UNASSIGNED)) {
             // Unassigned
-            Lot result = lotService.unassign(lot0.getPrevious().getId(), currentUser);
+            Lot result = lotService.unassign(original.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getStatus() != null
                 && lot.getStatus().equals(LotAction.UNSOLDERED)) {
             // Unsolder
-            Lot result = lotService.unsolder(lot0.getPrevious().getId(), currentUser);
+            Lot result = lotService.unsolder(original.getId(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getStatus() != null
                 && lot.getStatus().equals(LotAction.SOLDERED)) {
             // Solder and possibly assign as well
-            Lot result = lotService.solder(lot0.getPrevious().getId(), currentUser, lot.getUsedBy());
+            Lot result = lotService.solder(original.getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else if (lot.getUsedBy() != null
                 && !lot.getUsedBy().equals(original.getUsedBy())) {
             // Assign
-            Lot result = lotService.assign(lot0.getPrevious().getId(), currentUser, lot.getUsedBy());
+            Lot result = lotService.assign(original.getId(), currentUser, lot.getUsedBy());
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
 
         } else {

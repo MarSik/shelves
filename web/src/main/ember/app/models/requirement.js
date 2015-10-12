@@ -11,7 +11,7 @@ export default DS.Model.extend({
     count: attr('number'),
     type: hasMany('type', {inverse: null, async: true}),
     item: belongsTo('item', {async: true, inverse: 'requirements'}),
-    lots: hasMany('lot', {async: true}),
+    lots: hasMany('lot', {async: true, polymorphic: true}),
 
     typeCanBeRemoved: function () {
         return this.get('type.length') > 1;
