@@ -28,6 +28,7 @@ import java.util.UUID;
 
 @Service
 public class CustomUserDetailsService implements ElshelvesUserDetailsService, Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Autowired
     transient UserRepository userRepository;
