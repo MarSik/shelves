@@ -10,7 +10,7 @@ export default Lot.extend({
     finished: attr('boolean'),
 
     // only used to start projects, write only
-    type: belongsTo('type', {async: true, inverse: false}),
+    type: belongsTo('type', {async: true, inverse: null}),
 
     link: function() {
         return "items.show";

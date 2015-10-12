@@ -5,9 +5,9 @@ var attr = DS.attr,
 
 export default DS.Model.extend({
   created: attr("date"),
-  location: belongsTo("box", {async: true}),
-  previous: belongsTo("history", {async: true}),
+  location: belongsTo("box", {async: true, inverse: null}),
+  previous: belongsTo("history", {async: true, inverse: null}),
   action: attr(),
-  performedBy: belongsTo('user', {async: true}),
-  usedBy: belongsTo('requirement', {async: true})
+  performedBy: belongsTo('user', {async: true, inverse: null}),
+  usedBy: belongsTo('requirement', {async: true, inverse: null})
 });
