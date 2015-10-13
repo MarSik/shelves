@@ -51,14 +51,14 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
         if (object.getShowProperties() != null) {
             model.setShowProperties(new THashSet<NumericProperty>());
             for (NumericPropertyApiModel p: object.getShowProperties()) {
-                model.getShowProperties().add(emberToNumericProperty.convert(p, 1, cache));
+                model.addShowProperty(emberToNumericProperty.convert(p, 1, cache));
             }
         }
 
         if (object.getTypes() != null) {
             model.setTypes(new THashSet<Type>());
             for (PartTypeApiModel t: object.getTypes()) {
-                model.getTypes().add(emberToType.convert(t, nested, cache));
+                model.addType(emberToType.convert(t, nested, cache));
             }
         }
 

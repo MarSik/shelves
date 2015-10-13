@@ -58,7 +58,7 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<Purchase>());
 			for (PurchaseApiModel p : object.getItems()) {
-				model.getItems().add(emberToPurchase.convert(p, nested - 1, cache));
+				model.addItem(emberToPurchase.convert(p, nested - 1, cache));
 			}
 		}
 

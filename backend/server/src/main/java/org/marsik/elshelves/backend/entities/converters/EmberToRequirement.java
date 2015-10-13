@@ -52,7 +52,7 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 		if (object.getType() != null) {
 			model.setType(new THashSet<Type>());
 			for (PartTypeApiModel p: object.getType()) {
-				model.getType().add(emberToType.convert(p, nested, cache));
+				model.addType(emberToType.convert(p, nested, cache));
 			}
 		}
 

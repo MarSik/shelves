@@ -64,21 +64,21 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
         if (object.getFootprints() != null) {
             model.setFootprints(new THashSet<Footprint>());
             for (FootprintApiModel g : object.getFootprints()) {
-                model.getFootprints().add(emberToFootprint.convert(g, nested - 1, cache));
+                model.addFootprint(emberToFootprint.convert(g, nested - 1, cache));
             }
         }
         
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<Group>());
 			for (PartGroupApiModel g : object.getGroups()) {
-				model.getGroups().add(emberToGroup.convert(g, nested - 1, cache));
+				model.addGroup(emberToGroup.convert(g, nested - 1, cache));
 			}
 		}
 
         if (object.getSeeAlso() != null) {
             model.setSeeAlso(new THashSet<Type>());
             for (PartTypeApiModel t: object.getSeeAlso()) {
-                model.getSeeAlso().add(convert(t, nested - 1, cache));
+                model.addSeeAlso(convert(t, nested - 1, cache));
             }
         }
 

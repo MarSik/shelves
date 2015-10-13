@@ -54,7 +54,7 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<Lot>());
 			for (PolymorphicRecord l: object.getLots()) {
-				model.getLots().add(new Lot(l.getId()));
+				model.addLot(new Lot(l.getId()));
 			}
 		}
 

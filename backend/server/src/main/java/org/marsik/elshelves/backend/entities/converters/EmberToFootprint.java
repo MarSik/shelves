@@ -47,7 +47,7 @@ public class EmberToFootprint implements CachingConverter<FootprintApiModel, Foo
         if (object.getSeeAlso() != null) {
             model.setSeeAlso(new THashSet<Footprint>());
             for (FootprintApiModel t: object.getSeeAlso()) {
-                model.getSeeAlso().add(convert(t, nested - 1, cache));
+                model.addSeeAlso(convert(t, nested - 1, cache));
             }
         }
 

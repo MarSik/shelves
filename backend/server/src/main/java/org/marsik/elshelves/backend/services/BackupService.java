@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
-import org.antlr.v4.runtime.misc.OrderedHashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
@@ -82,7 +81,9 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -231,17 +232,20 @@ public class BackupService {
     @Autowired
     NumericPropertyRepository numericPropertyRepository;
 
-
-	protected <F extends IdentifiedEntityInterface>  void relink(Iterable<F> allItems,
-								   User currentUser,
-                                   RelinkService.RelinkContext relinkContext) {
+	protected <F extends IdentifiedEntity>  void relink(Set<F> allItems,
+                                                        User currentUser,
+                                                        RelinkService.RelinkContext relinkContext) {
 		if (allItems == null) {
 			return;
 		}
 
-        for (F i: allItems) {
+        for (F i: new ArrayList<>(allItems)) {
+            // Remove from Set before possibly changing UUID
+            allItems.remove(i);
             relinkContext
+                    .fixUuid(i)
                     .addToCache(i);
+            allItems.add(i);
         }
 
 		for (F i: allItems) {
@@ -254,7 +258,6 @@ public class BackupService {
         if (allItems == null) {
             return;
         }
-
 
         for (F i: allItems) {
             if (!i.isNew()) {
@@ -279,9 +282,6 @@ public class BackupService {
 
         for (T i0: items) {
             F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
-            relinkContext
-                    .fixUuid(i)
-                    .addToCache(i);
 
             if (i instanceof OwnedEntityInterface) {
                 relinkContext.fixOwner((OwnedEntityInterface)i, currentUser);
@@ -295,7 +295,7 @@ public class BackupService {
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
         RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
-        Set<IdentifiedEntity> pool = new OrderedHashSet<>();
+        Set<IdentifiedEntity> pool = new LinkedHashSet<>();
 
         // Everything will be owned by the current user
         if (backup.getUser() != null
@@ -316,11 +316,11 @@ public class BackupService {
         prepare(backup.getGroups(), emberToGroup, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getFootprints(), emberToFootprint, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getTypes(), emberToType, currentUser, conversionCache, relinkContext, pool);
-        prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getSources(), emberToSource, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getTransactions(), emberToTransaction, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getPurchases(), emberToPurchase, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getLots(), emberToLot, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getHistory(), emberToLotHistory, currentUser, conversionCache, relinkContext, pool);
 
@@ -534,7 +534,7 @@ public class BackupService {
                 continue;
             }
 
-            Source source = (Source)relinkCache.get(t.getSource().getId());
+            Source source = t.getSource();
             t.setName(source.getName() + " "
                     + (t.getDate() != null ? t.getDate().toString() : Integer.toString(seq++)));
         }
@@ -561,8 +561,8 @@ public class BackupService {
                 continue;
             }
 
-            Lot source = (Lot)relinkCache.get(p.getLots().iterator().next().getId());
-            p.setCreated(source.getLastModified());
+            Lot source = p.getLots().iterator().next();
+            p.setCreated(source.getCreated());
         }
     }
 

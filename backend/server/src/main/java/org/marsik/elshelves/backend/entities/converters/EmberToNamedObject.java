@@ -42,14 +42,14 @@ public class EmberToNamedObject {
         if (object.getCodes() != null) {
             model.setCodes(new THashSet<Code>());
             for (CodeApiModel c: object.getCodes()) {
-                model.getCodes().add(emberToCode.convert(c, nested, cache));
+                model.addCode(emberToCode.convert(c, nested, cache));
             }
         }
 
 		if (object.getDescribedBy() != null) {
 			model.setDescribedBy(new THashSet<Document>());
 			for (DocumentApiModel d: object.getDescribedBy()) {
-				model.getDescribedBy().add(emberToDocument.convert(d, nested, cache));
+				model.addDescribedBy(emberToDocument.convert(d, nested, cache));
 			}
 		}
 
@@ -66,7 +66,7 @@ public class EmberToNamedObject {
                 } else {
                     v.setValue(0L);
                 }
-                model.getProperties().add(v);
+                model.addProperty(v);
             }
         }
 

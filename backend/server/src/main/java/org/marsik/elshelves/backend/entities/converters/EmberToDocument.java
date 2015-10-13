@@ -53,7 +53,7 @@ public class EmberToDocument implements CachingConverter<DocumentApiModel, Docum
 			for (final PolymorphicRecord r: object.getDescribes()) {
 				NamedEntity entity = new NamedEntity();
 				entity.setId(r.getId());
-				model.getDescribes().add(entity);
+				model.addDescribes(entity);
 			}
 		}
 

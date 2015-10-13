@@ -64,7 +64,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	Purchase purchase;
 
 	public void setPurchase(Purchase p) {
-		if (purchase != null) purchase.getLots().add(this);
+		if (purchase != null) purchase.getLots().remove(this);
 		purchase = p;
 		if (purchase != null) purchase.getLots().add(this);
 	}
