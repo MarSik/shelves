@@ -1,9 +1,9 @@
-<section class="columns small-4">
+<section class="columns small-12">
     <h2>Types</h2>
 
     <button {{action 'createType'}}>{{fa-icon 'plus'}} Create type</button>
 
-    <ul>
+    <ul class="item-list">
         {{#each this as |type|}}
             <li>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} ({{type.free}} / {{type.available}})</li>
         {{/each}}

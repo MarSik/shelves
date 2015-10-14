@@ -1,9 +1,9 @@
-<section class="columns small-4">
+<section class="columns small-12">
     <h2>Footprints</h2>
 
     <button {{action 'createFootprint'}}>{{fa-icon 'plus'}} Create footprint</button>
 
-    <ul>
+    <ul class="item-list">
         {{#each this as |fp|}}
             <li>{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}</li>
         {{/each}}

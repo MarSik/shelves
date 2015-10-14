@@ -1,16 +1,8 @@
 import Ember from 'ember';
 // global $
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
     actions: {
-        showCreateGroup: function (group) {
-            this.set('selectedGroup', group);
-            $("#createGroup").foundation("reveal", "open");
-        },
-        showCreateTopLevelGroup: function () {
-            this.set('selectedGroup', null);
-            $("#createGroup").foundation("reveal", "open");
-        },
         createGroup: function () {
             var name = this.get('name');
             var newGroup = this.store.createRecord('group', {

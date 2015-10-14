@@ -1,30 +1,18 @@
 <div class="row">
-    <section class="columns large-4">
-        <h2>Groups</h2>
-
-<button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}}</button>
-
-<ul>
-    {{#each topLevel as |group|}}
-    {{item-tree item=group count='item.count' class='group-entity' moveItem='moveItem' deleteAction='deleteGroup' createAction='showCreateGroup' action='selectGroup' hoverAction='hoverGroup'}}
-    {{/each}}
-</ul>
-    </section>
-
 {{outlet}}
 </div>
 
 <div id="createGroup" class="reveal-modal" data-reveal>
-    <h2>Create group</h2>
-    <form {{action 'createGroup' on='submit'}}>
-    <label for="name">Name:</label>
-    {{input id='name' placeholder='Enter group name' value=name required='required'}}
-    {{#if selectedGroup}}
-    <label for="parent">Parent:
-        <div>{{selectedGroup.name}}</div></label>
-    {{/if}}
-    <input type="submit" value="Create group">
-    </form>
+  <h2>Create group</h2>
+  <form {{action 'createGroup' on='submit'}}>
+  <label for="name">Name:</label>
+  {{input id='name' placeholder='Enter group name' value=name required='required'}}
+  {{#if selectedGroup}}
+  <label for="parent">Parent:
+    <div>{{selectedGroup.name}}</div></label>
+  {{/if}}
+  <input type="submit" value="Create group">
+  </form>
 
-    <a class="close-reveal-modal">&#215;</a>
+  <a class="close-reveal-modal">&#215;</a>
 </div>

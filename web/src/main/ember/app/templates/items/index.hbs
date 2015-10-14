@@ -1,16 +1,19 @@
-<h2>Start new project</h2>
-<form {{action 'startProject' projectName on='submit'}}>
-    {{input type='text' value=projectName placeholder='project name'}}
-    <button type="submit">Create</button>
-</form>
-
-
-<section class="columns small-4">
+<section class="columns small-12">
     <h2>Projects</h2>
 
-    <ul>
+  <button {{action 'showCreateProject'}}>{{fa-icon 'plus'}} Create new project</button>
+
+  <ul class="item-list">
         {{#each this as |project|}}
             <li><a {{action 'projectSelected' project}}>{{project.purchase.type.name}}</a></li>
         {{/each}}
     </ul>
 </section>
+
+<div id="createProject" class="reveal-modal" data-reveal>
+  <h2>Create new project</h2>
+  <form {{action 'startProject' projectName on='submit'}}>
+  {{input type='text' value=projectName placeholder='project name'}}
+  <button type="submit">Create</button>
+  </form>
+</div>

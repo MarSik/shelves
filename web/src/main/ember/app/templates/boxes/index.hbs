@@ -1,0 +1,16 @@
+<section class="columns large-12">
+  {{#if qrEntity}}
+  <nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
+  {{/if}}
+
+  <h2>Locations</h2>
+
+  <button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}} Create location</button>
+
+  <ul>
+    {{#each topLevel as |box|}}
+    {{two-level-index model=box target='boxes.show'}}
+    {{/each}}
+  </ul>
+
+</section>

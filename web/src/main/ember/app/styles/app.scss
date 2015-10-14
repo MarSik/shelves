@@ -266,3 +266,19 @@ nav.actions {
   color: lighten($body-font-color, 60%);
   font-style: italic;
 }
+
+.item-tree {
+  @extend .small-6;
+  @extend .large-3;
+  @extend .columns;
+  display: inline-block;
+}
+
+.item-list {
+  @extend .row;
+  & > li {
+    @extend .small-6;
+    @extend .large-3;
+    @extend .columns;
+  }
+}

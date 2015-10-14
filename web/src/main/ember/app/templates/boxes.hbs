@@ -1,19 +1,4 @@
 <div class="row">
-<section class="columns large-4">
-    {{#if qrEntity}}
-        <nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
-    {{/if}}
-
-    <h2>Locations</h2>
-
-<button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}}</button>
-
-<ul>
-    {{#each topLevel as |box|}}
-    {{item-tree item=box count='item.count' class='box-entity' moveItem='moveItem' deleteAction='deleteBox' createAction='showCreateBox' action='selectBox' hoverAction='hoverBox'}}
-    {{/each}}
-</ul>
-</section>
 
 {{outlet}}
 </div>

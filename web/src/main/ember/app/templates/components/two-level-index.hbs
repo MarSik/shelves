@@ -1,0 +1,8 @@
+
+  <h3>{{#link-to target model}}{{model.name}} ({{model.count}}){{/link-to}}</h3>
+
+  <ul>
+    {{#each sorted as |i|}}
+    <li>{{#link-to target i}}{{i.name}} ({{i.count}}){{/link-to}}</li>
+    {{/each}}
+  </ul>

@@ -1,0 +1,15 @@
+<section class="columns large-12">
+<h2>Groups</h2>
+
+  <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}} Create group</button>
+
+  <ul class="columns row">
+      {{#each topLevel as |group|}}
+      {{two-level-index model=group target='groups.show'}}
+     {{/each}}
+    </ul>
+</section>
+
+  {{outlet}}
+
+
