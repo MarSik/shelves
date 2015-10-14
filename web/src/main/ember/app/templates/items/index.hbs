@@ -1,0 +1,16 @@
+<h2>Start new project</h2>
+<form {{action 'startProject' projectName on='submit'}}>
+    {{input type='text' value=projectName placeholder='project name'}}
+    <button type="submit">Create</button>
+</form>
+
+
+<section class="columns small-4">
+    <h2>Projects</h2>
+
+    <ul>
+        {{#each this as |project|}}
+            <li><a {{action 'projectSelected' project}}>{{project.purchase.type.name}}</a></li>
+        {{/each}}
+    </ul>
+</section>

@@ -1,0 +1,279 @@
+{{partial '_itemheader'}}
+
+<div class="row">
+<section class="meta columns large-6">
+<h3>Custom id</h3>
+
+<p>{{#click-to-edit content=model field='content.customId' placeholder='place for your custom id'}}{{model.customId}}{{/click-to-edit}}</p>
+
+<h3>Vendor</h3>
+
+<p>{{#click-to-edit content=model field='content.vendor' placeholder="place for the manufacturer's name"}}{{model.vendor}}{{/click-to-edit}}</p>
+
+<h3>Purchasing</h3>
+
+<ul class="small-block-grid-1 large-block-grid-2">
+    <li>
+        Minimum amount:
+        {{#click-to-edit content=model field='content.minimumCount'}}{{model.minimumCount}}{{/click-to-edit}}
+    </li>
+    <li>
+        Buy in multiples of:
+        {{#click-to-edit content=model field='content.buyMultiple'}}{{model.buyMultiple}}{{/click-to-edit}}
+    </li>
+</ul>
+
+<h3>Footprints</h3>
+
+<ul>
+{{#each model.footprints as |fp|}}
+    <li>
+        {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
+    {{#if displayAddFootprint}}{{#confirm-button class='button remove' action='removeFootprint' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+    </li>
+{{/each}}
+</ul>
+
+{{#if displayAddFootprint}}
+    {{ember-selectize
+    content=sortedFootprints
+    optionValuePath="content.id"
+    optionLabelPath="content.name"
+    selection=model.footprints
+    multiple=true
+    add-item='changeObserved'
+    remove-item='changeObserved'
+    create-item='createEmptyFootprint'
+    placeholder="Select a footprint" }}
+
+    <button {{action 'hideAddFootprint'}} class="button secondary">Hide</button>
+{{else}}
+    <button {{action 'showAddFootprint'}} class="button secondary">{{fa-icon 'bug'}} Manage footprint(s)</button>
+{{/if}}
+</section>
+
+<section class="list columns large-6">
+<h3>Groups</h3>
+
+<ul>
+    {{#each model.groups as |group|}}
+        <li>
+            {{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}
+            {{#if displayAddGroup}}{{#confirm-button class='button remove' action='removeGroup' param=group}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+        </li>
+    {{/each}}
+</ul>
+
+{{#if displayAddGroup}}
+    {{ember-selectize
+    content=sortedGroups
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=model.groups
+    multiple=true
+    add-item='changeObserved'
+    remove-item='changeObserved'
+    create-item='createEmptyGroup'
+    placeholder="Select a type" }}
+
+    <button {{action 'hideAddGroup'}} class="button secondary">Hide</button>
+{{else}}
+    <button {{action 'showAddGroup'}} class="button secondary">{{fa-icon 'database'}} Manage group(s)</button>
+{{/if}}
+
+<h3>See also</h3>
+
+<ul>
+    {{#each model.seeAlso as |type|}}
+        <li>
+            {{#link-to 'types.show' type}}{{fa-icon 'book'}} {{type.fullName}}{{/link-to}}
+            {{#if displayAddSeeAlso}}{{#confirm-button class='remove' action='removeSeeAlso' param=type}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+        </li>
+    {{/each}}
+</ul>
+
+{{#if displayAddSeeAlso}}
+    {{ember-selectize
+    content=sortedTypes
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=seeAlsoTypeToAdd
+    maxItems=1
+    placeholder="Select a type" }}
+
+    <button {{action 'addSeeAlso' seeAlsoTypeToAdd}} class="button primary">{{fa-icon 'plus'}} Add see also link</button>
+    <button {{action 'hideAddSeeAlso'}} class="button secondary">Hide</button>
+{{else}}
+<button {{action 'showAddSeeAlso'}} class="button secondary">{{fa-icon 'eye'}} Manage see also links</button>
+{{/if}}
+
+  <h3>Additional properties</h3>
+
+  <table>
+    {{#each model.properties as |property|}}
+    <tr>
+      <td>{{property.name}}</td>
+      <td>{{property-value entity=model property=property}}</td>
+      <td width="5ex">{{#if propertyAddingAllowed}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}</td>
+    </tr>
+    {{/each}}
+  </table>
+
+  {{#if propertyAddingAllowed}}
+  <h3>Add property</h3>
+
+  {{ember-selectize
+  content=sortedProperties
+  optionValuePath="content.id"
+  optionLabelPath="content.niceName"
+  selection=propertyToAdd
+  maxItems=1
+  placeholder="Select a property" }}
+
+  {{input type='text' value=propertyValueToAdd placeholder=unitHint}}
+
+  {{ember-selectize
+  content=sortedUnitPrefixes
+  optionValuePath="content.id"
+  optionLabelPath="content.niceName"
+  selection=propertyValuePrefixToAdd
+  maxItems=1
+  placeholder="Select an SI prefix" }}
+
+  <button class='small button' disabled={{addPropertyIncomplete}} {{action 'addProperty' model propertyToAdd propertyValueToAdd propertyValuePrefixToAdd}}>{{fa-icon 'plus'}} Add</button>
+  <button class='small button' {{action 'disableAddProperty'}} style="secondary button">{{fa-icon 'times'}} Cancel</button>
+  {{else}}
+  <button class='secondary button' {{action 'enableAddProperty'}}>{{fa-icon 'bar-chart'}} Manage properties</button>
+  {{/if}}
+
+{{#if model.manufacturable}}
+<h3>New project</h3>
+
+  {{input value=new_project_serial}}<button {{action 'startProject' model new_project_serial}}>Start new project</button>
+{{/if}}
+</section>
+
+<h3>Available lots</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Source</th>
+        <th colspan="4">Box / Project</th>
+    </tr>
+    <tr>
+        <th>SKU</th>
+        <th>Cnt.</th>
+        <th>Price</th>
+        <th>w/ Vat</th>
+        <th>Vat %</th>
+    </tr>
+    </thead>
+    {{#each model.lots as |lot|}}
+    <tbody>
+    <tr>
+        <td>
+          {{#link-to lot.endpoint lot}}{{fa-icon lot.icon}} detail{{/link-to}}
+        </td>
+        <td colspan="4">
+            {{#if lot.canBeAssigned}}
+            {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeSoldered}}
+            {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeUnsoldered}}
+            {{fa-icon 'check-square'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+            {{/if}}
+        </td>
+    </tr>
+    <tr>
+        <td class="sku">
+            {{lot.purchase.sku}}
+        </td>
+        <td class="count">
+            {{lot.count}}
+            {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
+          {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.source.name}}{{fa-icon 'history'}} history{{/link-to}}
+        </td>
+        <td class="price">
+            {{lot.purchase.priceWithoutVat}}
+        </td>
+        <td class="vat-included">
+            {{lot.purchase.priceWithVat}}
+        </td>
+        <td class="vat">
+            {{lot.purchase.vat}}
+        </td>
+    </tr>
+    </tbody>
+    {{/each}}
+</table>
+</div>
+
+<nav class="actions">
+    <button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
+    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+</nav>
+
+{{#modal-dialog condition=moveLot title="Split or move a lot"}}
+
+    <ul class="large-block-grid-3 small-block-grid-1">
+        <li>
+            <dl>
+                <dt>Source / SKU</dt>
+                <dd>
+                    {{#link-to 'transactions.show' moveLot.purchase.transaction}}{{moveLot.purchase.transaction.source.name}}{{/link-to}}
+                    /
+                    {{moveLot.purchase.sku}}
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>Current location</dt>
+                <dd>
+                    {{#if moveLot.canBeAssigned}}
+                        {{fa-icon 'cube'}} {{#link-to 'boxes.show' moveLot.location}}{{moveLot.location.fullName}}{{/link-to}}
+                    {{/if}}
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>Count</dt>
+                <dd>{{moveLot.count}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>price w/o VAT</dt>
+                <dd>{{moveLot.purchase.priceWithoutVat}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>price w/ VAT</dt>
+                <dd>{{moveLot.purchase.priceWithVat}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>VAT%</dt>
+                <dd>{{moveLot.purchase.vat}}</dd>
+            </dl>
+        </li>
+    </ul>
+
+    {{ember-selectize
+    content=sortedBoxes
+    optionValuePath="content.id"
+    optionLabelPath="content.fullName"
+    selection=moveLotToBox
+    create-item='createBox'
+    maxItems=1
+    placeholder="Select a destination" }}
+
+    {{input type="number" value=moveLotCount}}
+
+    <button disabled={{moveLotDisabled}} {{action 'moveLot' moveLot moveLotToBox moveLotCount}}>Move</button>
+{{/modal-dialog}}

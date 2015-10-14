@@ -1,69 +1,44 @@
 package org.marsik.elshelves.api.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import gnu.trove.map.hash.THashMap;
-import nl.marcus.ember.EmberIgnore;
-import org.marsik.elshelves.api.ember.EmberEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.marsik.elshelves.ember.EmberEntity;
 
-import java.util.Map;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class AbstractEntityApiModel implements EmberEntity {
-	protected AbstractEntityApiModel(UUID id) {
-		this.id = id;
-	}
-
-	protected AbstractEntityApiModel() {
-	}
-
-	@Override
-	@JsonIgnore
-    @EmberIgnore
-    public Map<String, String> getLinks() {
-        return new THashMap<String, String>(0);
+    public AbstractEntityApiModel(UUID uuid) {
+        this.id = uuid;
     }
 
+    @JsonProperty("id")
     UUID id;
-
-    boolean stub;
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    /**
-     * Signalizes whether this object was created without
-     * data to act as an empty ID holder.
-     */
-    @JsonIgnore
-    public boolean isStub() {
-        return stub;
-    }
-
-    @JsonIgnore
-    public void setStub(boolean stub) {
-        this.stub = stub;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AbstractEntityApiModel)) return false;
 
         AbstractEntityApiModel that = (AbstractEntityApiModel) o;
 
-        if (id == null || that.id == null) return false;
-
-        return id.equals(that.id);
+        if (id == null) {
+            return this == o;
+        } else if (that.getId() == null) {
+            return this == o;
+        } else {
+            return this.id.equals(that.getId());
+        }
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : System.identityHashCode(this);
+        return id != null ? id.hashCode() : super.hashCode();
     }
 }

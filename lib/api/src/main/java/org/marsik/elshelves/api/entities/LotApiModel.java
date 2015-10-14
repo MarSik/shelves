@@ -2,14 +2,18 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import org.joda.time.DateTime;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 
-import java.util.Date;
+import javax.validation.constraints.Min;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -20,9 +24,11 @@ import java.util.UUID;
  * objects need to be created to represent the
  * resulting two new Lots.
  */
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = LotIdResolver.class)
 @EmberModelName("lot")
-public class LotApiModel extends LotBaseApiModel {
+public class LotApiModel extends AbstractEntityApiModel {
 	public LotApiModel(UUID id) {
 		super(id);
 	}
@@ -32,15 +38,22 @@ public class LotApiModel extends LotBaseApiModel {
 
     BoxApiModel location;
 
-    LotApiModel previous;
-
-	LotAction action;
+	LotAction status;
 
 	PurchaseApiModel purchase;
 
 	RequirementApiModel usedBy;
 
-    Date expiration;
+    DateTime expiration;
+
+	DateTime created;
+
+	LotHistoryApiModel history;
+
+	@Min(1)
+	Long count;
+
+	Set<String> serials;
 
 	boolean canBeSoldered;
 	boolean canBeUnsoldered;
@@ -50,14 +63,64 @@ public class LotApiModel extends LotBaseApiModel {
     boolean canBeMoved;
     boolean valid;
 
+	/**
+	 * Serial number
+	 * Deprecated: only used for importing older data
+	 */
+	String serial;
+
+	/**
+	 * Previous version of this Lot (history)
+	 * Only used for importing older data and requesting a partial Lot
+	 */
+	@Setter(value = AccessLevel.PRIVATE)
+	LotApiModel previous;
+
+	/**
+	 * Next version of this Lot (history)
+	 * Deprecated: only used for importing older data
+	 */
+	Set<LotApiModel> next;
+
+	/**
+	 * User responsible for the last change
+	 * Deprecated: only used for importing older data
+	 */
+	UserApiModel performedBy;
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	@JsonIdentityReference(alwaysAsId = true)
+	public Set<LotApiModel> getNext() {
+		return next;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	@JsonIdentityReference(alwaysAsId = true)
+	public UserApiModel getPerformedBy() {
+		return performedBy;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	public LotAction getAction() {
+		return status;
+	}
+
+	/**
+	 * Deprecated: only used for importing older data
+	 */
+	public void setAction(LotAction action) {
+		status = action;
+	}
+
 	@JsonIdentityReference(alwaysAsId = true)
     public BoxApiModel getLocation() {
         return location;
-    }
-
-    @JsonSetter
-    public void setLocation(BoxApiModel location) {
-        this.location = location;
     }
 
 	@JsonIdentityReference(alwaysAsId = true)
@@ -65,32 +128,9 @@ public class LotApiModel extends LotBaseApiModel {
         return previous;
     }
 
-    @JsonSetter
-    public void setPrevious(LotApiModel previous) {
-        this.previous = previous;
-    }
-
-	public LotAction getAction() {
-		return action;
-	}
-
-	public void setAction(LotAction action) {
-		this.action = action;
-	}
-
 	@JsonIdentityReference(alwaysAsId = true)
 	public PurchaseApiModel getPurchase() {
 		return purchase;
-	}
-
-	@JsonSetter
-	public void setPurchase(PurchaseApiModel purchase) {
-		this.purchase = purchase;
-	}
-
-	@JsonIgnore
-	public PartTypeApiModel getType() {
-		return getPurchase().getType();
 	}
 
 	@JsonIdentityReference(alwaysAsId = true)
@@ -98,72 +138,8 @@ public class LotApiModel extends LotBaseApiModel {
 		return usedBy;
 	}
 
-	@JsonSetter
-	public void setUsedBy(RequirementApiModel usedBy) {
-		this.usedBy = usedBy;
+	@JsonIdentityReference(alwaysAsId = true)
+	public LotHistoryApiModel getHistory() {
+		return history;
 	}
-
-	public boolean isCanBeSoldered() {
-		return canBeSoldered;
-	}
-
-	public void setCanBeSoldered(boolean canBeSoldered) {
-		this.canBeSoldered = canBeSoldered;
-	}
-
-	public boolean isCanBeUnsoldered() {
-		return canBeUnsoldered;
-	}
-
-	public void setCanBeUnsoldered(boolean canBeUnsoldered) {
-		this.canBeUnsoldered = canBeUnsoldered;
-	}
-
-	public boolean isCanBeAssigned() {
-		return canBeAssigned;
-	}
-
-	public void setCanBeAssigned(boolean canBeAssigned) {
-		this.canBeAssigned = canBeAssigned;
-	}
-
-	public boolean isCanBeUnassigned() {
-		return canBeUnassigned;
-	}
-
-	public void setCanBeUnassigned(boolean canBeUnassigned) {
-		this.canBeUnassigned = canBeUnassigned;
-	}
-
-    public boolean isCanBeSplit() {
-        return canBeSplit;
-    }
-
-    public void setCanBeSplit(boolean canBeSplit) {
-        this.canBeSplit = canBeSplit;
-    }
-
-    public boolean isCanBeMoved() {
-        return canBeMoved;
-    }
-
-    public void setCanBeMoved(boolean canBeMoved) {
-        this.canBeMoved = canBeMoved;
-    }
-
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
-    public Date getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
-    }
 }

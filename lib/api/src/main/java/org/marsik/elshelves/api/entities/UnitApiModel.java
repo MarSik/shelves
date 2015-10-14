@@ -2,17 +2,19 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
-import org.marsik.elshelves.api.entities.idresolvers.SiSizePrefixDeserializer;
 import org.marsik.elshelves.api.entities.idresolvers.UnitIdResolver;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = UnitIdResolver.class)
 @EmberModelName("unit")
 public class UnitApiModel extends AbstractNamedEntityApiModel {
@@ -24,23 +26,10 @@ public class UnitApiModel extends AbstractNamedEntityApiModel {
     }
 
     String symbol;
-	List<SiPrefix> prefixes;
-
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
+	Set<SiPrefix> prefixes;
 
     @JsonSerialize(contentUsing = ToStringSerializer.class)
-	public List<SiPrefix> getPrefixes() {
+	public Set<SiPrefix> getPrefixes() {
 		return prefixes;
-	}
-
-    @JsonDeserialize(contentUsing = SiSizePrefixDeserializer.class)
-	public void setPrefixes(List<SiPrefix> prefixes) {
-		this.prefixes = prefixes;
 	}
 }

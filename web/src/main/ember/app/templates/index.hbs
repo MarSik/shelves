@@ -1,0 +1,66 @@
+<h2>Electronic part and project management</h2>
+
+{{#if session.isAuthenticated}}
+<section class="columns small-12">
+    <p class="alert-box alert">This is an unstable demo version. Expect possible data loss. No usage or backup guarantees.</p>
+</section>
+
+<section class="columns small-12">
+    <h3>Known issues</h3>
+
+    <ul>
+        <li>{{fa-icon 'exclamation-triangle'}} Do not open extra windows or tabs. This application is not designed to work in such environment and might present outdated information if you do it.</li>
+        <li>{{fa-icon 'exclamation-triangle'}} The logout button in menu is currently broken, please use the link here: <strong><a {{ action 'invalidateSession' }}>{{fa-icon 'hand-o-right'}} Logout</a></strong></li>
+        <li>{{fa-icon 'exclamation-triangle'}} The part count in {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} and {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}} tree views can show zeros when displayed for the first time.</li>
+    </ul>
+</section>
+
+<section class="columns small-12">
+    <h3>New issues</h3>
+
+    <p>If you discover any issue, please report it to <a href="https://bitbucket.org/MarSik/elshelves/issues">{{fa-icon 'bitbucket'}} The Bitbucket issue tracker</a></p>
+</section>
+
+<section class="columns small-12">
+    <h3>Quickstart</h3>
+    <p>There are two ways to start using this application:</p>
+    <p>You can start by creating your {{#link-to 'boxes'}}{{fa-icon 'cube'}} locations{{/link-to}},
+        {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}}, {{#link-to 'footprints'}}{{fa-icon 'bug'}} footprints{{/link-to}}, {{#link-to 'sources'}}{{fa-icon 'truck'}} sources{{/link-to}},
+        {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} and {{#link-to 'items'}}{{fa-icon 'flask'}} projects{{/link-to}} in this general order.
+    </p>
+    <p>The other approach starts with going to the {{#link-to 'transactions'}}{{fa-icon 'shopping-cart'}} purchase page{{/link-to}} and creating source and parts from there. When you type something
+    new to the selection boxes, click the <em>Add something..</em> option that appears and an empty type or source will be created for you. You can later go to the relevant {{#link-to 'sources'}}{{fa-icon 'truck'}} sources{{/link-to}}
+    and {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} pages and fill in the details. You can create {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}} and {{#link-to 'footprints'}}{{fa-icon 'bug'}} footprints{{/link-to}}
+    using the same approach while editing a part type.</p>
+
+    <p>Sections {{#link-to 'units'}}{{fa-icon 'arrows'}} units{{/link-to}} and {{#link-to 'properties'}}{{fa-icon 'bar-graph'}} properties{{/link-to}} allow you to create properties you want to track and set the measurement units and prefixes.
+        You can then go to {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} page and assign the properties with values to your parts. You can also show important properties in the table when you browse your parts in
+        {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}} view so you can better compare your parts.</p>
+</section>
+
+{{else}}
+<div class="row">
+    <section class="small-12 large-6 columns" id="login-form">
+    <h2>Login</h2>
+    <form {{action 'authenticate' on='submit'}}>
+        <label for="identification">Email address</label>
+        {{input type='email' id='identification' required='required' placeholder='Enter email address' value=identification}}
+        <label for="password">Password</label>
+        {{input id='password' placeholder='Enter Password' type='password' value=password}}
+        <button type="submit">Login</button><button class="secondary" {{action 'reverify'}}>Reset password</button>
+    </form>
+    </section>
+
+    <section class="small-12 large-6 columns" id="registration-form">
+        <h2>Register</h2>
+        <form {{action 'register' on='submit'}}>
+            <label for="name">Name:</label>
+            {{input id='name' placeholder='Enter your name' value=name required='required'}}
+            <label for="email">Email:</label>
+            {{input type='email' id='email' placeholder='Enter email address' value=email required='required'}}
+            <button type="submit">Register</button>
+        </form>
+    </section>
+</div>
+{{/if}}
+

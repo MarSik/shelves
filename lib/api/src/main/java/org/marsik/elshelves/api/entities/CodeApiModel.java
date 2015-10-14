@@ -2,20 +2,22 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.marsik.elshelves.api.ember.EmberModelName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.CodeIdResolver;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+@Data
+@EqualsAndHashCode(of = {}, callSuper = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = CodeIdResolver.class)
 @EmberModelName("code")
 public class CodeApiModel extends AbstractEntityApiModel {
     public CodeApiModel(UUID id) {
-        this.id = id;
+        super(id);
     }
 
     public CodeApiModel() {
@@ -30,36 +32,8 @@ public class CodeApiModel extends AbstractEntityApiModel {
 
     UserApiModel belongsTo;
 
-    public PolymorphicRecord getReference() {
-        return reference;
-    }
-
-    public void setReference(PolymorphicRecord reference) {
-        this.reference = reference;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     @JsonIdentityReference(alwaysAsId = true)
     public UserApiModel getBelongsTo() {
         return belongsTo;
-    }
-
-    public void setBelongsTo(UserApiModel belongsTo) {
-        this.belongsTo = belongsTo;
     }
 }

@@ -14,10 +14,11 @@
 
     <modules>
         <module>scanlib</module>
-        <module>common</module>
         <module>api</module>
         <module>gerber</module>
         <module>kicad</module>
+        <module>jackson</module>
+        <module>ember</module>
     </modules>
 
     <dependencies>

@@ -9,36 +9,46 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>services</module>
+        <module>backend</module>
         <module>lib</module>
+        <module>scanner</module>
+        <module>web</module>
     </modules>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <version>1.2.6.RELEASE</version>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.android.target>1.7</maven.android.target>
-        <spring.version>4.1.4.RELEASE</spring.version>
-        <spring.security.version>3.2.5.RELEASE</spring.security.version>
-        <spring.security.oauth.version>2.0.5.RELEASE</spring.security.oauth.version>
-        <spring.data.neo4j.version>3.2.1.RELEASE</spring.data.neo4j.version>
+
+        <version.findbugs>3.0.1</version.findbugs>
+        <version.findbugs.annotations>3.0.0</version.findbugs.annotations>
+
+        <spring.version>4.2.1.RELEASE</spring.version>
+        <spring.security.version>4.0.2.RELEASE</spring.security.version>
+        <spring.security.oauth.version>2.0.7.RELEASE</spring.security.oauth.version>
+        <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
+
         <freemarker.version>2.3.21</freemarker.version>
-        <hibernate.version>5.1.3.Final</hibernate.version>
         <hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
-        <neo4j.version>2.1.6</neo4j.version>
-        <aspect.version>1.8.4</aspect.version>
         <jetty.version>9.2.7.v20150116</jetty.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
-        <jackson.version>2.4.4-MarSik</jackson.version>
+        <jackson.version>2.6.1</jackson.version>
+        <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
         <tika.version>1.7</tika.version>
+        <lombok.version>1.16.6</lombok.version>
+        <modelmapper.version>0.7.5</modelmapper.version>
+        <flyway.version>3.2.1</flyway.version>
+        <assertj.version>3.2.0</assertj.version>
+        <javax.validation.api.version>1.1.0.Final</javax.validation.api.version>
+        <guava.version>17.0</guava.version>
 
         <!-- computer vision libs //-->
 
@@ -56,14 +66,31 @@
         <repository>
             <id>ApacheSnapshot</id>
             <name>Apache Repository</name>
-            <url>https://repository.apache.org/content/groups/snapshots/</url>
+            <url>http://repository.apache.org/content/groups/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>projectlombok.org</id>
+            <url>http://projectlombok.org/mavenrepo</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${version.findbugs.annotations}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -98,6 +125,12 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -110,6 +143,41 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${version.findbugs}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>annotations</artifactId>
+                        <version>${version.findbugs.annotations}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${version.findbugs}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

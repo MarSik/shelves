@@ -1,30 +1,15 @@
 package org.marsik.elshelves.kicad;
 
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRErrorStrategy;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ConsoleErrorListener;
-import org.antlr.v4.runtime.DiagnosticErrorListener;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.misc.Nullable;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.Test;
-import org.marsik.elshelves.kicad.SchemaLexer;
-import org.marsik.elshelves.kicad.SchemaParser;
 
 import java.io.IOException;
-import java.util.BitSet;
 
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class SchemaTest {
 

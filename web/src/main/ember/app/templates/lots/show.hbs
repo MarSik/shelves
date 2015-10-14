@@ -1,0 +1,32 @@
+<h2>Lot {{model.id}}</h2>
+
+<dl>
+    <dt>Count</dt>
+    <dd>{{model.count}}</dd>
+</dl>
+
+<dl>
+    <dt>Action</dt>
+    <dd>{{model.status}}</dd>
+</dl>
+
+<dl>
+    <dt>Date</dt>
+    <dd>{{model.created}}</dd>
+</dl>
+
+<h2>Chain of changes</h2>
+<table>
+<tr>
+    <td colspan="5">History:</td>
+</tr>
+{{#each history as |lot|}}
+    <tr>
+        <td>{{lot.created}}</td>
+        <td>{{lot.action}}</td>
+        <td>{{lot.location.fullName}}</td>
+        <td>{{lot.usedBy.project.name}}</td>
+        <td>{{lot.performedBy.name}}</td>
+    </tr>
+{{/each}}
+</table>
