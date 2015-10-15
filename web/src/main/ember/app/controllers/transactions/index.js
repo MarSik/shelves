@@ -24,13 +24,17 @@ export default Ember.Controller.extend({
                 source.destroy();
             });
         },
-        createType: function (name) {
+        createType: function (name, destination) {
             var type = this.store.createRecord('type', {
                 name: name,
                 flagged: true
             });
 
-            type.save().catch(function (err) {
+            console.log("Set ", destination);
+
+            type.save().then(function (t) {
+                destination.set('type', t);
+            }).catch(function (err) {
                 this.growl.error(err);
                 type.destroy();
             });

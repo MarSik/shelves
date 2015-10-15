@@ -10,7 +10,7 @@
                 loading=sortedTypes.isPending
                 required=true
                 maxItems=1
-                create-item='createType'
+                create-item=(action 'createType' purchase)
                 sort="content.fullName"
                 placeholder="Select a type" }}
             </div>

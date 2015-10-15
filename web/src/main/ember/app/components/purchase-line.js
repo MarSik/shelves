@@ -5,8 +5,8 @@ export default Ember.Component.extend({
         removeRow: function () {
             this.sendAction("removeRow", this.get("purchase"));
         },
-        createType: function (name) {
-            this.sendAction("createType", name);
+        createType: function (destination, name) {
+            this.sendAction("createType", name, destination);
         },
         save: function () {
             this.sendAction("save", this.get("purchase"));
