@@ -3,7 +3,7 @@ import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';
 import ENV from '../config/environment';
 /* global $ */
 
-export default Ember.Controller.extend(LoginControllerMixin, {
+export default Ember.Controller.extend({
     actions: {
         register: function() {
             var store = this.store;
@@ -39,6 +39,11 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             }).then(function () {
                 self.growl.info("Verification email was sent to the user this email (" +email+ ") belongs to. Use it to request a new password.");
             });
+        },
+        authenticate() {
+            var data = this.getProperties('identification', 'password');
+            console.log("Auth: "+JSON.stringify(data));
+            this.get('session').authenticate(this.get('authenticator'), data);
         }
     },
     authenticator: 'oauth2-w-auth:oauth2-password-grant'

@@ -3,17 +3,4 @@
 {{outlet}}
 </div>
 
-<div id="createBox" class="reveal-modal" data-reveal>
-    <h2>Create box</h2>
-    <form {{action 'createBox' on='submit'}}>
-    <label for="name">Name:</label>
-    {{input id='name' placeholder='Enter box name' value=name required='required'}}
-    {{#if selectedBox}}
-    <label for="parent">Parent:
-        <div>{{selectedBox.name}}</div></label>
-    {{/if}}
-    <input type="submit" value="Create box">
-    </form>
 
-    <a class="close-reveal-modal">&#215;</a>
-</div>

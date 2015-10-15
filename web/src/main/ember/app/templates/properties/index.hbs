@@ -1,7 +1,9 @@
 <section>
     <h2>Properties</h2>
 
-    <ul class="small-block-grid-2 large-block-grid-4">
+  <button {{action 'showCreateProperty'}}>{{fa-icon 'plus'}} Create property</button>
+
+  <ul class="small-block-grid-2 large-block-grid-4">
         {{#each this as |property|}}
         <li>
             {{#link-to 'properties.show' property}}{{property.name}}{{/link-to}}<br/>
@@ -10,12 +12,9 @@
         </li>
         {{/each}}
     </ul>
-
-    <button {{action 'showCreateProperty'}}>{{fa-icon 'plus'}} Create property</button>
 </section>
 
-<div id="createProperty" class="reveal-modal" data-reveal>
-    <h2>Create property</h2>
+{{#modal-dialog title="Create property" condition=showCreateDialog}}
     <form {{action 'createProperty' propertyName propertyUnit propertyBase on='submit'}}>
     <p>
     <label for="name">Name:</label>
@@ -48,7 +47,6 @@
     <button type="submit" disabled={{propertyNotComplete}}>Create property</button>
     </form>
 
-    <a class="close-reveal-modal">&#215;</a>
-</div>
+{{/modal-dialog}}
 
 {{outlet}}

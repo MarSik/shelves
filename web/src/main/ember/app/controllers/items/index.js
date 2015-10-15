@@ -3,10 +3,10 @@ import Ember from 'ember';
 export default Ember.ArrayController.extend({
     actions: {
       showCreateProject() {
-        $("#createProject").foundation("reveal", "open");
+        this.set('showCreateDialog', true);
       },
       startProject() {
-        $("#createProject").foundation("reveal", "close");
+        this.set('showCreateDialog', false);
         return true;
       }
     },

@@ -24,6 +24,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Part groups');
     },
     model: function () {
-        return this.store.all('group');
+        return this.store.peekAll('group');
     }
 });

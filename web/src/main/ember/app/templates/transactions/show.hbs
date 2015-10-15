@@ -14,7 +14,7 @@
 
 <ul>
     {{#each describedBy as |doc|}}
-    <li>{{#view 'entity-link' entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/view}}</li>
+    <li>{{#entity-link entity=doc resource='download' models='documents'}}{{doc.name}} [download]{{/entity-link}}</li>
     {{/each}}
 </ul>
 

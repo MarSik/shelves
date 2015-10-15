@@ -3,28 +3,6 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
     actions: {
-        createGroup: function () {
-            var name = this.get('name');
-            var newGroup = this.store.createRecord('group', {
-                name: name,
-                parent: this.get('selectedGroup')
-            });
-            var self = this;
-            $("#createGroup").foundation("reveal", "close");
-
-            newGroup.save()
-                .then(function() {
-                    /*if (self.get('selectedGroup')) {
-                     self.get('selectedGroup').get('groupes').pushObject(newGroup);
-                     self.store.commit();
-                     }*/
-                    self.growl.info("Group created");
-                })
-                .catch(function() {
-                    newGroup.rollback();
-                    self.growl.error("Group creation failed");
-                });
-        },
         deleteGroup: function(group) {
             group.destroyRecord();
         },

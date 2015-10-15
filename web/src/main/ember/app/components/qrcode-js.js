@@ -1,7 +1,7 @@
 import Ember from 'ember';
 // global QRCode
 
-export default Ember.View.extend({
+export default Ember.Component.extend({
     didInsertElement: function () {
         var qrcode = new QRCode(this.$().get(0), {
             text: this.get('url'),

@@ -5,7 +5,7 @@ export default Ember.ArrayController.extend({
     needs: "application",
     actions: {
         showCreateProperty: function () {
-            $("#createProperty").foundation("reveal", "open");
+          this.set('showCreateDialog', true);
         },
         createProperty: function (name, unit, base) {
             var newProperty = this.store.createRecord('property', {
@@ -14,9 +14,9 @@ export default Ember.ArrayController.extend({
                 base: base
             });
             var self = this;
-            $("#createProperty").foundation("reveal", "close");
+          this.set('showCreateDialog', false);
 
-            newProperty.save()
+          newProperty.save()
                 .then(function() {
                     self.growl.info("Property created");
                 })

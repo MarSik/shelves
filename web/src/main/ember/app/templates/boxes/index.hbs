@@ -1,6 +1,6 @@
 <section class="columns large-12">
   {{#if qrEntity}}
-  <nav class="qr">{{view 'entity-qr' models=qrModels entity=qrEntity size=200}}</nav>
+  <nav class="qr">{{entity-qr models=qrModels entity=qrEntity size=200}}</nav>
   {{/if}}
 
   <h2>Locations</h2>
@@ -14,3 +14,15 @@
   </ul>
 
 </section>
+
+{{#modal-dialog title="Create location" condition=showCreateDialog}}
+<form {{action 'createBox' name on='submit'}}>
+<label for="name">Name:</label>
+{{input id='name' placeholder='Enter box name' value=name required='required'}}
+{{#if selectedBox}}
+<label for="parent">Parent:
+  <div>{{selectedBox.name}}</div></label>
+{{/if}}
+<input type="submit" value="Create box">
+</form>
+{{/modal-dialog}}

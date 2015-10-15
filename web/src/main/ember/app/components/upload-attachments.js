@@ -10,7 +10,7 @@ export default Ember.Component.extend({
         upload: function () {
             var uploadUrl = this.get('url');
             var files = this.get('files');
-            var token = this.get('controller.session.content.access_token');
+            var token = this.get('session.content.secure.access_token');
             var entity = this.get('entity');
 
             var uploader = EmberUploader.Uploader.create({
@@ -38,7 +38,9 @@ export default Ember.Component.extend({
                     params["entity"] = entity.get('id');
                 }
 
-                uploader.upload(files, params);
+                console.log("Uploading ", files[0]);
+
+                uploader.upload(files[0], params);
             }
         }
     },

@@ -10,10 +10,9 @@
     </ul>
 </section>
 
-<div id="createProject" class="reveal-modal" data-reveal>
-  <h2>Create new project</h2>
+{{#modal-dialog title="Create new project" condition=showCreateDialog}}
   <form {{action 'startProject' projectName on='submit'}}>
   {{input type='text' value=projectName placeholder='project name'}}
   <button type="submit">Create</button>
   </form>
-</div>
+{{/modal-dialog}}

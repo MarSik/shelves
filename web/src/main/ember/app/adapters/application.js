@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import ENV from '../config/environment';
+import Ember from 'ember';
 
 var AppAdapter =  DS.RESTAdapter.extend({
   namespace: ENV.APP.API_NAMESPACE,

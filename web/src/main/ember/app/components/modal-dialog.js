@@ -5,7 +5,7 @@ export default Ember.Component.extend({
         close: function () {
             this.set('condition', null);
         }
-    }
-    //condition,
-    //title
+    },
+    condition: undefined,
+    title: undefined
 });

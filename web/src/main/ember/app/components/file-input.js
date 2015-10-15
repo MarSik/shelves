@@ -5,10 +5,12 @@ export default Ember.TextField.extend({
     attributeBindings: ['multiple', 'placeholder'],
     multiple: false,
     placeholder: 'Please select files to upload',
-    change: function(e) {
-        var input = e.target;
-        if (!Ember.isEmpty(input.files)) {
-            this.sendAction('action', input.files);
+
+
+    observeChange: function() {
+        var input = this.get('value');
+        if (!Ember.isEmpty(input)) {
+            this.sendAction('action', this.$()[0].files);
         }
-    }
+    }.observes('value')
 });

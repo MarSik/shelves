@@ -1,7 +1,7 @@
 <form {{action 'upload' on='submit'}}>
 <div class="row collapse">
     <div class="small-10 columns">
-        {{view 'file-input' type="file" multiple=multiple placeholder="Please select files to upload" action='selectFiles'}}
+        {{file-input type="file" multiple=multiple placeholder="Please select files to upload" action='selectFiles'}}
     </div>
     <div class="small-2 columns">
         <button type="submit" class="button postfix" disabled={{disabled}}>{{fa-icon 'cloud-upload'}} Upload</button>
