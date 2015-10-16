@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Seria
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -44,6 +45,11 @@ import java.util.Locale;
 @Configuration
 @EnableAspectJAutoProxy
 public class ApplicationRest extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public Filter shallowEtagHeaderFilter() {
+        return new ShallowEtagHeaderFilter();
+    }
 
     @Bean
     public Filter getPutDeleteEmulator() {
