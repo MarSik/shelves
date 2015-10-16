@@ -1,14 +1,9 @@
 <section>
-    <h2>Create unit</h2>
-    <form {{action 'createUnit' unitName unitSymbol on='submit'}}>
-    {{input type='text' value=unitName placeholder='unit name'}}
-    {{input type='text' value=unitSymbol placeholder='unit symbol'}}
-    <button type="submit" disabled={{createDisabled}}>Create</button>
-    </form>
+  <h2>Units</h2>
 
-    <h2>Units</h2>
+  <button {{action 'showCreateUnit'}}>{{fa-icon 'plus'}} Create unit</button>
 
-    <ul class="small-block-grid-2 large-block-grid-4">
+  <ul class="small-block-grid-2 large-block-grid-4">
         {{#each this as |unit|}}
         <li>
             {{#link-to 'units.show' unit}}{{unit.name}}{{/link-to}}<br/>{{unit.summary}}
@@ -17,5 +12,13 @@
         {{/each}}
     </ul>
 </section>
+
+{{#modal-dialog title="Create unit" condition=showCreateDialog}}
+<form {{action 'createUnit' unitName unitSymbol on='submit'}}>
+{{input type='text' value=unitName placeholder='unit name'}}
+{{input type='text' value=unitSymbol placeholder='unit symbol'}}
+<button type="submit" disabled={{createDisabled}}>Create</button>
+</form>
+{{/modal-dialog}}
 
 {{outlet}}

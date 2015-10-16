@@ -7,7 +7,7 @@
 
   <button {{action 'showCreateTopLevelBox'}}>{{fa-icon 'plus'}} Create location</button>
 
-  <ul>
+  <ul class="two-level-index">
     {{#each topLevel as |box|}}
     {{two-level-index model=box target='boxes.show'}}
     {{/each}}

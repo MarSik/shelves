@@ -32,5 +32,7 @@ export default Ember.Controller.extend({
         });
     }
   },
-  topLevel: Ember.computed.filterBy('model', 'hasParent', false)
+  sorting: ['name'],
+  topLevel: Ember.computed.sort('unsorted', 'sorting'),
+  unsorted: Ember.computed.filterBy('model', 'hasParent', false)
 });

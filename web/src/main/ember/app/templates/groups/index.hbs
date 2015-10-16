@@ -3,11 +3,11 @@
 
   <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}} Create group</button>
 
-  <ul class="columns row">
+  <ul class="columns two-level-index">
       {{#each topLevel as |group|}}
       {{two-level-index model=group target='groups.show'}}
      {{/each}}
-    </ul>
+  </ul>
 </section>
 
 {{#modal-dialog title="Create group" condition=showCreateDialog}}
