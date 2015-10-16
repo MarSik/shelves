@@ -571,6 +571,9 @@ public class BackupService {
                                                                                                                     Map<UUID, Object> cache) {
         Set<E> dtos = new THashSet<>();
         for (T item: items) {
+            if (cache.containsKey(item.getId())) {
+                continue;
+            }
             dtos.add(convertor.convert(item, 1, cache));
         }
 
@@ -593,8 +596,9 @@ public class BackupService {
         backup.setTransactions(backup(transactionRepository.findByOwner(currentUser), transactionToEmber, cache));
         backup.setPurchases(backup(purchaseRepository.findByTransactionOwner(currentUser), purchaseToEmber, cache));
 
-        backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
+        // Items have to be loaded before Lots
         backup.setItems(backup(itemRepository.findByOwner(currentUser), itemToEmber, cache));
+        backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
 
         backup.setRequirements(backup(requirementRepository.findByItemOwner(currentUser), requirementToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
