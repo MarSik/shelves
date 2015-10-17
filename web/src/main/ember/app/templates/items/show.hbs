@@ -3,11 +3,15 @@
 
 <h3>Status</h3>
 
+<ul class="button-group round">
 {{#if model.finished}}
-<button {{action 'reopen' model}}>Reopen</button>
+<li><button {{action 'reopen' model}}>Reopen</button></li>
 {{else}}
-<button {{action 'finish' model}}>Finish</button>
+<li><button {{action 'finish' model}}>Finish</button></li>
+<li><button {{action 'toggleAddRequirement'}} class="{{addRequirementClass}}">Add requirement</button></li>
+{{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="{{importRequirementsClass}}">Import requirements</button></li>{{/if}}
 {{/if}}
+</ul>
 
 <h3>Required parts</h3>
 <table>
@@ -18,11 +22,6 @@
     removeAlternativePart="removeAlternativePart"}}
 {{/each}}
 </table>
-
-<ul class="button-group round">
-    <li><button {{action 'toggleAddRequirement'}} class="{{addRequirementClass}}">Add requirement</button></li>
-    {{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="{{importRequirementsClass}}">Import requirements</button></li>{{/if}}
-</ul>
 
 <h3>History</h3>
 
@@ -38,9 +37,8 @@
   {{/each}}
 </table>
 
-{{#if showAddRequirement}}
+{{#modal-dialog title="Add requirement" condition=showAddRequirement}}
 <section>
-<h3>Add requirement</h3>
 <form class="row" {{action 'addRequirement' model requiredType requiredCount on='submit'}}>
         <div class="large-8 columns">
 {{ember-selectize
@@ -59,7 +57,7 @@ placeholder="Select a type" }}
     <button type="submit" class="large-1 columns">Add</button>
 </form>
 </section>
-{{/if}}
+{{/modal-dialog}}
 
 {{#if showImportRequirements}}
 <section>
