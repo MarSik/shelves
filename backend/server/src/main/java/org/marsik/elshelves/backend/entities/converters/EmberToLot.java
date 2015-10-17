@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
+public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 	@Autowired
 	EmberToBox emberToBox;
 
@@ -30,21 +30,8 @@ public class EmberToLot implements CachingConverter<LotApiModel, Lot, UUID> {
 	@Autowired
 	EmberToLotHistory emberToLotHistory;
 
-	@Override
-	public Lot convert(LotApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Lot)cache.get(object.getId());
-		}
-
-		Lot entity = new Lot();
-		if (object.getId() != null) {
-			cache.put(object.getId(), entity);
-		}
-		return convert(object, entity, nested, cache);
+	public EmberToLot() {
+		super(Lot.class);
 	}
 
 	@Override

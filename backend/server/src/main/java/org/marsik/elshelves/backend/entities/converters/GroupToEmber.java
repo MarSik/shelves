@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, UUID> {
+public class GroupToEmber extends AbstractEntityToEmber<Group, PartGroupApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
@@ -24,23 +24,8 @@ public class GroupToEmber implements CachingConverter<Group, PartGroupApiModel, 
     @Autowired
     NumericPropertyToEmber numericPropertyToEmber;
 
-	@Override
-	public PartGroupApiModel convert(Group object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (PartGroupApiModel)cache.get(object.getId());
-		}
-
-		PartGroupApiModel model = new PartGroupApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-
-		return convert(object, model, nested, cache);
+	public GroupToEmber() {
+		super(PartGroupApiModel.class);
 	}
 
 	@Override

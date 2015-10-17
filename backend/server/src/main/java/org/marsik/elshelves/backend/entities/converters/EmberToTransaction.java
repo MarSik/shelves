@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToTransaction implements CachingConverter<TransactionApiModel, Transaction, UUID> {
+public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiModel, Transaction> {
 	@Autowired
 	EmberToUser emberToUser;
 
@@ -25,24 +25,8 @@ public class EmberToTransaction implements CachingConverter<TransactionApiModel,
     @Autowired
     EmberToNamedObject emberToNamedObject;
 
-	@Override
-	public Transaction convert(TransactionApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Transaction)cache.get(object.getId());
-		}
-
-		Transaction model = new Transaction();
-
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-
-		return convert(object, model, nested, cache);
+	public EmberToTransaction() {
+		super(Transaction.class);
 	}
 
 	@Override

@@ -9,32 +9,16 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToBox implements CachingConverter<BoxApiModel, Box, UUID> {
+public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
     @Autowired
     EmberToUser emberToUser;
 
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
-    @Override
-    public Box convert(BoxApiModel object, int nested, Map<UUID, Object> cache) {
-        if (object == null) {
-            return null;
-        }
-
-        if (cache.containsKey(object.getId())) {
-            return (Box)cache.get(object.getId());
-        }
-
-        Box box = new org.marsik.elshelves.backend.entities.Box();
-
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), box);
-		}
-
-		return convert(object, box, nested, cache);
-    }
+	public EmberToBox() {
+		super(Box.class);
+	}
 
 	@Override
 	public Box convert(BoxApiModel object, Box box, int nested, Map<UUID, Object> cache) {

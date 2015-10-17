@@ -8,24 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToUser implements CachingConverter<UserApiModel, User, UUID> {
-    @Override
-    public User convert(UserApiModel dto, int nested, Map<UUID, Object> cache) {
-        if (dto == null) {
-            return null;
-        }
-
-        if (cache.containsKey(dto.getId())) {
-            return (User)cache.get(dto.getId());
-        }
-
-        User u = new User();
-		if (nested > 0
-				&& dto.getId() != null) {
-			cache.put(dto.getId(), u);
-		}
-		return convert(dto, u, nested, cache);
-    }
+public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
+	public EmberToUser() {
+		super(User.class);
+	}
 
 	@Override
 	public User convert(UserApiModel dto, User u, int nested, Map<UUID, Object> cache) {

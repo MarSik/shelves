@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
+public class BoxToEmber extends AbstractEntityToEmber<Box,BoxApiModel> {
     @Autowired
     UserToEmber userToEmber;
 
@@ -22,6 +22,10 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
+
+	protected BoxToEmber() {
+		super(BoxApiModel.class);
+	}
 
 	@Override
 	public BoxApiModel convert(Box box, BoxApiModel model, int nested, Map<UUID, Object> cache) {
@@ -51,24 +55,4 @@ public class BoxToEmber implements CachingConverter<Box, BoxApiModel, UUID> {
 
 		return model;
 	}
-
-	@Override
-    public BoxApiModel convert(Box box, int nested, Map<UUID, Object> cache) {
-        if (box == null) {
-            return null;
-        }
-
-        if (cache.containsKey(box.getId())) {
-            return (BoxApiModel)cache.get(box.getId());
-        }
-
-        BoxApiModel model = new BoxApiModel();
-
-		if (nested > 0
-				&& box.getId() != null) {
-			cache.put(box.getId(), model);
-		}
-
-		return convert(box, model, nested, cache);
-    }
 }

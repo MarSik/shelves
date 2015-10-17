@@ -9,26 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToSource implements CachingConverter<SourceApiModel, Source, UUID> {
+public class EmberToSource extends AbstractEmberToEntity<SourceApiModel, Source> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
-	@Override
-	public Source convert(SourceApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Source)cache.get(object.getId());
-		}
-
-		Source model = new Source();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public EmberToSource() {
+		super(Source.class);
 	}
 
 	@Override

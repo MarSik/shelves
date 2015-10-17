@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.lang3.StringUtils;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -48,7 +49,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
     }
 
     @Override
-    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+    public boolean delete(UUID uuid, User currentUser) throws BaseRestException {
         boolean res = super.delete(uuid, currentUser);
         if (res) {
             try {
@@ -72,7 +73,7 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
     }
 
     @Override
-    public Document update(Document dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+    public Document update(Document dto, User currentUser) throws BaseRestException {
         Document doc = super.update(dto, currentUser);
         if (doc != null && doc.getId() != null && doc.getUrl() != null) {
             downloadDoc(doc.getId(), doc.getUrl());

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUID> {
+public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 	@Autowired
 	EmberToFootprint emberToFootprint;
 
@@ -27,22 +27,8 @@ public class EmberToType implements CachingConverter<PartTypeApiModel, Type, UUI
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
-	@Override
-	public Type convert(PartTypeApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Type)cache.get(object.getId());
-		}
-
-		Type model = new Type();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public EmberToType() {
+		super(Type.class);
 	}
 
 	@Override

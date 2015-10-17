@@ -10,26 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class  FootprintToEmber implements CachingConverter<Footprint, FootprintApiModel, UUID> {
+public class  FootprintToEmber extends AbstractEntityToEmber<Footprint, FootprintApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
-	@Override
-	public FootprintApiModel convert(Footprint object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (FootprintApiModel)cache.get(object.getId());
-		}
-
-		FootprintApiModel model = new FootprintApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public FootprintToEmber() {
+		super(FootprintApiModel.class);
 	}
 
 	@Override

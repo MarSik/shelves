@@ -33,6 +33,9 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
             return null;
         }
 
+        model.setId(object.getId());
+        model.setVersion(object.getVersion());
+
         if (nested > 0
                 && object.getId() != null) {
             cache.put(object.getId(), model);

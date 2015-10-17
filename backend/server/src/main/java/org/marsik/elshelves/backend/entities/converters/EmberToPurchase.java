@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purchase, UUID> {
+public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Purchase> {
 	@Autowired
 	EmberToTransaction emberToTransaction;
 
@@ -23,21 +23,8 @@ public class EmberToPurchase implements CachingConverter<PurchaseApiModel, Purch
 	@Autowired
 	EmberToType emberToType;
 
-	@Override
-	public Purchase convert(PurchaseApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Purchase)cache.get(object.getId());
-		}
-
-		Purchase entity = new Purchase();
-		if (object.getId() != null) {
-			cache.put(object.getId(), entity);
-		}
-		return convert(object, entity, nested, cache);
+	public EmberToPurchase() {
+		super(Purchase.class);
 	}
 
 	@Override

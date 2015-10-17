@@ -12,29 +12,15 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class ItemToEmber implements CachingConverter<Item, ItemApiModel, UUID> {
+public class ItemToEmber extends AbstractEntityToEmber<Item, ItemApiModel> {
 	@Autowired
 	LotToEmber lotToEmber;
 
 	@Autowired
 	RequirementToEmber requirementToEmber;
 
-	@Override
-	public ItemApiModel convert(Item object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (ItemApiModel)cache.get(object.getId());
-		}
-
-		ItemApiModel model = new ItemApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public ItemToEmber() {
+		super(ItemApiModel.class);
 	}
 
 	@Override

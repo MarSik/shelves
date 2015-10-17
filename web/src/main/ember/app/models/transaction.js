@@ -6,7 +6,8 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default DS.Model.extend({
-    name: attr('string'),
+  version: attr(),
+  name: attr('string'),
     date: attr('date'),
     items: hasMany("purchase", {async: true}),
     belongsTo: belongsTo("user", {async: true}),

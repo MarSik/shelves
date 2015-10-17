@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -89,7 +90,7 @@ public class SourceService extends AbstractRestService<SourceRepository, Source>
 	}
 
 	@Override
-	public Source update(Source dto, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+	public Source update(Source dto, User currentUser) throws BaseRestException {
 		Source s = super.update(dto, currentUser);
 		if (s != null && s.getId() != null) {
 			refreshFavicon(s.getId());
@@ -98,7 +99,7 @@ public class SourceService extends AbstractRestService<SourceRepository, Source>
 	}
 
 	@Override
-	public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+	public boolean delete(UUID uuid, User currentUser) throws BaseRestException {
 		boolean res = super.delete(uuid, currentUser);
 		if (res) {
 			try {

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, UUID> {
+public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
@@ -24,23 +24,8 @@ public class EmberToGroup implements CachingConverter<PartGroupApiModel, Group, 
     @Autowired
     EmberToType emberToType;
 
-	@Override
-	public Group convert(PartGroupApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Group)cache.get(object.getId());
-		}
-
-		Group model = new Group();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-
-		return convert(object, model, nested, cache);
+	public EmberToGroup() {
+		super(Group.class);
 	}
 
 	@Override

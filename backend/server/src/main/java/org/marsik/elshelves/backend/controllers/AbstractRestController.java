@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.FileUtils;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
@@ -57,6 +58,9 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
         T incoming = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
         incoming = service.create(incoming, currentUser);
 
+        // Flush is needed to get the updated version
+        service.flush();
+
         E entity = getDbToRest().convert(incoming, 1, new THashMap<>());
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
@@ -69,13 +73,16 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
     @Transactional
     public EmberModel update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
-                             @Valid @RequestBody E item) throws InvalidRequest, OperationNotPermitted, PermissionDenied, EntityNotFound {
+                             @Valid @RequestBody E item) throws BaseRestException {
         T update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
 
         // The REST entity does not contain id during PUT, because that is
         // provided by the URL
         update.setId(uuid);
         T entity = service.update(update, currentUser);
+
+        // Flush is needed to get the updated version
+        service.flush();
 
         E result = getDbToRest().convert(entity, 1, new THashMap<>());
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(result);
@@ -87,7 +94,7 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
     @ResponseBody
     @Transactional
     public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
-                                         @PathVariable("id") UUID uuid) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+                                         @PathVariable("id") UUID uuid) throws BaseRestException {
         service.delete(uuid, currentUser);
         return new THashMap<>();
     }

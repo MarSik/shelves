@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -57,7 +58,7 @@ public class UploadController {
 					   @RequestParam("files[]") MultipartFile[] files,
                        @RequestParam(value = "webcam", required = false) MultipartFile webcam,
 					   @RequestParam("entity") UUID entity,
-                       HttpServletRequest request) throws IOException, OperationNotPermitted, EntityNotFound, PermissionDenied {
+                       HttpServletRequest request) throws IOException, BaseRestException {
 		NamedEntity e;
 
 		if (entity != null) {
@@ -96,7 +97,7 @@ public class UploadController {
 		return b.build();
 	}
 
-    private void processUpload(User currentUser, Set<Document> documents, NamedEntity describesRecord, MultipartFile file) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
+    private void processUpload(User currentUser, Set<Document> documents, NamedEntity describesRecord, MultipartFile file) throws BaseRestException {
         Document d = new Document();
         d.setName(file.getOriginalFilename());
         d.setSize(file.getSize());

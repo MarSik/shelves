@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class RequirementToEmber implements CachingConverter<Requirement, RequirementApiModel, UUID> {
+public class RequirementToEmber extends AbstractEntityToEmber<Requirement, RequirementApiModel> {
 	@Autowired
 	TypeToEmber typeToEmber;
 
@@ -25,22 +25,8 @@ public class RequirementToEmber implements CachingConverter<Requirement, Require
 	@Autowired
 	LotToEmber lotToEmber;
 
-	@Override
-	public RequirementApiModel convert(Requirement object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (RequirementApiModel)cache.get(object.getId());
-		}
-
-		RequirementApiModel model = new RequirementApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public RequirementToEmber() {
+		super(RequirementApiModel.class);
 	}
 
 	@Override

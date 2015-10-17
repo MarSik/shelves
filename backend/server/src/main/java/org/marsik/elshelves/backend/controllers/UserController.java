@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -84,7 +85,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public EmberModel getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws EntityNotFound, PermissionDenied {
+    public EmberModel getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
         if (ids == null) {
             throw new PermissionDenied();
         }

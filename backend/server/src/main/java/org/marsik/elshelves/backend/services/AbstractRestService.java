@@ -3,9 +3,11 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.controllers.exceptions.UpdateConflict;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
@@ -114,7 +116,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     }
 
     @CircuitBreaker
-    public boolean delete(UUID uuid, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+    public boolean delete(UUID uuid, User currentUser) throws BaseRestException {
         T one = getSingleEntity(uuid);
 
 		if (one == null) {
@@ -134,7 +136,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     }
 
     @CircuitBreaker
-    public T update(T update, User currentUser) throws PermissionDenied, OperationNotPermitted, EntityNotFound {
+    public T update(T update, User currentUser) throws BaseRestException {
         T one = getSingleEntity(update.getId());
 
 		if (one == null) {
@@ -143,6 +145,14 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
 		if (!one.getOwner().equals(currentUser)) {
             throw new PermissionDenied();
+        }
+
+        if (one.getVersion() != null && !one.getVersion().equals(update.getVersion())) {
+            throw new UpdateConflict();
+        }
+
+        if (update.getVersion() != null && !update.getVersion().equals(one.getVersion())) {
+            throw new UpdateConflict();
         }
 
         try {
@@ -157,5 +167,9 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         }
 
         return one;
+    }
+
+    public void flush() {
+        repository.flush();
     }
 }

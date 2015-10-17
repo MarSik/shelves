@@ -9,26 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class SourceToEmber implements CachingConverter<Source, SourceApiModel, UUID> {
+public class SourceToEmber extends AbstractEntityToEmber<Source, SourceApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
-	@Override
-	public SourceApiModel convert(Source object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (SourceApiModel)cache.get(object.getId());
-		}
-
-		SourceApiModel model = new SourceApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public SourceToEmber() {
+		super(SourceApiModel.class);
 	}
 
 	@Override

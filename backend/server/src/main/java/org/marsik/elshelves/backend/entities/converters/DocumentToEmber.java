@@ -12,29 +12,15 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class DocumentToEmber implements CachingConverter<Document, DocumentApiModel, UUID> {
+public class DocumentToEmber extends AbstractEntityToEmber<Document, DocumentApiModel> {
 	@Autowired
 	UserToEmber userToEmber;
 
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
-	@Override
-	public DocumentApiModel convert(Document object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (DocumentApiModel)cache.get(object.getId());
-		}
-
-		DocumentApiModel model = new DocumentApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public DocumentToEmber() {
+		super(DocumentApiModel.class);
 	}
 
 	@Override

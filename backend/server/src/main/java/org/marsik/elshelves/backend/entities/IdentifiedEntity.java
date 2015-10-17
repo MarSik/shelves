@@ -23,6 +23,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,6 +43,9 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
 
     @Column(columnDefinition = "BINARY(16)")
     UUID id;
+
+    @Version
+    Long version;
 
     /**
      * Record the timestamp of last modification so

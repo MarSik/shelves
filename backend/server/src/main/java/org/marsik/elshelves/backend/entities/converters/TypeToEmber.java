@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUID> {
+public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 	@Autowired
 	GroupToEmber groupToEmber;
 
@@ -31,22 +31,8 @@ public class TypeToEmber implements CachingConverter<Type, PartTypeApiModel, UUI
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
-	@Override
-	public PartTypeApiModel convert(Type object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (PartTypeApiModel)cache.get(object.getId());
-		}
-
-		PartTypeApiModel model = new PartTypeApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public TypeToEmber() {
+		super(PartTypeApiModel.class);
 	}
 
 	@Override

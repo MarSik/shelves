@@ -12,27 +12,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class UserToEmber implements CachingConverter<User, UserApiModel, UUID> {
+public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     @Autowired
     AuthorizationToEmber authorizationToEmber;
 
-    @Override
-    public UserApiModel convert(User entity, int nested, Map<UUID, Object> cache) {
-        if (entity == null) {
-            return null;
-        }
-
-        if (cache.containsKey(entity.getId())) {
-            return (UserApiModel)cache.get(entity.getId());
-        }
-
-        UserApiModel user = new UserApiModel();
-		if (nested > 0
-				&& entity.getId() != null) {
-			cache.put(entity.getId(), user);
-		}
-
-		return convert(entity, user, nested, cache);
+    public UserToEmber() {
+        super(UserApiModel.class);
     }
 
 	@Override

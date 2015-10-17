@@ -21,6 +21,8 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
     @JsonProperty("id")
     UUID id;
 
+    Long version;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

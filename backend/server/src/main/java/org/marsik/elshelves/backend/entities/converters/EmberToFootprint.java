@@ -10,28 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToFootprint implements CachingConverter<FootprintApiModel, Footprint, UUID> {
+public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, Footprint> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
-	@Override
-	public Footprint convert(FootprintApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Footprint)cache.get(object.getId());
-		}
-
-		Footprint model = new Footprint();
-
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-
-		return convert(object, model, nested, cache);
+	public EmberToFootprint() {
+		super(Footprint.class);
 	}
 
 	@Override

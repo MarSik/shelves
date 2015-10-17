@@ -33,6 +33,9 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
             return null;
         }
 
+        model.setId(object.getId());
+        model.setVersion(object.getVersion());
+
         if (nested > 0
                 && object.getId() != null) {
             cache.put(object.getId(), model);

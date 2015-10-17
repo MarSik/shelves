@@ -12,26 +12,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToDocument implements CachingConverter<DocumentApiModel, Document, UUID> {
+public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Document> {
 	@Autowired
 	EmberToUser emberToUser;
 
-	@Override
-	public Document convert(DocumentApiModel object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (Document)cache.get(object.getId());
-		}
-
-		Document model = new Document();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public EmberToDocument() {
+		super(Document.class);
 	}
 
 	@Override

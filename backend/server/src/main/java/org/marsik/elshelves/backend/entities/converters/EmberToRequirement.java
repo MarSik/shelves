@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class EmberToRequirement implements CachingConverter<RequirementApiModel, Requirement, UUID> {
+public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiModel, Requirement> {
     @Autowired
     EmberToType emberToType;
 
@@ -22,25 +22,9 @@ public class EmberToRequirement implements CachingConverter<RequirementApiModel,
 	@Autowired
 	EmberToLot emberToLot;
 
-    @Override
-    public Requirement convert(RequirementApiModel object, int nested, Map<UUID, Object> cache) {
-        if (object == null) {
-            return null;
-        }
-
-        if (cache.containsKey(object.getId())) {
-            return (Requirement)cache.get(object.getId());
-        }
-
-        Requirement model = new Requirement();
-
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-
-		return convert(object, model, nested, cache);
-    }
+	public EmberToRequirement() {
+		super(Requirement.class);
+	}
 
 	@Override
 	public Requirement convert(RequirementApiModel object, Requirement model, int nested, Map<UUID, Object> cache) {

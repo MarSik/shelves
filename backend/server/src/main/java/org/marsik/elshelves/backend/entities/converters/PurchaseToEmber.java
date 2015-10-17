@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiModel, UUID> {
+public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
@@ -26,22 +26,8 @@ public class PurchaseToEmber implements CachingConverter<Purchase, PurchaseApiMo
 	@Autowired
 	TransactionToEmber transactionToEmber;
 
-	@Override
-	public PurchaseApiModel convert(Purchase object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (PurchaseApiModel)cache.get(object.getId());
-		}
-
-		PurchaseApiModel model = new PurchaseApiModel();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), model);
-		}
-		return convert(object, model, nested, cache);
+	public PurchaseToEmber() {
+		super(PurchaseApiModel.class);
 	}
 
 	@Override

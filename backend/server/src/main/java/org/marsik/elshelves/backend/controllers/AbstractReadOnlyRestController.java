@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.FileUtils;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
@@ -49,7 +50,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
     @ResponseBody
     @Transactional(readOnly = true)
     public EmberModel getAll(@CurrentUser User currentUser,
-							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws EntityNotFound, PermissionDenied {
+							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
 		Collection<T> allItems;
 
 		if (ids == null) {
@@ -81,7 +82,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
     @ResponseBody
     @Transactional(readOnly = true)
     public EmberModel getOne(@CurrentUser User currentUser,
-                             @PathVariable("id") UUID uuid) throws PermissionDenied, EntityNotFound {
+                             @PathVariable("id") UUID uuid) throws BaseRestException {
         T entity = service.get(uuid, currentUser);
         E dto = getDbToRest().convert(entity, 1, new THashMap<>());
 

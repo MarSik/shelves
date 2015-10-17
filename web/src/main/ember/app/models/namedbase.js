@@ -5,7 +5,8 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default DS.Model.extend({
-    name: attr('string'),
+  version: attr(),
+  name: attr('string'),
     description: attr('string'),
     summary: attr(),
     flagged: attr('boolean'),

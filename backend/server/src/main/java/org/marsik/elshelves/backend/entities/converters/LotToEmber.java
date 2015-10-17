@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
+public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 	@Autowired
 	UserToEmber userToEmber;
 
@@ -27,9 +27,12 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 	@Autowired
 	RequirementToEmber requirementToEmber;
 
-
 	@Autowired
 	ModelMapper modelMapper;
+
+	public LotToEmber() {
+		super(LotApiModel.class);
+	}
 
 	protected LotApiModel createEntity() {
 		return new LotApiModel();
@@ -60,23 +63,5 @@ public class LotToEmber implements CachingConverter<Lot, LotApiModel, UUID> {
 		entity.setValid(object.isValid());
 
 		return entity;
-	}
-
-	@Override
-	public LotApiModel convert(Lot object, int nested, Map<UUID, Object> cache) {
-		if (object == null) {
-			return null;
-		}
-
-		if (cache.containsKey(object.getId())) {
-			return (LotApiModel)cache.get(object.getId());
-		}
-
-		LotApiModel entity = createEntity();
-		if (nested > 0
-				&& object.getId() != null) {
-			cache.put(object.getId(), entity);
-		}
-		return convert(object, entity, nested, cache);
 	}
 }
