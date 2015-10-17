@@ -14,6 +14,7 @@ import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.ember.EmberModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BinaryOperator;
 
 public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends BaseIdentifiedEntityRepository<T>, T>> {
     final Class<E> dtoClazz;
@@ -49,7 +52,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
     @RequestMapping
     @ResponseBody
     @Transactional(readOnly = true)
-    public EmberModel getAll(@CurrentUser User currentUser,
+    public ResponseEntity<EmberModel> getAll(@CurrentUser User currentUser,
 							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
 		Collection<T> allItems;
 
@@ -75,20 +78,39 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
             sideLoad(entity, builder);
         }
 
-        return builder.build();
+        T lastModified = allItems.stream().reduce(new BinaryOperator<T>() {
+            @Override
+            public T apply(T t, T t2) {
+                if (t.getLastModified().isAfter(t2.getLastModified())) {
+                    return t;
+                } else {
+                    return t2;
+                }
+            }
+        }).get();
+
+        return ResponseEntity
+                .ok()
+                .lastModified(lastModified.getLastModified().getMillis())
+                .body(builder.build());
     }
 
     @RequestMapping("/{id}")
     @ResponseBody
     @Transactional(readOnly = true)
-    public EmberModel getOne(@CurrentUser User currentUser,
+    public ResponseEntity<EmberModel> getOne(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid) throws BaseRestException {
         T entity = service.get(uuid, currentUser);
         E dto = getDbToRest().convert(entity, 1, new THashMap<>());
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dto);
         sideLoad(dto, builder);
-        return builder.build();
+
+        return ResponseEntity
+                .ok()
+                .eTag(dto.getVersion().toString())
+                .lastModified(entity.getLastModified().getMillis())
+                .body(builder.build());
     }
 
     protected S getService() {

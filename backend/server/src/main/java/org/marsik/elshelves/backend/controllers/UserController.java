@@ -17,6 +17,7 @@ import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,16 +77,18 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @Override
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
-    public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user) throws OperationNotPermitted {
+    public ResponseEntity<EmberModel> create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user) throws OperationNotPermitted {
         String verificationCode = userDetailsService.createUser(user);
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 
-        return new EmberModel.Builder<UserApiModel>(user).build();
+        return ResponseEntity
+                .ok()
+                .body(new EmberModel.Builder<UserApiModel>(user).build());
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public EmberModel getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
+    public ResponseEntity<EmberModel> getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
         if (ids == null) {
             throw new PermissionDenied();
         }

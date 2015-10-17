@@ -16,6 +16,7 @@ import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,7 +54,7 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public EmberModel create(@CurrentUser User currentUser,
+    public ResponseEntity<EmberModel> create(@CurrentUser User currentUser,
                              @Valid @RequestBody E item) throws OperationNotPermitted {
         T incoming = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
         incoming = service.create(incoming, currentUser);
@@ -65,13 +66,17 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
-        return builder.build();
+        return ResponseEntity
+                .ok()
+                .eTag(entity.getVersion().toString())
+                .lastModified(incoming.getLastModified().getMillis())
+                .body(builder.build());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     @Transactional
-    public EmberModel update(@CurrentUser User currentUser,
+    public ResponseEntity<EmberModel> update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
                              @Valid @RequestBody E item) throws BaseRestException {
         T update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
@@ -87,7 +92,12 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
         E result = getDbToRest().convert(entity, 1, new THashMap<>());
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(result);
         sideLoad(result, builder);
-        return builder.build();
+
+        return ResponseEntity
+                .ok()
+                .eTag(entity.getVersion().toString())
+                .lastModified(entity.getLastModified().getMillis())
+                .body(builder.build());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
