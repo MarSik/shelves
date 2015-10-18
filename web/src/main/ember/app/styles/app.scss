@@ -288,6 +288,20 @@ nav.actions {
   -moz-column-count: 4; /* Firefox */
   column-count: 4;
 
+  * > .hover-actions {
+    display: none;
+  }
+
+  *:hover > .hover-actions {
+    display: inline;
+
+    button {
+      display: inline;
+      border: 0;
+      padding: 0.1ex;
+    }
+  }
+
   & > li {
     display: inline-block;
     width: 100%;

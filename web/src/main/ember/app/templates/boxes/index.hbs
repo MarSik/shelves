@@ -9,7 +9,7 @@
 
   <ul class="two-level-index">
     {{#each topLevel as |box|}}
-    {{two-level-index model=box target='boxes.show'}}
+    {{two-level-index model=box target='boxes.show' createAction=(action 'showCreateBox')}}
     {{/each}}
   </ul>
 

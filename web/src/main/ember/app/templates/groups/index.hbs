@@ -5,7 +5,7 @@
 
   <ul class="columns two-level-index">
       {{#each topLevel as |group|}}
-      {{two-level-index model=group target='groups.show'}}
+      {{two-level-index model=group target='groups.show' createAction=(action 'showCreateGroup')}}
      {{/each}}
   </ul>
 </section>
