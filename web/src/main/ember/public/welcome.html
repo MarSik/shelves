@@ -17,7 +17,6 @@
         nav.top-bar {
             border-bottom: solid 2px #b3b3b3;
             overflow: hidden;
-            margin-bottom: 0.5em;
         }
 
         body {
@@ -33,7 +32,11 @@
             background-color: rgba(255, 255, 255, 0.9);
             padding: 0;
             margin: 0;
-            border: 2ex solid #fff;
+            border: 2ex solid transparent;
+        }
+
+        #wrapper > section:first-of-type {
+            margin-top: 1em !important;
         }
 
         .solid, #wrapper > section:nth-child(odd) {
@@ -55,8 +58,6 @@
 
         #wrapper > section {
             max-width: 1024px;
-            border-left: solid black 2px;
-            border-right: solid black 2px;
         }
 
         .feature-list {
