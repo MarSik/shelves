@@ -52,13 +52,17 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
             for (FootprintApiModel g : object.getFootprints()) {
                 model.addFootprint(emberToFootprint.convert(g, nested - 1, cache));
             }
-        }
+        } else {
+			model.setFootprints(null);
+		}
         
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<Group>());
 			for (PartGroupApiModel g : object.getGroups()) {
 				model.addGroup(emberToGroup.convert(g, nested - 1, cache));
 			}
+		} else {
+			model.setGroups(null);
 		}
 
         if (object.getSeeAlso() != null) {
@@ -66,7 +70,10 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
             for (PartTypeApiModel t: object.getSeeAlso()) {
                 model.addSeeAlso(convert(t, nested - 1, cache));
             }
-        }
+        } else {
+			model.setSeeAlso(null);
+			model.setSeeAlsoIncoming(null);
+		}
 
 		return model;
 	}

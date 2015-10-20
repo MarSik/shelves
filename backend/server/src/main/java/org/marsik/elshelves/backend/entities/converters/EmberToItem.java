@@ -34,6 +34,8 @@ public class EmberToItem extends AbstractEmberToEntity<ItemApiModel, Item> {
 			for (RequirementApiModel r: object.getRequirements()) {
 				item.addRequirement(emberToRequirement.convert(r, nested, cache));
 			}
+		} else {
+			item.setRequires(null);
 		}
 
 		return item;

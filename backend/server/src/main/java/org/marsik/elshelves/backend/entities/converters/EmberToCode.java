@@ -23,6 +23,8 @@ public class EmberToCode extends AbstractEmberToEntity<CodeApiModel, Code> {
             NamedEntity e = new NamedEntity();
             e.setId(object.getReference().getId());
             model.setReference(e);
+        } else {
+            model.setReference(null);
         }
 
         return model;

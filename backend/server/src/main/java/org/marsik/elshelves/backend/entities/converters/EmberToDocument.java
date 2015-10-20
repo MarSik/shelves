@@ -41,6 +41,8 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 				entity.setId(r.getId());
 				model.addDescribes(entity);
 			}
+		} else {
+			model.setDescribes(null);
 		}
 
 		return model;

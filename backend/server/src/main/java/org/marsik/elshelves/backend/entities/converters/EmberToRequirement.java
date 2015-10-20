@@ -38,6 +38,8 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 			for (PartTypeApiModel p: object.getType()) {
 				model.addType(emberToType.convert(p, nested, cache));
 			}
+		} else {
+			model.setType(null);
 		}
 
 		model.setItem(emberToItem.convert(object.getItem(), nested, cache));

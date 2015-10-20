@@ -43,6 +43,8 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 			for (PolymorphicRecord l: object.getLots()) {
 				model.addLot(new Lot(l.getId()));
 			}
+		} else {
+			model.setLots(null);
 		}
 
 		return model;

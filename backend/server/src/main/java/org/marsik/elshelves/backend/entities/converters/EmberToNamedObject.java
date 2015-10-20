@@ -52,7 +52,9 @@ public class EmberToNamedObject {
 			for (DocumentApiModel d: object.getDescribedBy()) {
 				model.addDescribedBy(emberToDocument.convert(d, nested, cache));
 			}
-		}
+		} else {
+            model.setDescribedBy(null);
+        }
 
         if (object.getProperties() != null) {
             model.setProperties(new THashSet<NumericPropertyValue>());
@@ -69,6 +71,8 @@ public class EmberToNamedObject {
                 }
                 model.addProperty(v);
             }
+        } else {
+            model.setProperties(null);
         }
 
 		return model;

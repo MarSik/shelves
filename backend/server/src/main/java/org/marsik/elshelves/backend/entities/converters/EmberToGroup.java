@@ -38,6 +38,8 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
             for (NumericPropertyApiModel p: object.getShowProperties()) {
                 model.addShowProperty(emberToNumericProperty.convert(p, 1, cache));
             }
+        } else {
+            model.setShowProperties(null);
         }
 
         if (object.getTypes() != null) {
@@ -45,7 +47,11 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
             for (PartTypeApiModel t: object.getTypes()) {
                 model.addType(emberToType.convert(t, nested, cache));
             }
+        } else {
+            model.setTypes(null);
         }
+
+        model.setGroups(null);
 
 		return model;
 	}

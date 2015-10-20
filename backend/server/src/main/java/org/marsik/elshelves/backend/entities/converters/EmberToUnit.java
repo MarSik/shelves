@@ -22,10 +22,7 @@ public class EmberToUnit extends AbstractEmberToEntity<UnitApiModel, Unit> {
 	public Unit convert(UnitApiModel object, Unit model, int nested, Map<UUID, Object> cache) {
 		emberToNamedObject.convert(object, model, nested, cache);
 		model.setSymbol(object.getSymbol());
-
-		if (object.getPrefixes() != null) {
-			model.setPrefixes(object.getPrefixes());
-		}
+		model.setPrefixes(object.getPrefixes());
 
 		return model;
 	}

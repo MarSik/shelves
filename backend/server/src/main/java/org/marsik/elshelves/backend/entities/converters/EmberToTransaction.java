@@ -44,6 +44,8 @@ public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiMode
 			for (PurchaseApiModel p : object.getItems()) {
 				model.addItem(emberToPurchase.convert(p, nested - 1, cache));
 			}
+		} else {
+			model.setItems(null);
 		}
 
 		return model;

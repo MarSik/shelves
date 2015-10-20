@@ -54,6 +54,8 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 		if (object.getSerial() != null
 				&& !object.getSerial().isEmpty()) {
 			model.getSerials().add(object.getSerial());
+		} else {
+			model.setSerials(null);
 		}
 
 		return model;

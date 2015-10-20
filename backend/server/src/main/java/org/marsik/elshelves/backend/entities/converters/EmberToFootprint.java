@@ -33,7 +33,10 @@ public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, F
             for (FootprintApiModel t: object.getSeeAlso()) {
                 model.addSeeAlso(convert(t, nested - 1, cache));
             }
-        }
+        } else {
+			model.setSeeAlso(null);
+			model.setSeeAlsoIncoming(null);
+		}
 
 		return model;
 	}

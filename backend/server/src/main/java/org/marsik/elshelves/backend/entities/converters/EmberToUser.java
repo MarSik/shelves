@@ -19,6 +19,9 @@ public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
 		u.setName(dto.getName());
 		u.setPassword(dto.getPassword());
 		u.setId(dto.getId());
+
+		u.setAuthorizations(null);
+
 		return u;
 	}
 }
