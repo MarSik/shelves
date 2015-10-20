@@ -8,7 +8,6 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
-import org.marsik.elshelves.backend.configuration.StorageConfiguration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,17 +27,17 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 public class FileStorageManager implements StorageManager, StorageMaintenance {
-    final StorageConfiguration storageConfiguration;
+    final String storagePath;
 
     final Object hashStoreLock = new Object();
 
-    public FileStorageManager(StorageConfiguration storageConfiguration) {
-        this.storageConfiguration = storageConfiguration;
+    public FileStorageManager(String storagePath) {
+        this.storagePath = storagePath;
     }
 
     private String getPath(UUID uuid) {
         StringBuilder sb = new StringBuilder();
-        sb.append(storageConfiguration.getDocumentPath());
+        sb.append(storagePath);
         sb.append("/");
         sb.append(uuid.toString().substring(0, 2));
         sb.append("/");
@@ -139,7 +138,7 @@ public class FileStorageManager implements StorageManager, StorageMaintenance {
 
     private File getHashFile(String hash) {
         StringBuilder sb = new StringBuilder();
-        sb.append(storageConfiguration.getDocumentPath());
+        sb.append(storagePath);
         sb.append("/store/");
         sb.append(hash.substring(0, 2));
         sb.append("/");

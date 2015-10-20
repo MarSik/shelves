@@ -1,14 +1,12 @@
 package org.marsik.elshelves.backend.app.spring;
 
-import org.marsik.elshelves.backend.configuration.DatabaseConfiguration;
-import org.marsik.elshelves.backend.configuration.SearchIndexConfiguration;
-import org.marsik.elshelves.backend.configuration.StorageConfiguration;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.services.FileStorageManager;
 import org.marsik.elshelves.backend.services.StorageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,24 +24,12 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 public class ApplicationData {
     private static final Logger log = LoggerFactory.getLogger(ApplicationData.class);
 
-    @Bean
-    DatabaseConfiguration getDbConfiguration() {
-        return new DatabaseConfiguration();
-    }
-
-    @Bean
-    public SearchIndexConfiguration getStreetDbConfig() {
-        return new SearchIndexConfiguration();
-    }
-
-    @Bean
-    public StorageConfiguration getStorageConfiguration() {
-        return new StorageConfiguration();
-    }
+    @Value("${storage.path:/tmp/shelves/documents}")
+    String documentPath;
 
     @Bean
     public StorageManager getStorageManager() {
-        return new FileStorageManager(getStorageConfiguration());
+        return new FileStorageManager(documentPath);
     }
 
     @Bean

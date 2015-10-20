@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.app.security;
 
-import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,13 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurity extends
         WebSecurityConfigurerAdapter {
-    @Bean
-    public MailgunConfiguration getMailgunConfiguration() {
-        MailgunConfiguration conf = new MailgunConfiguration();
-		conf.load();
-		return conf;
-    }
-
     @Autowired
     private ElshelvesUserDetailsService elshelvesUserDetailsService;
 

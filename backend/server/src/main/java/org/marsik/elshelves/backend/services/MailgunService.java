@@ -2,10 +2,10 @@ package org.marsik.elshelves.backend.services;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.marsik.elshelves.backend.configuration.MailgunConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,15 +24,16 @@ import java.security.NoSuchAlgorithmException;
 public class MailgunService {
 	private static final Logger log = LoggerFactory.getLogger(MailgunService.class);
 
-    @Autowired
-    MailgunConfiguration configuration;
+	@Value("${mailgun.url:https://api.mailgun.net/v2/shelves.cz/messages}")
+	String url;
+
+	@Value("${mailgun.key:}")
+	String key;
 
 	@Autowired
 	RestTemplate rest;
 
     public String computeSignature(Integer timestamp, String token) {
-        String key = configuration.getKey();
-
         try {
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             String data = timestamp.toString()+token;
@@ -49,7 +50,7 @@ public class MailgunService {
     }
 
 	private HttpHeaders prepareAuthHeaders() {
-		String plainCreds = "api:" + configuration.getKey();
+		String plainCreds = "api:" + key;
 		byte[] plainCredsBytes = new byte[0];
 		try {
 			plainCredsBytes = plainCreds.getBytes("ASCII");
@@ -111,10 +112,10 @@ public class MailgunService {
 
 		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
 
-		if (configuration.getKey().isEmpty()) {
+		if (key.isEmpty()) {
 			log.debug("Trying to send email through Mailgun: {}", params);
 		} else {
-			rest.postForObject(configuration.getUrl(),
+			rest.postForObject(url,
 					request, MailgunResponse.class);
 		}
 
