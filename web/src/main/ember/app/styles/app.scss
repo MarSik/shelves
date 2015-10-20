@@ -155,10 +155,6 @@ table {
     text-align: left;
   }
 
-  tr + tr {
-    border-top: solid thin darkgrey;
-  }
-
   thead tr {
     border: 0;
   }
@@ -187,7 +183,7 @@ table {
     background: -moz-linear-gradient(top, #fafafa, #f8f8f8);
   }
 
-  tbody tr:last-child td {
+  tbody tr.summary td {
     padding-bottom: 0.5em;
     font-style: italic;
   }

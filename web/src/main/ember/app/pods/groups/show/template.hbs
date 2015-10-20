@@ -27,7 +27,7 @@
     </tr>
     </thead>
   {{#each sortedCategoriesList as |cat|}}
-    {{group-type-line model=cat sorting=typeSorting columnCount=typeColumns}}
+    {{group-type-line model=cat sorting=typeSorting columnCount=typeColumns showProperties=model.showProperties}}
   {{/each}}
 </table>
 
