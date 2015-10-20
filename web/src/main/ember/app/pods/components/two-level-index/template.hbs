@@ -2,7 +2,7 @@
   <h3>
     {{#link-to target model}}{{model.name}} ({{model.count}}){{/link-to}}
     <span class="hover-actions">
-      <button {{action 'add' model}}>{{fa-icon 'plus'}}</button>
+      <a {{action 'add' model}}>{{fa-icon 'plus'}}</a>
     </span>
   </h3>
 
@@ -11,7 +11,7 @@
     <li>
       {{#link-to target i}}{{i.name}} ({{i.count}}){{/link-to}}
       <span class="hover-actions">
-        <button {{action 'add' i}}>{{fa-icon 'plus'}}</button>
+        <a {{action 'add' i}}>{{fa-icon 'plus'}}</a>
       </span>
     </li>
     {{/each}}

@@ -1,6 +1,18 @@
 <div class="group-detail columns small-12">
     {{partial '_itemheader'}}
 
+  <section>
+    <h3>Groups</h3>
+
+    <button {{action 'showCreateTopLevelGroup'}}>{{fa-icon 'plus'}} Create sub-group</button>
+
+    <ul class="two-level-index">
+      {{#each model.groups as |group|}}
+      {{two-level-index model=group target='groups.show' createAction=(action 'showCreateGroup')}}
+      {{/each}}
+    </ul>
+  </section>
+
 <h3>Types</h3>
 
 <table style="width: 100%;">
@@ -33,6 +45,7 @@
         {{/each}}
     </tr>
     <tr>
+        <td>&nbsp;</td>
         <td colspan="{{typeColumns}}">{{type.summary}}</td>
     </tr>
     </tbody>
@@ -64,3 +77,15 @@
         <button class='secondary' {{action 'manageProperties' true}}>{{fa-icon 'bar-chart'}} Manage properties</button>
     {{/if}}
 </div>
+
+{{#modal-dialog title="Create group" condition=showCreateDialog}}
+<form {{action 'createGroup' createName on='submit'}}>
+<label for="name">Name:</label>
+{{input id='name' placeholder='Enter group name' value=createName required='required'}}
+{{#if selectedGroup}}
+<label for="parent">Parent:
+  <div>{{selectedGroup.name}}</div></label>
+{{/if}}
+<input type="submit" value="Create group">
+</form>
+{{/modal-dialog}}

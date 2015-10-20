@@ -1,19 +1,23 @@
 {{#if pendingTransactions}}
     <h3>Pending transactions</h3>
     <table>
+      <thead>
         <tr>
             <th>Source</th>
             <th>Date</th>
             <th>Name</th>
             <th>Missing</th>
         </tr>
+      </thead>
         {{#each pendingTransactions as |trans|}}
+      <tbody>
             <tr>
             <td>{{#link-to 'transactions.show' trans}}{{trans.source.name}}{{/link-to}}</td>
             <td>{{trans.date}}</td>
             <td>{{trans.name}}</td>
             <td>{{trans.missing}}</td>
             </tr>
+      </tbody>
         {{/each}}
     </table>
 {{/if}}
@@ -44,7 +48,7 @@
         </div>
     </div>
 
-    <table>
+    <table class="purchase">
         <thead>
         <tr>
             <th colspan="5">Type</th>
@@ -62,9 +66,11 @@
         {{purchase-line purchase=purchase sortedTypes=sortedTypes removeRow="removeRow" createType="createType"}}
         {{/each}}
 
+      <thead>
         <tr>
-            <td colspan="6"><button {{action 'addRow'}}>{{fa-icon 'plus'}} Add row</button></td>
+            <th colspan="6"><button {{action 'addRow'}}>{{fa-icon 'plus'}} Add row</button></th>
         </tr>
+      </thead>
     </table>
 
 
