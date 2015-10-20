@@ -27,35 +27,8 @@
     </tr>
     </thead>
   {{#each sortedCategoriesList as |cat|}}
-  <thead>
-      <tr>
-        <th colspan="{{typeColumns}}">{{cat.fullName}}</th>
-        <th>&nbsp;</th>
-      </tr>
-  </thead>
-  {{#each cat.types as |type|}}
-    <tbody>
-    <tr>
-        <td>{{#draggable-item content=type.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}</td>
-        <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}}</td>
-        <td>{{type.vendor}}</td>
-        <td>
-            {{#each type.footprints as |fp|}}
-            {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
-            {{/each}}
-        </td>
-        <td>{{#link-to 'types.show' type}}{{type.available}}{{/link-to}}</td>
-        {{#each model.showProperties as |property|}}
-            <td>{{property-value entity=type property=property}}</td>
-        {{/each}}
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td colspan="{{typeColumns}}">{{type.summary}}</td>
-    </tr>
-    </tbody>
+    {{group-type-line model=cat sorting=typeSorting columnCount=typeColumns}}
   {{/each}}
-{{/each}}
 </table>
 
     <h3>Additional properties to display</h3>
