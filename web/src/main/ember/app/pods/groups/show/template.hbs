@@ -13,8 +13,6 @@
     </ul>
   </section>
 
-<h3>Types</h3>
-
 <table style="width: 100%;">
     <thead>
     <tr>
@@ -28,7 +26,14 @@
         {{/each}}
     </tr>
     </thead>
-{{#each sortedTypes as |type|}}
+  {{#each sortedCategoriesList as |cat|}}
+  <thead>
+      <tr>
+        <th colspan="{{typeColumns}}">{{cat.fullName}}</th>
+        <th>&nbsp;</th>
+      </tr>
+  </thead>
+  {{#each cat.types as |type|}}
     <tbody>
     <tr>
         <td>{{#draggable-item content=type.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}</td>
@@ -49,6 +54,7 @@
         <td colspan="{{typeColumns}}">{{type.summary}}</td>
     </tr>
     </tbody>
+  {{/each}}
 {{/each}}
 </table>
 

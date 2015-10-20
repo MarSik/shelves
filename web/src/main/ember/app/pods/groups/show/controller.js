@@ -73,5 +73,42 @@ export default Ember.Controller.extend({
     }.property('model.showProperties.size'),
 
     typeSorting: ['name'],
-    sortedTypes: Ember.computed.sort('model.types', 'typeSorting')
+    sortedTypes: Ember.computed.sort('model.types', 'typeSorting'),
+
+    _categories: [],
+    categoriesList: Ember.computed('_categories', 'model.groups', {
+      get() {
+        if (!Ember.isEmpty(this.get('_categories'))
+          && this.get('_categories') == this.get('model')) {
+          console.log('CACHED');
+          return this.get('_categories');
+        }
+
+        var self = this;
+        this.set('_categories', []);
+
+        var f = function (group) {
+          if (!Ember.isEmpty(group.get('types'))) {
+            self.get('_categories').pushObject(group);
+          }
+          console.log('ADDING ', group);
+
+          group.get('groups').then(function (grps) {
+            grps.forEach(function (g) {
+              console.log("Nested " + g);
+              f(g);
+            });
+          });
+        };
+
+        f(this.get('model'));
+        return this.get('_categories');
+      },
+      set(v) {
+        this.set('_categories', v);
+      }
+    }),
+
+    categorySorting: ['fullName'],
+    sortedCategoriesList: Ember.computed.sort('categoriesList', 'categorySorting')
 });

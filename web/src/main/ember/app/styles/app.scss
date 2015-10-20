@@ -195,6 +195,14 @@ table {
   tbody tr:first-child td {
     padding-top: 0.5em;
   }
+
+  thead tr th {
+     padding-top: 0.5em;
+  }
+
+  thead:first-child tr th, thead:last-child tr th {
+     padding-top: 0;
+  }
 }
 
 table.purchase {
