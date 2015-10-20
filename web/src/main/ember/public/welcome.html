@@ -17,34 +17,43 @@
         nav.top-bar {
             border-bottom: solid 2px #b3b3b3;
             overflow: hidden;
+            margin-bottom: 0.5em;
         }
 
         body {
-            background-color: rgba(0, 0, 0, 0.3);
             background-image: url("images/background-pcb.png");
             background-attachment: fixed;
             background-repeat: repeat;
             line-height: 1.6em;
         }
 
-        .solid, body > section:nth-child(odd) {
+        #wrapper {
+            box-sizing: border-box;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0;
+            margin: 0;
+            border: 2ex solid #fff;
+        }
+
+        .solid, #wrapper > section:nth-child(odd) {
             margin: 0 auto;
             padding: 1em 5ex 2em 5ex;
             background-color: rgba(252, 255, 252, 0.92);
         }
 
-        .transparent, body > section:nth-child(even) {
+        .transparent, #wrapper > section:nth-child(even) {
             margin: 0 auto;
             padding: 1em 5ex 2em 5ex;
-            background-color: rgba(0, 0, 0, 0.60);
+            background-color: rgba(0, 64, 0, 0.50);
             color: white;
         }
 
-        .transparent *, body > section:nth-child(even) * {
+        .transparent *, #wrapper > section:nth-child(even) * {
             color: white;
         }
 
-        body > section {
+        #wrapper > section {
             max-width: 1024px;
             border-left: solid black 2px;
             border-right: solid black 2px;
@@ -101,6 +110,7 @@
     </style>
 </head>
 <body>
+<div id="wrapper">
 <div class="contain-to-grid">
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
@@ -253,9 +263,9 @@
             <p><i class="fa fa-fw fa-bitbucket fa-3x"></i> The <a href="https://bitbucket.org/MarSik/elshelves">source</a> and <a href="https://bitbucket.org/MarSik/elshelves/issues">issue tracker</a> are on bitbucket</a>.</p>
             <p><i class="fa fa-fw fa-file-text-o fa-3x"></i> The source is published under the <a href="http://www.gnu.org/licenses/agpl-3.0-standalone.html">AGPLv3 license</a>.</p>
         </li>
-        <li><i class="fa fa-code fa-3x"></i> The REST API documentation is being worked on, use the browser console to watch the requests. The general structure obeys the constraints of <a href="http://emberjs.com/guides/models/the-rest-adapter/">Ember Data</a> and <a href="http://jsonapi.org/">JSON API</a>.</li>
+        <li><i class="fa fa-code fa-3x"></i> The REST API documentation is being worked on, use the browser console to watch the requests. The general structure obeys the constraints of <a href="http://emberjs.com/guides/models/the-rest-adapter/">Ember Data</a> and older version of <a href="http://jsonapi.org/">JSON API</a>.</li>
         <li>
-            <p><i class="fa fa-fw fa-html5 fa-3x"></i> Written using <a href="http://spring.io/">Spring</a>, <a href="http://www.neo4j.com">Neo4j</a> and <a href="http://emberjs.com">Ember.js</a>.</p>
+            <p><i class="fa fa-fw fa-html5 fa-3x"></i> Written using <a href="http://spring.io/">Spring</a>, <a href="https://mariadb.org/">MariaDB</a> and <a href="http://emberjs.com">Ember.js</a>.</p>
             <p><i class="fa fa-fw fa-cloud fa-3x"></i> Deployable as WAR or standalone with nginx proxy.</p>
         </li>
     </ul>
@@ -297,7 +307,7 @@
 
     <ul class="small-block-grid-3">
         <li><a href="http://vpsfree.cz"><img src="images/vpsfree.png" style="height: 80px;" alt="vpsFree.cz"></a></li>
-        <li><a href="http://www.neo4j.com"><img src="images/neo4j.png"></a></li>
+        <li><a href="https://mariadb.org"><img src="images/MariaDB-seal-white.png"></a></li>
         <li><a href="http://www.gnu.org/licenses/agpl-3.0.html"><img src="images/agplv3.png" style="height: 51px;" alt="Affero GNU GPL v3"></a></li>
     </ul>
 </section>
@@ -308,6 +318,8 @@
         <li><a href="http://emberjs.com"><img src="images/emberjs.png" style="height: 80px;" alt="ember.js"></a></li>
     </ul>
 </section>
+
+</div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
