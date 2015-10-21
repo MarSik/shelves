@@ -6,12 +6,22 @@ import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
+import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.marsik.elshelves.backend.app.jackson.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.servlet.WebFormSupportFilter;
 import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +55,43 @@ import java.util.Locale;
 @Configuration
 @EnableAspectJAutoProxy
 public class ApplicationRest extends WebMvcConfigurerAdapter {
+
+    @Value("${http2.max-streams:10}")
+    Integer http2MaxStreams;
+
+    @Bean
+    public EmbeddedServletContainerCustomizer customizer() {
+        return new EmbeddedServletContainerCustomizer() {
+
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+                if (container instanceof JettyEmbeddedServletContainerFactory) {
+                    customizeJetty((JettyEmbeddedServletContainerFactory) container);
+                }
+            }
+
+            private void customizeJetty(JettyEmbeddedServletContainerFactory jetty) {
+                jetty.addServerCustomizers(new JettyServerCustomizer() {
+
+                    @Override
+                    public void customize(Server server) {
+                        for (Connector connector : server.getConnectors()) {
+                            if (connector instanceof ServerConnector) {
+                                HttpConnectionFactory connectionFactory = ((ServerConnector) connector)
+                                        .getConnectionFactory(HttpConnectionFactory.class);
+
+                                HTTP2CServerConnectionFactory http2c = new HTTP2CServerConnectionFactory(connectionFactory.getHttpConfiguration());
+                                http2c.setMaxConcurrentStreams(http2MaxStreams);
+
+                                ((ServerConnector) connector).addConnectionFactory(http2c);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+    }
 
     @Bean
     public Filter shallowEtagHeaderFilter() {

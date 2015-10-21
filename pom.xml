@@ -17,7 +17,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.6.RELEASE</version>
+        <version>1.2.7.RELEASE</version>
     </parent>
 
     <properties>
@@ -34,11 +34,14 @@
         <spring.security.oauth.version>2.0.7.RELEASE</spring.security.oauth.version>
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
 
+        <jetty.version>9.3.5.v20151012</jetty.version>
+        <jetty-jsp.version>9.2.13.v20150730</jetty-jsp.version>
+        <servlet-api.version>3.1.0</servlet-api.version>
+
+        <hystrix.version>1.3.16</hystrix.version>
         <freemarker.version>2.3.21</freemarker.version>
         <hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
-        <jetty.version>9.2.7.v20150116</jetty.version>
-        <servlet-api.version>3.1.0</servlet-api.version>
         <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
         <jackson.version>2.6.1</jackson.version>
         <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
@@ -49,6 +52,7 @@
         <assertj.version>3.2.0</assertj.version>
         <javax.validation.api.version>1.1.0.Final</javax.validation.api.version>
         <guava.version>17.0</guava.version>
+        <mysql-connector.version>5.1.36</mysql-connector.version>
 
         <!-- computer vision libs //-->
 
