@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.fields.SiPrefix;
 import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
@@ -14,8 +16,8 @@ import org.marsik.elshelves.api.entities.idresolvers.NumericPropertyIdResolver;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @EmberModelName("property")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = NumericPropertyIdResolver.class)
 public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
@@ -42,5 +44,15 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     @JsonSerialize(using = ToStringSerializer.class)
     public SiPrefix getBase() {
         return base;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

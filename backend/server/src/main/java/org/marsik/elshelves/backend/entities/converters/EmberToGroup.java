@@ -51,7 +51,9 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
             model.setTypes(null);
         }
 
-        model.setGroups(null);
+        if (object.getGroups() == null) {
+            model.setGroups(null);
+        }
 
 		return model;
 	}

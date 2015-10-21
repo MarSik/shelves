@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.ProjectIdResolver;
 
@@ -15,8 +17,8 @@ import java.util.UUID;
  * Deprecated
  * Used only for importing old backups
  */
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ProjectIdResolver.class)
 @EmberModelName("project")
 public class ProjectApiModel extends AbstractNamedEntityApiModel {
@@ -34,5 +36,15 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 	@JsonIdentityReference(alwaysAsId = true)
 	public Set<RequirementApiModel> getRequirements() {
 		return requirements;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

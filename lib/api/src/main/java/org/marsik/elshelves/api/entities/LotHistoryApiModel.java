@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.idresolvers.LotHistoryIdResolver;
 import org.marsik.elshelves.ember.EmberModelName;
@@ -12,8 +14,8 @@ import org.marsik.elshelves.api.entities.fields.LotAction;
 
 import java.util.UUID;
 
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = LotHistoryIdResolver.class)
 @EmberModelName("history")
 public class LotHistoryApiModel extends AbstractEntityApiModel {
@@ -35,4 +37,14 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
 
     @JsonProperty("location")
     UUID locationId;
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

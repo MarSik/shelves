@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.ItemIdResolver;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ItemIdResolver.class)
 @EmberModelName("item")
 public class ItemApiModel extends LotApiModel {
@@ -45,5 +47,15 @@ public class ItemApiModel extends LotApiModel {
     @JsonIdentityReference(alwaysAsId = true)
     public SourceApiModel getSource() {
         return source;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

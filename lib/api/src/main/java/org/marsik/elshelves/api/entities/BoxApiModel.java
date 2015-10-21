@@ -55,4 +55,14 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
     public void setBoxes(Set<BoxApiModel> boxes) {
         this.boxes = boxes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

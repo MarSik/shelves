@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.ember.EmberModelName;
@@ -24,8 +25,8 @@ import java.util.UUID;
  * objects need to be created to represent the
  * resulting two new Lots.
  */
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = LotIdResolver.class)
 @EmberModelName("lot")
 public class LotApiModel extends AbstractEntityApiModel {
@@ -141,5 +142,15 @@ public class LotApiModel extends AbstractEntityApiModel {
 	@JsonIdentityReference(alwaysAsId = true)
 	public LotHistoryApiModel getHistory() {
 		return history;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

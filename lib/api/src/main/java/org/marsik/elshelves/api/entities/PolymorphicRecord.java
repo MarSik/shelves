@@ -2,14 +2,16 @@ package org.marsik.elshelves.api.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModel;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 public class PolymorphicRecord extends AbstractEntityApiModel {
     String type;
 
@@ -26,5 +28,15 @@ public class PolymorphicRecord extends AbstractEntityApiModel {
         p.setType(EmberModel.getSingularName(entity.getClass()));
         p.setId(entity.getId());
         return p;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

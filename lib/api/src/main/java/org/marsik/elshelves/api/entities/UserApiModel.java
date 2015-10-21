@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.UserIdResolver;
 
@@ -14,8 +16,8 @@ import java.util.UUID;
 /**
  * Represents an user of the system
  */
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = UserIdResolver.class)
 @EmberModelName("user")
 public class UserApiModel extends AbstractEntityApiModel {
@@ -35,5 +37,15 @@ public class UserApiModel extends AbstractEntityApiModel {
     @JsonIdentityReference(alwaysAsId = true)
     public List<AuthorizationApiModel> getAuthorizations() {
         return authorizations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

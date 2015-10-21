@@ -20,7 +20,9 @@ import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
+import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
@@ -63,6 +65,7 @@ import org.marsik.elshelves.backend.repositories.FootprintRepository;
 import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.ItemRepository;
+import org.marsik.elshelves.backend.repositories.LotHistoryRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
@@ -82,6 +85,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -406,12 +410,20 @@ public class BackupService {
         SourceApiModel source = new SourceApiModel();
         source.setName("Backup restore " + new DateTime().toString());
         source.setId(uuidGenerator.generate());
+        source.setDescribedBy(new THashSet<>());
+        source.setCodes(new THashSet<>());
+        source.setProperties(new THashSet<>());
         backup.getSources().add(source);
 
         PartGroupApiModel g = new PartGroupApiModel();
         g.setId(uuidGenerator.generate());
         g.setName("Imported projects");
         g.setTypes(new THashSet<>());
+        g.setGroups(new THashSet<>());
+        g.setShowProperties(new THashSet<>());
+        g.setDescribedBy(new THashSet<>());
+        g.setProperties(new THashSet<>());
+        g.setCodes(new THashSet<>());
         backup.getGroups().add(g);
 
         for (ProjectApiModel project: projects) {
@@ -419,7 +431,11 @@ public class BackupService {
             type.setManufacturable(true);
             type.setGroups(new THashSet<>());
             type.getGroups().add(g);
-            g.getTypes().add(type);
+            type.setFootprints(new THashSet<>());
+            type.setDescribedBy(new THashSet<>());
+            type.setProperties(new THashSet<>());
+            type.setCodes(new THashSet<>());
+            type.setSeeAlso(new THashSet<>());
             backup.getTypes().add(type);
 
             ItemApiModel item = modelMapper.map(project, ItemApiModel.class);
@@ -450,6 +466,9 @@ public class BackupService {
             transaction.setName(project.getName());
             transaction.setDate(new DateTime());
             transaction.setSource(source);
+            transaction.setDescribedBy(new THashSet<>());
+            transaction.setCodes(new THashSet<>());
+            transaction.setProperties(new THashSet<>());
             backup.getTransactions().add(transaction);
         }
     }
@@ -597,12 +616,39 @@ public class BackupService {
         backup.setPurchases(backup(purchaseRepository.findByTransactionOwner(currentUser), purchaseToEmber, cache));
 
         // Items have to be loaded before Lots
-        backup.setItems(backup(itemRepository.findByOwner(currentUser), itemToEmber, cache));
-        backup.setLots(backup(lotRepository.findByOwner(currentUser), lotToEmber, cache));
+        Collection<Item> items = itemRepository.findByOwner(currentUser);
+        final Collection<Lot> lots = lotRepository.findByOwner(currentUser);
+
+        backup.setItems(backup(items, itemToEmber, cache));
+        backup.setLots(backup(lots, lotToEmber, cache));
 
         backup.setRequirements(backup(requirementRepository.findByItemOwner(currentUser), requirementToEmber, cache));
         backup.setUser(userToEmber.convert(currentUser, 1, cache));
 
+        Set<LotHistory> history = new THashSet<>();
+
+        for (Lot l: items) {
+            collectHistory(history, l);
+        }
+
+        for (Lot l: lots) {
+            collectHistory(history, l);
+        }
+
+        backup.setHistory(new THashSet<>());
+
+        for (LotHistory h: history) {
+            backup.getHistory().add(modelMapper.map(h, LotHistoryApiModel.class));
+        }
+
         return backup;
 	}
+
+    private void collectHistory(Set<LotHistory> history, Lot l) {
+        LotHistory h = l.getHistory();
+        while (h != null) {
+            history.add(h);
+            h = h.getPrevious();
+        }
+    }
 }

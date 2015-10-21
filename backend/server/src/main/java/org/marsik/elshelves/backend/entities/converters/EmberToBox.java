@@ -25,8 +25,13 @@ public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
 		emberToNamedObject.convert(object, box, nested, cache);
 		box.setParent(convert(object.getParent(), 1, cache));
 
-		box.setLots(null);
-		box.setContains(null);
+		if (object.getLots() == null) {
+			box.setLots(null);
+		}
+
+		if (object.getBoxes() == null) {
+			box.setContains(null);
+		}
 
 		return box;
 	}

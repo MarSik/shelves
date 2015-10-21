@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.RequirementIdResolver;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@EqualsAndHashCode(of = {}, callSuper = true)
+@Getter
+@Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = RequirementIdResolver.class)
 @EmberModelName("requirement")
 public class RequirementApiModel extends AbstractEntityApiModel {
@@ -57,5 +59,15 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	@JsonIdentityReference(alwaysAsId = true)
 	public ItemApiModel getItem() {
 		return item;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

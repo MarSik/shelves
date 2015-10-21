@@ -3,13 +3,15 @@ package org.marsik.elshelves.api.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {}, callSuper = true)
 public abstract class AbstractOwnedEntityApiModel extends AbstractEntityApiModel {
     public AbstractOwnedEntityApiModel(UUID id) {
         super(id);
@@ -20,5 +22,15 @@ public abstract class AbstractOwnedEntityApiModel extends AbstractEntityApiModel
     @JsonIdentityReference(alwaysAsId = true)
     public UserApiModel getBelongsTo() {
         return belongsTo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
