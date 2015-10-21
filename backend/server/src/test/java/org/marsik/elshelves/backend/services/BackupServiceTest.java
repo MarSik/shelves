@@ -109,4 +109,28 @@ public class BackupServiceTest {
         assertThat(model.getPrevious().getId())
                 .isEqualTo(dto.getPreviousId());
     }
+
+    @Ignore
+    @Test
+    public void testPreviousLinkToEmber() {
+        Action dto = new Action();
+        dto.setPrevious(new Action());
+        dto.setId(UUID.randomUUID());
+        dto.getPrevious().setId(uuidGenerator.generate());
+
+        ActionDTO model = modelMapper.map(dto, ActionDTO.class);
+
+        assertThat(model)
+                .isInstanceOf(ActionDTO.class);
+
+        assertThat(model.getId())
+                .isEqualTo(dto.getId());
+
+        assertThat(model.getPreviousId())
+                .isNotNull()
+                .isInstanceOf(UUID.class);
+
+        assertThat(model.getPreviousId())
+                .isEqualTo(dto.getPrevious().getId());
+    }
 }
