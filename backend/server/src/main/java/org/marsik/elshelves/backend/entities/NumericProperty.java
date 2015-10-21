@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -53,7 +54,7 @@ public class NumericProperty extends NamedEntity {
     @OneToMany(mappedBy = "property",
             cascade = { CascadeType.ALL },
             orphanRemoval = true)
-    Collection<NumericPropertyValue> propertyUses = new THashSet<>();
+    Set<NumericPropertyValue> propertyUses = new THashSet<>();
 
     @Override
     public boolean canBeDeleted() {

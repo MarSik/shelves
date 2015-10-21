@@ -42,7 +42,7 @@ public class Footprint extends NamedEntity {
 	Integer npth;
 
 	@ManyToMany(mappedBy = "footprints")
-	Collection<Type> types = new THashSet<>();
+	Set<Type> types = new THashSet<>();
 
 	public void addType(Type t) {
 		t.addFootprint(this);
