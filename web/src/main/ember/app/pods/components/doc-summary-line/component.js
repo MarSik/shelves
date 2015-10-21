@@ -24,6 +24,6 @@ export default Ember.Component.extend({
       return "file-o";
     }
   }.property('doc.contentType'),
-  tagName: 'tr'
+  tagName: 'tbody'
   // doc
 });
