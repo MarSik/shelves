@@ -33,5 +33,20 @@ export default DS.Model.extend({
         });
         return 0;
       }
-    })
+    }),
+
+    progress: function () {
+        var sum = this.get('count');
+        var soldered = 0;
+        var assigned = 0;
+
+        this.get('lots').forEach(function (req) {
+            var prog = req.get('progress');
+            soldered += prog[0];
+            assigned += prog[1];
+        });
+
+        return [soldered, sum];
+
+    }.property('count', 'lots.@each.progress')
 });

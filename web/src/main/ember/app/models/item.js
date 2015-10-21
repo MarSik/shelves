@@ -32,5 +32,18 @@ export default Lot.extend({
 
   editable: Ember.computed("finished", function () {
     return !this.get("finished");
-  })
+  }),
+
+  progress: function () {
+    var sum = 0;
+    var soldered = 0;
+
+    this.get('requirements').forEach(function (req) {
+      var prog = req.get('progress');
+      soldered += prog[0];
+      sum += prog[1];
+    });
+
+    return [soldered, sum];
+  }.property('requirements.@each.progress')
 });

@@ -158,11 +158,12 @@
     <thead>
     <tr>
         <th>Source</th>
-        <th colspan="4">Box / Project</th>
+        <th colspan="5">Box / Project</th>
     </tr>
     <tr>
         <th>SKU</th>
         <th>Cnt.</th>
+        <th>%</th>
         <th>Price</th>
         <th>w/ Vat</th>
         <th>Vat %</th>
@@ -194,6 +195,9 @@
             {{lot.count}}
             {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
           {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.source.name}}{{fa-icon 'history'}} history{{/link-to}}
+        </td>
+        <td>
+            {{lot.progress}}
         </td>
         <td class="price">
             {{lot.purchase.priceWithoutVat}}

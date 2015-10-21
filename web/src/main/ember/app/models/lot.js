@@ -39,5 +39,10 @@ export default LotBase.extend({
 
   endpoint: function () {
     return "lots.show";
-  }.property()
+  }.property(),
+
+  progress: function () {
+    var soldered = this.get('canBeSoldered') ? 0 : this.get('count');
+    return [soldered, this.get('count')];
+  }.property('count', 'canBeSoldered')
 });
