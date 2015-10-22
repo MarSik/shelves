@@ -59,7 +59,7 @@ public class Group extends NamedEntity {
 		t.getGroups().remove(this);
 	}
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany
     Set<NumericProperty> showProperties = new THashSet<>();
 
 	public void addShowProperty(NumericProperty p) {

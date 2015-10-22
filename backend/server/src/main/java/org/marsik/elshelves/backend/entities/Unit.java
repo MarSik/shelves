@@ -37,7 +37,6 @@ public class Unit extends NamedEntity {
     Set<SiPrefix> prefixes = new THashSet<>();
 
     @OneToMany(mappedBy = "unit",
-            cascade = { CascadeType.ALL },
             orphanRemoval = true)
     Set<NumericProperty> unitUses = new THashSet<>();
 

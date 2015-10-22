@@ -2,7 +2,7 @@ package org.marsik.elshelves.backend.entities;
 
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
-public interface IdentifiedEntityInterface extends RelinkableEntity {
+public interface IdentifiedEntityInterface extends RelinkableEntity, Cloneable {
     java.util.UUID getId();
 
     Long getDbId();
@@ -18,4 +18,6 @@ public interface IdentifiedEntityInterface extends RelinkableEntity {
     boolean isNew();
 
     void relink(Relinker relinker);
+
+    Object shallowClone();
 }

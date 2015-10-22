@@ -38,6 +38,9 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
     @JsonProperty("location")
     UUID locationId;
 
+    @JsonProperty("assignedTo")
+    UUID assignedToId;
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

@@ -58,8 +58,9 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 
 		// Reinsert all items
 		for (Purchase p: items) {
+			p = context.fixUuid(p);
+
 			context
-					.fixUuid(p)
 					.ensureOwner(p, currentUser)
 					.relink(p);
 

@@ -50,8 +50,7 @@ public class Purchase extends OwnedEntity {
 	Boolean vatIncluded;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			optional = false)
+	@ManyToOne(optional = false)
 	Transaction transaction;
 
 	public void setTransaction(Transaction t) {
@@ -65,8 +64,7 @@ public class Purchase extends OwnedEntity {
 		setTransaction(null);
 	}
 
-    @OneToMany(mappedBy = "purchase",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "purchase")
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

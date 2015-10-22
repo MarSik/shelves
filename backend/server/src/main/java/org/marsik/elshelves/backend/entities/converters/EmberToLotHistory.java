@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.LotHistory;
+import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,11 @@ public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel,
         if (object.getPerformedById() != null) {
             model.setPerformedBy(new User());
             model.getPerformedBy().setId(object.getPerformedById());
+        }
+
+        if (object.getAssignedToId() != null) {
+            model.setAssignedTo(new Requirement());
+            model.getAssignedTo().setId(object.getAssignedToId());
         }
 
         model.setAction(object.getAction());

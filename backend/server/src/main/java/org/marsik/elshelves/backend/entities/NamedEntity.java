@@ -56,7 +56,6 @@ public class NamedEntity extends OwnedEntity
 	}
 
 	@OneToMany(mappedBy = "entity",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			orphanRemoval = true)
     Set<NumericPropertyValue> properties = new THashSet<>();
 
@@ -72,7 +71,6 @@ public class NamedEntity extends OwnedEntity
      * Barcode associated with this entity
      */
 	@OneToMany(mappedBy = "reference",
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE },
 			orphanRemoval = true)
     Set<Code> codes = new THashSet<>();
 

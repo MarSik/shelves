@@ -51,15 +51,13 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	@Enumerated(EnumType.STRING)
 	LotAction status;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			fetch = FetchType.EAGER,
+	@ManyToOne(fetch = FetchType.EAGER,
 	        optional = false)
 	@NotNull
 	LotHistory history;
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			fetch = FetchType.EAGER,
+	@ManyToOne(fetch = FetchType.EAGER,
 			optional = false)
 	Purchase purchase;
 
@@ -304,6 +302,7 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		relinkItem(relinker, getPurchase(), this::setPurchase);
 		relinkItem(relinker, getLocation(), this::setLocation);
 		relinkItem(relinker, getUsedBy(), this::setUsedBy);
+		relinkItem(relinker, getHistory(), this::setHistory);
 		super.relink(relinker);
 	}
 

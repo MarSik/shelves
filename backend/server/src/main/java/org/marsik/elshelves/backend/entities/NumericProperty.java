@@ -27,8 +27,7 @@ import java.util.Set;
 @Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
-    @ManyToOne(optional = false,
-            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(optional = false)
     @NotNull
     Unit unit;
 
@@ -52,7 +51,6 @@ public class NumericProperty extends NamedEntity {
     String symbol;
 
     @OneToMany(mappedBy = "property",
-            cascade = { CascadeType.ALL },
             orphanRemoval = true)
     Set<NumericPropertyValue> propertyUses = new THashSet<>();
 

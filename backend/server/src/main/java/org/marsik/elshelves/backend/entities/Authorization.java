@@ -31,8 +31,7 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     String name;
 
     @NotNull
-    @ManyToOne(optional = false,
-            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(optional = false)
     User owner;
 
     public void setOwner(User u) {

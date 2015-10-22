@@ -30,8 +30,7 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @NotEmpty
     String code;
 
-    @ManyToOne(optional = false,
-            cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(optional = false)
     @NotNull
     NamedEntity reference;
 

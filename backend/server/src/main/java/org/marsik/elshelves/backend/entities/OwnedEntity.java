@@ -23,8 +23,7 @@ public abstract class OwnedEntity extends IdentifiedEntity
 		implements OwnedEntityInterface, UpdateableEntity {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
-	@ManyToOne(optional = false,
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(optional = false)
 	@NotNull
 	User owner;
 
@@ -42,7 +41,7 @@ public abstract class OwnedEntity extends IdentifiedEntity
 
 	@PrePersist
 	void prePersist() {
-		log.debug("Saving "+toString());
+		log.debug("Saving " + toString() + " ptr: " + String.valueOf(System.identityHashCode(this)));
 	}
 
 	@Override

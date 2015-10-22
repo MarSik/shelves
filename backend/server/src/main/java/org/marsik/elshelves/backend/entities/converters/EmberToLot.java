@@ -25,9 +25,6 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 	EmberToRequirement emberToRequirement;
 
 	@Autowired
-	ModelMapper modelMapper;
-
-	@Autowired
 	EmberToLotHistory emberToLotHistory;
 
 	public EmberToLot() {

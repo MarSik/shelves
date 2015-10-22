@@ -159,4 +159,14 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     public int hashCode() {
         return id != null ? id.hashCode() : super.hashCode();
     }
+
+    @Override
+    public Object shallowClone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

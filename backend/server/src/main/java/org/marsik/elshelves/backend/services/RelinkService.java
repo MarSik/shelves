@@ -123,26 +123,31 @@ public class RelinkService {
          * @return The value entity prepared for import
          */
         @SuppressWarnings("unchecked")
-        public RelinkContext fixUuid(IdentifiedEntity value)  {
+        public <T extends IdentifiedEntity> T fixUuid(T value)  {
             if (value.getId() == null) {
                 value.setId(uuidGenerator.generate());
                 log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
             }
 
-            // Save a reference with the old id
-            addToCache(value);
-
-            // Remove a collision with an existing object
+            // Remove a collision with an existing object, be sure everything is relinked after fixing
             IdentifiedEntity e = identifiedEntityRepository.findById(value.getId());
             if (e != null) {
                 log.warn("Entity {} with colliding UUID {}", value.getClass().getName(), value.getId().toString());
 
+                // Create new object so we are not changing the id on an object that
+                // might be already using it as key in some collection
+                T fixed = (T)value.shallowClone();
+
+                // Save a reference with the old id
+                cache.put(value.getId(), fixed);
+
                 // Save a reference with the new id
-                value.setId(uuidGenerator.generate());
-                addToCache(value);
+                fixed.setId(uuidGenerator.generate());
+                addToCache(fixed);
+                value = fixed;
             }
 
-            return this;
+            return value;
         }
 
         public RelinkContext fixOwner(OwnedEntityInterface item, User user) {

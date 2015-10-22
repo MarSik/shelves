@@ -44,7 +44,7 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
     @org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime registrationDate;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     Set<Authorization> authorizations = new THashSet<>();
 
     public void addAuthorization(Authorization a) {

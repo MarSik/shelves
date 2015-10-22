@@ -17,6 +17,7 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
@@ -29,6 +30,7 @@ import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -50,6 +52,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToUnit;
 import org.marsik.elshelves.backend.entities.converters.FootprintToEmber;
 import org.marsik.elshelves.backend.entities.converters.GroupToEmber;
 import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
+import org.marsik.elshelves.backend.entities.converters.LotHistoryToEmber;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.entities.converters.NumericPropertyToEmber;
 import org.marsik.elshelves.backend.entities.converters.PurchaseToEmber;
@@ -81,13 +84,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -95,6 +102,9 @@ import java.util.UUID;
 @Service
 public class BackupService {
     private static final Logger log = LoggerFactory.getLogger(BackupService.class);
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Autowired
     ModelMapper modelMapper;
@@ -119,6 +129,9 @@ public class BackupService {
 
     @Autowired
     EmberToLotHistory emberToLotHistory;
+
+    @Autowired
+    LotHistoryToEmber lotHistoryToEmber;
 
 	@Autowired
 	EmberToPurchase emberToPurchase;
@@ -243,14 +256,19 @@ public class BackupService {
 			return;
 		}
 
-        for (F i: new ArrayList<>(allItems)) {
-            // Remove from Set before possibly changing UUID
-            allItems.remove(i);
-            relinkContext
-                    .fixUuid(i)
-                    .addToCache(i);
-            allItems.add(i);
+        List<F> fixedItems = new ArrayList<>();
+
+        for (F i: allItems) {
+            F fixed = relinkContext.fixUuid(i);
+            relinkContext.addToCache(fixed);
+            fixedItems.add(fixed);
+
+            assert relinkContext.get(i.getId()) == relinkContext.get(fixed.getId());
+            assert relinkContext.get(fixed.getId()) == fixed;
         }
+
+        allItems.clear();
+        allItems.addAll(fixedItems);
 
 		for (F i: allItems) {
             log.debug("Relinking {} id {}", i.getClass().getName(), i.getId());
@@ -263,15 +281,59 @@ public class BackupService {
             return;
         }
 
-        for (F i: allItems) {
-            if (!i.isNew()) {
-                log.debug("Skipping already saved {} id {}", i.getClass().getName(), i.getId());
-                continue;
-            }
 
-            log.debug("Saving {} id {}", i.getClass().getName(), i.getId());
-            identifiedEntityRepository.save(i);
+        // Create by type map so we can save some specific types first
+        Map<Class<?>, Set<F>> byType = new THashMap<>();
+        for (F i : allItems) {
+            byType.putIfAbsent(i.getClass(), new THashSet<>());
+            byType.get(i.getClass()).add(i);
         }
+
+        for (F i : byType.get(Type.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(Footprint.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(LotHistory.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(Source.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(Transaction.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(Purchase.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(Item.class)) {
+            saveOne(i);
+        }
+
+        for (Set<F> is : byType.values()) {
+            for (F i: is) {
+                saveOne(i);
+            }
+        }
+    }
+
+    private <F extends IdentifiedEntity> void saveOne(F i) {
+        // Skip already saved entities
+        if (!i.isNew()
+                || identifiedEntityRepository.findById(i.getId()) != null) {
+            log.debug("Skipping already saved {} id {}", i.getClass().getName(), i.getId());
+            return;
+        }
+
+        log.debug("Saving {} id {}", i.getClass().getName(), i.getId());
+        entityManager.persist(i);
     }
 
     protected <T, F extends IdentifiedEntity>  void prepare(Iterable<T> items,
@@ -295,6 +357,7 @@ public class BackupService {
         }
     }
 
+    @Transactional
 	public boolean restoreFromBackup(RestoreApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
@@ -599,6 +662,7 @@ public class BackupService {
         return dtos;
     }
 
+    @Transactional(readOnly = true)
 	public RestoreApiModel doBackup(User currentUser) {
         RestoreApiModel backup = new RestoreApiModel();
         Map<UUID, Object> cache = new THashMap<>();
@@ -638,7 +702,7 @@ public class BackupService {
         backup.setHistory(new THashSet<>());
 
         for (LotHistory h: history) {
-            backup.getHistory().add(modelMapper.map(h, LotHistoryApiModel.class));
+            backup.getHistory().add(lotHistoryToEmber.convert(h, 1, cache));
         }
 
         return backup;

@@ -9,7 +9,6 @@ import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.LotHistory;
-import org.marsik.elshelves.backend.entities.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +59,7 @@ public class BackupServiceTest {
         LotHistory h = modelMapper.map(history, LotHistory.class);
 
         assertThat(h.getPerformedBy())
-                .isInstanceOf(User.class);
+                .isInstanceOf(Person.class);
         assertThat(h.getPerformedBy().getId())
                 .isEqualTo(history.getPerformedById());
 
@@ -79,13 +78,23 @@ public class BackupServiceTest {
     private static class Action {
         UUID id;
         Action previous;
+        Person user;
+    }
+
+    @Data
+    private static class Person {
+        UUID id;
     }
 
     @Data
     private static class ActionDTO {
         UUID id;
         UUID previousId;
+        UUID userId;
     }
+
+    // ModelMapper does not support recursive references
+    // see https://github.com/jhalterman/modelmapper/issues/164
 
     @Ignore
     @Test
@@ -116,7 +125,9 @@ public class BackupServiceTest {
         Action dto = new Action();
         dto.setPrevious(new Action());
         dto.setId(UUID.randomUUID());
-        dto.getPrevious().setId(uuidGenerator.generate());
+        dto.getPrevious().setId(UUID.randomUUID());
+        dto.setUser(new Person());
+        dto.getUser().setId(UUID.randomUUID());
 
         ActionDTO model = modelMapper.map(dto, ActionDTO.class);
 
@@ -126,11 +137,14 @@ public class BackupServiceTest {
         assertThat(model.getId())
                 .isEqualTo(dto.getId());
 
-        assertThat(model.getPreviousId())
+        assertThat(model.getUserId())
                 .isNotNull()
-                .isInstanceOf(UUID.class);
+                .isInstanceOf(UUID.class)
+                .isEqualTo(dto.getUser().getId());
 
         assertThat(model.getPreviousId())
+                .isNotNull()
+                .isInstanceOf(UUID.class)
                 .isEqualTo(dto.getPrevious().getId());
     }
 }

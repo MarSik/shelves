@@ -28,7 +28,7 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 	RequirementToEmber requirementToEmber;
 
 	@Autowired
-	ModelMapper modelMapper;
+	LotHistoryToEmber lotHistoryToEmber;
 
 	public LotToEmber() {
 		super(LotApiModel.class);
@@ -52,7 +52,7 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
 		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested - 1, cache));
 		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
-		entity.setHistory(modelMapper.map(object.getHistory(), LotHistoryApiModel.class));
+		entity.setHistory(lotHistoryToEmber.convert(object.getHistory(), nested - 1, cache));
 
 		entity.setCanBeAssigned(object.isCanBeAssigned());
 		entity.setCanBeUnassigned(object.isCanBeUnassigned());

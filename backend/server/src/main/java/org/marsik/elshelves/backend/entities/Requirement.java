@@ -25,8 +25,7 @@ import java.util.function.Predicate;
 @NoArgsConstructor
 @Entity
 public class Requirement extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
-	@ManyToOne(optional = false,
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(optional = false)
 	@NotNull
 	Item item;
 

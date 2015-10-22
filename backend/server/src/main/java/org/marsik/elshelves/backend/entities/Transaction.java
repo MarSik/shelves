@@ -30,7 +30,6 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	DateTime date;
 
 	@OneToMany(mappedBy = "transaction",
-			cascade = { CascadeType.ALL },
 			orphanRemoval = true)
 	Set<Purchase> items = new THashSet<>();
 
@@ -43,8 +42,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	}
 
 	@NotNull
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE },
-			optional = false)
+	@ManyToOne(optional = false)
 	Source source;
 
 	public void setSource(Source s) {
