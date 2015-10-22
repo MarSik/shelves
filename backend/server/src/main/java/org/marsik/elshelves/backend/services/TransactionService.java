@@ -13,6 +13,8 @@ import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,4 +85,13 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
     protected Iterable<Transaction> getAllEntities(User currentUser) {
         return getRepository().findByOwner(currentUser);
     }
+
+	@Override
+	protected Transaction save(Transaction entity) {
+		for (Purchase p: entity.getItems()) {
+			saveOrUpdate(p);
+		}
+
+		return super.save(entity);
+	}
 }

@@ -8,11 +8,14 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.controllers.exceptions.UpdateConflict;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Set;
@@ -24,6 +27,9 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
 	@Autowired
 	RelinkService relinkService;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     public AbstractRestService(R repository,
                                UuidGenerator uuidGenerator) {
@@ -96,7 +102,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     public T create(T entity, User currentUser) throws OperationNotPermitted {
         entity = createEntity(entity, currentUser);
         entity.setCreated(new DateTime());
-        entity = repository.save(entity);
+        entity = save(entity);
         return entity;
     }
 
@@ -159,14 +165,30 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
             one = updateEntity(one, update, currentUser);
             one.setLastModified(new DateTime());
 
-            // Introspection based updater breaks the aspected behaviour
-            // so it is necessary to resave the updated object here
-            one = repository.save(one);
+            one = save(one);
         } catch (InvocationTargetException|IllegalAccessException ex) {
             ex.printStackTrace();
         }
 
         return one;
+    }
+
+    protected T save(T entity) {
+        return repository.save(entity);
+    }
+
+    protected <E extends IdentifiedEntityInterface> E saveOrUpdate(E entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        if (entity.isNew()) {
+            entityManager.persist(entity);
+        } else {
+            entityManager.merge(entity);
+        }
+
+        return entity;
     }
 
     public void flush() {

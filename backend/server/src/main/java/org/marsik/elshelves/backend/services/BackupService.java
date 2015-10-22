@@ -25,12 +25,14 @@ import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.NamedEntity;
+import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.Type;
+import org.marsik.elshelves.backend.entities.Unit;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -289,7 +291,16 @@ public class BackupService {
             byType.get(i.getClass()).add(i);
         }
 
+        for (F i : byType.get(Unit.class)) {
+            saveOne(i);
+        }
+
+
         for (F i : byType.get(Type.class)) {
+            saveOne(i);
+        }
+
+        for (F i : byType.get(NumericProperty.class)) {
             saveOne(i);
         }
 

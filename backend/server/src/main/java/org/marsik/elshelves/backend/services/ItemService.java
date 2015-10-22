@@ -151,6 +151,7 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
         created.add(history);
 
         item.setCount(1L);
+        item.setRequires(new THashSet<>());
         item.setStatus(LotAction.DELIVERY);
         item.setHistory(history);
         item.setPurchase(purchase);
@@ -171,9 +172,22 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
 
         identifiedEntityRepository.save(type);
         identifiedEntityRepository.save(source);
+        identifiedEntityRepository.save(transaction);
         identifiedEntityRepository.save(purchase);
         identifiedEntityRepository.save(created);
+        identifiedEntityRepository.save(item);
+        identifiedEntityRepository.save(history);
 
         return item;
+    }
+
+    @Override
+    protected Item save(Item entity) {
+        saveOrUpdate(entity.getHistory());
+        saveOrUpdate(entity.getPurchase());
+        for (Requirement r: entity.getRequires()) {
+            saveOrUpdate(r);
+        }
+        return super.save(entity);
     }
 }

@@ -6,6 +6,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Box;
+import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Requirement;
@@ -17,6 +18,8 @@ import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -27,6 +30,9 @@ public class LotService {
 	BoxRepository boxRepository;
 	UuidGenerator uuidGenerator;
     RequirementRepository requirementRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Autowired
     public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository,
@@ -78,7 +84,7 @@ public class LotService {
 		}
 
 		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser, uuidGenerator);
-		lotRepository.save(lot);
+		save(lot);
 
 		purchase.getLots().add(lot);
 
@@ -102,7 +108,7 @@ public class LotService {
         }
 
         lot0.move(currentUser, location, uuidGenerator);
-        lotRepository.save(lot0);
+        save(lot0);
 
         return lot0;
     }
@@ -136,7 +142,8 @@ public class LotService {
 			throw new OperationNotPermitted();
 		}
 
-		lotRepository.save(result);
+		save(result);
+        save(lot);
 
 		return new LotSplitResult(result, result.equals(lot) ? null : lot);
 	}
@@ -153,7 +160,7 @@ public class LotService {
 		}
 
 		lot.destroy(currentUser, uuidGenerator);
-		lotRepository.save(lot);
+		save(lot);
 
 		return lot;
 	}
@@ -182,7 +189,7 @@ public class LotService {
         }
 
         lot.solder(currentUser, requirement, uuidGenerator);
-        lotRepository.save(lot);
+        save(lot);
 
         return lot;
     }
@@ -203,7 +210,7 @@ public class LotService {
         }
 
         lot.unsolder(currentUser, uuidGenerator);
-        lotRepository.save(lot);
+        save(lot);
 
         return lot;
     }
@@ -230,7 +237,7 @@ public class LotService {
         }
 
         lot.assign(currentUser, requirement, uuidGenerator);
-        lotRepository.save(lot);
+        save(lot);
 
         return lot;
     }
@@ -251,8 +258,27 @@ public class LotService {
         }
 
         lot.unassign(currentUser, uuidGenerator);
-        lotRepository.save(lot);
+        save(lot);
 
         return lot;
+    }
+
+    protected Lot save(Lot entity) {
+        saveOrUpdate(entity.getHistory());
+        return lotRepository.save(entity);
+    }
+
+    protected <E extends IdentifiedEntityInterface> E saveOrUpdate(E entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        if (entity.isNew()) {
+            entityManager.persist(entity);
+        } else {
+            entityManager.merge(entity);
+        }
+
+        return entity;
     }
 }

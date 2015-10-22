@@ -51,6 +51,7 @@ public class NumericProperty extends NamedEntity {
     String symbol;
 
     @OneToMany(mappedBy = "property",
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true)
     Set<NumericPropertyValue> propertyUses = new THashSet<>();
 
