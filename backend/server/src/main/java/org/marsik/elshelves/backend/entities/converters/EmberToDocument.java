@@ -4,6 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 				model.addDescribes(entity);
 			}
 		} else {
-			model.setDescribes(null);
+			model.setDescribes(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;

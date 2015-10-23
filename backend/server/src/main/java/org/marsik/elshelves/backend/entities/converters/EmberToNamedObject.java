@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.NumericPropertyValue;
@@ -45,6 +46,8 @@ public class EmberToNamedObject {
             for (CodeApiModel c: object.getCodes()) {
                 model.addCode(emberToCode.convert(c, nested, cache));
             }
+        } else {
+            model.setCodes(new IdentifiedEntity.UnprovidedSet<>());
         }
 
 		if (object.getDescribedBy() != null) {
@@ -53,7 +56,7 @@ public class EmberToNamedObject {
 				model.addDescribedBy(emberToDocument.convert(d, nested, cache));
 			}
 		} else {
-            model.setDescribedBy(null);
+            model.setDescribedBy(new IdentifiedEntity.UnprovidedSet<>());
         }
 
         if (object.getProperties() != null) {
@@ -72,7 +75,7 @@ public class EmberToNamedObject {
                 model.addProperty(v);
             }
         } else {
-            model.setProperties(null);
+            model.setProperties(new IdentifiedEntity.UnprovidedSet<>());
         }
 
 		return model;

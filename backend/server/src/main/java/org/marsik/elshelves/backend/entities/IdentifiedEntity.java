@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -103,7 +104,8 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
     protected static <T> void reconcileLists(Collection<T> update, Getter<T> local, Updater<? super T> adder, Updater<? super T> remover, boolean forceRefresh) {
-        if (update == null) {
+        if (update == null
+                || update instanceof UnprovidedSet) {
             return;
         }
 
@@ -167,6 +169,12 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static class UnprovidedSet<E> extends THashSet<E> {
+        public UnprovidedSet() {
+            super(0);
         }
     }
 }

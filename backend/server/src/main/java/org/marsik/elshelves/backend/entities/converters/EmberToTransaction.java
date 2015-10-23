@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiMode
 				model.addItem(emberToPurchase.convert(p, nested - 1, cache));
 			}
 		} else {
-			model.setItems(null);
+			model.setItems(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;

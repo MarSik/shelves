@@ -4,6 +4,7 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 				model.addLot(new Lot(l.getId()));
 			}
 		} else {
-			model.setLots(null);
+			model.setLots(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;

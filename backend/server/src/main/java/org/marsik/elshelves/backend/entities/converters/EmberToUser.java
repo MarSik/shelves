@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
 		u.setPassword(dto.getPassword());
 		u.setId(dto.getId());
 
-		u.setAuthorizations(null);
+		u.setAuthorizations(new IdentifiedEntity.UnprovidedSet<>());
 
 		return u;
 	}

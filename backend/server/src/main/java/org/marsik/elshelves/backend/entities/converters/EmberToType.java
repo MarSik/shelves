@@ -6,6 +6,7 @@ import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
                 model.addFootprint(emberToFootprint.convert(g, nested - 1, cache));
             }
         } else {
-			model.setFootprints(null);
+			model.setFootprints(new IdentifiedEntity.UnprovidedSet<>());
 		}
         
 		if (object.getGroups() != null) {
@@ -62,7 +63,7 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 				model.addGroup(emberToGroup.convert(g, nested - 1, cache));
 			}
 		} else {
-			model.setGroups(null);
+			model.setGroups(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
         if (object.getSeeAlso() != null) {
@@ -71,8 +72,8 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
                 model.addSeeAlso(convert(t, nested - 1, cache));
             }
         } else {
-			model.setSeeAlso(null);
-			model.setSeeAlsoIncoming(null);
+			model.setSeeAlso(new IdentifiedEntity.UnprovidedSet<>());
+			model.setSeeAlsoIncoming(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;

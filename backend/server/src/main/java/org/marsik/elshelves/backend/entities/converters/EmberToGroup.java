@@ -5,6 +5,7 @@ import org.marsik.elshelves.api.entities.NumericPropertyApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.backend.entities.Group;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
                 model.addShowProperty(emberToNumericProperty.convert(p, 1, cache));
             }
         } else {
-            model.setShowProperties(null);
+            model.setShowProperties(new IdentifiedEntity.UnprovidedSet<>());
         }
 
         if (object.getTypes() != null) {
@@ -48,11 +49,11 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
                 model.addType(emberToType.convert(t, nested, cache));
             }
         } else {
-            model.setTypes(null);
+            model.setTypes(new IdentifiedEntity.UnprovidedSet<>());
         }
 
         if (object.getGroups() == null) {
-            model.setGroups(null);
+            model.setGroups(new IdentifiedEntity.UnprovidedSet<>());
         }
 
 		return model;

@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 				&& !object.getSerial().isEmpty()) {
 			model.getSerials().add(object.getSerial());
 		} else {
-			model.setSerials(null);
+			model.setSerials(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;

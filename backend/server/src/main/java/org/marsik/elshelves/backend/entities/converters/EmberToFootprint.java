@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +35,8 @@ public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, F
                 model.addSeeAlso(convert(t, nested - 1, cache));
             }
         } else {
-			model.setSeeAlso(null);
-			model.setSeeAlsoIncoming(null);
+			model.setSeeAlso(new IdentifiedEntity.UnprovidedSet<>());
+			model.setSeeAlsoIncoming(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;
