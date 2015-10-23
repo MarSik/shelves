@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.Box;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
 		box.setParent(convert(object.getParent(), 1, cache));
 
 		if (object.getLots() == null) {
-			box.setLots(null);
+			box.setLots(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		if (object.getBoxes() == null) {
