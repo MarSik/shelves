@@ -5,9 +5,9 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
+import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -71,6 +71,9 @@ public class LotController {
     @Autowired
     EmberToLot emberToLot;
 
+    @Autowired
+    LotRepository lotRepository;
+
     private LotApiModel cnv(Lot l) {
         return lotToEmber.convert(l, 1, new THashMap<>());
     }
@@ -128,86 +131,21 @@ public class LotController {
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("uuid") UUID id,
                                 @RequestBody @Validated LotApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        EmberModel.Builder<LotApiModel> modelBuilder = performLotAction(currentUser, id, lot0);
+        Lot lot = emberToLot.convert(lot0, Integer.MAX_VALUE, new THashMap<>());
+        LotSplitResult result = lotService.update(lotRepository.findById(id), lot, currentUser);
 
-        if (modelBuilder == null) {
-            throw new InvalidRequest();
+        Map<UUID, Object> cache = new THashMap<>();
+
+        EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(
+                lotToEmber.convert(result.getRequested(), 1, cache));
+        if (result.getRemainder() != null) {
+            modelBuilder.sideLoad(
+                    lotToEmber.convert(result.getRemainder(), 1, cache));
         }
 
         return modelBuilder.build();
     }
 
-    protected EmberModel.Builder<LotApiModel> performLotAction(@CurrentUser User currentUser,
-            @PathVariable("uuid") UUID id, @RequestBody @Validated LotApiModel lot0)
-            throws PermissionDenied, EntityNotFound, OperationNotPermitted, InvalidRequest {
-        EmberModel.Builder<LotApiModel> modelBuilder = null;
-        Lot original = null;
-
-        if (id != null) {
-            original = lotService.get(id, currentUser);
-        }
-
-        if (original == null) {
-            throw new EntityNotFound();
-        }
-
-        Lot lot = emberToLot.convert(lot0, Integer.MAX_VALUE, new THashMap<>());
-
-        if (lot.getCount() != null
-                && lot.getCount() > 0
-                && !lot.getCount().equals(original.getCount())) {
-            // Count changed - SPLIT operation (with possible MOVE)
-            LotSplitResult result = lotService.split(original.getId(), lot.getCount(), currentUser, lot.getUsedBy());
-            Lot endResult = result.getRequested();
-
-            if (lot.getLocation() != null
-                    && !lot.getLocation().equals(result.getRequested().getLocation())) {
-                // Move the requested amount if needed
-                endResult = lotService.move(endResult.getId(), lot.getLocation(), currentUser);
-            }
-
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(endResult));
-            if (result.getRemainder() != null) {
-                modelBuilder.sideLoad(cnv(result.getRemainder()));
-            }
-
-        } else if (lot.getLocation() != null
-                && !lot.getLocation().equals(original.getLocation())) {
-            // Location and previous specified, but no purchase - MOVE operation
-            Lot result = lotService.move(original.getId(), lot.getLocation(), currentUser);
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
-
-        } else if (lot.getStatus() != null
-                && !lot.getStatus().equals(original.getStatus())
-                && lot.getStatus().equals(LotAction.UNASSIGNED)) {
-            // Unassigned
-            Lot result = lotService.unassign(original.getId(), currentUser);
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
-
-        } else if (lot.getStatus() != null
-                && !lot.getStatus().equals(original.getStatus())
-                && lot.getStatus().equals(LotAction.UNSOLDERED)) {
-            // Unsolder
-            Lot result = lotService.unsolder(original.getId(), currentUser);
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
-
-        } else if (lot.getStatus() != null
-                && !lot.getStatus().equals(original.getStatus())
-                && lot.getStatus().equals(LotAction.SOLDERED)) {
-            // Solder and possibly assign as well
-            Lot result = lotService.solder(original.getId(), currentUser, lot.getUsedBy());
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
-
-        } else if (lot.getUsedBy() != null
-                && !lot.getUsedBy().equals(original.getUsedBy())) {
-            // Assign
-            Lot result = lotService.assign(original.getId(), currentUser, lot.getUsedBy());
-            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
-
-        }
-
-        return modelBuilder;
-    }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody

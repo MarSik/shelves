@@ -45,14 +45,15 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 		model.setSerials(object.getSerials());
 		model.setHistory(emberToLotHistory.convert(object.getHistory(), nested, cache));
 
-		if (model.getSerials() == null) {
-			model.setSerials(new THashSet<>());
-		}
-
 		if (object.getSerial() != null
 				&& !object.getSerial().isEmpty()) {
+			if (model.getSerials() == null) {
+				model.setSerials(new THashSet<>());
+			}
 			model.getSerials().add(object.getSerial());
-		} else {
+		}
+
+		if (model.getSerials() == null) {
 			model.setSerials(new IdentifiedEntity.UnprovidedSet<>());
 		}
 

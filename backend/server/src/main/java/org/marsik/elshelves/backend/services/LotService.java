@@ -35,6 +35,9 @@ public class LotService {
     EntityManager entityManager;
 
     @Autowired
+    RelinkService relinkService;
+
+    @Autowired
     public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository,
                       UuidGenerator uuidGenerator,
                       RequirementRepository requirementRepository) {
@@ -86,117 +89,14 @@ public class LotService {
 		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser, uuidGenerator);
 		save(lot);
 
-		purchase.getLots().add(lot);
+		purchase.addLot(lot);
 
 		return lot;
 	}
 
-    public Lot move(UUID previous, Box location0, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
-        Box location = boxRepository.findById(location0.getId());
-        Lot lot0 = lotRepository.findById(previous);
 
-        if (lot0 == null || location == null) {
-            throw new EntityNotFound();
-        }
 
-        if (!lot0.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        if (!location.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        lot0.move(currentUser, location, uuidGenerator);
-        save(lot0);
-
-        return lot0;
-    }
-
-	public LotSplitResult split(UUID source, Long count, User currentUser, Requirement requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
-		Lot lot = lotRepository.findById(source);
-        Requirement requirement = null;
-
-        if (requirement0 != null) {
-            requirement = requirementRepository.findById(requirement0.getId());
-        }
-
-        if (lot == null
-                || (requirement0 != null && requirement == null)) {
-            throw new EntityNotFound();
-        }
-
-        if (!lot.getOwner().equals(currentUser)
-                || (requirement != null && !requirement.getOwner().equals(currentUser))) {
-            throw new PermissionDenied();
-        }
-
-        if (count <= 0
-                || (count < lot.getCount() && !lot.isCanBeSplit())
-                || (requirement != null && !lot.isCanBeAssigned())) {
-            throw new OperationNotPermitted();
-        }
-
-		Lot result = lot.take(count, currentUser, uuidGenerator, requirement);
-		if (result == null) {
-			throw new OperationNotPermitted();
-		}
-
-		save(result);
-        save(lot);
-
-		return new LotSplitResult(result, result.equals(lot) ? null : lot);
-	}
-
-	public Lot destroy(UUID source, User currentUser) throws PermissionDenied, EntityNotFound {
-		Lot lot = lotRepository.findById(source);
-
-		if (lot == null) {
-			throw new EntityNotFound();
-		}
-
-		if (!lot.getOwner().equals(currentUser)) {
-			throw new PermissionDenied();
-		}
-
-		lot.destroy(currentUser, uuidGenerator);
-		save(lot);
-
-		return lot;
-	}
-
-    public Lot solder(UUID source, User currentUser, Requirement requirement0) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
-        Lot lot = lotRepository.findById(source);
-        Requirement requirement = null;
-
-        if (requirement0 != null) {
-            requirement = requirementRepository.findById(requirement0.getId());
-        }
-
-        if (lot == null
-                || (requirement0 != null && requirement == null)) {
-            throw new EntityNotFound();
-        }
-
-        if (!lot.getOwner().equals(currentUser)
-                || (requirement != null && !requirement.getOwner().equals(currentUser))) {
-            throw new PermissionDenied();
-        }
-
-        if (!lot.isCanBeSoldered()
-                || (requirement != null && !lot.isCanBeMoved())) {
-            throw new OperationNotPermitted();
-        }
-
-        lot.solder(currentUser, requirement, uuidGenerator);
-        save(lot);
-
-        return lot;
-    }
-
-    public Lot unsolder(UUID source, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
-        Lot lot = lotRepository.findById(source);
-
+	public <T extends Lot> LotSplitResult<T> update(T lot, T update, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {
         if (lot == null) {
             throw new EntityNotFound();
         }
@@ -205,63 +105,26 @@ public class LotService {
             throw new PermissionDenied();
         }
 
-        if (!lot.isCanBeUnsoldered()) {
-            throw new OperationNotPermitted();
+        long count = lot.getCount();
+
+        RelinkService.RelinkContext context = relinkService.newRelinker();
+        context.relink(update);
+
+		lot.updateFrom(update);
+
+        T rest = null;
+
+        if (count > lot.getCount()) {
+            rest = (T)lot.shallowClone();
+            rest.setCount(count - lot.getCount());
+            save(rest);
         }
 
-        lot.unsolder(currentUser, uuidGenerator);
+        // TODO record history to lot
         save(lot);
 
-        return lot;
-    }
-
-    public Lot assign(UUID source, User currentUser, Requirement requirement0) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
-        Lot lot = lotRepository.findById(source);
-        Requirement requirement = requirementRepository.findById(requirement0.getId());
-
-        if (lot == null
-                || requirement == null) {
-            throw new EntityNotFound();
-        }
-
-        if (!lot.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        if (!requirement.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        if (!lot.isCanBeAssigned()) {
-            throw new OperationNotPermitted();
-        }
-
-        lot.assign(currentUser, requirement, uuidGenerator);
-        save(lot);
-
-        return lot;
-    }
-
-    public Lot unassign(UUID source, User currentUser) throws OperationNotPermitted, PermissionDenied, EntityNotFound {
-        Lot lot = lotRepository.findById(source);
-
-        if (lot == null) {
-            throw new EntityNotFound();
-        }
-
-        if (!lot.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        if (!lot.isCanBeUnassigned()) {
-            throw new OperationNotPermitted();
-        }
-
-        lot.unassign(currentUser, uuidGenerator);
-        save(lot);
-
-        return lot;
-    }
+		return new LotSplitResult<T>(lot, rest);
+	}
 
     protected Lot save(Lot entity) {
         saveOrUpdate(entity.getHistory());

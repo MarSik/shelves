@@ -2,20 +2,20 @@ package org.marsik.elshelves.backend.dtos;
 
 import org.marsik.elshelves.backend.entities.Lot;
 
-public class LotSplitResult {
-	final Lot requested;
-	final Lot remainder;
+public class LotSplitResult<T extends Lot> {
+	final T requested;
+	final T remainder;
 
-	public LotSplitResult(Lot requested, Lot remainder) {
+	public LotSplitResult(T requested, T remainder) {
 		this.requested = requested;
 		this.remainder = remainder;
 	}
 
-	public Lot getRequested() {
+	public T getRequested() {
 		return requested;
 	}
 
-	public Lot getRemainder() {
+	public T getRemainder() {
 		return remainder;
 	}
 }

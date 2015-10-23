@@ -1,19 +1,16 @@
 package org.marsik.elshelves.backend.entities;
 
 import gnu.trove.set.hash.THashSet;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -73,7 +70,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	}
 
 	@Override
-	public void updateFrom(UpdateableEntity update0) {
+	public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
 		if (!(update0 instanceof Transaction)) {
 			throw new IllegalArgumentException();
 		}

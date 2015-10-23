@@ -1,18 +1,13 @@
 package org.marsik.elshelves.backend.entities;
 
 import gnu.trove.set.hash.THashSet;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.interfaces.Relinker;
-import org.marsik.elshelves.ember.EmberModelName;
-import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
-import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -102,7 +97,7 @@ public class NamedEntity extends OwnedEntity
 	}
 
 	@Override
-	public void updateFrom(UpdateableEntity update0) {
+	public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
 		if (!(update0 instanceof NamedEntity)) {
 			throw new IllegalArgumentException();
 		}

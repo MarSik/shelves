@@ -1,22 +1,20 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
-import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
+import org.marsik.elshelves.backend.dtos.LotSplitResult;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
 import org.marsik.elshelves.backend.entities.converters.EmberToType;
+import org.marsik.elshelves.backend.repositories.ItemRepository;
+import org.marsik.elshelves.backend.services.LotService;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
-import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
-import org.marsik.elshelves.api.entities.PurchaseApiModel;
-import org.marsik.elshelves.api.entities.TransactionApiModel;
-import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
@@ -70,7 +68,10 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     EmberToType emberToType;
 
     @Autowired
-    LotController lotController;
+    LotService lotService;
+
+    @Autowired
+    ItemRepository itemRepository;
 
     @RequestMapping("/{uuid}/import")
     @Transactional
@@ -95,18 +96,17 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     @Transactional
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("id") UUID id,
-                                @RequestBody @Validated ItemApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        EmberModel.Builder<? super ItemApiModel> modelBuilder = lotController.performLotAction(currentUser, id, lot0);
+                                @RequestBody @Validated ItemApiModel item0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, new THashMap<>());
+        LotSplitResult<Item> result = lotService.update(itemRepository.findById(id), item, currentUser);
 
-        if (modelBuilder == null
-                && lot0.getFinished() != null) {
-            Item item = getService().get(id, currentUser);
-            item.finishOrReopen(lot0.getFinished(), currentUser, uuidGenerator);
-            modelBuilder = new EmberModel.Builder<>(dbToRest.convert(item, 1, new THashMap<>()));
-        }
+        Map<UUID, Object> cache = new THashMap<>();
 
-        if (modelBuilder == null) {
-            throw new InvalidRequest();
+        EmberModel.Builder<ItemApiModel> modelBuilder = new EmberModel.Builder<>(
+                getDbToRest().convert(result.getRequested(), 1, cache));
+        if (result.getRemainder() != null) {
+            modelBuilder.sideLoad(
+                    getDbToRest().convert(result.getRemainder(), 1, cache));
         }
 
         return modelBuilder.build();

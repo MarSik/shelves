@@ -1,17 +1,14 @@
 package org.marsik.elshelves.backend.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -77,7 +74,7 @@ public class Authorization extends IdentifiedEntity implements OwnedEntityInterf
     }
 
     @Override
-    public void updateFrom(UpdateableEntity update0) {
+    public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
         if (!(update0 instanceof Authorization)) {
             return;
         }

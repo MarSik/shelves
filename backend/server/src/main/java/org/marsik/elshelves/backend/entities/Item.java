@@ -1,20 +1,17 @@
 package org.marsik.elshelves.backend.entities;
 
 import gnu.trove.set.hash.THashSet;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -54,7 +51,7 @@ public class Item extends Lot implements StickerCapable {
 	}
 
 	@Override
-	public void updateFrom(UpdateableEntity update0) {
+	public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
 		if (!(update0 instanceof Item)) {
 			throw new IllegalArgumentException();
 		}

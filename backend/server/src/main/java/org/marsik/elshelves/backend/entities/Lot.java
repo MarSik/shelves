@@ -1,21 +1,18 @@
 package org.marsik.elshelves.backend.entities;
 
 import gnu.trove.set.hash.THashSet;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
-import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,6 +25,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -149,55 +147,6 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		return result;
 	}
 
-	protected Lot copy(Long count) {
-		Lot l = new Lot();
-		l.setCount(count);
-		return l;
-	}
-
-    public LotHistory move(User performedBy, Box location, UuidGenerator uuidGenerator) {
-		setLocation(location);
-
-		LotHistory h = recordChange(LotAction.MOVED, performedBy, uuidGenerator);
-		h.setLocation(location);
-
-		return h;
-    }
-
-	public LotHistory solder(User performedBy, Requirement requirement, UuidGenerator uuidGenerator) {
-		if (requirement != null) {
-			assign(performedBy, requirement, uuidGenerator);
-		}
-
-		return recordChange(LotAction.SOLDERED, performedBy, uuidGenerator);
-	}
-
-    public LotHistory unsolder(User performedBy, UuidGenerator uuidGenerator) {
-		return recordChange(LotAction.UNSOLDERED, performedBy, uuidGenerator);
-    }
-
-	public LotHistory destroy(User performedBy, UuidGenerator uuidGenerator) {
-		return recordChange(LotAction.DESTROYED, performedBy, uuidGenerator);
-	}
-
-	public LotHistory assign(User performedBy, Requirement where, UuidGenerator uuidGenerator) {
-		setUsedBy(where);
-
-		LotHistory h = recordChange(LotAction.ASSIGNED, performedBy, uuidGenerator);
-		h.setAssignedTo(where);
-
-		return h;
-	}
-
-	public LotHistory unassign(User performedBy, UuidGenerator uuidGenerator) {
-		setUsedBy(null);
-
-		LotHistory h = recordChange(LotAction.UNASSIGNED, performedBy, uuidGenerator);
-		h.setAssignedTo(null);
-
-		return h;
-	}
-
 	protected LotHistory recordChange(LotAction action, User performedBy, UuidGenerator uuidGenerator) {
 		setStatus(action);
 
@@ -295,6 +244,65 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	@Transient
 	public Type getType() {
 		return getPurchase() == null ? null : getPurchase().getType();
+	}
+
+	@Override
+	public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
+		if (!(update0 instanceof Lot)) {
+			throw new IllegalArgumentException();
+		}
+
+		Lot update = (Lot)update0;
+
+		if (update.getStatus() != getStatus()) {
+			if (update.getStatus() == LotAction.SOLDERED
+					&& !isCanBeSoldered()) {
+				throw new OperationNotPermitted();
+			}
+
+			if (update.getStatus() == LotAction.UNSOLDERED
+					&& !isCanBeUnsoldered()) {
+				throw new OperationNotPermitted();
+			}
+		}
+
+		update(update.getStatus(), this::setStatus);
+
+		if (!Objects.equals(update.getCount(), getCount())
+				&& !isCanBeSplit()) {
+			throw new OperationNotPermitted();
+		}
+
+		if (update.getCount().compareTo(getCount()) > 0) {
+			throw new OperationNotPermitted();
+		}
+
+		update(update.getCount(), this::setCount);
+
+		if (!Objects.equals(update.getLocation(), getLocation())
+				&& !isCanBeMoved()) {
+			throw new OperationNotPermitted();
+		}
+
+		update(update.getLocation(), this::setLocation);
+
+		if (!Objects.equals(update.getUsedBy(), getUsedBy())
+				&& update.getUsedBy() == null
+				&& !isCanBeUnassigned()) {
+			throw new OperationNotPermitted();
+		}
+
+		if (!Objects.equals(update.getUsedBy(), getUsedBy())
+				&& getUsedBy() == null
+				&& !isCanBeAssigned()) {
+			throw new OperationNotPermitted();
+		}
+
+		update(update.getUsedBy(), this::setUsedBy);
+
+		update(update.getSerials(), this::setSerials);
+
+		super.updateFrom(update);
 	}
 
 	@Override
