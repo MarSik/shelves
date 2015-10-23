@@ -8,7 +8,8 @@ export default Ember.Component.extend({
             this.set('editing', true);
         },
         saveEdit: function () {
-            this.sendAction('action', this.get('param'), this.get('param2'), this.get('value'));
+          console.log("Save lot count ", this.get('action'), this.get('value'));
+            this.get('action')(this.get('value'));
             this.set('editing', false);
         },
         cancelEdit: function () {

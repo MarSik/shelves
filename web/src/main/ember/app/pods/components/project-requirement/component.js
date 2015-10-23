@@ -5,14 +5,14 @@ export default Ember.Component.extend({
   tagName: "tbody",
 
   actions: {
-    solderLot(lot) {
-      this.sendAction("solderLot", lot);
+    solderLot(lot, count) {
+      this.sendAction("solderLot", lot, count);
     },
-    unsolderLot(lot) {
-      this.sendAction("unsolderLot", lot);
+    unsolderLot(lot, count) {
+      this.sendAction("unsolderLot", lot, count);
     },
-    unassignLot(lot) {
-      this.sendAction("unassignLot", lot);
+    unassignLot(lot, count) {
+      this.sendAction("unassignLot", lot, count);
     },
     assignLot() {
       this.sendAction("assignLot", this.get("r"), this.get('assignableLots'));

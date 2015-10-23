@@ -10,17 +10,17 @@ export default Ember.Component.extend({
     hideActions: function () {
       this.set('displayActions', false);
     },
-    solderLot: function (lot) {
+    solderLot: function (lot, count) {
       this.set('displayActions', false);
-      this.sendAction("solderLot", lot);
+      this.sendAction("solderLot", lot, count);
     },
-    unsolderLot: function (lot) {
+    unsolderLot: function (lot, count) {
       this.set('displayActions', false);
-      this.sendAction("unsolderLot", lot);
+      this.sendAction("unsolderLot", lot, count);
     },
-    unassignLot: function (lot) {
+    unassignLot: function (lot, count) {
       this.set('displayActions', false);
-      this.sendAction("unassignLot", lot);
+      this.sendAction("unassignLot", lot, count);
     }
   },
 

@@ -51,8 +51,11 @@ export default Ember.Controller.extend({
                 self.growl.error(e);
             });
         },
-        solderLot: function (lot) {
+        solderLot: function (lot, count) {
           lot.set('status', 'SOLDERED');
+          lot.set('count', count);
+
+          console.log("Lot count ", arguments);
 
           var self = this;
 

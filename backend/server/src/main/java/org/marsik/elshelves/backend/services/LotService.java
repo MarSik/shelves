@@ -84,7 +84,13 @@ public class LotService {
 			throw new PermissionDenied();
 		}
 
-		Lot lot = Lot.delivery(purchase, uuidGenerator.generate(), newLot0.getCount(), location, expiration, currentUser, uuidGenerator);
+		Lot lot = Lot.delivery(purchase,
+                uuidGenerator.generate(),
+                newLot0.getCount(),
+                location,
+                expiration,
+                currentUser,
+                uuidGenerator);
 		save(lot);
 
 		purchase.addLot(lot);
@@ -110,15 +116,21 @@ public class LotService {
 
         // Prepare history object
         lot.recordChange(update, currentUser, uuidGenerator);
-		lot.updateFrom(update);
 
         T rest = null;
 
-        if (count > lot.getCount()) {
+        if (count > update.getCount()) {
             rest = (T)lot.shallowClone();
-            rest.setCount(count - lot.getCount());
-            save(rest);
+            rest.setDbId(null);
+            rest.setVersion(null);
+            rest.setId(uuidGenerator.generate());
+            rest.setCount(count - update.getCount());
+            rest.relink(context);
         }
+
+        lot.updateFrom(update);
+
+        save(rest);
 
         // Save history
         LotHistory curr = lot.getHistory();
@@ -133,6 +145,10 @@ public class LotService {
 	}
 
     protected Lot save(Lot entity) {
+        if (entity == null) {
+            return null;
+        }
+
         saveOrUpdate(entity.getHistory());
         return lotRepository.save(entity);
     }

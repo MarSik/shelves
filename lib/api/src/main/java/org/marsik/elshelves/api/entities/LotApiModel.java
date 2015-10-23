@@ -14,6 +14,7 @@ import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.api.entities.idresolvers.LotIdResolver;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,6 +53,7 @@ public class LotApiModel extends AbstractEntityApiModel {
 	LotHistoryApiModel history;
 
 	@Min(1)
+	@NotNull
 	Long count;
 
 	Set<String> serials;

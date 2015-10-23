@@ -79,14 +79,4 @@ public class Item extends Lot implements StickerCapable {
 	public int hashCode() {
 		return super.hashCode();
 	}
-
-	public LotHistory finishOrReopen(boolean finish, User performedBy, UuidGenerator uuidGenerator) {
-		if (getFinished() != null
-				&& getFinished() == finish) {
-			return getHistory();
-		}
-
-		setFinished(finish);
-		return recordChange(finish ? LotAction.FINISHED : LotAction.REOPENED, performedBy, uuidGenerator);
-	}
 }

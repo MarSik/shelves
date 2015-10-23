@@ -150,7 +150,8 @@ public class Lot extends OwnedEntity implements StickerCapable {
 
     public boolean isCanBeSplit() {
         return isValid()
-                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getStatus());
+                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.SOLDERED,
+				LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getStatus());
     }
 
     public boolean isCanBeMoved() {
