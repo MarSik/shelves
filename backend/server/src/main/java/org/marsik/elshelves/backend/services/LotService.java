@@ -8,6 +8,7 @@ import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
@@ -29,7 +30,6 @@ public class LotService {
 	PurchaseRepository purchaseRepository;
 	BoxRepository boxRepository;
 	UuidGenerator uuidGenerator;
-    RequirementRepository requirementRepository;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -39,13 +39,11 @@ public class LotService {
 
     @Autowired
     public LotService(LotRepository lotRepository, PurchaseRepository purchaseRepository, BoxRepository boxRepository,
-                      UuidGenerator uuidGenerator,
-                      RequirementRepository requirementRepository) {
+                      UuidGenerator uuidGenerator) {
         this.lotRepository = lotRepository;
         this.purchaseRepository = purchaseRepository;
         this.boxRepository = boxRepository;
         this.uuidGenerator = uuidGenerator;
-        this.requirementRepository = requirementRepository;
     }
 
     protected Collection<Lot> getAllEntities(User currentUser) {
@@ -110,6 +108,8 @@ public class LotService {
         RelinkService.RelinkContext context = relinkService.newRelinker();
         context.relink(update);
 
+        // Prepare history object
+        lot.recordChange(update, currentUser, uuidGenerator);
 		lot.updateFrom(update);
 
         T rest = null;
@@ -120,7 +120,13 @@ public class LotService {
             save(rest);
         }
 
-        // TODO record history to lot
+        // Save history
+        LotHistory curr = lot.getHistory();
+        while (curr != null && curr.isNew()) {
+            saveOrUpdate(curr);
+            curr = curr.getPrevious();
+        }
+
         save(lot);
 
 		return new LotSplitResult<T>(lot, rest);

@@ -97,64 +97,12 @@ public class Lot extends OwnedEntity implements StickerCapable {
         return getCount() - usedCount();
     }
 
-	public Lot take(Long count, User performedBy, UuidGenerator uuidGenerator, Requirement requirement) {
-		// Not available for split
-		if (!isCanBeSplit()) {
-			return null;
-		}
-
-        // Use the exact amount or all if not enough available
-        if (getCount() <= count) {
-            count = getCount();
-        }
-
-		Lot result = null;
-
-        // No remainder..
-        if (getCount().equals(count)) {
-            result = this;
-        } else {
-			// Create the taken Lot and substract the count
-			setCount(getCount() - count);
-
-			result = new Lot();
-			result.setId(uuidGenerator.generate());
-			result.setHistory(getHistory());
-			result.setCount(count);
-			result.setStatus(getStatus());
-			result.setLocation(getLocation());
-			result.setUsedBy(getUsedBy());
-			result.setExpiration(getExpiration());
-			result.setPurchase(getPurchase());
-			result.setOwner(getOwner());
-
-			Set<String> serials = new THashSet<>();
-			getSerials().stream().skip(getCount() - count).forEach(new Consumer<String>() {
-				@Override
-				public void accept(String s) {
-					serials.add(s);
-				}
-			});
-
-			result.setSerials(serials); // TODO take a specific serials
-			getSerials().removeAll(result.getSerials());
-		}
-
-		if (requirement != null && result.isCanBeAssigned()) {
-			result.recordChange(LotAction.ASSIGNED, performedBy, uuidGenerator);
-		}
-
-		return result;
-	}
-
-	protected LotHistory recordChange(LotAction action, User performedBy, UuidGenerator uuidGenerator) {
-		setStatus(action);
-
+	public LotHistory recordChange(Lot update, User performedBy, UuidGenerator uuidGenerator) {
 		LotHistory h = new LotHistory();
 		h.setId(uuidGenerator.generate());
 		h.setPrevious(getHistory());
 		h.setPerformedBy(performedBy);
-		h.setAction(action);
+		h.setAction(LotAction.EVENT);
 
 		setHistory(h);
 
@@ -170,8 +118,9 @@ public class Lot extends OwnedEntity implements StickerCapable {
 		l.setCount(count);
 		l.setPurchase(purchase);
 		l.setExpiration(expiration);
+		l.setStatus(LotAction.DELIVERY);
 
-		LotHistory h = l.recordChange(LotAction.DELIVERY, performedBy, uuidGenerator);
+		LotHistory h = l.recordChange(null, performedBy, uuidGenerator);
 		h.setLocation(location);
 
 		return l;
