@@ -12,7 +12,7 @@ export default LotBase.extend({
   status: attr(),
   purchase: belongsTo('purchase', {async: true}),
   expiration: attr('date'),
-  serial: attr('string'),
+  serials: attr(),
   history: belongsTo("history", {async: true}),
 
   usedBy: belongsTo('requirement', {async: true}),

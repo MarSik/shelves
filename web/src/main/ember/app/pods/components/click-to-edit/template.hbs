@@ -4,7 +4,7 @@
     <button type="submit">save</button>
     <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
 </form>
-{{else if show}}
+{{else if realValue}}
 {{yield}} {{#if enabled}}<button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>{{/if}}
 {{else if enabled}}
 <span class="placeholder">{{placeholder}}</span> <button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>

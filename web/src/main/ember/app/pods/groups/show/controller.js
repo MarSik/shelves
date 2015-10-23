@@ -104,7 +104,7 @@ export default Ember.Controller.extend({
         f(this.get('model'));
         return this.get('_categories');
       },
-      set(v) {
+      set(k, v) {
         this.set('_categories', v);
       }
     }),

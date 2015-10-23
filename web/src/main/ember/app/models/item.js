@@ -45,5 +45,16 @@ export default Lot.extend({
     });
 
     return [soldered, sum];
-  }.property('requirements.@each.progress')
+  }.property('requirements.@each.progress'),
+
+  serial: Ember.computed("serials", {
+    get() {
+      var serials = this.get("serials");
+      return serials.length ? serials[0] : "";
+    },
+    set(k, v) {
+      console.log("Set serial "+v);
+      this.set("serials", [v]);
+    }
+  })
 });

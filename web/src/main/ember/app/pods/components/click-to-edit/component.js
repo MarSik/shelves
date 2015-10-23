@@ -8,11 +8,14 @@ export default Ember.Component.extend({
                 return;
             }
 
-            this.set('value', this.get('show'));
+            this.set('value', this.get('realValue'));
             this.set('editing', true);
         },
         saveEdit: function () {
-            this.set('show', this.get('value'));
+            console.log('Saving '+this.get('value'));
+            this.set('realValue', this.get('value'));
+            console.log('Saved '+this.get('realValue'));
+            console.log('Saved '+this.get(this.get('field')));
             this.get('content').save();
             this.set('editing', false);
         },
@@ -20,12 +23,13 @@ export default Ember.Component.extend({
             this.set('editing', false);
         }
     },
-    // content
-    // field
-    // editable
+    content: undefined,
+    field: undefined,
+    editable: true,
+
     editing: false,
     value: null,
-    show: Ember.computed.indirect('field'),
+    realValue: Ember.computed.indirect('field'),
     enabled: Ember.computed("editable", function () {
       var e = this.get("editable");
       return Ember.isNone(this.get('editable')) || this.get('editable');

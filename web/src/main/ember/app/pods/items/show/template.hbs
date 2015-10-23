@@ -1,4 +1,7 @@
-<h2>Type / Project {{model.serials}}</h2>
+<h2>
+  {{#click-to-edit content=model field='content.serial' placeholder='place for serial number or name'}}{{model.serial}}{{/click-to-edit}}
+</h2>
+
 {{entity-header model=model.purchase.type}}
 
 <h3>Status</h3>
