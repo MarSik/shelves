@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.marsik.elshelves.ember.EmberModelName;
 
-import javax.persistence.Entity;
-
 @JsonFormat(shape= JsonFormat.Shape.OBJECT)
 @EmberModelName("siprefix")
-@Entity
 public enum SiPrefix {
     // SI base 10 prefixes
 	ATTO("a", 10, -18),

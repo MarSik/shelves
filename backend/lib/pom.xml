@@ -18,4 +18,17 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${maven.android.target}</source>
+                    <target>${maven.android.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -12,6 +12,8 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -43,6 +45,7 @@ public class NumericProperty extends NamedEntity {
      * The value is scaled to base units.
      */
     @NotNull
+    @Enumerated(EnumType.STRING)
     SiPrefix base;
 
     String symbol;
