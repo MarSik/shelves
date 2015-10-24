@@ -48,7 +48,7 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
         boolean mobileDevice = false;
 
         for (GrantedAuthority g: authentication.getAuthorities()) {
-            if (g.getAuthority().equals("MOBILE")) {
+            if (g.getAuthority().equals("ROLE_MOBILE")) {
                 mobileDevice = true;
                 break;
             }

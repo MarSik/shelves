@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ENV from '../../config/environment';
+import ENV from '../../../config/environment';
 
 export default Ember.Component.extend({
     tagName: "form",
@@ -8,7 +8,7 @@ export default Ember.Component.extend({
         return ENV.APP.API_ENDPOINT + '/stickers';
     }.property(),
     access_token: function () {
-        return this.get('controller.session.content.access_token');
+        return this.get('controller.session.content.secure.access_token');
     }.property('controller.session.content')
     // items - array of items to generate the stickers for
 });

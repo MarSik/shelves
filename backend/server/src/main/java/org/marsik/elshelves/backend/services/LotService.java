@@ -141,6 +141,11 @@ public class LotService {
 
         save(lot);
 
+        /* TODO? Switch uuids and rest with lot so the old id belongs to the rest and the assigned / moved
+           lot has a new uuid. This should help with concurrent access (the second request might still have chance
+           to get the necessary count without reloading its cache.
+         */
+
 		return new LotSplitResult<T>(lot, rest);
 	}
 
