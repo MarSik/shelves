@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.jackson.CreateObjectIdResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractIdResolver implements CreateObjectIdResolver {
+	private final static Logger log = LoggerFactory.getLogger(AbstractIdResolver.class);
+
 	private Map<ObjectIdGenerator.IdKey,Object> _items = new HashMap<ObjectIdGenerator.IdKey,Object>();
 
 	@Override
@@ -34,7 +38,7 @@ public abstract class AbstractIdResolver implements CreateObjectIdResolver {
 			AbstractEntityApiModel stub =  getType().getConstructor(id.key.getClass()).newInstance(id.key);
 			return stub;
 		} catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException|InstantiationException ex) {
-			ex.printStackTrace();
+			log.error("Error creating empty shell", ex);
 			return null;
 		}
 	}
@@ -52,8 +56,8 @@ public abstract class AbstractIdResolver implements CreateObjectIdResolver {
         try {
             return this.getClass().newInstance();
         } catch (InstantiationException|IllegalAccessException ex) {
-            ex.printStackTrace();
-            return null;
+			log.error("Error creating AbstractIdResolver", ex);
+			return null;
         }
     }
 }
