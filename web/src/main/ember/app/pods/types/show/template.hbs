@@ -157,13 +157,15 @@
 <table>
     <thead>
     <tr>
-        <th>Source</th>
-        <th colspan="5">Box / Project</th>
+        <th>Cnt.</th>
+        <th>Box / Project</th>
+        <th>Serial</th>
+        <th colspan="3">&nbsp;</th>
     </tr>
     <tr>
-        <th>SKU</th>
-        <th>Cnt.</th>
         <th>%</th>
+        <th>Source / SKU</th>
+        <th>&nbsp;</th>
         <th>Price</th>
         <th>w/ Vat</th>
         <th>Vat %</th>
@@ -172,33 +174,37 @@
     {{#each model.lots as |lot|}}
     <tbody>
     <tr>
+        <td>{{lot.count}}</td>
         <td>
-          {{#link-to lot.endpoint lot}}{{fa-icon lot.icon}} detail{{/link-to}}
-        </td>
-        <td colspan="4">
-            {{#if lot.canBeAssigned}}
+          {{#if lot.canBeAssigned}}
             {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
-            {{/if}}
+          {{/if}}
             {{#if lot.canBeSoldered}}
-            {{fa-icon 'flask'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
-            {{/if}}
-            {{#if lot.canBeUnsoldered}}
-            {{fa-icon 'check-square'}} {{#link-to 'projects.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
-            {{/if}}
+          {{fa-icon 'flask'}} {{#link-to 'items.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+          {{/if}}
+          {{#if lot.canBeUnsoldered}}
+            {{fa-icon 'check-square'}} {{#link-to 'items.show' lot.usedBy.project}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+          {{/if}}
+
+          {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
         </td>
+        <td>
+          {{#link-to lot.endpoint lot}}{{fa-icon lot.icon}} {{#if lot.serial}}{{lot.serial}}{{else}}detail{{/if}}{{/link-to}}
+        </td>
+        <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-        <td class="sku">
-            {{lot.purchase.sku}}
-        </td>
-        <td class="count">
-            {{lot.count}}
-            {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
-          {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.source.name}}{{fa-icon 'history'}} history{{/link-to}}
-        </td>
         <td>
             {{lot.progress}}
         </td>
+        <td class="sku">
+          {{fa-icon 'shopping-cart'}}
+          {{#link-to 'transactions.show' lot.purchase.transaction}}
+          {{lot.purchase.transaction.source.name}}
+          {{#if lot.purchase.sku}} / {{lot.purchase.sku}}{{/if}}
+          {{/link-to}}
+        </td>
+        <td>&nbsp;</td>
         <td class="price">
             {{lot.purchase.priceWithoutVat}}
         </td>
