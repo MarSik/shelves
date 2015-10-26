@@ -29,7 +29,7 @@ export default Ember.Component.extend({
 
     editing: false,
     value: null,
-    realValue: Ember.computed.indirect('field'),
+    show: Ember.computed.indirect('field'),
     enabled: Ember.computed("editable", function () {
       var e = this.get("editable");
       return Ember.isNone(this.get('editable')) || this.get('editable');
