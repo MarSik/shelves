@@ -19,6 +19,7 @@
         <module>kicad</module>
         <module>jackson</module>
         <module>ember</module>
+        <module>ember-lib</module>
     </modules>
 
     <dependencies>

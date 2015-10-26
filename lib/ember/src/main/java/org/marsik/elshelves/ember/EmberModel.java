@@ -1,6 +1,5 @@
 package org.marsik.elshelves.ember;
 
-import com.google.common.base.CaseFormat;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.atteo.evo.inflector.English;
@@ -26,24 +25,7 @@ public final class EmberModel extends HashMap<String, Object> {
         //Must use the builder
     }
 
-    public static String getSingularName(final Class<?> clazz) {
-        if (clazz.isAnnotationPresent(EmberModelName.class)) {
-            return clazz.getAnnotation(EmberModelName.class).value();
-        }
-        else {
-            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
-        }
-    }
-
-    public static String getPluralName(final Class<?> clazz) {
-        return English.plural(getSingularName(clazz));
-    }
-
-    public static String getPluralName(String singular) {
-        return English.plural(singular);
-    }
-
-    public static class Builder<T> implements org.marsik.elshelves.ember.Builder<EmberModel> {
+	public static class Builder<T> implements org.marsik.elshelves.ember.Builder<EmberModel> {
         private final Map<String, Set<Object>> sideLoadedItems = new THashMap<String, Set<Object>>();
         private final Map<String, Object> metaData = new HashMap<String, Object>();
         private final String payloadName;
@@ -57,7 +39,7 @@ public final class EmberModel extends HashMap<String, Object> {
 
         public Builder(final Object entity) {
             payload = entity;
-            payloadName = getSingularName(entity.getClass());
+            payloadName = EmberModelHelper.getSingularName(entity.getClass());
 
 			knownObjects.add(entity);
 			implicitSideloader(entity);
@@ -65,7 +47,7 @@ public final class EmberModel extends HashMap<String, Object> {
 
 		public Builder(final Class<T> clazz, final Iterable<T> entities) {
 			payload = entities;
-			payloadName = getPluralName(clazz);
+			payloadName = EmberModelHelper.getPluralName(clazz);
 
 			for (T entity: entities) {
 				knownObjects.add(entity);
@@ -82,7 +64,7 @@ public final class EmberModel extends HashMap<String, Object> {
         }
 
         private Collection<Object> getSideLoadingBucket(Class<?> type) {
-            String bucket = getPluralName(type);
+            String bucket = EmberModelHelper.getPluralName(type);
 
             if (!sideLoadedItems.containsKey(bucket)) {
                 sideLoadedItems.put(bucket, new THashSet<Object>());
@@ -211,7 +193,7 @@ public final class EmberModel extends HashMap<String, Object> {
             List<EmberPurge> purges = new ArrayList<>();
 
             for (EmberEntity entity: purge) {
-                purges.add(new EmberPurge(getSingularName(entity.getClass()), entity.getId()));
+                purges.add(new EmberPurge(EmberModelHelper.getSingularName(entity.getClass()), entity.getId()));
             }
 
             if (!purges.isEmpty()) {

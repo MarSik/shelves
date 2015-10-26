@@ -21,6 +21,12 @@
 
         <dependency>
             <groupId>org.marsik.elshelves</groupId>
+            <artifactId>ember</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.marsik.elshelves</groupId>
             <artifactId>kicad</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -112,6 +118,13 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
+        </dependency>
+
+        <!-- Faster collections //-->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
         </dependency>
 
         <!-- Reading and writing Microsoft Office files //-->
