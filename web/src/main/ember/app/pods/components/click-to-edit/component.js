@@ -8,14 +8,11 @@ export default Ember.Component.extend({
                 return;
             }
 
-            this.set('value', this.get('realValue'));
+            this.set('value', this.get('show'));
             this.set('editing', true);
         },
         saveEdit: function () {
-            console.log('Saving '+this.get('value'));
-            this.set('realValue', this.get('value'));
-            console.log('Saved '+this.get('realValue'));
-            console.log('Saved '+this.get(this.get('field')));
+            this.set('show', this.get('value'));
             this.get('content').save();
             this.set('editing', false);
         },

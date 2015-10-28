@@ -50,7 +50,7 @@ export default Lot.extend({
   serial: Ember.computed("serials", {
     get() {
       var serials = this.get("serials");
-      return serials.length ? serials[0] : "";
+      return !Ember.isEmpty(serials) ? serials[0] : "";
     },
     set(k, v) {
       console.log("Set serial "+v);
