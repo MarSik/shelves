@@ -28,7 +28,6 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @Getter
 @Setter
@@ -36,7 +35,7 @@ import java.util.function.Consumer;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DefaultEmberModel(LotApiModel.class)
-public class Lot extends OwnedEntity implements StickerCapable {
+public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport<LotHistory> {
 	public Lot(UUID uuid) {
 		setId(uuid);
 	}
@@ -272,5 +271,39 @@ public class Lot extends OwnedEntity implements StickerCapable {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	@Override
+	public boolean isRevisionNeeded(UpdateableEntity update0) {
+		if (!(update0 instanceof Lot)) {
+			throw new IllegalArgumentException();
+		}
+
+		Lot update = (Lot)update0;
+
+		return willUpdate(getStatus(), update.getStatus())
+				|| willUpdate(getCount(), update.getCount())
+				|| willUpdate(getLocation(), update.getLocation())
+				|| willUpdate(getUsedBy(), update.getUsedBy());
+	}
+
+	@Override
+	public LotHistory createRevision(UuidGenerator uuidGenerator, User performedBy) {
+		LotHistory h = new LotHistory();
+		h.setId(uuidGenerator.generate());
+		h.setPrevious(getHistory());
+		h.setPerformedBy(performedBy);
+		h.setAction(LotAction.EVENT);
+		return h;
+	}
+
+	@Override
+	public LotHistory getPreviousRevision() {
+		return getHistory();
+	}
+
+	@Override
+	public void setPreviousRevision(LotHistory revision) {
+		setHistory(revision);
 	}
 }

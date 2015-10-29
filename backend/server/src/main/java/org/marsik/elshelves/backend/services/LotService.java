@@ -115,7 +115,10 @@ public class LotService {
         context.relink(update);
 
         // Prepare history object
-        lot.recordChange(update, currentUser, uuidGenerator);
+        if (lot.isRevisionNeeded(update)) {
+            LotHistory history = lot.createRevision(uuidGenerator, currentUser);
+            lot.setPreviousRevision(history);
+        }
 
         T rest = null;
 

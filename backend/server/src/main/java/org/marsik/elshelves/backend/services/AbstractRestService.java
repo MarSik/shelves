@@ -8,7 +8,9 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.controllers.exceptions.UpdateConflict;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
+import org.marsik.elshelves.backend.entities.RevisionsSupport;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
@@ -77,12 +79,24 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
             throw new OperationNotPermitted();
         }
 
-        ((UpdateableEntity)entity).updateFrom(update);
+        IdentifiedEntity revision = null;
+
+        if (entity instanceof RevisionsSupport
+                && ((RevisionsSupport) entity).isRevisionNeeded(update)) {
+            revision = ((RevisionsSupport) entity).createRevision(uuidGenerator, currentUser);
+        }
+
+        entity.updateFrom(update);
 
         RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
         relinkContext
                 .addToCache(currentUser)
                 .addToCache(entity);
+
+        if (entity instanceof RevisionsSupport
+                && revision != null) {
+            ((RevisionsSupport) entity).setPreviousRevision(revision);
+        }
 
         entity.relink(relinkContext);
 

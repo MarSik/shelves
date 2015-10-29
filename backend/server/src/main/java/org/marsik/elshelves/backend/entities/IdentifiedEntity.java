@@ -81,10 +81,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
     }
 
 
-    protected interface RemoteUpdater<T, L> {
-        void update(T inst, L value);
-    }
-
     protected interface Updater<T> {
         void update(T value);
     }
@@ -93,10 +89,18 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         Collection<T> get();
     }
 
+    protected interface SimpleGetter<T> {
+        T get();
+    }
+
     protected static <T> void update(T value, Updater<T> cb) {
         if (value != null) {
             cb.update(value);
         }
+    }
+
+    protected static <T> boolean willUpdate(T local, T update) {
+        return update != null && !update.equals(local);
     }
 
     protected static <T> void reconcileLists(Collection<T> update, Getter<T> local, Updater<? super T> adder, Updater<? super T> remover) {
