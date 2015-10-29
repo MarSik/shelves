@@ -79,4 +79,16 @@ public class Item extends Lot implements StickerCapable {
 	public int hashCode() {
 		return super.hashCode();
 	}
+
+	@Override
+	public boolean isRevisionNeeded(UpdateableEntity update0) {
+		if (!(update0 instanceof Item)) {
+			throw new IllegalArgumentException();
+		}
+
+		Item update = (Item)update0;
+
+		return super.isRevisionNeeded(update)
+				|| willUpdate(getFinished(), update.getFinished());
+	}
 }
