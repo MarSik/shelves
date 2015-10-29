@@ -79,11 +79,10 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
     public ResponseEntity<EmberModel> update(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid,
                              @Valid @RequestBody E item) throws BaseRestException {
-        T update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
-
         // The REST entity does not contain id during PUT, because that is
         // provided by the URL
-        update.setId(uuid);
+        item.setId(uuid);
+        T update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
         T entity = service.update(update, currentUser);
 
         // Flush is needed to get the updated version
