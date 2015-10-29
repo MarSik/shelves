@@ -12,6 +12,14 @@
         <h3>Description</h3>
 
         <p>{{#click-to-editarea content=model field='content.description' placeholder='place for the full description'}}{{model.description}}{{/click-to-editarea}}</p>
+
+        {{#if model.codes}}
+        <h3>Barcodes</h3>
+
+        {{#each model.codes as |code|}}
+        {{bar-code model=code}}
+        {{/each}}
+        {{/if}}
     </section>
     <section class="attachments columns small-12 large-6">
 

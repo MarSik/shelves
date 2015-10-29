@@ -36,8 +36,10 @@ import org.marsik.elshelves.backend.entities.Unit;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.BoxToEmber;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
+import org.marsik.elshelves.backend.entities.converters.CodeToEmber;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToBox;
+import org.marsik.elshelves.backend.entities.converters.EmberToCode;
 import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
@@ -65,6 +67,7 @@ import org.marsik.elshelves.backend.entities.converters.TypeToEmber;
 import org.marsik.elshelves.backend.entities.converters.UnitToEmber;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
+import org.marsik.elshelves.backend.repositories.CodeRepository;
 import org.marsik.elshelves.backend.repositories.DocumentRepository;
 import org.marsik.elshelves.backend.repositories.FootprintRepository;
 import org.marsik.elshelves.backend.repositories.GroupRepository;
@@ -251,6 +254,15 @@ public class BackupService {
     @Autowired
     NumericPropertyRepository numericPropertyRepository;
 
+    @Autowired
+    CodeToEmber codeToEmber;
+
+    @Autowired
+    EmberToCode emberToCode;
+
+    @Autowired
+    CodeRepository codeRepository;
+
 	protected <F extends IdentifiedEntity>  void relink(Set<F> allItems,
                                                         User currentUser,
                                                         RelinkService.RelinkContext relinkContext) {
@@ -401,6 +413,7 @@ public class BackupService {
         prepare(backup.getItems(), emberToItem, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getHistory(), emberToLotHistory, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getCodes(), emberToCode, currentUser, conversionCache, relinkContext, pool);
 
         relink(pool, currentUser, relinkContext);
 
@@ -685,6 +698,7 @@ public class BackupService {
         backup.setGroups(backup(groupRepository.findByOwner(currentUser), groupToEmber, cache));
         backup.setFootprints(backup(footprintRepository.findByOwner(currentUser), footprintToEmber, cache));
         backup.setTypes(backup(typeRepository.findByOwner(currentUser), typeToEmber, cache));
+        backup.setCodes(backup(codeRepository.findByOwner(currentUser), codeToEmber, cache));
 
         backup.setSources(backup(sourceRepository.findByOwner(currentUser), sourceToEmber, cache));
         backup.setTransactions(backup(transactionRepository.findByOwner(currentUser), transactionToEmber, cache));
