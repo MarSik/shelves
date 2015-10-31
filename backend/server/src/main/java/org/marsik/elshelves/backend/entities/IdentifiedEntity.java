@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.ember.EmberModelName;
@@ -180,5 +181,11 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         public UnprovidedSet() {
             super(0);
         }
+    }
+
+    public static IdentifiedEntity fromPolymorphicRecord(PolymorphicRecord record) {
+        IdentifiedEntity entity = new IdentifiedEntity();
+        entity.setId(record.getId());
+        return entity;
     }
 }

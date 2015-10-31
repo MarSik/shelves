@@ -1,9 +1,10 @@
 import DS from 'ember-data';
+import IdentifiedBase from './identifiedbase';
 
 var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
-export default DS.Model.extend({
+export default IdentifiedBase.extend({
   version: attr(),
   code: attr('string'),
     type: attr('string'),
