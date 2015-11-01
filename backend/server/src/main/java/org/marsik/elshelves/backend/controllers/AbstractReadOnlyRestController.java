@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.controllers;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -76,6 +77,14 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
 
         for (E entity: allDtos) {
             sideLoad(entity, builder);
+        }
+
+        // Empty list
+        if (allItems.isEmpty()) {
+            return ResponseEntity
+                    .ok()
+                    .lastModified(new DateTime().getMillis())
+                    .body(builder.build());
         }
 
         T lastModified = allItems.stream().reduce(new BinaryOperator<T>() {

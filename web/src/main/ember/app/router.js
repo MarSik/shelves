@@ -19,6 +19,12 @@ Router.map(function() {
     });
   });
 
+  this.resource("lists", function() {
+    this.route("show", {
+      path: "/:list_id"
+    });
+  });
+
   this.resource("footprints", function() {
     this.route("show", {
       path: "/:footprint_id"

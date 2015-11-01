@@ -30,7 +30,7 @@
         <version.findbugs.annotations>3.0.0</version.findbugs.annotations>
 
         <spring.version>4.2.1.RELEASE</spring.version>
-        <spring.security.version>4.0.2.RELEASE</spring.security.version>
+        <spring.security.version>4.0.3.RELEASE</spring.security.version>
         <spring.security.oauth.version>2.0.7.RELEASE</spring.security.oauth.version>
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
 

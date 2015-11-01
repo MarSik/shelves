@@ -1,0 +1,18 @@
+<section class="columns small-12">
+    <h2>Lists</h2>
+
+  <button {{action 'showCreateList'}}>{{fa-icon 'plus'}} Create new list</button>
+
+  <ul class="item-list">
+        {{#each this as |list|}}
+            <li>{{#link-to 'lists.show' list}}{{list.name}}{{/link-to}}</li>
+        {{/each}}
+    </ul>
+</section>
+
+{{#modal-dialog title="Create new list" condition=showCreateDialog}}
+  <form {{action 'createList' listName on='submit'}}>
+  {{input type='text' value=listName placeholder='list name'}}
+  <button type="submit">Create</button>
+  </form>
+{{/modal-dialog}}

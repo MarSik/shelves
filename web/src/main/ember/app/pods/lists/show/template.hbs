@@ -1,0 +1,9 @@
+{{partial '_itemheader'}}
+
+<h3>Items</h3>
+
+<ul>
+{{#each model.items as |item|}}
+<li>{{fa-icon item.icon}} {{item.fullName}}</li>
+{{/each}}
+</ul>
