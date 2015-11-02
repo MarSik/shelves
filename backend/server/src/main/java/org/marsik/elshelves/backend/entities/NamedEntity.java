@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.services.UuidGenerator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
@@ -42,10 +43,11 @@ public class NamedEntity extends OwnedEntity
 	@Lob
 	String description;
 
-	@ManyToMany(mappedBy = "describes")
+	@ManyToMany(mappedBy = "describes", fetch = FetchType.LAZY)
 	Set<Document> describedBy = new THashSet<>();
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST },
+			fetch = FetchType.LAZY)
 	TextRevision previousRevision;
 
 	public void addDescribedBy(Document d) {
@@ -57,6 +59,7 @@ public class NamedEntity extends OwnedEntity
 	}
 
 	@OneToMany(mappedBy = "entity",
+			fetch = FetchType.LAZY,
 			orphanRemoval = true)
     Set<NumericPropertyValue> properties = new THashSet<>();
 
@@ -72,6 +75,7 @@ public class NamedEntity extends OwnedEntity
      * Barcode associated with this entity
      */
 	@OneToMany(mappedBy = "reference",
+			fetch = FetchType.LAZY,
 			orphanRemoval = true)
     Set<Code> codes = new THashSet<>();
 

@@ -44,5 +44,20 @@ export default LotBase.extend({
   progress: function () {
     var soldered = this.get('canBeSoldered') ? 0 : this.get('count');
     return [soldered, this.get('count')];
-  }.property('count', 'canBeSoldered')
+  }.property('count', 'canBeSoldered'),
+
+  serial: Ember.computed("serials", {
+    get() {
+      var serials = this.get("serials");
+      return !Ember.isEmpty(serials) ? serials[0] : "";
+    },
+    set(k, v) {
+      console.log("Set serial "+v);
+      this.set("serials", [v]);
+    }
+  }),
+
+  fullName: function () {
+    return this.get('purchase.type.name') + " " + this.get('serial');
+  }.property('purchase.type.name', 'serial')
 });

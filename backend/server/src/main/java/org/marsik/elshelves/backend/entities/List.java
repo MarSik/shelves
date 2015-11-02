@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.api.entities.ListApiModel;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @DefaultEmberModel(ListApiModel.class)
 public class List extends NamedEntity {
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     Set<IdentifiedEntity> items;
 
     public void addItem(IdentifiedEntity item) {

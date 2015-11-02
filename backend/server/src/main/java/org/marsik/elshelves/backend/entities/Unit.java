@@ -14,6 +14,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class Unit extends NamedEntity {
     Set<SiPrefix> prefixes = new THashSet<>();
 
     @OneToMany(mappedBy = "unit",
+            fetch = FetchType.LAZY,
             orphanRemoval = true)
     Set<NumericProperty> unitUses = new THashSet<>();
 

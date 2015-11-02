@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Entity
 @DefaultEmberModel(PurchaseApiModel.class)
 public class Purchase extends OwnedEntity {
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	Type type;
 
 	public void setType(Type t) {
@@ -47,7 +48,7 @@ public class Purchase extends OwnedEntity {
 	Boolean vatIncluded;
 
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	Transaction transaction;
 
 	public void setTransaction(Transaction t) {
@@ -61,7 +62,7 @@ public class Purchase extends OwnedEntity {
 		setTransaction(null);
 	}
 
-    @OneToMany(mappedBy = "purchase")
+    @OneToMany(mappedBy = "purchase", fetch = FetchType.LAZY)
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

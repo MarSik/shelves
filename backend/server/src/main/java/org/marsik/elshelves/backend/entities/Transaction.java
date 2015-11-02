@@ -12,6 +12,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	DateTime date;
 
 	@OneToMany(mappedBy = "transaction",
+			fetch = FetchType.LAZY,
 			orphanRemoval = true)
 	Set<Purchase> items = new THashSet<>();
 
@@ -39,7 +41,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	}
 
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	Source source;
 
 	public void setSource(Source s) {

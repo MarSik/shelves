@@ -5,9 +5,9 @@ CREATE TABLE list (
 );
 
 CREATE TABLE list_items (
-    lists bigint(20) NOT NULL,
+    list bigint(20) NOT NULL,
     items bigint(20) NOT NULL,
-    CONSTRAINT PRIMARY KEY (lists, items),
-    CONSTRAINT FK_list_items_list FOREIGN KEY (lists) REFERENCES list (db_id),
+    CONSTRAINT PRIMARY KEY (list, items),
+    CONSTRAINT FK_list_items_list FOREIGN KEY (list) REFERENCES list (db_id),
     CONSTRAINT FK_list_items_items FOREIGN KEY (items) REFERENCES identified_entity (db_id)
 );

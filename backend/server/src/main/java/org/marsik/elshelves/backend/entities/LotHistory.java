@@ -12,6 +12,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -32,10 +33,10 @@ public class LotHistory extends IdentifiedEntity {
         this.assignedTo = assignedTo;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     LotHistory previous;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     User performedBy;
 
     @CreatedDate
@@ -44,10 +45,10 @@ public class LotHistory extends IdentifiedEntity {
 
     LotAction action;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Box location;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Requirement assignedTo;
 
     @Override

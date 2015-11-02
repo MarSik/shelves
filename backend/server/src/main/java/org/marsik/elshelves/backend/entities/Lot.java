@@ -48,13 +48,13 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	@Enumerated(EnumType.STRING)
 	LotAction status;
 
-	@ManyToOne(fetch = FetchType.EAGER,
+	@ManyToOne(fetch = FetchType.LAZY,
 	        optional = false)
 	@NotNull
 	LotHistory history;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER,
+	@ManyToOne(fetch = FetchType.LAZY,
 			optional = false)
 	Purchase purchase;
 
@@ -64,7 +64,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		if (purchase != null) purchase.getLots().add(this);
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	Box location;
 
 	public void setLocation(Box l) {
@@ -73,7 +73,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		if (location != null) location.getLots().add(this);
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	Requirement usedBy;
 
 	public void setUsedBy(Requirement r) {
@@ -85,7 +85,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime expiration;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.LAZY)
 	Set<String> serials = new THashSet<>();
 
     public long usedCount() {

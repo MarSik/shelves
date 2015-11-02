@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class Footprint extends NamedEntity {
 	 */
 	Integer npth;
 
-	@ManyToMany(mappedBy = "footprints")
+	@ManyToMany(mappedBy = "footprints", fetch = FetchType.LAZY)
 	Set<Type> types = new THashSet<>();
 
 	public void addType(Type t) {
@@ -48,10 +49,10 @@ public class Footprint extends NamedEntity {
 		t.removeFootprint(this);
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
     Set<Footprint> seeAlso = new THashSet<>();
 
-	@ManyToMany(mappedBy = "seeAlso")
+	@ManyToMany(mappedBy = "seeAlso", fetch = FetchType.LAZY)
 	Set<Footprint> seeAlsoIncoming = new THashSet<>();
 
 	public void addSeeAlso(Footprint fp) {

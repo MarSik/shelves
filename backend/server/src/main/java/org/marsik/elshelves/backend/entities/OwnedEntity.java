@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ public abstract class OwnedEntity extends IdentifiedEntity
 		implements OwnedEntityInterface, UpdateableEntity {
 	private static final Logger log = LoggerFactory.getLogger(OwnedEntity.class);
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@NotNull
 	User owner;
 

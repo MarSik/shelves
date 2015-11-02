@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -23,7 +24,7 @@ import java.util.Set;
 public class Box extends NamedEntity
 		implements StickerCapable, UpdateableEntity {
 
-	@OneToMany(mappedBy = "parent")
+	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     Set<Box> contains = new THashSet<>();
 
 	public void setContains(Set<Box> update) {
@@ -38,7 +39,7 @@ public class Box extends NamedEntity
 		b.setParent(null);
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     Box parent;
 
 	public void setParent(Box b) {
@@ -47,7 +48,7 @@ public class Box extends NamedEntity
 		if (parent != null) parent.getContains().add(this);
 	}
 
-	@OneToMany(mappedBy = "location")
+	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

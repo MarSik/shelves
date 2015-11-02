@@ -7,6 +7,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -21,7 +22,7 @@ public class NumericPropertyValue implements RelinkableEntity {
     @GeneratedValue
     Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     NamedEntity entity;
 
     public void setEntity(NamedEntity v) {
@@ -35,7 +36,7 @@ public class NumericPropertyValue implements RelinkableEntity {
         setEntity(null);
     }
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     NumericProperty property;
 
     @NotNull

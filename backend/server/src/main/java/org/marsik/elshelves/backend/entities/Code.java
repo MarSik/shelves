@@ -13,6 +13,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +31,7 @@ public class Code extends OwnedEntity implements UpdateableEntity {
     @NotEmpty
     String code;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     NamedEntity reference;
 

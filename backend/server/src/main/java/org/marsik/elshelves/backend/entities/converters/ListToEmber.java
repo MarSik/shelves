@@ -27,7 +27,7 @@ public class ListToEmber extends AbstractEntityToEmber<List, ListApiModel> {
         model.setItems(new THashSet<>());
 
         for (IdentifiedEntity entity: object.getItems()) {
-            model.getItems().add(new PolymorphicRecord(entity.getId()));
+            model.getItems().add(PolymorphicRecord.build(entity.getEmberType(), entity.getId()));
         }
 
         return model;

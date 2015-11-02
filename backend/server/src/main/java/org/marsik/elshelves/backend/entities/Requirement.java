@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
 @NoArgsConstructor
 @Entity
 public class Requirement extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@NotNull
 	Item item;
 
@@ -37,7 +38,7 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 		setItem(null);
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	Set<Type> type = new THashSet<>();
 
 	public void addType(Type t) {
@@ -50,7 +51,7 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 		t.getUsedIn().remove(this);
 	}
 
-	@OneToMany(mappedBy = "usedBy")
+	@OneToMany(mappedBy = "usedBy", fetch = FetchType.LAZY)
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {

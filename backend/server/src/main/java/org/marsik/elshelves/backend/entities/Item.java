@@ -13,6 +13,7 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import java.util.Set;
 @Entity
 public class Item extends Lot implements StickerCapable {
 	@OneToMany(mappedBy = "item",
+			fetch = FetchType.LAZY,
 			orphanRemoval = true)
 	Set<Requirement> requires = new THashSet<>();
 

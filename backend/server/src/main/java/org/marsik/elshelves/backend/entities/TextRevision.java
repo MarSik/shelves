@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -18,10 +19,11 @@ public class TextRevision extends IdentifiedEntity {
     String summary;
     String description;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST },
+            fetch = FetchType.LAZY)
     TextRevision parent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     User performedBy;
 

@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Table(name = "groups")
 @DefaultEmberModel(PartGroupApiModel.class)
 public class Group extends NamedEntity {
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	Group parent;
 
 	public void setParent(Group b) {
@@ -32,7 +33,7 @@ public class Group extends NamedEntity {
 		if (parent != null) parent.getGroups().add(this);
 	}
 
-	@OneToMany(mappedBy = "parent")
+	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 	Set<Group> groups = new THashSet<>();
 
 	public void addGroup(Group b) {
@@ -43,7 +44,7 @@ public class Group extends NamedEntity {
 		b.setParent(null);
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	Set<Type> types = new THashSet<>();
 
 	public void addType(Type t) {
@@ -56,7 +57,7 @@ public class Group extends NamedEntity {
 		t.getGroups().remove(this);
 	}
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     Set<NumericProperty> showProperties = new THashSet<>();
 
 	public void addShowProperty(NumericProperty p) {

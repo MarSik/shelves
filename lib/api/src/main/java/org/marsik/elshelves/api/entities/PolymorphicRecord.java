@@ -13,10 +13,6 @@ import java.util.UUID;
 public class PolymorphicRecord extends AbstractEntityApiModel {
     String type;
 
-    public PolymorphicRecord(UUID uuid) {
-        super(uuid);
-    }
-
     public PolymorphicRecord(String uuid) {
         super(UUID.fromString(uuid));
     }
@@ -25,6 +21,13 @@ public class PolymorphicRecord extends AbstractEntityApiModel {
         PolymorphicRecord p = new PolymorphicRecord();
         p.setType(EmberModelHelper.getSingularName(entity.getClass()));
         p.setId(entity.getId());
+        return p;
+    }
+
+    public static PolymorphicRecord build(String type, UUID id) {
+        PolymorphicRecord p = new PolymorphicRecord();
+        p.setType(type);
+        p.setId(id);
         return p;
     }
 

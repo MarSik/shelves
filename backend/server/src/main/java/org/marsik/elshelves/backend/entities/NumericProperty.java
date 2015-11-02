@@ -14,6 +14,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ import java.util.Set;
 @Entity
 @DefaultEmberModel(NumericPropertyApiModel.class)
 public class NumericProperty extends NamedEntity {
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     Unit unit;
 
@@ -51,6 +52,7 @@ public class NumericProperty extends NamedEntity {
     String symbol;
 
     @OneToMany(mappedBy = "property",
+            fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST,
             orphanRemoval = true)
     Set<NumericPropertyValue> propertyUses = new THashSet<>();

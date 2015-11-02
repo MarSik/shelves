@@ -12,6 +12,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class Type extends NamedEntity implements StickerCapable {
 	 */
 	Boolean manufacturable = false;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	Set<Footprint> footprints = new THashSet<>();
 
 	public void addFootprint(Footprint fp) {
@@ -53,7 +54,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		fp.getTypes().remove(this);
 	}
 
-	@ManyToMany(mappedBy = "types")
+	@ManyToMany(mappedBy = "types", fetch = FetchType.LAZY)
 	Set<Group> groups = new THashSet<>();
 
 	public void addGroup(Group g) {
@@ -64,7 +65,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		g.removeType(this);
 	}
 
-	@OneToMany(mappedBy = "type")
+	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
 	Set<Purchase> purchases = new THashSet<>();
 
 	public void addPurchase(Purchase p) {
@@ -75,7 +76,7 @@ public class Type extends NamedEntity implements StickerCapable {
 		p.unsetType(this);
 	}
 
-	@ManyToMany(mappedBy = "type")
+	@ManyToMany(mappedBy = "type", fetch = FetchType.LAZY)
 	Set<Requirement> usedIn = new THashSet<>();
 
 	public void addUsedIn(Requirement r) {
@@ -86,10 +87,10 @@ public class Type extends NamedEntity implements StickerCapable {
 		r.removeType(this);
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
     Set<Type> seeAlso = new THashSet<>();
 
-	@ManyToMany(mappedBy = "seeAlso")
+	@ManyToMany(mappedBy = "seeAlso", fetch = FetchType.LAZY)
 	Set<Type> seeAlsoIncoming = new THashSet<>();
 
 	public void addSeeAlso(Type t) {
