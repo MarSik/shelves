@@ -49,7 +49,7 @@ public class Item extends Lot implements StickerCapable {
 
 	@Override
 	public String getBaseUrl() {
-		return "projects";
+		return "items";
 	}
 
 	@Override
