@@ -138,7 +138,7 @@ placeholder="Select a type" }}
             <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
             <td>{{lot.type.vendor}}</td>
             <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
-            <td>{{#link-to lot.endpoint lot}}[info]{{/link-to}}</td>
+            <td>{{#link-to lot.link lot}}[info]{{/link-to}}</td>
             <td>{{#add-count-button action=(action 'performAssignment' assignLotToRequirement lot) default=assignLotToRequirement.missing}}assign{{/add-count-button}}</td>
         </tr>
     {{/each}}

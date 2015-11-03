@@ -37,7 +37,7 @@ export default LotBase.extend({
     }
   }.property("canBeUnsoldered"),
 
-  endpoint: function () {
+  link: function () {
     return "lots.show";
   }.property(),
 

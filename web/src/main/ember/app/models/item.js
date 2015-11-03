@@ -26,7 +26,7 @@ export default Lot.extend({
     }
   }.property("canBeUnsoldered", "finished"),
 
-  endpoint: function () {
+  link: function () {
     return "items.show";
   }.property(),
 

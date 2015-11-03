@@ -1,9 +1,13 @@
 {{partial '_itemheader'}}
 
+<div class="row">
+<section class="columns">
 <h3>Items</h3>
 
-<ul>
+<ul class="two-level-index">
 {{#each model.items as |item|}}
-<li>{{fa-icon item.icon}} {{item.fullName}}</li>
+<li>{{fa-icon item.icon}} {{#link-to item.link item}}{{item.fullName}}{{/link-to}}</li>
 {{/each}}
 </ul>
+</section>
+</div>
