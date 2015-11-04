@@ -30,7 +30,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 	@OneToMany(mappedBy = "transaction",
 			fetch = FetchType.LAZY,
-			cascade = CascadeType.MERGE,
+			cascade = CascadeType.PERSIST,
 			orphanRemoval = true)
 	Set<Purchase> items = new THashSet<>();
 
