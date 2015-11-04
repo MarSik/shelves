@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -29,6 +30,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 	@OneToMany(mappedBy = "transaction",
 			fetch = FetchType.LAZY,
+			cascade = CascadeType.MERGE,
 			orphanRemoval = true)
 	Set<Purchase> items = new THashSet<>();
 
