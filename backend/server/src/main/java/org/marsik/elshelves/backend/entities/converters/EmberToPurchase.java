@@ -39,6 +39,8 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 		model.setTransaction(emberToTransaction.convert(object.getTransaction(), nested, cache));
 		model.setType(emberToType.convert(object.getType(), nested, cache));
 
+		
+
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<Lot>());
 			for (PolymorphicRecord l: object.getLots()) {

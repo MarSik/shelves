@@ -41,6 +41,9 @@ public class Type extends NamedEntity implements StickerCapable {
 	 */
 	Boolean manufacturable = false;
 
+	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
+	Set<Sku> skus = new THashSet<>();
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	Set<Footprint> footprints = new THashSet<>();
 
