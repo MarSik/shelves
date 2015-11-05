@@ -74,6 +74,42 @@ export default IdentifiedBase.extend({
         }
     }),
 
+  totalCount: Ember.computed('items.@each.count', {
+    set(key, value) {
+      return value;
+    },
+    get() {
+      var self = this;
+      this.get('items').then(function (ts) {
+        var count = 0;
+        ts.forEach(function (item) {
+          count += item.get('count');
+        });
+        self.set('totalCount', count);
+      });
+
+      return 0;
+    }
+  }),
+
+  deliveredCount: Ember.computed('items.@each.delivered', {
+    set(key, value) {
+      return value;
+    },
+    get() {
+      var self = this;
+      this.get('items').then(function (ts) {
+        var count = 0;
+        ts.forEach(function (item) {
+          count += item.get('delivered');
+        });
+        self.set('deliveredCount', count);
+      });
+
+      return 0;
+    }
+  }),
+
     totalWithVat: Ember.computed('items.@each.priceWithVat', 'items.@each.count', {
         set(key, value) {
             return value;
