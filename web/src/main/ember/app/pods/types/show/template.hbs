@@ -10,6 +10,21 @@
 
 <p>{{#click-to-edit content=model field='content.vendor' placeholder="place for the manufacturer's name"}}{{model.vendor}}{{/click-to-edit}}</p>
 
+<h3>SKUs</h3>
+
+<ul>
+  {{#each skus as |sku|}}
+  <li>
+    {{#link-to 'sources.show' sku.source}}{{sku.source.name}}{{/link-to}} -
+    {{#if sku.source.skuUrl}}
+      <a href="{{skuurl sku.source.skuUrl sku=sku.sku}}">{{sku.sku}}</a>
+    {{else}}
+      {{sku.sku}}
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+
 <h3>Purchasing</h3>
 
 <ul class="small-block-grid-1 large-block-grid-2">
@@ -153,6 +168,7 @@
 {{/if}}
 </section>
 
+<section class="columns">
 <h3>Available lots</h3>
 <table>
     <thead>
@@ -219,6 +235,7 @@
     </tbody>
     {{/each}}
 </table>
+</section>
 </div>
 
 <nav class="actions">

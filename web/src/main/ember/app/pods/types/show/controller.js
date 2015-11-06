@@ -274,5 +274,22 @@ export default Ember.Controller.extend({
     moveLotToBox: null,
     moveLotDisabled: function () {
         return Ember.isEmpty(this.get('moveLotToBox')) || Ember.isEmpty(this.get('moveLotCount'));
-    }.property('moveLotToBox', 'moveLotCount')
+    }.property('moveLotToBox', 'moveLotCount'),
+
+    skus: Ember.computed('model.skus', 'model.skuValues', function() {
+      var l = [];
+      var self = this;
+
+      var values = this.get('model.skuValues');
+      var keys = this.get('model.skus').forEach(function (id) {
+        console.log("SKU", id, values[id]);
+        l.push(Ember.Object.create({
+          id: id,
+          sku: values[id].sku,
+          source: self.store.findRecord('source', values[id].source)
+        }));
+      });
+
+      return l;
+    })
 });

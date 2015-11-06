@@ -14,6 +14,9 @@ export default NamedBase.extend({
   minimumCount: attr('number'),
   buyMultiple: attr('number'),
 
+  skus: attr(),
+  skuValues: attr('object'),
+
   free: attr(),
   available: attr(),
   total: attr(),

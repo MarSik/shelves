@@ -51,4 +51,11 @@ public class PurchaseService extends AbstractRestService<PurchaseRepository, Pur
     protected Iterable<Purchase> getAllEntities(User currentUser) {
         return getRepository().findByTransactionOwner(currentUser);
     }
+
+	@Override
+	protected Purchase save(Purchase entity) {
+		Purchase p = super.save(entity);
+		saveOrUpdate(p.getSku());
+		return p;
+	}
 }

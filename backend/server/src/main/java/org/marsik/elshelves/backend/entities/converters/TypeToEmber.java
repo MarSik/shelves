@@ -1,14 +1,16 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
+import org.marsik.elshelves.api.fields.SkuLink;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.Sku;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +93,20 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 				model.getSeeAlso().add(convert(t, nested - 1, cache));
 			}
         }
+
+		if (object.getSkus() != null) {
+
+			model.setSkuValues(new THashMap<>());
+			model.setSkus(new THashSet<>());
+
+			for (Sku sku: object.getSkus()) {
+				SkuLink skuLink = new SkuLink();
+				skuLink.setSku(sku.getSku());
+				skuLink.setSource(sku.getSource().getId());
+				model.getSkuValues().put(sku.getId(), skuLink);
+				model.getSkus().add(sku.getId());
+			}
+		}
 
 		return model;
 	}
