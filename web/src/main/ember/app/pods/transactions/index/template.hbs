@@ -1,5 +1,12 @@
 {{#if pendingTransactions}}
     <h3>Pending transactions</h3>
+
+    {{#if pendingOnly}}
+    <button {{action 'showAll'}}>Show all</button>
+    {{else}}
+    <button {{action 'showPending'}}>Show pending only</button>
+    {{/if}}
+
     <table>
       <thead>
         <tr>
@@ -20,6 +27,8 @@
       </tbody>
         {{/each}}
     </table>
+{{else}}
+<button {{action 'showAll'}}>Show transactions</button>
 {{/if}}
 
 <section class="purchase">

@@ -38,8 +38,15 @@ export default Ember.Controller.extend({
                 this.growl.error(err);
                 type.destroy();
             });
+        },
+        showAll: function () {
+          this.set('pendingOnly', false);
+        },
+        showPending: function() {
+          this.set('pendingOnly', true);
         }
     },
+    pendingOnly: true,
     selectedSource: null,
 
     typeSorting: ['name'],
@@ -68,5 +75,13 @@ export default Ember.Controller.extend({
         return false;
     }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
 
-    pendingTransactions: Ember.computed.filterBy('controllers.transactions.model', 'fullyDelivered', false)
+    pendingTransactions: Ember.computed("pendingOnly", "controllers.transactions.model.@each.fullyDelivered", function () {
+      var trs = this.get('controllers.transactions.model');
+
+      if (this.get('pendingOnly')) {
+        return trs.filterBy('fullyDelivered', false);
+      } else {
+        return trs;
+      }
+    })
 });
