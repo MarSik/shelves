@@ -49,6 +49,10 @@ public class Sku extends IdentifiedEntity implements ContentEquals<Sku> {
 
     @Transient
     public boolean sameContent(Sku sku) {
+        if (sku == null) {
+            return false;
+        }
+
         EqualsBuilder builder = new EqualsBuilder();
         return builder
                 .append(getSource(), sku.getSource())
