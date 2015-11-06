@@ -1,0 +1,1 @@
+ALTER TABLE source ADD COLUMN sku_url VARCHAR(256);

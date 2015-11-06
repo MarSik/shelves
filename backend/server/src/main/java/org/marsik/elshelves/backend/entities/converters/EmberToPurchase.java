@@ -7,6 +7,7 @@ import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
+import org.marsik.elshelves.backend.entities.Sku;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,12 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 		model.setTransaction(emberToTransaction.convert(object.getTransaction(), nested, cache));
 		model.setType(emberToType.convert(object.getType(), nested, cache));
 
-		
+		if (object.getSku() != null) {
+			model.setSku(new Sku());
+			model.getSku().setSku(object.getSku());
+			model.getSku().setType(model.getType());
+			model.getSku().setSource(null);
+		}
 
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<Lot>());

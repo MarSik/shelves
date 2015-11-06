@@ -48,6 +48,10 @@ public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApi
 		model.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
 		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
 
+		if (object.getSku() != null) {
+			model.setSku(object.getSku().getSku());
+		}
+
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<PolymorphicRecord>());
 			for (Lot l: object.getLots()) {

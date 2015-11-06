@@ -28,7 +28,7 @@
 
     <dl>
         <dt>Source</dt>
-        <dd>{{model.source.name}}</dd>
+        <dd>{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}}</dd>
     </dl>
 
     <dl>
@@ -84,7 +84,13 @@
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
             <td class="sku">
-              {{#click-to-edit content=purchase field='content.sku' editable=editEnabled}}{{lot.purchase.sku}}{{/click-to-edit}}
+              {{#click-to-edit content=purchase field='content.sku' editable=editEnabled}}
+                {{#if model.source.skuUrl}}
+                  <a href="{{skuurl model.source.skuUrl sku=purchase.sku}}">{{purchase.sku}}</a>
+                {{else}}
+                  {{purchase.sku}}
+                {{/if}}
+              {{/click-to-edit}}
             </td>
             <td class="count">
                 {{#click-to-edit content=purchase field='content.count' editable=editEnabled}}{{purchase.count}}{{/click-to-edit}}

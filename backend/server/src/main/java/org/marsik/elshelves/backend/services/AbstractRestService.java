@@ -188,7 +188,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     }
 
     protected T save(T entity) {
-        return repository.save(entity);
+        return saveOrUpdate(entity);
     }
 
     protected <E extends IdentifiedEntityInterface> E saveOrUpdate(E entity) {

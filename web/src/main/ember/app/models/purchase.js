@@ -11,6 +11,7 @@ export default LotBase.extend({
   singlePrice: attr("number"),
   totalPrice: attr("number"),
   vat: attr("number"),
+  sku: attr('string'),
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction", {async: true}),
   lots: hasMany("lot", {inverse: null, async: true, polymorphic: true}),

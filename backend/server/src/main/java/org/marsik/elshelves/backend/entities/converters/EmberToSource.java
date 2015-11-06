@@ -21,6 +21,7 @@ public class EmberToSource extends AbstractEmberToEntity<SourceApiModel, Source>
 	public Source convert(SourceApiModel object, Source model, int nested, Map<UUID, Object> cache) {
 		emberToNamedObject.convert(object, model, nested, cache);
 		model.setUrl(object.getUrl());
+		model.setSkuUrl(object.getSkuUrl());
 
 		return model;
 	}

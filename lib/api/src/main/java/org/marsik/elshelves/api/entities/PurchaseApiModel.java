@@ -35,6 +35,7 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
     Double vat;
     Boolean vatIncluded;
     Long missing;
+	String sku;
 
 	TransactionApiModel transaction;
 

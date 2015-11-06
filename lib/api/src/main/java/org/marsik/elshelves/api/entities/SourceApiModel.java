@@ -24,6 +24,7 @@ public class SourceApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	String url;
+	String skuUrl;
 
 	@Override
 	public boolean equals(Object o) {

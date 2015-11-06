@@ -4,6 +4,10 @@
     <section class="columns large-6 small-12">
     <h3>URL</h3>
     {{#click-to-edit content=model field='content.url'}}<a href="{{model.url}}">{{model.url}}</a>{{/click-to-edit}}
+
+    <h3>Sku URL</h3>
+
+    {{#click-to-edit content=model placeholder="You can enter a template URL this source uses for direct item access based on SKU. Use {} as the placeholder for sku." field='content.skuUrl'}}<a href="{{model.skuUrl}}">{{model.skuUrl}}</a>{{/click-to-edit}}
     </section>
 </div>
 

@@ -27,6 +27,7 @@ import java.util.Set;
 @DefaultEmberModel(SourceApiModel.class)
 public class Source extends NamedEntity {
 	String url;
+	String skuUrl;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -68,6 +69,7 @@ public class Source extends NamedEntity {
 		Source update = (Source)update0;
 
 		update(update.getUrl(), this::setUrl);
+		update(update.getSkuUrl(), this::setSkuUrl);
 		update(update.getSourceDownloader(), this::setSourceDownloader);
 		update(update.getShippingCalculator(), this::setShippingCalculator);
 

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,9 @@ import java.util.Set;
 public class Purchase extends OwnedEntity {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	Type type;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	Sku sku;
 
 	public void setType(Type t) {
 		if (type != null) type.getPurchases().remove(this);
@@ -115,6 +119,11 @@ public class Purchase extends OwnedEntity {
 		update(update.getVatIncluded(), this::setVatIncluded);
 		update(update.getType(), this::setType);
 
+		if (willUpdate(getSku(), update.getSku())
+				&& !update.getSku().sameContent(getSku())) {
+			update(update.getSku(), this::setSku);
+		}
+
 		super.updateFrom(update0);
 	}
 
@@ -122,6 +131,16 @@ public class Purchase extends OwnedEntity {
 	public void relink(Relinker relinker) {
 		relinkItem(relinker, getTransaction(), this::setTransaction);
 		relinkItem(relinker, getType(), this::setType);
+		relinkItem(relinker, getSku(), this::setSku);
+
+		if (getSku() != null && getSku().isNew()) {
+			getSku().relink(relinker);
+
+			if (getSku().getSource() == null) {
+				getSku().setSource(getTransaction().getSource());
+			}
+		}
+
 		relinkList(relinker, this::getLots, this::addLot, this::removeLot);
 		super.relink(relinker);
 	}

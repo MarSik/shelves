@@ -85,4 +85,16 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
     protected Iterable<Transaction> getAllEntities(User currentUser) {
         return getRepository().findByOwner(currentUser);
     }
+
+	@Override
+	protected Transaction save(Transaction entity) {
+		Transaction t = super.save(entity);
+
+		for (Purchase p: t.getItems()) {
+			saveOrUpdate(p.getSku());
+			saveOrUpdate(p);
+		}
+
+		return t;
+	}
 }

@@ -27,6 +27,7 @@ public class SourceToEmber extends AbstractEntityToEmber<Source, SourceApiModel>
 
 		model.setHasIcon(object.isHasIcon());
 		model.setUrl(object.getUrl());
+		model.setSkuUrl(object.getSkuUrl());
 
 		return model;
 	}
