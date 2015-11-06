@@ -1,0 +1,2 @@
+ALTER TABLE user ADD COLUMN project_source BIGINT(20);
+ALTER TABLE user ADD CONSTRAINT FK_user_project_source FOREIGN KEY (project_source) REFERENCES source (db_id) ON DELETE SET NULL ON UPDATE CASCADE;

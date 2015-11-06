@@ -33,6 +33,7 @@ public class UserApiModel extends AbstractEntityApiModel {
     String email;
 
     List<AuthorizationApiModel> authorizations;
+    SourceApiModel projectSource;
 
     @JsonIdentityReference(alwaysAsId = true)
     public List<AuthorizationApiModel> getAuthorizations() {

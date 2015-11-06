@@ -12,7 +12,9 @@ import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -43,6 +45,9 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
 
     @OneToMany(mappedBy = "owner", orphanRemoval = true)
     Set<Authorization> authorizations = new THashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    Source projectSource;
 
     public void addAuthorization(Authorization a) {
         a.setOwner(this);
@@ -103,6 +108,7 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
 
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
+        update(update.getProjectSource(), this::setProjectSource);
 
         reconcileLists(update.getAuthorizations(), this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
     }
@@ -110,6 +116,8 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
     @Override
     public void relink(Relinker relinker) {
         relinkList(relinker, this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
+        relinkItem(relinker, getProjectSource(), this::setProjectSource);
+
         super.relink(relinker);
     }
 

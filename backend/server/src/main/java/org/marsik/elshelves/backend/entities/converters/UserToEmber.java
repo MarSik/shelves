@@ -16,6 +16,9 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     @Autowired
     AuthorizationToEmber authorizationToEmber;
 
+    @Autowired
+    SourceToEmber sourceToEmber;
+
     public UserToEmber() {
         super(UserApiModel.class);
     }
@@ -37,6 +40,8 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
                 user.getAuthorizations().add(authorizationToEmber.convert(auth, nested - 1, cache));
             }
         }
+
+        user.setProjectSource(sourceToEmber.convert(entity.getProjectSource(), nested - 1, cache));
 
 		return user;
 	}

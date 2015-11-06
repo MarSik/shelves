@@ -125,10 +125,17 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
         type.addPurchase(purchase);
 
         if (source == null) {
+            source = currentUser.getProjectSource();
+        }
+
+        if (source == null) {
             source = new Source();
             source.setId(uuidGenerator.generate());
             source.setName("Project source");
             created.add(source);
+
+            currentUser.setProjectSource(source);
+            identifiedEntityRepository.save(currentUser);
         }
 
         if (transaction == null) {
