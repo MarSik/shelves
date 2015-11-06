@@ -22,5 +22,6 @@ public class BackupApiModel {
     Set<NumericPropertyApiModel> properties = new HashSet<>();
     Set<DocumentApiModel> documents = new HashSet<>();
     Set<CodeApiModel> codes = new HashSet<>();
+    Set<ListApiModel> lists = new HashSet<>();
     UserApiModel user;
 }

@@ -44,6 +44,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToItem;
+import org.marsik.elshelves.backend.entities.converters.EmberToList;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
 import org.marsik.elshelves.backend.entities.converters.EmberToLotHistory;
 import org.marsik.elshelves.backend.entities.converters.EmberToNumericProperty;
@@ -56,6 +57,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToUnit;
 import org.marsik.elshelves.backend.entities.converters.FootprintToEmber;
 import org.marsik.elshelves.backend.entities.converters.GroupToEmber;
 import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
+import org.marsik.elshelves.backend.entities.converters.ListToEmber;
 import org.marsik.elshelves.backend.entities.converters.LotHistoryToEmber;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.entities.converters.NumericPropertyToEmber;
@@ -73,6 +75,7 @@ import org.marsik.elshelves.backend.repositories.FootprintRepository;
 import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.ItemRepository;
+import org.marsik.elshelves.backend.repositories.ListRepository;
 import org.marsik.elshelves.backend.repositories.LotHistoryRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
@@ -263,6 +266,15 @@ public class BackupService {
     @Autowired
     CodeRepository codeRepository;
 
+    @Autowired
+    ListRepository listRepository;
+
+    @Autowired
+    ListToEmber listToEmber;
+
+    @Autowired
+    EmberToList emberToList;
+
 	protected <F extends IdentifiedEntity>  void relink(Set<F> allItems,
                                                         User currentUser,
                                                         RelinkService.RelinkContext relinkContext) {
@@ -414,6 +426,7 @@ public class BackupService {
         prepare(backup.getRequirements(), emberToRequirement, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getHistory(), emberToLotHistory, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getCodes(), emberToCode, currentUser, conversionCache, relinkContext, pool);
+        prepare(backup.getLists(), emberToList, currentUser, conversionCache, relinkContext, pool);
 
         relink(pool, currentUser, relinkContext);
 
@@ -729,6 +742,8 @@ public class BackupService {
         for (LotHistory h: history) {
             backup.getHistory().add(lotHistoryToEmber.convert(h, 1, cache));
         }
+
+        backup.setLists(backup(listRepository.findByOwner(currentUser), listToEmber, cache));
 
         return backup;
 	}
