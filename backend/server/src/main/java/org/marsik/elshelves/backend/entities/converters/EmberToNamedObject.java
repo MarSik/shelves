@@ -40,6 +40,7 @@ public class EmberToNamedObject {
 		model.setDescription(object.getDescription());
 		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
         model.setFlagged(object.isFlagged());
+        model.setCreated(object.getCreated());
 
         if (object.getCodes() != null) {
             model.setCodes(new THashSet<Code>());

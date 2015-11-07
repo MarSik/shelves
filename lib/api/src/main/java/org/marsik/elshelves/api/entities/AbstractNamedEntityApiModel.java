@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 	boolean hasIcon = false;
     boolean flagged = false;
     boolean canBeDeleted = false;
+	DateTime created;
 
 	Set<DocumentApiModel> describedBy;
 

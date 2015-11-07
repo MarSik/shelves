@@ -36,6 +36,7 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getId());
 		model.setCount(object.getCount());
+		model.setCreated(object.getCreated());
 
         model.setExpiration(object.getExpiration());
 		model.setStatus(object.getStatus());

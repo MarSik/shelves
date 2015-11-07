@@ -42,6 +42,7 @@ public class NamedObjectToEmber {
 		model.setDescription(object.getDescription());
         model.setFlagged(object.getFlagged());
         model.setCanBeDeleted(object.canBeDeleted());
+		model.setCreated(object.getCreated());
 
         if (object.getCodes() != null) {
             model.setCodes(new THashSet<CodeApiModel>());

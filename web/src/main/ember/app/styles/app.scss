@@ -56,6 +56,19 @@
 }
 
 .purchase {
+  margin-top: 1em;
+
+  dl {
+    dt {
+      @extend h3;
+    }
+
+    dd button {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
   table {
     width: 100%;
 

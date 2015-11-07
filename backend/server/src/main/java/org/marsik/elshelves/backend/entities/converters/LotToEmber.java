@@ -46,6 +46,7 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 			return entity;
 		}
 
+		entity.setCreated(object.getCreated());
         entity.setExpiration(object.getExpiration());
 		entity.setSerials(object.getSerials());
 		entity.setAction(object.getStatus());

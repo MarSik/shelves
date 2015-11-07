@@ -23,20 +23,19 @@
 </section>
     </div>
 
-<section class="purchase">
-    <h2>Purchase</h2>
+<div class="row purchase">
 
-    <dl>
+    <dl class="columns large-4">
         <dt>Source</dt>
         <dd>{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}}</dd>
     </dl>
 
-    <dl>
+    <dl class="columns large-4">
         <dt>Purchase date</dt>
         <dd>{{#click-to-edit content=model field='content.date' editable=editEnabled}}{{model.date}}{{/click-to-edit}}</dd>
     </dl>
 
-    <dl>
+    <dl class="columns large-4">
         <dt>Status</dt>
         <dd>
             {{#if model.locked}}
@@ -46,22 +45,28 @@
             {{/if}}
         </dd>
     </dl>
+</div>
 
+<section class="columns purchase">
+   <h3>Summary</h3>
     <table>
         <tr>
             <th></th><th>count</th><th>without VAT</th><th>with VAT</th>
         </tr>
         <tr>
-            <th>total</th><td>{{model.totalCount}}</td><td>{{model.totalWithoutVat}}</td><td>{{model.totalWithVat}}</td>
+            <th>total</th><td>{{model.totalCount}}</td><td>{{price model.totalWithoutVat}}</td><td>{{price model.totalWithVat}}</td>
         </tr>
         <tr>
-            <th>delivered</th><td>{{model.deliveredCount}}</td><td>{{model.deliveredWithoutVat}}</td><td>{{model.deliveredWithVat}}</td>
+            <th>delivered</th><td>{{model.deliveredCount}}</td><td>{{price model.deliveredWithoutVat}}</td><td>{{price model.deliveredWithVat}}</td>
         </tr>
         <tr>
-            <th>missing</th><td>{{model.missing}}</td><td>{{model.missingWithoutVat}}</td><td>{{model.missingWithVat}}</td>
+            <th>missing</th><td>{{model.missing}}</td><td>{{price model.missingWithoutVat}}</td><td>{{price model.missingWithVat}}</td>
         </tr>
     </table>
+  </section>
 
+  <section class="columns purchase">
+    <h3>Items</h3>
     <table>
         <thead>
         <tr>
@@ -104,10 +109,10 @@
             </td>
             {{else}}
             <td class="price">
-                {{purchase.priceWithoutVat}}
+                {{price purchase.priceWithoutVat}}
             </td>
             <td class="vat-included">
-                {{purchase.priceWithVat}}
+                {{price purchase.priceWithVat}}
             </td>
             {{/if}}
             <td class="vat">
@@ -134,6 +139,6 @@
         </tbody>
         {{/each}}
     </table>
-</section>
+  </section>
 
 {{outlet}}
