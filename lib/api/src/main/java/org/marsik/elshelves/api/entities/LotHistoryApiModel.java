@@ -29,7 +29,7 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
     @JsonProperty("previous")
     UUID previousId;
 
-    DateTime created;
+    DateTime validSince;
     LotAction action;
 
     @JsonProperty("performedBy")

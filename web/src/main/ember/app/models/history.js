@@ -4,7 +4,7 @@ var attr = DS.attr,
   belongsTo = DS.belongsTo;
 
 export default DS.Model.extend({
-  created: attr("date"),
+  validSince: attr("date"),
   location: belongsTo("box", {async: true, inverse: null}),
   previous: belongsTo("history", {async: true, inverse: null}),
   action: attr(),

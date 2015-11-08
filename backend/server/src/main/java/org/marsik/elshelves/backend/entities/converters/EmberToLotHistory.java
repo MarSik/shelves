@@ -23,7 +23,7 @@ public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel,
             model.getLocation().setId(object.getLocationId());
         }
 
-        model.setCreated(object.getCreated());
+        model.setValidSince(object.getValidSince());
         model.setId(object.getId());
 
         if (object.getPreviousId() != null) {

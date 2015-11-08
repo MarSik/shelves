@@ -450,6 +450,10 @@ public class BackupService {
                 continue;
             }
 
+            if (lot.getCreated() == null) {
+                lot.setCreated(new DateTime());
+            }
+
             if (lot.getNext() != null && !lot.getNext().isEmpty()) {
                 // Remove history objects from lots
                 it.remove();
@@ -458,7 +462,8 @@ public class BackupService {
                 LotHistoryApiModel history = new LotHistoryApiModel();
                 history.setAction(lot.getAction());
                 history.setId(lot.getId());
-                history.setCreated(lot.getCreated());
+                history.setValidSince(lot.getCreated());
+
                 if (lot.getPerformedBy() != null) {
                     history.setPerformedById(lot.getPerformedBy().getId());
                 }
@@ -476,13 +481,12 @@ public class BackupService {
                     // Use the last lot as history when the last operation was split
                     lot.setHistory(new LotHistoryApiModel());
                     lot.getHistory().setId(lot.getPrevious().getId());
-                    backup.getHistory().add(lot.getHistory());
                 } else {
                     // Prepare a history record
                     LotHistoryApiModel history = new LotHistoryApiModel();
                     history.setAction(lot.getAction());
                     history.setId(uuidGenerator.generate());
-                    history.setCreated(lot.getCreated());
+                    history.setValidSince(lot.getCreated());
                     if (lot.getPerformedBy() != null) {
                         history.setPerformedById(lot.getPerformedBy().getId());
                     }
@@ -504,7 +508,7 @@ public class BackupService {
         LotHistoryApiModel history = new LotHistoryApiModel();
         history.setId(uuidGenerator.generate());
         history.setAction(LotAction.DELIVERY);
-        history.setCreated(new DateTime());
+        history.setValidSince(new DateTime());
         backup.getHistory().add(history);
 
         SourceApiModel source = new SourceApiModel();

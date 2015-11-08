@@ -6,7 +6,16 @@ var attr = DS.attr,
     belongsTo = DS.belongsTo;
 
 export default LotBase.extend({
-  created: attr('date'),
+  created: Ember.computed('history', function () {
+    var h = this.get('history');
+    var t = null;
+    while (!Ember.isEmpty(h)) {
+      t = h.get('validsince');
+      h = h.get('previous');
+    }
+
+    return t;
+  }),
   location: belongsTo("box", {async: true}),
   previous: belongsTo("lot", {async: true}),
   status: attr(),

@@ -48,6 +48,9 @@ public class LotApiModel extends AbstractEntityApiModel {
 
     DateTime expiration;
 
+	/**
+	 * Used only for data restore from old data.
+ 	 */
 	DateTime created;
 
 	LotHistoryApiModel history;

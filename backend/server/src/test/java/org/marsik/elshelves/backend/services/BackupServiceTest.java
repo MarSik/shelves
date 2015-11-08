@@ -52,7 +52,7 @@ public class BackupServiceTest {
         history.setId(uuidGenerator.generate());
         history.setPreviousId(uuidGenerator.generate());
         history.setAction(LotAction.DESTROYED);
-        history.setCreated(new DateTime());
+        history.setValidSince(new DateTime());
         history.setPerformedById(uuidGenerator.generate());
         history.setLocationId(uuidGenerator.generate());
 

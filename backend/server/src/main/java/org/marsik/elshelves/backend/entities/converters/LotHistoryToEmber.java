@@ -21,7 +21,7 @@ public class LotHistoryToEmber extends AbstractEntityToEmber<LotHistory, LotHist
 
         model.setId(object.getId());
         model.setAction(object.getAction());
-        model.setCreated(object.getCreated());
+        model.setValidSince(object.getValidSince());
         model.setPreviousId(object.getPrevious() != null ? object.getPrevious().getId() : null);
 
         model.setLocationId(object.getLocation() != null ? object.getLocation().getId() : null);

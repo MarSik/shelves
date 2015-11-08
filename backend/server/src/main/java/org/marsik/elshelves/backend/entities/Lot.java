@@ -12,6 +12,7 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -97,15 +98,29 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
     }
 
 	public LotHistory recordChange(Lot update, User performedBy, UuidGenerator uuidGenerator) {
-		LotHistory h = new LotHistory();
-		h.setId(uuidGenerator.generate());
-		h.setPrevious(getHistory());
-		h.setPerformedBy(performedBy);
-		h.setAction(LotAction.EVENT);
+		LotHistory.LotHistoryBuilder h = LotHistory.builder();
 
-		setHistory(h);
+		LotAction action = LotAction.EVENT;
 
-		return h;
+		if (update == null) {
+			action = LotAction.DELIVERY;
+		} else if (update.getStatus() == getStatus()) {
+			action = update.getStatus();
+		} else if (!update.getLocation().equals(getLocation())) {
+			action = LotAction.MOVED;
+		} else if (!update.getUsedBy().equals(getUsedBy())) {
+			action = update.getUsedBy() == null ? LotAction.UNASSIGNED : LotAction.ASSIGNED;
+		}
+
+		h.id(uuidGenerator.generate())
+				.previous(getHistory())
+				.performedBy(performedBy)
+				.action(action)
+				.created(new DateTime());
+
+		setHistory(h.build());
+
+		return getHistory();
 	}
 
 	public static Lot delivery(Purchase purchase, UUID uuid, Long count,
