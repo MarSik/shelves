@@ -57,6 +57,27 @@
         </div>
     </div>
 
+    <div class="row">
+      <section class="columns large-4">
+        <h3>Exchange rate</h3>
+
+        {{input type='text' value=exchangeRate placeholder='1.00'}}
+      </section>
+
+      <section class="columns large-4">
+        <h3>w/VAT</h3>
+
+        {{input type='checkbox' checked=defaultVatIncluded}}
+      </section>
+
+      <section class="columns large-4">
+        <h3>default VAT</h3>
+
+        {{input type='text' value=defaultVat placeholder='20'}}
+      </section>
+    </div>
+
+
     <table class="purchase">
         <thead>
         <tr>

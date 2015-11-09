@@ -131,7 +131,7 @@
         {{/each}}
         {{#if purchase.missing}}
         <tr>
-            <td colspan="5">
+            <td colspan="6">
                 {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
             </td>
         </tr>

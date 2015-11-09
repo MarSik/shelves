@@ -5,8 +5,8 @@ export default Ember.Controller.extend({
     actions: {
         addRow: function () {
             this.store.createRecord('purchase', {
-                vat: 20,
-                vatIncluded: true,
+                vat: this.get('defaultVat'),
+                vatIncluded: this.get('defaultVatIncluded'),
                 transaction: this.get('model')
             });
         },
@@ -83,5 +83,9 @@ export default Ember.Controller.extend({
       } else {
         return trs;
       }
-    })
+    }),
+
+  defaultVat: 21,
+  defaultVatIncluded: false,
+  exchangeRate: 1.00
 });
