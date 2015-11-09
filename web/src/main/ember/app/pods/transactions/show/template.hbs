@@ -88,7 +88,7 @@
             <td>
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
-            <td class="sku">
+            <td class="sku">{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}} -
               {{#click-to-edit content=purchase field='content.sku' editable=editEnabled}}
                 {{#if model.source.skuUrl}}
                   <a href="{{skuurl model.source.skuUrl sku=purchase.sku}}">{{purchase.sku}}</a>
