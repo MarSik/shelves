@@ -36,6 +36,7 @@ public abstract class AbstractIdResolver implements CreateObjectIdResolver {
 		try {
 			System.out.println("Creating empty " +getType().getName()+ " with id "+id.key.toString());
 			AbstractEntityApiModel stub =  getType().getConstructor(id.key.getClass()).newInstance(id.key);
+			stub.setStub(true);
 			return stub;
 		} catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException|InstantiationException ex) {
 			log.error("Error creating empty shell", ex);

@@ -455,10 +455,10 @@ public class BackupService {
             }
 
             if (lot.getNext() != null && !lot.getNext().isEmpty()) {
-                // Remove history objects from lots
+                // Remove history object from lots
                 it.remove();
 
-                // Create a lot record
+                // Create a lot history record
                 LotHistoryApiModel history = new LotHistoryApiModel();
                 history.setAction(lot.getAction());
                 history.setId(lot.getId());
@@ -474,22 +474,28 @@ public class BackupService {
                 if (lot.getPrevious() != null) {
                     history.setPreviousId(lot.getPrevious().getId());
                 }
+
                 backup.getHistory().add(history);
             } else {
-                // Real lot object, relink it to the history
+                // Real lot object
                 if (lot.getAction() == LotAction.SPLIT) {
                     // Use the last lot as history when the last operation was split
+                    // it will be relinked to the proper history object
                     lot.setHistory(new LotHistoryApiModel());
                     lot.getHistory().setId(lot.getPrevious().getId());
+                    lot.getHistory().setStub(true);
+
                 } else {
                     // Prepare a history record
                     LotHistoryApiModel history = new LotHistoryApiModel();
                     history.setAction(lot.getAction());
                     history.setId(uuidGenerator.generate());
                     history.setValidSince(lot.getCreated());
+
                     if (lot.getPerformedBy() != null) {
                         history.setPerformedById(lot.getPerformedBy().getId());
                     }
+
                     if (lot.getLocation() != null) {
                         history.setLocationId(lot.getLocation().getId());
                     }
@@ -497,6 +503,7 @@ public class BackupService {
                     if (lot.getPrevious() != null) {
                         history.setPreviousId(lot.getPrevious().getId());
                     }
+
                     lot.setHistory(history);
                     backup.getHistory().add(history);
                 }

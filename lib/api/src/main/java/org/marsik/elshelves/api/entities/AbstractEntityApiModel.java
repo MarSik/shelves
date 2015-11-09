@@ -1,5 +1,6 @@
 package org.marsik.elshelves.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,14 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
     UUID id;
 
     Long version;
+
+    /**
+     * This can be used as an explicit hint to the converter.
+     * isStub() == true means this is an unresolved reference waiting
+     * to be relinked.
+     */
+    @JsonIgnore
+    boolean stub = false;
 
     @Override
     public boolean equals(Object o) {

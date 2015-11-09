@@ -37,9 +37,11 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         model.setVersion(object.getVersion());
 
         if (nested > 0
+                && !object.isStub()
                 && object.getId() != null) {
             cache.put(object.getId(), model);
         }
+
         return convert(object, model, nested, cache);
     }
 }
