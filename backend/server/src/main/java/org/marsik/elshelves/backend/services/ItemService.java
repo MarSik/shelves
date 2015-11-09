@@ -152,7 +152,7 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
 
         LotHistory history = new LotHistory();
         history.setId(uuidGenerator.generate());
-        history.setCreated(new DateTime());
+        history.setValidSince(new DateTime());
         history.setAction(LotAction.DELIVERY);
         history.setPerformedBy(currentUser);
         created.add(history);
