@@ -34,7 +34,7 @@
 <section class="purchase">
     <h2>Purchase</h2>
 
-    <form {{action 'purchase' model on='submit'}}>
+    <form {{action 'purchase' model invoiceCurrency paidCurrency exchangeRate on='submit'}}>
 
     {{input type='text' value=model.name id=name placeholder='Purchase name'}}
 
@@ -58,19 +58,31 @@
     </div>
 
     <div class="row">
-      <section class="columns large-4">
+      <section class="columns large-3">
+        <h3>Invoice currency</h3>
+
+        {{input type='text' value=invoiceCurrency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+      </section>
+
+      <section class="columns large-3">
+        <h3>Paid currency</h3>
+
+        {{input type='text' value=paidCurrency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+      </section>
+
+      <section class="columns large-3">
         <h3>Exchange rate</h3>
 
         {{input type='text' value=exchangeRate placeholder='1.00'}}
       </section>
 
-      <section class="columns large-4">
+      <section class="columns large-1">
         <h3>w/VAT</h3>
 
         {{input type='checkbox' checked=defaultVatIncluded}}
       </section>
 
-      <section class="columns large-4">
+      <section class="columns large-2">
         <h3>default VAT</h3>
 
         {{input type='text' value=defaultVat placeholder='20'}}

@@ -10,6 +10,9 @@ import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.PurchaseIdResolver;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,9 +33,24 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 
 	Long count;
 
-	Double singlePrice;
-    Double totalPrice;
-    Double vat;
+	@Min(0)
+	BigDecimal singlePrice;
+	@Min(0)
+    BigDecimal totalPrice;
+
+	@Size(min = 3, max = 3)
+	String currency;
+
+	@Min(0)
+	BigDecimal singlePricePaid;
+	@Min(0)
+	BigDecimal totalPricePaid;
+
+	@Size(min = 3, max = 3)
+	String currencyPaid;
+
+	@Min(0)
+	BigDecimal vat;
     Boolean vatIncluded;
     Long missing;
 	String sku;

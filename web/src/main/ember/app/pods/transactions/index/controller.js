@@ -7,7 +7,9 @@ export default Ember.Controller.extend({
             this.store.createRecord('purchase', {
                 vat: this.get('defaultVat'),
                 vatIncluded: this.get('defaultVatIncluded'),
-                transaction: this.get('model')
+                transaction: this.get('model'),
+                currency: this.get('invoiceCurrency'),
+                currencyPaid: this.get('paidCurrency')
             });
         },
         removeRow: function (purchase) {
@@ -87,5 +89,7 @@ export default Ember.Controller.extend({
 
   defaultVat: 21,
   defaultVatIncluded: false,
-  exchangeRate: 1.00
+  exchangeRate: 1.00,
+  invoiceCurrency: "CZK",
+  paidCurrency: "CZK"
 });

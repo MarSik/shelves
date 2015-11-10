@@ -8,8 +8,15 @@ var attr = DS.attr,
 
 export default LotBase.extend({
   type: belongsTo('type', {inverse: null, async: true}),
+
   singlePrice: attr("number"),
   totalPrice: attr("number"),
+  currency: attr('string'),
+
+  singlePricePaid: attr("number"),
+  totalPricePaid: attr("number"),
+  currencyPaid: attr('string'),
+
   vat: attr("number"),
   sku: attr('string'),
   vatIncluded: attr("boolean"),

@@ -295,6 +295,13 @@
             <version>1.18</version>
         </dependency>
 
+        <!-- Joda Money //-->
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-money</artifactId>
+            <version>${joda.money.version}</version>
+        </dependency>
+
         <!-- event bus //-->
         <dependency>
             <groupId>net.engio</groupId>

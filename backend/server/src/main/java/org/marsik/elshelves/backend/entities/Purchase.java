@@ -4,19 +4,29 @@ import gnu.trove.set.hash.THashSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.money.BigMoney;
+import org.joda.money.CurrencyUnit;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
 
 @Getter
@@ -46,9 +56,58 @@ public class Purchase extends OwnedEntity {
 	@Min(1)
 	Long count;
 
-	Double singlePrice;
-	Double totalPrice;
-	Double vat;
+	/**
+	 * TotalPrice is reusing the currency of singlePrice and only the number is stored in the database.
+	 * The currency is stripped/restored during update/loading time.
+	 */
+
+	@Column(name = "currency")
+	@Size(min = 3, max = 3)
+	private String currency;
+
+	@Column(name = "paid_currency")
+	@Size(min = 3, max = 3)
+	private String currencyPaid;
+
+	@Column(name = "single_price")
+	private BigDecimal singlePriceRaw;
+
+	@Column(name = "total_price")
+	private BigDecimal totalPriceRaw;
+
+	/**
+	 * TotalPricePaid is reusing the currency of singlePricePaid and only the number is stored in the database.
+	 * The currency is stripped/restored during update/loading time.
+	 */
+	@Column(name = "paid_single_price")
+	private BigDecimal singlePricePaidRaw;
+
+	@Column(name = "paid_total_price")
+	private BigDecimal totalPricePaidRaw;
+
+
+	@Transient
+	BigMoney singlePrice;
+
+	/**
+	 * The currency of totalPrice is ignored in database and is always assumed
+	 * to be equal to the currency of singlePrice.
+	 */
+	@Transient
+	BigMoney totalPrice;
+
+	@Transient
+	BigMoney singlePricePaid;
+
+	/**
+	 * The currency of totalPricePaid is ignored in database and is always assumed
+	 * to be equal to the currency of singlePricePaid.
+	 */
+	@Transient
+	BigMoney totalPricePaid;
+
+
+	BigDecimal vat;
 	Boolean vatIncluded;
 
 	@NotNull
@@ -155,20 +214,72 @@ public class Purchase extends OwnedEntity {
 		return super.hashCode();
 	}
 
+	@PreUpdate
 	@PrePersist
 	void prePersist() {
 		if (getSinglePrice() == null
 				&& getCount() != null
 				&& getTotalPrice() != null) {
-			setSinglePrice(getTotalPrice() / getCount());
+			setSinglePrice(getTotalPrice().dividedBy(getCount(), RoundingMode.UP));
 		}
 
 		if (getTotalPrice() == null
 				&& getCount() != null
 				&& getSinglePrice() != null) {
-			setTotalPrice(getSinglePrice() * getCount());
+			setTotalPrice(getSinglePrice().multipliedBy(getCount()));
 		}
 
+		setIfNotNull(this::setSinglePriceRaw, getSinglePrice(), BigMoney::getAmount);
+		setIfNotNull(this::setTotalPriceRaw, getTotalPrice(), BigMoney::getAmount);
+
+		setIfNotNull(this::setSinglePricePaidRaw, getSinglePricePaid(), BigMoney::getAmount);
+		setIfNotNull(this::setTotalPricePaidRaw, getTotalPricePaid(), BigMoney::getAmount);
+
+		setIfNotNull(this::setCurrency, getSinglePrice(), new RemoteGetter<BigMoney, String>() {
+			@Override
+			public String get(BigMoney object) {
+				return object.getCurrencyUnit().getCurrencyCode();
+			}
+		});
+
+		setIfNotNull(this::setCurrencyPaid, getSinglePricePaid(), new RemoteGetter<BigMoney, String>() {
+			@Override
+			public String get(BigMoney object) {
+				return object.getCurrencyUnit().getCurrencyCode();
+			}
+		});
+
 		super.prePersist();
+	}
+
+	@PostLoad
+	void postLoad() {
+		if (getCurrency() != null) {
+			CurrencyUnit currency = CurrencyUnit.of(getCurrency());
+			if (getSinglePriceRaw() != null) setSinglePrice(BigMoney.of(currency, getSinglePriceRaw()));
+			if (getTotalPriceRaw() != null) setTotalPrice(BigMoney.of(currency, getTotalPriceRaw()));
+		}
+
+		if (getCurrencyPaid() != null) {
+			CurrencyUnit paidCurrency = CurrencyUnit.of(getCurrencyPaid());
+			if (getSinglePricePaidRaw() != null) setSinglePricePaid(BigMoney.of(paidCurrency, getSinglePricePaidRaw()));
+			if (getTotalPricePaidRaw() != null) setTotalPricePaid(BigMoney.of(paidCurrency, getTotalPricePaidRaw()));
+		}
+	}
+
+	private static <E, T> void setIfNotNull(Updater<T> setter, E isNull, RemoteGetter<E, T> getter) {
+		if (isNull == null) {
+			setter.update(null);
+		} else {
+			setter.update(getter.get(isNull));
+		}
+	}
+
+	private <E, T> T returnIfNotNull(E isNull, RemoteGetter<E, T> getter) {
+		if (isNull == null) {
+			return null;
+		} else {
+			return getter.get(isNull);
+		}
 	}
 }

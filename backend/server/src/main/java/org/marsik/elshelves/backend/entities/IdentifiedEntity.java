@@ -94,6 +94,10 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         T get();
     }
 
+    protected interface RemoteGetter<E, T> {
+        T get(E object);
+    }
+
     protected static <T> void update(T value, Updater<T> cb) {
         if (value != null) {
             cb.update(value);

@@ -1,6 +1,9 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.joda.money.BigMoney;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
@@ -33,8 +36,23 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 	public Purchase convert(PurchaseApiModel object, Purchase model, int nested, Map<UUID, Object> cache) {
 		model.setId(object.getId());
 		model.setCount(object.getCount());
-		model.setSinglePrice(object.getSinglePrice());
-		model.setTotalPrice(object.getTotalPrice());
+
+		if (object.getCurrency() != null) {
+			CurrencyUnit currency = CurrencyUnit.of(object.getCurrency());
+			if (object.getSinglePrice() != null)
+				model.setSinglePrice(BigMoney.of(currency, object.getSinglePrice()));
+			if (object.getTotalPrice() != null)
+				model.setTotalPrice(BigMoney.of(currency, object.getTotalPrice()));
+		}
+
+		if (object.getCurrencyPaid() != null) {
+			CurrencyUnit currencyPaid = CurrencyUnit.of(object.getCurrencyPaid());
+			if (object.getSinglePricePaid() != null)
+				model.setSinglePricePaid(BigMoney.of(currencyPaid, object.getSinglePricePaid()));
+			if (object.getTotalPricePaid() != null)
+				model.setTotalPricePaid(BigMoney.of(currencyPaid, object.getTotalPricePaid()));
+		}
+
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
 		model.setTransaction(emberToTransaction.convert(object.getTransaction(), nested, cache));
