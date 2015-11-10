@@ -199,7 +199,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         if (entity.isNew()) {
             entityManager.persist(entity);
         } else {
-            entityManager.merge(entity);
+            entity = entityManager.merge(entity);
         }
 
         return entity;
