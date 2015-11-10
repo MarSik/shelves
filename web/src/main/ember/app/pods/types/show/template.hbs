@@ -223,10 +223,10 @@
           {{/link-to}}
         </td>
         <td class="price">
-            {{price lot.purchase.priceWithoutVat}}
+            {{price lot.purchase.priceWithoutVat}} {{lot.purchase.currency}}
         </td>
         <td class="vat-included">
-            {{price lot.purchase.priceWithVat}}
+            {{price lot.purchase.priceWithVat}} {{lot.purchase.currency}}
         </td>
         <td class="vat">
             {{lot.purchase.vat}}

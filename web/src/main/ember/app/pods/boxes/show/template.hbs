@@ -9,6 +9,7 @@
         <th>Vendor {{sort-link action='sortBy' field='type.vendor'}}</th>
         <th>Footprint {{sort-link action='sortBy' field='type.footprint'}}</th>
         <th>Count {{sort-link action='sortBy' field='count'}}</th>
+        <th>Price {{sort-link action='sortBy' field='purchase.priceWithoutVat'}}</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -30,11 +31,12 @@
             {{/each}}
         </td>
         <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.count}}{{/link-to}}</td>
+        <td>{{price lot.purchase.priceWithoutVat}} {{lot.purchase.currency}}</td>
         <td>{{#link-to 'lots.show' lot}}{{fa-icon 'history'}}{{/link-to}}</td>
     </tr>
     <tr class="summary">
         <td>&nbsp;</td>
-        <td colspan="5">{{lot.type.summary}}</td>
+        <td colspan="6">{{lot.type.summary}}</td>
     </tr>
     </tbody>
 {{/each}}
