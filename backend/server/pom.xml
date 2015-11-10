@@ -283,18 +283,6 @@
             <version>1.7.3</version>
         </dependency>
 
-        <!-- Required for embedding the neo4j rest API-->
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.18</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-servlet</artifactId>
-            <version>1.18</version>
-        </dependency>
-
         <!-- Joda Money //-->
         <dependency>
             <groupId>org.joda</groupId>
