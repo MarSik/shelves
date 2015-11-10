@@ -102,17 +102,18 @@
             </td>
             {{#if editEnabled}}
             <td class="price">
-                {{#click-to-edit content=purchase field='content.singlePrice'}}{{purchase.singlePrice}}{{/click-to-edit}}
+                {{purchase.singlePrice}} {{purchase.currency}}
+                <button class="button single-line" {{action 'editPrice' purchase}}>{{fa-icon 'edit'}}</button>
             </td>
             <td class="vat-included">
                 <button class="button remove" {{action 'fixVat' purchase}}>{{fa-icon 'wrench'}} VAT {{#if purchase.vatIncluded}}{{else}}not{{/if}} included</button>
             </td>
             {{else}}
             <td class="price">
-                {{price purchase.priceWithoutVat}}
+                {{price purchase.priceWithoutVat}} {{purchase.currency}}
             </td>
             <td class="vat-included">
-                {{price purchase.priceWithVat}}
+                {{price purchase.priceWithVat}} {{purchase.currency}}
             </td>
             {{/if}}
             <td class="vat">
@@ -142,3 +143,62 @@
   </section>
 
 {{outlet}}
+
+{{#modal-dialog title="Set price" condition=selectedItem}}
+<div class="row">
+  <section class="columns">
+    <p>{{selectedItem.type.fullName}}</p>
+  </section>
+</div>
+
+<div class="row">
+  <section class="columns large-3">
+    <h3>Price in {{selectedItem.currency}}</h3>
+
+    {{input type='text' value=selectedItem.singlePrice}}
+  </section>
+
+  <section class="columns large-3">
+    <h3>Invoice currency</h3>
+
+    {{input maxlength=3 type='text' value=selectedItem.currency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+  </section>
+
+  <section class="columns large-3">
+    <h3>Paid currency</h3>
+
+    {{input maxlength=3 type='text' value=selectedItem.currencyPaid placeholder='3 letter ISO code - USD, EUR, CZK'}}
+  </section>
+
+  <section class="columns large-3">
+    <h3>Exchange rate</h3>
+
+    {{input type='text' value=exchangeRate placeholder='1.00'}}
+  </section>
+
+  <section class="columns large-1">
+    <h3>w/VAT</h3>
+
+    {{input type='checkbox' checked=selectedItem.vatIncluded}}
+  </section>
+
+  <section class="columns large-2">
+    <h3>VAT</h3>
+
+    {{input type='text' value=selectedItem.vat placeholder='20'}}
+  </section>
+
+  <section class="columns large-3">&nbsp;</section>
+
+  <section class="columns large-3">
+     <h3>Paid in {{selectedItem.currencyPaid}}</h3>
+
+     <p>{{selectedItemPaidPrice}}</p>
+  </section>
+
+  <section class="columns large-3">
+    <button {{action 'updatePrice'}}>Save</button>
+  </section>
+</div>
+
+{{/modal-dialog}}
