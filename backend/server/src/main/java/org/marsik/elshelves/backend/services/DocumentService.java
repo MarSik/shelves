@@ -83,15 +83,22 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
 
     @Override
     public Document create(Document dto, User currentUser) throws OperationNotPermitted {
-		if (dto != null
-				&& (dto.getName() == null || dto.getName().isEmpty())
-				&& dto.getUrl() != null) {
+		if ((dto.getName() == null || dto.getName().isEmpty())
+                && dto.getUrl() != null) {
 			try {
 				dto.setName(new File(dto.getUrl().toURI().getPath()).getName());
 			} catch (URISyntaxException ex) {
 				ex.printStackTrace();
 			}
 		}
+
+        if (dto.getContentType() == null) {
+            dto.setContentType("application/octet-stream");
+        }
+
+        if (dto.getSize() == null) {
+            dto.setSize(0L);
+        }
 
         Document doc = super.create(dto, currentUser);
 

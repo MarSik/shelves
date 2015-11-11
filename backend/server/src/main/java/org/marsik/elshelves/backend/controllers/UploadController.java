@@ -102,6 +102,10 @@ public class UploadController {
         d.setName(file.getOriginalFilename());
         d.setSize(file.getSize());
         d.setContentType(file.getContentType());
+		if (d.getContentType() == null) {
+			d.setContentType("application/octet-stream");
+		}
+
         d.setDescribes(new THashSet<>());
         d.getDescribes().add(describesRecord);
 
