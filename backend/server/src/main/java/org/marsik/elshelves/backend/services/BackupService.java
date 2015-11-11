@@ -430,7 +430,7 @@ public class BackupService {
         separateLotsFromHistory(backup.getLots(), backup);
 
         // convert projects to types + items
-        convertProjects(backup.getProjects(), backup);
+        convertProjects(backup.getProjects(), backup, currentUser);
 
         prepare(backup.getUnits(), emberToUnit, currentUser, conversionCache, relinkContext, pool);
         prepare(backup.getDocuments(), emberToDocument, currentUser, conversionCache, relinkContext, pool);
@@ -532,7 +532,7 @@ public class BackupService {
         }
     }
 
-    private void convertProjects(Set<ProjectApiModel> projects, RestoreApiModel backup) {
+    private void convertProjects(Set<ProjectApiModel> projects, RestoreApiModel backup, User currentUser) {
         LotHistoryApiModel history = new LotHistoryApiModel();
         history.setId(uuidGenerator.generate());
         history.setAction(LotAction.DELIVERY);
@@ -540,12 +540,18 @@ public class BackupService {
         backup.getHistory().add(history);
 
         SourceApiModel source = new SourceApiModel();
-        source.setName("Backup restore " + new DateTime().toString());
-        source.setId(uuidGenerator.generate());
-        source.setDescribedBy(new THashSet<>());
-        source.setCodes(new THashSet<>());
-        source.setProperties(new THashSet<>());
-        backup.getSources().add(source);
+
+        if (currentUser.getProjectSource() != null) {
+            source.setId(currentUser.getProjectSource().getId());
+            source.setStub(true);
+        } else {
+            source.setName("Backup restore " + new DateTime().toString());
+            source.setId(uuidGenerator.generate());
+            source.setDescribedBy(new THashSet<>());
+            source.setCodes(new THashSet<>());
+            source.setProperties(new THashSet<>());
+            backup.getSources().add(source);
+        }
 
         PartGroupApiModel g = new PartGroupApiModel();
         g.setId(uuidGenerator.generate());
