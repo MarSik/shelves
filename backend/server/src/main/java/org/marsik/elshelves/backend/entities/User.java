@@ -55,6 +55,12 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
     @JoinColumn(name = "lost_found")
     Group lostAndFound;
 
+    /**
+     * The default payment currency for an user
+     */
+    @Size(min = 3, max = 3)
+    String currency;
+
     public void addAuthorization(Authorization a) {
         a.setOwner(this);
     }
@@ -115,6 +121,8 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
         update(update.getProjectSource(), this::setProjectSource);
+
+        update(update.getCurrency(), this::setCurrency);
 
         reconcileLists(update.getAuthorizations(), this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
     }

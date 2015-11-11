@@ -33,6 +33,7 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
 
 		user.setEmail(entity.getEmail());
 		user.setName(entity.getName());
+        user.setCurrency(entity.getCurrency());
 
         user.setAuthorizations(new ArrayList<AuthorizationApiModel>());
         if (entity.getAuthorizations() != null) {

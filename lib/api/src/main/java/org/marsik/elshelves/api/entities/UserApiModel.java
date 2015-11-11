@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.api.entities.idresolvers.UserIdResolver;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +32,9 @@ public class UserApiModel extends AbstractEntityApiModel {
 	String name;
     String password;
     String email;
+
+    @Size(min = 3, max = 3)
+    String currency;
 
     List<AuthorizationApiModel> authorizations;
     SourceApiModel projectSource;
