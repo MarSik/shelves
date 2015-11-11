@@ -77,14 +77,15 @@ export default Ember.Controller.extend({
         return false;
     }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
 
-    pendingTransactions: Ember.computed("pendingOnly", "controllers.transactions.model.@each.fullyDelivered", function () {
-      var trs = this.get('controllers.transactions.model');
+    pendingTransactions: Ember.computed("pendingOnly", "controllers.transactions.model.@each.fullyDelivered",
+      function () {
+        var trs = this.get('controllers.transactions.model');
 
-      if (this.get('pendingOnly')) {
-        return trs.filterBy('fullyDelivered', false);
-      } else {
-        return trs;
-      }
+        if (this.get('pendingOnly')) {
+          return trs.filterBy('fullyDelivered', false).sortBy('date');
+        } else {
+          return trs.sortBy('date');
+        }
     }),
 
   defaultVat: 21,
