@@ -53,7 +53,7 @@ public class NumericProperty extends NamedEntity {
 
     @OneToMany(mappedBy = "property",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.ALL},
             orphanRemoval = true)
     Set<NumericPropertyValue> propertyUses = new THashSet<>();
 

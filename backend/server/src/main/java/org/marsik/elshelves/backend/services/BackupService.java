@@ -26,6 +26,7 @@ import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
+import org.marsik.elshelves.backend.entities.NumericPropertyValue;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
@@ -307,6 +308,23 @@ public class BackupService {
             return;
         }
 
+        /* Clear all property values so we can save them after
+           all referenced entities are saved first.
+
+           This is needed to prevent an exception like:
+
+           org.hibernate.TransientPropertyValueException:
+           Not-null property references a transient value
+           - transient instance must be saved before current operation :
+           NumericPropertyValue.property -> NumericProperty
+         */
+        List<NumericPropertyValue> propertyValues = new ArrayList<>();
+        for (IdentifiedEntity e0: allItems) {
+            if (e0 instanceof NamedEntity) {
+                propertyValues.addAll(((NamedEntity) e0).getProperties());
+                ((NamedEntity) e0).setProperties(new THashSet<>());
+            }
+        }
 
         // Create by type map so we can save some specific types first
         Map<Class<?>, Set<F>> byType = new THashMap<>();
@@ -318,7 +336,6 @@ public class BackupService {
         for (F i : byType.get(Unit.class)) {
             saveOne(i);
         }
-
 
         for (F i : byType.get(Type.class)) {
             saveOne(i);
@@ -356,6 +373,10 @@ public class BackupService {
             for (F i: is) {
                 saveOne(i);
             }
+        }
+
+        for (NumericPropertyValue v: propertyValues) {
+            entityManager.persist(v);
         }
     }
 

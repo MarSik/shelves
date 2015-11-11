@@ -60,6 +60,7 @@ public class NamedEntity extends OwnedEntity
 
 	@OneToMany(mappedBy = "entity",
 			fetch = FetchType.LAZY,
+			cascade = {CascadeType.ALL},
 			orphanRemoval = true)
     Set<NumericPropertyValue> properties = new THashSet<>();
 
