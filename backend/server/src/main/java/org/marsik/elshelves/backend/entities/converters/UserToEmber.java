@@ -19,6 +19,9 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     @Autowired
     SourceToEmber sourceToEmber;
 
+    @Autowired
+    GroupToEmber groupToEmber;
+
     public UserToEmber() {
         super(UserApiModel.class);
     }
@@ -43,6 +46,7 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
         }
 
         user.setProjectSource(sourceToEmber.convert(entity.getProjectSource(), nested - 1, cache));
+        user.setLostAndFound(groupToEmber.convert(entity.getLostAndFound(), nested - 1, cache));
 
 		return user;
 	}

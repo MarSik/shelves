@@ -18,6 +18,9 @@ public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
 	@Autowired
 	EmberToSource emberToSource;
 
+	@Autowired
+	EmberToGroup emberToGroup;
+
 	@Override
 	public User convert(UserApiModel dto, User u, int nested, Map<UUID, Object> cache) {
 		u.setEmail(dto.getEmail());
@@ -30,6 +33,10 @@ public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
 
 		if (dto.getProjectSource() != null) {
 			u.setProjectSource(emberToSource.convert(dto.getProjectSource(), nested, cache));
+		}
+
+		if (dto.getLostAndFound() != null) {
+			u.setLostAndFound(emberToGroup.convert(dto.getLostAndFound(), nested, cache));
 		}
 
 		return u;

@@ -38,6 +38,7 @@ public class UserApiModel extends AbstractEntityApiModel {
 
     List<AuthorizationApiModel> authorizations;
     SourceApiModel projectSource;
+    PartGroupApiModel lostAndFound;
 
     @JsonIdentityReference(alwaysAsId = true)
     public List<AuthorizationApiModel> getAuthorizations() {

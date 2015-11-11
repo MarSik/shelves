@@ -121,6 +121,7 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         update(update.getName(), this::setName);
         update(update.getEmail(), this::setEmail);
         update(update.getProjectSource(), this::setProjectSource);
+        update(update.getLostAndFound(), this::setLostAndFound);
 
         update(update.getCurrency(), this::setCurrency);
 
@@ -131,6 +132,7 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
     public void relink(Relinker relinker) {
         relinkList(relinker, this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
         relinkItem(relinker, getProjectSource(), this::setProjectSource);
+        relinkItem(relinker, getLostAndFound(), this::setLostAndFound);
 
         super.relink(relinker);
     }
