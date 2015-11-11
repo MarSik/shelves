@@ -11,8 +11,10 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -48,6 +50,10 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
 
     @OneToOne(fetch = FetchType.LAZY)
     Source projectSource;
+
+    @OneToOne
+    @JoinColumn(name = "lost_found")
+    Group lostAndFound;
 
     public void addAuthorization(Authorization a) {
         a.setOwner(this);

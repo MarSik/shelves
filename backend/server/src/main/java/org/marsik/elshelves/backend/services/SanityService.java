@@ -7,6 +7,8 @@ import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.SanityRepository;
+import org.marsik.elshelves.backend.repositories.TypeRepository;
+import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,12 @@ public class SanityService {
     GroupService groupService;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    TypeRepository typeRepository;
+
+    @Autowired
     UuidGenerator uuidGenerator;
 
     @Transactional
@@ -36,9 +44,6 @@ public class SanityService {
     @Scheduled(cron = "0 */5 * * * *")
     public void collectOrphanedTypes() {
         Iterable<Type> types = sanityRepository.findOrphanedTypes();
-        Map<User, Group> orphanGroups = new THashMap<>();
-
-        String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ").format(new Date());
 
         for (Type t: types) {
             User u = t.getOwner();
@@ -47,26 +52,26 @@ public class SanityService {
                 continue;
             }
 
-            if (!orphanGroups.containsKey(u)) {
+            if (u.getLostAndFound() == null) {
                 Group group = new Group();
                 group.setId(uuidGenerator.generate());
                 group.setOwner(u);
-                group.setName("Orphaned types - " + date);
-                orphanGroups.put(u, group);
+                group.setName("Lost and found");
+
+                u.setLostAndFound(group);
+
+                try {
+                    groupService.create(group, u);
+                    userRepository.save(u);
+                } catch (OperationNotPermitted operationNotPermitted) {
+                    operationNotPermitted.printStackTrace();
+                }
             }
 
-            Group g = orphanGroups.get(u);
+            Group g = u.getLostAndFound();
             logger.info("Adding type {} to orphan group {} for user {}", t, g, u);
             t.addGroup(g);
-        }
-
-        for (Map.Entry<User, Group> e: orphanGroups.entrySet()) {
-            try {
-                groupService.create(e.getValue(), e.getKey());
-            } catch (OperationNotPermitted operationNotPermitted) {
-                // This should not ever happen for groups and types
-                operationNotPermitted.printStackTrace();
-            }
+            typeRepository.save(t);
         }
     }
 }
