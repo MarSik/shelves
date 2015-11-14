@@ -417,7 +417,7 @@ public class BackupService {
 	public boolean restoreFromBackup(RestoreApiModel backup,
 									 User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        RelinkService.RelinkContext relinkContext = relinkService.newRelinker().currentUser(currentUser);
         Set<IdentifiedEntity> pool = new LinkedHashSet<>();
 
         // Everything will be owned by the current user

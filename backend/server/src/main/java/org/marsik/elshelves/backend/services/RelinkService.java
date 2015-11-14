@@ -3,23 +3,19 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
+import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
+import org.marsik.elshelves.backend.entities.Sku;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
+import org.marsik.elshelves.backend.repositories.SkuRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,14 +32,27 @@ public class RelinkService {
     @Autowired
     IdentifiedEntityRepository identifiedEntityRepository;
 
+    @Autowired
+    SkuRepository skuRepository;
+
     public static class RelinkContext implements Relinker {
         final Map<UUID, IdentifiedEntityInterface> cache = new THashMap<>();
         final IdentifiedEntityRepository identifiedEntityRepository;
+        final SkuRepository skuRepository;
         final UuidGenerator uuidGenerator;
+        User currentUser;
 
-        public RelinkContext(IdentifiedEntityRepository identifiedEntityRepository, UuidGenerator uuidGenerator) {
+        public RelinkContext(IdentifiedEntityRepository identifiedEntityRepository,
+                             SkuRepository skuRepository,
+                             UuidGenerator uuidGenerator) {
             this.identifiedEntityRepository = identifiedEntityRepository;
             this.uuidGenerator = uuidGenerator;
+            this.skuRepository = skuRepository;
+        }
+
+        public RelinkContext currentUser(User user) {
+            this.currentUser = user;
+            return this;
         }
 
         public RelinkContext addToCache(UUID id, IdentifiedEntityInterface entity) {
@@ -104,6 +113,18 @@ public class RelinkService {
 
             // Try getting the instance from database
             IdentifiedEntity entity = identifiedEntityRepository.findById(value.getId());
+            if (entity != null
+                    && entity instanceof OwnedEntity
+                    && currentUser != null
+                    && !((OwnedEntity) entity).getOwner().equals(currentUser)) {
+                log.error("Entity {} belongs to user {} - changing the UUID", entity, ((OwnedEntity) entity).getOwner());
+
+                entity.setId(uuidGenerator.generate());
+                addToCache(entity);
+
+                return (T)entity;
+            }
+
             if (entity != null) {
                 addToCache(entity);
                 return (T)entity;
@@ -111,6 +132,15 @@ public class RelinkService {
 
             // Return the entity itself if it does not exist in the DB yet
             return value;
+        }
+
+        public Sku findExistingSku(Sku sku) {
+            if (currentUser == null) {
+                return sku;
+            }
+
+            Sku item =  skuRepository.findByTypeOwnerAndSourceIdAndSku(currentUser, sku.getSource().getId(), sku.getSku());
+            return item == null ? sku : item;
         }
 
         /**
@@ -170,6 +200,6 @@ public class RelinkService {
 
 
     public RelinkContext newRelinker() {
-        return new RelinkContext(identifiedEntityRepository, uuidGenerator);
+        return new RelinkContext(identifiedEntityRepository, skuRepository, uuidGenerator);
     }
 }

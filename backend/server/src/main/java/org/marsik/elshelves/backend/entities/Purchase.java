@@ -193,6 +193,14 @@ public class Purchase extends OwnedEntity {
 		relinkItem(relinker, getSku(), this::setSku);
 
 		if (getSku() != null && getSku().isNew()) {
+			if (getSku().getSource() == null) {
+				getSku().setSource(getTransaction().getSource());
+			}
+
+			setSku(relinker.findExistingSku(getSku()));
+		}
+
+		if (getSku() != null && getSku().isNew()) {
 			getSku().relink(relinker);
 
 			if (getSku().getSource() == null) {

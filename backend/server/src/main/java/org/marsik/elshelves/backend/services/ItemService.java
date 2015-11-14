@@ -100,7 +100,9 @@ public class ItemService extends AbstractRestService<ItemRepository, Item> {
         item.setId(uuidGenerator.generate());
 
         RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
-        relinkContext.addToCache(currentUser);
+        relinkContext
+                .currentUser(currentUser)
+                .addToCache(currentUser);
 
         if (type == null) {
             type = new Type();

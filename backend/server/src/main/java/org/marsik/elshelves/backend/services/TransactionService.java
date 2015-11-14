@@ -55,8 +55,9 @@ public class TransactionService extends AbstractRestService<TransactionRepositor
 		Transaction t = super.createEntity(dto, currentUser);
 
 		RelinkService.RelinkContext context = relinkService.newRelinker();
-		context.addToCache(t);
-		context.addToCache(currentUser);
+		context.currentUser(currentUser)
+				.addToCache(t)
+				.addToCache(currentUser);
 
 		// Reinsert all items
 		for (Purchase p: items) {

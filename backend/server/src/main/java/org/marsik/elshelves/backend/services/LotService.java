@@ -112,7 +112,9 @@ public class LotService {
         long count = lot.getCount();
 
         RelinkService.RelinkContext context = relinkService.newRelinker();
-        context.relink(update);
+        context
+                .currentUser(currentUser)
+                .relink(update);
 
         // Prepare history object
         if (lot.isRevisionNeeded(update)) {
