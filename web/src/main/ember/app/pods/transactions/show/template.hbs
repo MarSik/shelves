@@ -47,9 +47,9 @@
     </dl>
 </div>
 
-<section class="columns purchase">
+<section class="columns large-6 purchase">
    <h3>Summary</h3>
-    <table>
+    <table class="transaction-summary">
         <tr>
             <th></th><th>count</th><th>without VAT</th><th>with VAT</th>
         </tr>
@@ -67,19 +67,19 @@
 
   <section class="columns purchase">
     <h3>Items</h3>
-    <table>
+    <table class="transaction-summary">
         <thead>
         <tr>
-            <th>Type</th>
+            <th>Type / Location</th>
             <th>SKU</th>
             <th>Cnt.</th>
             <th>Price</th>
+            {{#if editEnabled}}
+            <th>VAT?</th>
+            {{else}}
             <th>w/ Vat</th>
+            {{/if}}
             <th>Vat %</th>
-        </tr>
-        <tr>
-            <th colspan="2">Location</th>
-            <th colspan="4">Cnt.</th>
         </tr>
         </thead>
         {{#each sortedItems as |purchase|}}
@@ -106,7 +106,7 @@
                 <button class="button single-line" {{action 'editPrice' purchase}}>{{fa-icon 'edit'}}</button>
             </td>
             <td class="vat-included">
-                <button class="button remove" {{action 'fixVat' purchase}}>{{fa-icon 'wrench'}} VAT {{#if purchase.vatIncluded}}{{else}}not{{/if}} included</button>
+                <button class="button single-line" {{action 'fixVat' purchase}}>{{#if purchase.vatIncluded}}w/{{else}}w/o{{/if}} VAT</button>
             </td>
             {{else}}
             <td class="price">

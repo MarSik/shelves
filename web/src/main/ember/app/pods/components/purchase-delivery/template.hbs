@@ -19,7 +19,7 @@
 </div>
 {{/if}}
 {{#if canDeliver}}
-<button {{action 'startDelivery'}}>Delivered</button>
+<button class="single-line" {{action 'startDelivery'}}>{{fa-icon 'truck'}} record delivery</button>
 {{/if}}
 {{#if fullyDelivered}}
 {{fa-icon 'check-square-o'}} {{purchase.delivered}}
