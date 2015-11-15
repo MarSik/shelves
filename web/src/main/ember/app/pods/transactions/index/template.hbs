@@ -14,6 +14,7 @@
             <th>Date</th>
             <th>Name</th>
             <th>Missing</th>
+            <th>out of</th>
         </tr>
       </thead>
         {{#each pendingTransactions as |trans|}}
@@ -23,6 +24,7 @@
             <td>{{trans.date}}</td>
             <td>{{trans.name}}</td>
             <td>{{trans.missing}}</td>
+            <td>{{trans.totalCount}}</td>
             </tr>
       </tbody>
         {{/each}}
