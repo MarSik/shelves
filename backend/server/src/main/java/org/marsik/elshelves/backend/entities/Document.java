@@ -38,6 +38,7 @@ public class Document extends NamedEntity implements StickerCapable {
 
     URL url;
 
+	@NotEmpty
 	@ManyToMany(fetch = FetchType.LAZY)
 	Set<NamedEntity> describes = new THashSet<>();
 

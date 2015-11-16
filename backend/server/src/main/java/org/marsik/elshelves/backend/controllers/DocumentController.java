@@ -1,27 +1,42 @@
 package org.marsik.elshelves.backend.controllers;
 
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.IOUtils;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
+import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.DocumentAnalysisDoneService;
 import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.StorageManager;
+import org.marsik.elshelves.ember.EmberModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +44,9 @@ import java.util.UUID;
 public class DocumentController extends AbstractRestController<Document, DocumentApiModel, DocumentService> {
 	@Autowired
 	StorageManager storageManager;
+
+	@Autowired
+	DocumentAnalysisDoneService documentAnalysisDoneService;
 
 	@Autowired
 	public DocumentController(DocumentService service,
@@ -50,5 +68,42 @@ public class DocumentController extends AbstractRestController<Document, Documen
 		response.setHeader("Content-Disposition", "attachment; filename=" + name);
 		IOUtils.copy(storageManager.retrieve(uuid), response.getOutputStream());
 		response.flushBuffer();
+	}
+
+	@Transactional
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<EmberModel> upload(@CurrentUser User currentUser,
+											 @RequestParam("file") MultipartFile file,
+											 @RequestParam("entity") @Valid DocumentApiModel entity) throws IOException, BaseRestException {
+
+		Document incoming = getRestToDb().convert(entity, Integer.MAX_VALUE, new THashMap<>());
+		incoming = service.create(incoming, currentUser);
+
+		// Flush is needed to get the updated version
+		service.flush();
+
+		DocumentApiModel result = getDbToRest().convert(incoming, 1, new THashMap<>());
+
+		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
+		sideLoad(entity, builder);
+
+		processUpload(incoming, file);
+
+		return ResponseEntity
+				.ok()
+				.eTag(entity.getVersion().toString())
+				.lastModified(incoming.getLastModified().getMillis())
+				.body(builder.build());
+	}
+
+	private void processUpload(Document d, MultipartFile file) throws BaseRestException, IOException {
+		d.setSize(file.getSize());
+		d.setContentType(file.getContentType());
+		if (d.getContentType() == null) {
+			d.setContentType("application/octet-stream");
+		}
+
+		storageManager.upload(d.getId(), file, documentAnalysisDoneService);
 	}
 }
