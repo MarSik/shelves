@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,18 +42,18 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/documents")
-public class DocumentController extends AbstractRestController<Document, DocumentApiModel, DocumentService> {
+public class DocumentController extends AbstractReadOnlyRestController<Document, DocumentApiModel, DocumentService> {
 	@Autowired
 	StorageManager storageManager;
 
-	@Autowired
-	DocumentAnalysisDoneService documentAnalysisDoneService;
+	EmberToDocument restToDb;
 
 	@Autowired
 	public DocumentController(DocumentService service,
 							  DocumentToEmber dbToRest,
 							  EmberToDocument restToDb) {
-		super(DocumentApiModel.class, service, dbToRest, restToDb);
+		super(DocumentApiModel.class, dbToRest, service);
+		this.restToDb = restToDb;
 	}
 
 	@Transactional(readOnly = true)
@@ -88,7 +89,7 @@ public class DocumentController extends AbstractRestController<Document, Documen
 		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
 		sideLoad(entity, builder);
 
-		processUpload(incoming, file);
+		getService().processUpload(incoming, file);
 
 		return ResponseEntity
 				.ok()
@@ -97,13 +98,33 @@ public class DocumentController extends AbstractRestController<Document, Documen
 				.body(builder.build());
 	}
 
-	private void processUpload(Document d, MultipartFile file) throws BaseRestException, IOException {
-		d.setSize(file.getSize());
-		d.setContentType(file.getContentType());
-		if (d.getContentType() == null) {
-			d.setContentType("application/octet-stream");
-		}
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	@Transactional
+	public ResponseEntity<EmberModel> update(@CurrentUser User currentUser,
+			@PathVariable("id") UUID uuid,
+			@Valid @RequestBody DocumentApiModel item) throws BaseRestException {
+		// The REST entity does not contain id during PUT, because that is
+		// provided by the URL
+		item.setId(uuid);
+		Document update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
+		Document entity = service.update(update, currentUser);
 
-		storageManager.upload(d.getId(), file, documentAnalysisDoneService);
+		// Flush is needed to get the updated version
+		service.flush();
+
+		DocumentApiModel result = getDbToRest().convert(entity, 1, new THashMap<>());
+		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
+		sideLoad(result, builder);
+
+		return ResponseEntity
+				.ok()
+				.eTag(entity.getVersion().toString())
+				.lastModified(entity.getLastModified().getMillis())
+				.body(builder.build());
+	}
+
+	public EmberToDocument getRestToDb() {
+		return restToDb;
 	}
 }

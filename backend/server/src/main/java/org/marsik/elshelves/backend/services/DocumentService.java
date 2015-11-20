@@ -16,6 +16,7 @@ import org.marsik.elshelves.kicad.SchemaComponents;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -174,5 +175,15 @@ public class DocumentService extends AbstractRestService<DocumentRepository, Doc
         }
 
         return requirements;
+    }
+
+    public void processUpload(Document d, MultipartFile file) throws BaseRestException, IOException {
+        d.setSize(file.getSize());
+        d.setContentType(file.getContentType());
+        if (d.getContentType() == null) {
+            d.setContentType("application/octet-stream");
+        }
+
+        storageManager.upload(d.getId(), file, documentAnalysisDoneService);
     }
 }
