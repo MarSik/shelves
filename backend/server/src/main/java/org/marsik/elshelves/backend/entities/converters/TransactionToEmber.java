@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,12 +33,8 @@ public class TransactionToEmber extends AbstractEntityToEmber<Transaction, Trans
 	}
 
 	@Override
-	public TransactionApiModel convert(Transaction object, TransactionApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(object, model, nested, cache);
-
-		if (nested == 0) {
-			return model;
-		}
+	public TransactionApiModel convert(String path, Transaction object, TransactionApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		namedObjectToEmber.convert(path, object, model, cache, include);
 
 		model.setDate(object.getDate());
 
@@ -68,12 +64,12 @@ public class TransactionToEmber extends AbstractEntityToEmber<Transaction, Trans
 			}
 		}
 
-		model.setSource(sourceToEmber.convert(object.getSource(), nested - 1, cache));
+		model.setSource(sourceToEmber.convert(path, "source", object.getSource(), cache, include));
 
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<PurchaseApiModel>());
 			for (Purchase p : object.getItems()) {
-				model.getItems().add(purchaseToEmber.convert(p, nested - 1, cache));
+				model.getItems().add(purchaseToEmber.convert(path, "item", p, cache, include));
 			}
 		}
 

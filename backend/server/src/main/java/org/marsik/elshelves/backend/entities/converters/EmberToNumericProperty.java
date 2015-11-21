@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -21,16 +22,12 @@ public class EmberToNumericProperty extends AbstractEmberToEntity<NumericPropert
     EmberToUnit emberToUnit;
 
     @Override
-    public NumericProperty convert(NumericPropertyApiModel object, NumericProperty model, int nested, Map<UUID, Object> cache) {
-        emberToNamedObject.convert(object, model, nested, cache);
-
-        if (nested == 0) {
-            return model;
-        }
+    public NumericProperty convert(String path, NumericPropertyApiModel object, NumericProperty model, Map<UUID, Object> cache, Set<String> include) {
+        emberToNamedObject.convert(path, object, model, cache, include);
 
         model.setSymbol(object.getSymbol());
         model.setBase(object.getBase());
-        model.setUnit(emberToUnit.convert(object.getUnit(), nested - 1, cache));
+        model.setUnit(emberToUnit.convert(path, "unit", object.getUnit(), cache, include));
 
         return model;
     }

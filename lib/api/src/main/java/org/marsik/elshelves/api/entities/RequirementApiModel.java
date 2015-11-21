@@ -42,25 +42,6 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 
 	Set<PolymorphicRecord> lots;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public ProjectApiModel getProject() {
-		return project;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<PartTypeApiModel> getType() {
-		return type;
-	}
-
-	public Set<PolymorphicRecord> getLots() {
-		return lots;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public ItemApiModel getItem() {
-		return item;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

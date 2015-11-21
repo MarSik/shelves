@@ -39,26 +39,6 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
         setName(name);
     }
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<PartGroupApiModel> getGroups() {
-        return groups;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public PartGroupApiModel getParent() {
-        return parent;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<PartTypeApiModel> getTypes() {
-        return types;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<NumericPropertyApiModel> getShowProperties() {
-        return showProperties;
-    }
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

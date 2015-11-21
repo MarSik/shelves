@@ -40,11 +40,6 @@ public class UserApiModel extends AbstractEntityApiModel {
     SourceApiModel projectSource;
     PartGroupApiModel lostAndFound;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public List<AuthorizationApiModel> getAuthorizations() {
-        return authorizations;
-    }
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -18,8 +19,8 @@ public class EmberToSource extends AbstractEmberToEntity<SourceApiModel, Source>
 	}
 
 	@Override
-	public Source convert(SourceApiModel object, Source model, int nested, Map<UUID, Object> cache) {
-		emberToNamedObject.convert(object, model, nested, cache);
+	public Source convert(String path, SourceApiModel object, Source model, Map<UUID, Object> cache, Set<String> include) {
+		emberToNamedObject.convert(path, object, model, cache, include);
 		model.setUrl(object.getUrl());
 		model.setSkuUrl(object.getSkuUrl());
 

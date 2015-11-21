@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,14 +31,14 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
 	}
 
 	@Override
-	public Group convert(PartGroupApiModel object, Group model, int nested, Map<UUID, Object> cache) {
-		emberToNamedObject.convert(object, model, nested, cache);
-		model.setParent(convert(object.getParent(), 1, cache));
+	public Group convert(String path, PartGroupApiModel object, Group model, Map<UUID, Object> cache, Set<String> include) {
+		emberToNamedObject.convert(path, object, model, cache, include);
+		model.setParent(convert(path, "parent", object.getParent(), cache, include));
 
         if (object.getShowProperties() != null) {
             model.setShowProperties(new THashSet<NumericProperty>());
             for (NumericPropertyApiModel p: object.getShowProperties()) {
-                model.addShowProperty(emberToNumericProperty.convert(p, 1, cache));
+                model.addShowProperty(emberToNumericProperty.convert(path, "property", p, cache, include));
             }
         } else {
             model.setShowProperties(new IdentifiedEntity.UnprovidedSet<>());
@@ -46,7 +47,7 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
         if (object.getTypes() != null) {
             model.setTypes(new THashSet<Type>());
             for (PartTypeApiModel t: object.getTypes()) {
-                model.addType(emberToType.convert(t, nested, cache));
+                model.addType(emberToType.convert(path, "type", t, cache, include));
             }
         } else {
             model.setTypes(new IdentifiedEntity.UnprovidedSet<>());

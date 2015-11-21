@@ -19,11 +19,6 @@ public abstract class AbstractOwnedEntityApiModel extends AbstractEntityApiModel
 
     UserApiModel belongsTo;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public UserApiModel getBelongsTo() {
-        return belongsTo;
-    }
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

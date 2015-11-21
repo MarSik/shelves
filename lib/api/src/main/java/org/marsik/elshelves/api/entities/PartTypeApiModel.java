@@ -53,21 +53,6 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
     // Parts in store and on boards
     Long total;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<FootprintApiModel> getFootprints() {
-        return footprints;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<PartGroupApiModel> getGroups() {
-        return groups;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<PartTypeApiModel> getSeeAlso() {
-        return seeAlso;
-    }
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

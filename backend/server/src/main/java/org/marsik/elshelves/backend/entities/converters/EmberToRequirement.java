@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,8 +28,7 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 	}
 
 	@Override
-	public Requirement convert(RequirementApiModel object, Requirement model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getId());
+	public Requirement convert(String path, RequirementApiModel object, Requirement model, Map<UUID, Object> cache, Set<String> include) {
 		model.setCount(object.getCount());
         model.setName(object.getName());
         model.setSummary(object.getSummary());
@@ -36,13 +36,13 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 		if (object.getType() != null) {
 			model.setType(new THashSet<Type>());
 			for (PartTypeApiModel p: object.getType()) {
-				model.addType(emberToType.convert(p, nested, cache));
+				model.addType(emberToType.convert(path, "type", p, cache, include));
 			}
 		} else {
 			model.setType(null);
 		}
 
-		model.setItem(emberToItem.convert(object.getItem(), nested, cache));
+		model.setItem(emberToItem.convert(path, "item", object.getItem(), cache, include));
 
 		return model;
 	}

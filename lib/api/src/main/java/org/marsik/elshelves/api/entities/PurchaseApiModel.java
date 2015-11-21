@@ -61,15 +61,6 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 
 	Set<PolymorphicRecord> lots;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public TransactionApiModel getTransaction() {
-		return transaction;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public PartTypeApiModel getType() {
-		return type;
-	}
 
 	@Override
 	public boolean equals(Object o) {

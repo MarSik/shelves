@@ -75,11 +75,11 @@ public class LotController {
     LotRepository lotRepository;
 
     private LotApiModel cnv(Lot l) {
-        return lotToEmber.convert(l, 1, new THashMap<>());
+        return lotToEmber.convert(l, new THashMap<>());
     }
 
     private EmberModel prepare(Lot l) {
-        LotApiModel res = lotToEmber.convert(l, 1, new THashMap<>());
+        LotApiModel res = cnv(l);
         EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(res);
         return modelBuilder.build();
     }
@@ -89,7 +89,7 @@ public class LotController {
         Collection<LotApiModel> lots = new THashSet<>();
 
         for (Lot l: ls) {
-            lots.add(lotToEmber.convert(l, 1, cache));
+            lots.add(lotToEmber.convert(l, cache));
         }
 
         EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(LotApiModel.class, lots);
@@ -131,16 +131,16 @@ public class LotController {
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("uuid") UUID id,
                                 @RequestBody @Validated LotApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        Lot lot = emberToLot.convert(lot0, Integer.MAX_VALUE, new THashMap<>());
+        Lot lot = emberToLot.convert(lot0, new THashMap<>());
         LotSplitResult result = lotService.update(lotRepository.findById(id), lot, currentUser);
 
         Map<UUID, Object> cache = new THashMap<>();
 
         EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(
-                lotToEmber.convert(result.getRequested(), 1, cache));
+                lotToEmber.convert(result.getRequested(), cache));
         if (result.getRemainder() != null) {
             modelBuilder.sideLoad(
-                    lotToEmber.convert(result.getRemainder(), 1, cache));
+                    lotToEmber.convert(result.getRemainder(), cache));
         }
 
         return modelBuilder.build();
@@ -154,7 +154,7 @@ public class LotController {
                                  @RequestBody @Validated LotApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
         EmberModel.Builder<LotApiModel> modelBuilder;
 
-        Lot lot = emberToLot.convert(lot0, Integer.MAX_VALUE, new THashMap<>());
+        Lot lot = emberToLot.convert(lot0, new THashMap<>());
 
         Lot result = lotService.delivery(lot, lot.getExpiration(), currentUser);
         modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));

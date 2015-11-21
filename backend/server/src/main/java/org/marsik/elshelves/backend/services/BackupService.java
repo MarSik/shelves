@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
@@ -15,10 +16,10 @@ import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
+import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Footprint;
-import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Item;
@@ -27,7 +28,6 @@ import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.NumericPropertyValue;
-import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Source;
@@ -77,7 +77,6 @@ import org.marsik.elshelves.backend.repositories.GroupRepository;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.marsik.elshelves.backend.repositories.ListRepository;
-import org.marsik.elshelves.backend.repositories.LotHistoryRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NumericPropertyRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
@@ -403,7 +402,7 @@ public class BackupService {
         }
 
         for (T i0: items) {
-            F i = converter.convert(i0, Integer.MAX_VALUE, conversionCache);
+            F i = converter.convert(i0, conversionCache);
 
             if (i instanceof OwnedEntityInterface) {
                 relinkContext.fixOwner((OwnedEntityInterface)i, currentUser);
@@ -486,14 +485,20 @@ public class BackupService {
                 history.setValidSince(lot.getCreated());
 
                 if (lot.getPerformedBy() != null) {
-                    history.setPerformedById(lot.getPerformedBy().getId());
+                    history.setPerformedBy(new UserApiModel());
+                    history.getPerformedBy().setId(lot.getPerformedBy().getId());
+                    history.getPerformedBy().setStub(true);
                 }
                 if (lot.getLocation() != null) {
-                    history.setLocationId(lot.getLocation().getId());
+                    history.setLocation(new BoxApiModel());
+                    history.getLocation().setId(lot.getLocation().getId());
+                    history.getLocation().setStub(true);
                 }
 
                 if (lot.getPrevious() != null) {
-                    history.setPreviousId(lot.getPrevious().getId());
+                    history.setPrevious(new LotHistoryApiModel());
+                    history.getPrevious().setId(lot.getPrevious().getId());
+                    history.getPrevious().setStub(true);
                 }
 
                 backup.getHistory().add(history);
@@ -514,15 +519,21 @@ public class BackupService {
                     history.setValidSince(lot.getCreated());
 
                     if (lot.getPerformedBy() != null) {
-                        history.setPerformedById(lot.getPerformedBy().getId());
+                        history.setPerformedBy(new UserApiModel());
+                        history.getPerformedBy().setId(lot.getPerformedBy().getId());
+                        history.getPerformedBy().setStub(true);
                     }
 
                     if (lot.getLocation() != null) {
-                        history.setLocationId(lot.getLocation().getId());
+                        history.setLocation(new BoxApiModel());
+                        history.getLocation().setId(lot.getLocation().getId());
+                        history.getLocation().setStub(true);
                     }
 
                     if (lot.getPrevious() != null) {
-                        history.setPreviousId(lot.getPrevious().getId());
+                        history.setPrevious(new LotHistoryApiModel());
+                        history.getPrevious().setId(lot.getPrevious().getId());
+                        history.getPrevious().setStub(true);
                     }
 
                     lot.setHistory(history);
@@ -731,7 +742,7 @@ public class BackupService {
             if (cache.containsKey(item.getId())) {
                 continue;
             }
-            dtos.add(convertor.convert(item, 1, cache));
+            dtos.add(convertor.convert(item, cache));
         }
 
         return dtos;
@@ -763,7 +774,7 @@ public class BackupService {
         backup.setLots(backup(lots, lotToEmber, cache));
 
         backup.setRequirements(backup(requirementRepository.findByItemOwner(currentUser), requirementToEmber, cache));
-        backup.setUser(userToEmber.convert(currentUser, 1, cache));
+        backup.setUser(userToEmber.convert(currentUser, cache));
 
         Set<LotHistory> history = new THashSet<>();
 
@@ -778,7 +789,7 @@ public class BackupService {
         backup.setHistory(new THashSet<>());
 
         for (LotHistory h: history) {
-            backup.getHistory().add(lotHistoryToEmber.convert(h, 1, cache));
+            backup.getHistory().add(lotHistoryToEmber.convert(h, cache));
         }
 
         backup.setLists(backup(listRepository.findByOwner(currentUser), listToEmber, cache));

@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,6 +27,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+@DefaultEmberModel(UserApiModel.class)
 public class User extends IdentifiedEntity implements OwnedEntityInterface, StickerCapable, UpdateableEntity {
     @NotNull
     @Size(max = 255)

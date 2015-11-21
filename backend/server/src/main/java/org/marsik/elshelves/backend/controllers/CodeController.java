@@ -42,7 +42,7 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
                               @PathVariable("code") String code,
                               @PathVariable("type") String type) throws PermissionDenied, EntityNotFound {
         Code c = getService().getByTypeAndCode(type, code, user);
-        CodeApiModel res = getDbToRest().convert(c, 1, new THashMap<>());
+        CodeApiModel res = getDbToRest().convert(c, new THashMap<>());
         EmberModel.Builder<CodeApiModel> builder = new EmberModel.Builder<>(res);
         return builder.build();
     }

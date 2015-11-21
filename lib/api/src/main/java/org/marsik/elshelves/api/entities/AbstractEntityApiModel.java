@@ -8,13 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.marsik.elshelves.ember.EmberEntity;
+import org.marsik.elshelves.jackson.StubSupport;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class AbstractEntityApiModel implements EmberEntity {
+public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport {
     public AbstractEntityApiModel(UUID uuid) {
         this.id = uuid;
     }
@@ -23,6 +24,9 @@ public abstract class AbstractEntityApiModel implements EmberEntity {
     UUID id;
 
     Long version;
+
+    @JsonProperty("_type")
+    String entityType;
 
     /**
      * This can be used as an explicit hint to the converter.

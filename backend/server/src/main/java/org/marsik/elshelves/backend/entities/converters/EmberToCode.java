@@ -6,6 +6,7 @@ import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -15,7 +16,7 @@ public class EmberToCode extends AbstractEmberToEntity<CodeApiModel, Code> {
     }
 
     @Override
-    public Code convert(CodeApiModel object, Code model, int nested, Map<UUID, Object> cache) {
+    public Code convert(String path, CodeApiModel object, Code model, Map<UUID, Object> cache, Set<String> include) {
         model.setType(object.getType());
         model.setCode(object.getCode());
 

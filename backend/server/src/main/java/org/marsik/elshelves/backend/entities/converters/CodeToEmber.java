@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,17 +20,11 @@ public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
     }
 
     @Override
-    public CodeApiModel convert(Code object, CodeApiModel model, int nested, Map<UUID, Object> cache) {
-        model.setId(object.getId());
-
-        if (nested == 0) {
-            return model;
-        }
-
+    public CodeApiModel convert(String path, Code object, CodeApiModel model, Map<UUID, Object> cache, Set<String> include) {
         model.setType(object.getType());
         model.setCode(object.getCode());
 
-        model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+        model.setBelongsTo(userToEmber.convert(path, "belongs-to", object.getOwner(), cache, include));
 
         if (object.getReference() != null) {
             PolymorphicRecord r = new PolymorphicRecord();

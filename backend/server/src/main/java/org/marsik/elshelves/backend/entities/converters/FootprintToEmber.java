@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,12 +20,8 @@ public class  FootprintToEmber extends AbstractEntityToEmber<Footprint, Footprin
 	}
 
 	@Override
-	public FootprintApiModel convert(Footprint object, FootprintApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(object, model, nested, cache);
-
-		if (nested == 0) {
-			return model;
-		}
+	public FootprintApiModel convert(String path, Footprint object, FootprintApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		namedObjectToEmber.convert(path, object, model, cache, include);
 
 		model.setHoles(object.getHoles());
 		model.setPads(object.getPads());
@@ -35,10 +32,10 @@ public class  FootprintToEmber extends AbstractEntityToEmber<Footprint, Footprin
         if (object.getSeeAlso() != null) {
             model.setSeeAlso(new THashSet<FootprintApiModel>());
             for (Footprint t: object.getSeeAlso()) {
-                model.getSeeAlso().add(convert(t, nested - 1, cache));
+                model.getSeeAlso().add(convert(path, "see-also", t, cache, include));
             }
 			for (Footprint t: object.getSeeAlsoIncoming()) {
-				model.getSeeAlso().add(convert(t, nested - 1, cache));
+				model.getSeeAlso().add(convert(path, "see-also", t, cache, include));
 			}
         }
 

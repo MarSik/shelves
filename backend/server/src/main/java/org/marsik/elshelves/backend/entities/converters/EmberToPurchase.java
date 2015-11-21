@@ -3,8 +3,6 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,8 +32,7 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 	}
 
 	@Override
-	public Purchase convert(PurchaseApiModel object, Purchase model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getId());
+	public Purchase convert(String path, PurchaseApiModel object, Purchase model, Map<UUID, Object> cache, Set<String> include) {
 		model.setCount(object.getCount());
 
 		if (object.getCurrency() != null) {
@@ -55,8 +53,8 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());
-		model.setTransaction(emberToTransaction.convert(object.getTransaction(), nested, cache));
-		model.setType(emberToType.convert(object.getType(), nested, cache));
+		model.setTransaction(emberToTransaction.convert(path, "transaction", object.getTransaction(), cache, include));
+		model.setType(emberToType.convert(path, "type", object.getType(), cache, include));
 
 		if (object.getSku() != null) {
 			model.setSku(new Sku());

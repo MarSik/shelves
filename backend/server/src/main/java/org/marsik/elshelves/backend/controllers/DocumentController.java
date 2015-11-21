@@ -1,19 +1,16 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.IOUtils;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
-import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
 import org.marsik.elshelves.backend.security.CurrentUser;
-import org.marsik.elshelves.backend.services.DocumentAnalysisDoneService;
 import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.StorageManager;
 import org.marsik.elshelves.ember.EmberModel;
@@ -31,13 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -78,13 +72,13 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 											 @RequestParam("file") MultipartFile file,
 											 @RequestParam("entity") @Valid DocumentApiModel entity) throws IOException, BaseRestException {
 
-		Document incoming = getRestToDb().convert(entity, Integer.MAX_VALUE, new THashMap<>());
+		Document incoming = getRestToDb().convert(entity, new THashMap<>());
 		incoming = service.create(incoming, currentUser);
 
 		// Flush is needed to get the updated version
 		service.flush();
 
-		DocumentApiModel result = getDbToRest().convert(incoming, 1, new THashMap<>());
+		DocumentApiModel result = getDbToRest().convert(incoming, new THashMap<>());
 
 		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
 		sideLoad(entity, builder);
@@ -107,13 +101,13 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 		// The REST entity does not contain id during PUT, because that is
 		// provided by the URL
 		item.setId(uuid);
-		Document update = getRestToDb().convert(item, Integer.MAX_VALUE, new THashMap<>());
+		Document update = getRestToDb().convert(item, new THashMap<>());
 		Document entity = service.update(update, currentUser);
 
 		// Flush is needed to get the updated version
 		service.flush();
 
-		DocumentApiModel result = getDbToRest().convert(entity, 1, new THashMap<>());
+		DocumentApiModel result = getDbToRest().convert(entity, new THashMap<>());
 		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
 		sideLoad(result, builder);
 

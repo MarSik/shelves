@@ -123,7 +123,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
 			throw new OperationNotPermitted();
 		}
 
-        User user = emberToUser.convert(userInfo, 1, new THashMap<UUID, Object>());
+        User user = emberToUser.convert(userInfo, new THashMap<UUID, Object>());
         user.setId(uuidGenerator.generate());
 		user.setVerificationCode(RandomStringUtils.randomAlphanumeric(20));
 		user.setVerificationStartTime(new DateTime());
@@ -173,7 +173,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
 		u.setVerificationStartTime(null);
         userRepository.save(u);
 
-		UserApiModel response = userToEmber.convert(u, 1, new THashMap<UUID, Object>());
+		UserApiModel response = userToEmber.convert(u, new THashMap<UUID, Object>());
 		response.setPassword(password);
 
         return response;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -21,8 +22,8 @@ public class EmberToList extends AbstractEmberToEntity<ListApiModel, List> {
     }
 
     @Override
-    public List convert(ListApiModel object, List model, int nested, Map<UUID, Object> cache) {
-        emberToNamedObject.convert(object, model, nested, cache);
+    public List convert(String path, ListApiModel object, List model, Map<UUID, Object> cache, Set<String> include) {
+        emberToNamedObject.convert(path, object, model, cache, include);
 
         if (object.getItems() != null) {
             model.setItems(new THashSet<>());

@@ -1,10 +1,11 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
-import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T extends IdentifiedEntity> implements CachingConverter<F, T, UUID> {
@@ -15,7 +16,12 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
     }
 
     @Override
-    public T convert(F object, int nested, Map<UUID, Object> cache) {
+    public T convert(F object, Map<UUID, Object> cache) {
+        return convert(null, null, object, cache, new THashSet<String>());
+    }
+
+    @Override
+    public T convert(String path, String element, F object, Map<UUID, Object> cache, Set<String> include) {
         if (object == null) {
             return null;
         }
@@ -36,12 +42,11 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         model.setId(object.getId());
         model.setVersion(object.getVersion());
 
-        if (nested > 0
-                && !object.isStub()
+        if (!object.isStub()
                 && object.getId() != null) {
             cache.put(object.getId(), model);
         }
 
-        return convert(object, model, nested, cache);
+        return convert(null, object, model, cache, include);
     }
 }

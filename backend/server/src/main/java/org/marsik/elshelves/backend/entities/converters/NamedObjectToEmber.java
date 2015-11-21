@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,13 +31,7 @@ public class NamedObjectToEmber {
     @Autowired
     CodeToEmber codeToEmber;
 
-	public AbstractNamedEntityApiModel convert(NamedEntity object, AbstractNamedEntityApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getId());
-
-		if (nested == 0) {
-			return model;
-		}
-
+	public AbstractNamedEntityApiModel convert(String path, NamedEntity object, AbstractNamedEntityApiModel model, Map<UUID, Object> cache, Set<String> include) {
 		model.setName(object.getName());
 		model.setSummary(object.getSummary());
 		model.setDescription(object.getDescription());
@@ -47,17 +42,17 @@ public class NamedObjectToEmber {
         if (object.getCodes() != null) {
             model.setCodes(new THashSet<CodeApiModel>());
             for (Code c: object.getCodes()) {
-                model.getCodes().add(codeToEmber.convert(c, nested -1, cache));
+                model.getCodes().add(codeToEmber.convert(path, "code", c, cache, include));
             }
         }
 
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+		model.setBelongsTo(userToEmber.convert(path, "owner", object.getOwner(), cache, include));
 
 		if (object.getDescribedBy() != null) {
 			model.setDescribedBy(new THashSet<DocumentApiModel>());
 
 			for (Document d: object.getDescribedBy()) {
-				model.getDescribedBy().add(documentToEmber.convert(d, nested - 1, cache));
+				model.getDescribedBy().add(documentToEmber.convert(path, "document", d, cache, include));
 			}
 		}
 
@@ -67,7 +62,7 @@ public class NamedObjectToEmber {
 
             for (NumericPropertyValue v: object.getProperties()) {
                 model.getValues().put(v.getProperty().getId(), v.getValue());
-                model.getProperties().add(numericPropertyToEmber.convert(v.getProperty(), nested - 1, cache));
+                model.getProperties().add(numericPropertyToEmber.convert(path, "property", v.getProperty(), cache, include));
             }
         }
 

@@ -38,21 +38,6 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 
     Set<CodeApiModel> codes;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<DocumentApiModel> getDescribedBy() {
-		return describedBy;
-	}
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<NumericPropertyApiModel> getProperties() {
-        return properties;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<CodeApiModel> getCodes() {
-        return codes;
-    }
-
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

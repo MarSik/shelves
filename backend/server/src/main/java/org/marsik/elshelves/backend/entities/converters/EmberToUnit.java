@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,8 +20,8 @@ public class EmberToUnit extends AbstractEmberToEntity<UnitApiModel, Unit> {
 	}
 
 	@Override
-	public Unit convert(UnitApiModel object, Unit model, int nested, Map<UUID, Object> cache) {
-		emberToNamedObject.convert(object, model, nested, cache);
+	public Unit convert(String path, UnitApiModel object, Unit model, Map<UUID, Object> cache, Set<String> include) {
+		emberToNamedObject.convert(path, object, model, cache, include);
 		model.setSymbol(object.getSymbol());
 		model.setPrefixes(object.getPrefixes());
 

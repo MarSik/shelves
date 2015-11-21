@@ -4,11 +4,11 @@ import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,7 +33,7 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 	}
 
 	@Override
-	public Lot convert(LotApiModel object, Lot model, int nested, Map<UUID, Object> cache) {
+	public Lot convert(String path, LotApiModel object, Lot model, Map<UUID, Object> cache, Set<String> include) {
 		model.setId(object.getId());
 		model.setCount(object.getCount());
 		model.setStatus(object.getStatus());
@@ -42,11 +42,11 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 		model.setCreated(object.getCreated());
 
 		model.setExpiration(object.getExpiration());
-		model.setLocation(emberToBox.convert(object.getLocation(), nested, cache));
-		model.setPurchase(emberToPurchase.convert(object.getPurchase(), nested, cache));
-		model.setUsedBy(emberToRequirement.convert(object.getUsedBy(), nested, cache));
+		model.setLocation(emberToBox.convert(path, "location", object.getLocation(), cache, include));
+		model.setPurchase(emberToPurchase.convert(path, "purchase", object.getPurchase(), cache, include));
+		model.setUsedBy(emberToRequirement.convert(path, "used-by", object.getUsedBy(), cache, include));
 		model.setSerials(object.getSerials());
-		model.setHistory(emberToLotHistory.convert(object.getHistory(), nested, cache));
+		model.setHistory(emberToLotHistory.convert(path, "history", object.getHistory(), cache, include));
 
 		if (object.getSerial() != null
 				&& !object.getSerial().isEmpty()) {

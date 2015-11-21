@@ -36,11 +36,6 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     @NotNull
     SiPrefix base;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public UnitApiModel getUnit() {
-        return unit;
-    }
-
     @JsonSerialize(using = ToStringSerializer.class)
     public SiPrefix getBase() {
         return base;

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -38,12 +39,8 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 	}
 
 	@Override
-	public PartTypeApiModel convert(Type object, PartTypeApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(object, model, nested, cache);
-
-		if (nested == 0) {
-			return model;
-		}
+	public PartTypeApiModel convert(String path, Type object, PartTypeApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		namedObjectToEmber.convert(path, object, model, cache, include);
 
 		model.setDescription(object.getDescription());
 		model.setVendor(object.getVendor());
@@ -63,14 +60,14 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
         if (object.getFootprints() != null) {
             model.setFootprints(new THashSet<FootprintApiModel>());
             for (Footprint g : object.getFootprints()) {
-                model.getFootprints().add(footprintToEmber.convert(g, nested - 1, cache));
+                model.getFootprints().add(footprintToEmber.convert(path, "footprint", g, cache, include));
             }
         }
         
 		if (object.getGroups() != null) {
 			model.setGroups(new THashSet<PartGroupApiModel>());
 			for (Group g : object.getGroups()) {
-				model.getGroups().add(groupToEmber.convert(g, nested - 1, cache));
+				model.getGroups().add(groupToEmber.convert(path, "group", g, cache, include));
 			}
 		}
 
@@ -87,10 +84,10 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
         if (object.getSeeAlso() != null) {
             model.setSeeAlso(new THashSet<PartTypeApiModel>());
             for (Type t: object.getSeeAlso()) {
-                model.getSeeAlso().add(convert(t, nested - 1, cache));
+                model.getSeeAlso().add(convert(path, "see-also", t, cache, include));
             }
 			for (Type t: object.getSeeAlsoIncoming()) {
-				model.getSeeAlso().add(convert(t, nested - 1, cache));
+				model.getSeeAlso().add(convert(path, "see-also", t, cache, include));
 			}
         }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,7 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 	}
 
 	@Override
-	public Document convert(DocumentApiModel object, Document model, int nested, Map<UUID, Object> cache) {
+	public Document convert(String path, DocumentApiModel object, Document model, Map<UUID, Object> cache, Set<String> include) {
 		model.setId(object.getId());
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
@@ -30,11 +31,7 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 		model.setSize(object.getSize());
         model.setUrl(object.getUrl());
 
-		if (nested == 0) {
-			return model;
-		}
-
-		model.setOwner(emberToUser.convert(object.getBelongsTo(), nested, cache));
+		model.setOwner(emberToUser.convert(path, "owner", object.getBelongsTo(), cache, include));
 		if (object.getDescribes() != null) {
 			model.setDescribes(new THashSet<NamedEntity>());
 			for (final PolymorphicRecord r: object.getDescribes()) {

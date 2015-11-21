@@ -36,11 +36,6 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 	UserApiModel belongsTo;
 	Set<PolymorphicRecord> describes;
 
-    @JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getBelongsTo() {
-		return belongsTo;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

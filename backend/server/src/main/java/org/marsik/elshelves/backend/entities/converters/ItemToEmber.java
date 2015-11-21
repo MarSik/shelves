@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -24,19 +25,15 @@ public class ItemToEmber extends AbstractEntityToEmber<Item, ItemApiModel> {
 	}
 
 	@Override
-	public ItemApiModel convert(Item object, ItemApiModel model, int nested, Map<UUID, Object> cache) {
-		lotToEmber.convert(object, model, nested, cache);
+	public ItemApiModel convert(String path, Item object, ItemApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		lotToEmber.convert(path, object, model, cache, include);
 
 		model.setFinished(object.getFinished());
-
-		if (nested == 0) {
-			return model;
-		}
 
 		if (object.getRequires() != null) {
 			model.setRequirements(new THashSet<RequirementApiModel>());
 			for (Requirement r: object.getRequires()) {
-				model.getRequirements().add(requirementToEmber.convert(r, nested - 1, cache));
+				model.getRequirements().add(requirementToEmber.convert(path, "requirement", r, cache, include));
 			}
 		}
 

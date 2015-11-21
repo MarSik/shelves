@@ -6,6 +6,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.LotHistoryToEmber;
 import org.marsik.elshelves.backend.repositories.LotHistoryRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.ember.EmberModel;
@@ -26,7 +27,7 @@ public class LotHistoryController {
     LotHistoryRepository lotHistoryRepository;
 
     @Autowired
-    ModelMapper modelMapper;
+    LotHistoryToEmber lotHistoryToEmber;
 
     @RequestMapping("/{id}")
     @ResponseBody
@@ -34,10 +35,7 @@ public class LotHistoryController {
     public EmberModel getOne(@CurrentUser User currentUser,
                              @PathVariable("id") UUID uuid) throws PermissionDenied, EntityNotFound {
         LotHistory entity = lotHistoryRepository.findById(uuid);
-        LotHistoryApiModel dto = modelMapper.map(entity, LotHistoryApiModel.class);
-
-        // Workaround model mapper bug
-        dto.setPreviousId(entity.getPrevious() == null ? null : entity.getPrevious().getId());
+        LotHistoryApiModel dto = lotHistoryToEmber.convert(entity, new THashMap<>());
 
         EmberModel.Builder<LotHistoryApiModel> builder = new EmberModel.Builder<LotHistoryApiModel>(dto);
         return builder.build();

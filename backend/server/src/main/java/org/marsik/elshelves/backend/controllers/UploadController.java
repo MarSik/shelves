@@ -6,7 +6,6 @@ import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
-import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
@@ -89,7 +88,7 @@ public class UploadController {
 		Map<UUID, Object> cache = new THashMap<>();
 
 		for (Document d: documents) {
-			result.add(documentToEmber.convert(d, 1, cache));
+			result.add(documentToEmber.convert(d, cache));
 		}
 
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -18,12 +19,8 @@ public class SourceToEmber extends AbstractEntityToEmber<Source, SourceApiModel>
 	}
 
 	@Override
-	public SourceApiModel convert(Source object, SourceApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(object, model, nested, cache);
-
-		if (nested == 0) {
-			return model;
-		}
+	public SourceApiModel convert(String path, Source object, SourceApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		namedObjectToEmber.convert(path, object, model, cache, include);
 
 		model.setHasIcon(object.isHasIcon());
 		model.setUrl(object.getUrl());

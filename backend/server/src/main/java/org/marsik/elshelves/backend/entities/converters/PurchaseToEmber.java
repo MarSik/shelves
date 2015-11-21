@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -31,13 +31,8 @@ public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApi
 	}
 
 	@Override
-	public PurchaseApiModel convert(Purchase object, PurchaseApiModel model, int nested, Map<UUID, Object> cache) {
+	public PurchaseApiModel convert(String path, Purchase object, PurchaseApiModel model, Map<UUID, Object> cache, Set<String> include) {
 		model.setCount(object.getCount());
-		model.setId(object.getId());
-
-		if (nested == 0) {
-			return model;
-		}
 
 		if (object.getSinglePrice() != null)
 			model.setSinglePrice(object.getSinglePrice().getAmount());
@@ -57,8 +52,8 @@ public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApi
 		model.setVatIncluded(object.getVatIncluded());
         model.setMissing(object.getMissing());
 
-		model.setType(typeToEmber.convert(object.getType(), nested - 1, cache));
-		model.setTransaction(transactionToEmber.convert(object.getTransaction(), nested - 1, cache));
+		model.setType(typeToEmber.convert(path, "type", object.getType(), cache, include));
+		model.setTransaction(transactionToEmber.convert(path, "transaction", object.getTransaction(), cache, include));
 
 		if (object.getSku() != null) {
 			model.setSku(object.getSku().getSku());

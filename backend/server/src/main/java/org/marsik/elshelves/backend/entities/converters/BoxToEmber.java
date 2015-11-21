@@ -28,19 +28,15 @@ public class BoxToEmber extends AbstractEntityToEmber<Box,BoxApiModel> {
 	}
 
 	@Override
-	public BoxApiModel convert(Box box, BoxApiModel model, int nested, Map<UUID, Object> cache) {
-		namedObjectToEmber.convert(box, model, nested, cache);
+	public BoxApiModel convert(String path, Box box, BoxApiModel model, Map<UUID, Object> cache, Set<String> include) {
+		namedObjectToEmber.convert(path, box, model, cache, include);
 
-		if (nested == 0) {
-			return model;
-		}
-
-		model.setParent(convert(box.getParent(), nested - 1, cache));
+		model.setParent(convert(path, "parent", box.getParent(), cache, include));
 
 		if (box.getContains() != null) {
 			Set<BoxApiModel> boxes = new THashSet<>();
 			for (Box b : box.getContains()) {
-				boxes.add(convert(b, nested - 1, cache));
+				boxes.add(convert(path, "box", b, cache, include));
 			}
 			model.setBoxes(boxes);
 		}
@@ -48,7 +44,7 @@ public class BoxToEmber extends AbstractEntityToEmber<Box,BoxApiModel> {
 		if (box.getLots() != null) {
 			Set<LotApiModel> lots = new THashSet<>();
 			for (Lot l: box.getLots()) {
-				lots.add(lotToEmber.convert(l, nested - 1, cache));
+				lots.add(lotToEmber.convert(path, "lot", l, cache, include));
 			}
 			model.setLots(lots);
 		}

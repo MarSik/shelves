@@ -1,13 +1,12 @@
 package org.marsik.elshelves.backend.controllers;
 
+import com.google.common.collect.Sets;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
-import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
-import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -26,8 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BinaryOperator;
 
@@ -50,11 +50,20 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
 
     }
 
+    protected Set<String> processInclude(String include) {
+        if (include == null) {
+            return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(Sets.newHashSet(include.split(",")));
+        }
+    }
+
     @RequestMapping
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<EmberModel> getAll(@CurrentUser User currentUser,
-							 @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
+                                             @RequestParam(value = "ids[]", required = false) UUID[] ids,
+                                             @RequestParam(value = "include", required = false) String include) throws BaseRestException {
 		Collection<T> allItems;
 
 		if (ids == null) {
@@ -70,7 +79,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
         Map<UUID, Object> cache = new THashMap<>();
 
         for (T entity: allItems) {
-            allDtos.add(getDbToRest().convert(entity, 1, cache));
+            allDtos.add(getDbToRest().convert(null, null, entity, cache, processInclude(include)));
         }
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dtoClazz, allDtos);
@@ -108,9 +117,10 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<EmberModel> getOne(@CurrentUser User currentUser,
-                             @PathVariable("id") UUID uuid) throws BaseRestException {
+                                             @PathVariable("id") UUID uuid,
+                                             @RequestParam(value = "include", required = false) String include) throws BaseRestException {
         T entity = service.get(uuid, currentUser);
-        E dto = getDbToRest().convert(entity, 1, new THashMap<>());
+        E dto = getDbToRest().convert(null, null, entity, new THashMap<>(), processInclude(include));
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dto);
         sideLoad(dto, builder);

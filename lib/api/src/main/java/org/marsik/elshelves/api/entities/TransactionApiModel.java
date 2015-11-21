@@ -31,16 +31,6 @@ public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	Set<PurchaseApiModel> items;
 	SourceApiModel source;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<PurchaseApiModel> getItems() {
-		return items;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public SourceApiModel getSource() {
-		return source;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

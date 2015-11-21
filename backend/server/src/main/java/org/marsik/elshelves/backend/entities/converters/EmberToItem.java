@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -25,15 +26,15 @@ public class EmberToItem extends AbstractEmberToEntity<ItemApiModel, Item> {
 	}
 
 	@Override
-	public Item convert(ItemApiModel object, Item item, int nested, Map<UUID, Object> cache) {
-		emberToLot.convert(object, item, nested, cache);
+	public Item convert(String path, ItemApiModel object, Item item, Map<UUID, Object> cache, Set<String> include) {
+		emberToLot.convert(path, object, item, cache, include);
 
 		item.setFinished(object.getFinished());
 
 		if (object.getRequirements() != null) {
 			item.setRequires(new THashSet<Requirement>());
 			for (RequirementApiModel r: object.getRequirements()) {
-				item.addRequirement(emberToRequirement.convert(r, nested, cache));
+				item.addRequirement(emberToRequirement.convert(path, "requirement", r, cache, include));
 			}
 		} else {
 			item.setRequires(new IdentifiedEntity.UnprovidedSet<>());

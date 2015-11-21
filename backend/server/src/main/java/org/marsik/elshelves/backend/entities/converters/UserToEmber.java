@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,13 +28,7 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     }
 
 	@Override
-	public UserApiModel convert(User entity, UserApiModel user, int nested, Map<UUID, Object> cache) {
-		user.setId(entity.getId());
-
-		if (nested == 0) {
-			return user;
-		}
-
+	public UserApiModel convert(String path, User entity, UserApiModel user, Map<UUID, Object> cache, Set<String> include) {
 		user.setEmail(entity.getEmail());
 		user.setName(entity.getName());
         user.setCurrency(entity.getCurrency());
@@ -41,12 +36,12 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
         user.setAuthorizations(new ArrayList<AuthorizationApiModel>());
         if (entity.getAuthorizations() != null) {
             for (Authorization auth : entity.getAuthorizations()) {
-                user.getAuthorizations().add(authorizationToEmber.convert(auth, nested - 1, cache));
+                user.getAuthorizations().add(authorizationToEmber.convert(path, "authorization", auth, cache, include));
             }
         }
 
-        user.setProjectSource(sourceToEmber.convert(entity.getProjectSource(), nested - 1, cache));
-        user.setLostAndFound(groupToEmber.convert(entity.getLostAndFound(), nested - 1, cache));
+        user.setProjectSource(sourceToEmber.convert(path, "project-source", entity.getProjectSource(), cache, include));
+        user.setLostAndFound(groupToEmber.convert(path, "lost-and-found", entity.getLostAndFound(), cache, include));
 
 		return user;
 	}

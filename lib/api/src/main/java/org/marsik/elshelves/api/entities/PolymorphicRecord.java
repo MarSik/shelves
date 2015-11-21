@@ -1,5 +1,6 @@
 package org.marsik.elshelves.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class PolymorphicRecord extends AbstractEntityApiModel {
+    //TODO needs to be configured in Ember first @JsonProperty("_type")
     String type;
 
     public PolymorphicRecord(String uuid) {

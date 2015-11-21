@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -24,20 +25,14 @@ public class DocumentToEmber extends AbstractEntityToEmber<Document, DocumentApi
 	}
 
 	@Override
-	public DocumentApiModel convert(Document object, DocumentApiModel model, int nested, Map<UUID, Object> cache) {
-		model.setId(object.getId());
-
-		if (nested == 0) {
-			return model;
-		}
-
+	public DocumentApiModel convert(String path, Document object, DocumentApiModel model, Map<UUID, Object> cache, Set<String> include) {
 		model.setName(object.getName());
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
         model.setUrl(object.getUrl());
 
-		model.setBelongsTo(userToEmber.convert(object.getOwner(), nested - 1, cache));
+		model.setBelongsTo(userToEmber.convert(path, "owner", object.getOwner(), cache, include));
 
 		if (object.getDescribes() != null) {
 			model.setDescribes(new THashSet<PolymorphicRecord>());

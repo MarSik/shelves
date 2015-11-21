@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -71,7 +72,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @RequestMapping("/whoami")
     public EmberModel getCurrentUser(@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
         final User user = getService().get(currentUser.getId(), currentUser);
-        return new EmberModel.Builder<UserApiModel>(getDbToRest().convert(user, 1, new THashMap<>())).build();
+        return new EmberModel.Builder<UserApiModel>(getDbToRest().convert(user, new THashMap<>())).build();
     }
 
     @Override
@@ -88,7 +89,9 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<EmberModel> getAll(@CurrentUser User currentUser, @RequestParam(value = "ids[]", required = false) UUID[] ids) throws BaseRestException {
+    public ResponseEntity<EmberModel> getAll(@CurrentUser User currentUser,
+                                             @RequestParam(value = "ids[]", required = false) UUID[] ids,
+                                             @RequestParam(value = "include", required = false) String include) throws BaseRestException {
         if (ids == null) {
             throw new PermissionDenied();
         }
@@ -99,6 +102,6 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
             }
         }
         
-        return super.getAll(currentUser, ids);
+        return super.getAll(currentUser, ids, include);
     }
 }

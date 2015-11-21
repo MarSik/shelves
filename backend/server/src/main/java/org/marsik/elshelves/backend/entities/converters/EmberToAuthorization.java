@@ -5,6 +5,7 @@ import org.marsik.elshelves.backend.entities.Authorization;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -14,7 +15,7 @@ public class EmberToAuthorization extends AbstractEmberToEntity<AuthorizationApi
     }
 
     @Override
-    public Authorization convert(AuthorizationApiModel object, Authorization model, int nested, Map<UUID, Object> cache) {
+    public Authorization convert(String path, AuthorizationApiModel object, Authorization model, Map<UUID, Object> cache, Set<String> include) {
         model.setId(object.getId());
         model.setName(object.getName());
         model.setSecret(object.getSecret());

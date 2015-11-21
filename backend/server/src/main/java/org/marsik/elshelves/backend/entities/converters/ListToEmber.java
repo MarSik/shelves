@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -21,8 +22,8 @@ public class ListToEmber extends AbstractEntityToEmber<List, ListApiModel> {
     }
 
     @Override
-    public ListApiModel convert(List object, ListApiModel model, int nested, Map<UUID, Object> cache) {
-        namedObjectToEmber.convert(object, model, nested, cache);
+    public ListApiModel convert(String path, List object, ListApiModel model, Map<UUID, Object> cache, Set<String> include) {
+        namedObjectToEmber.convert(path, object, model, cache, include);
 
         model.setItems(new THashSet<>());
 

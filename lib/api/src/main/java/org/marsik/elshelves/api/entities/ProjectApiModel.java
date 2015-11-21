@@ -33,10 +33,6 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 
 	Set<RequirementApiModel> requirements;
 
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<RequirementApiModel> getRequirements() {
-		return requirements;
-	}
 
 	@Override
 	public boolean equals(Object o) {

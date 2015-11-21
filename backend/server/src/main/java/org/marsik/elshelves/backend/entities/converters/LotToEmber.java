@@ -1,13 +1,12 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.backend.entities.Lot;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -38,21 +37,17 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 		return new LotApiModel();
 	}
 
-	public LotApiModel convert(Lot object, LotApiModel entity, int nested, Map<UUID, Object> cache) {
+	public LotApiModel convert(String path, Lot object, LotApiModel entity, Map<UUID, Object> cache, Set<String> include) {
 		entity.setId(object.getId());
 		entity.setCount(object.getCount());
-
-		if (nested == 0) {
-			return entity;
-		}
 
         entity.setExpiration(object.getExpiration());
 		entity.setSerials(object.getSerials());
 		entity.setAction(object.getStatus());
-		entity.setPurchase(purchaseToEmber.convert(object.getPurchase(), nested - 1, cache));
-		entity.setUsedBy(requirementToEmber.convert(object.getUsedBy(), nested - 1, cache));
-		entity.setLocation(boxToEmber.convert(object.getLocation(), nested - 1, cache));
-		entity.setHistory(lotHistoryToEmber.convert(object.getHistory(), nested - 1, cache));
+		entity.setPurchase(purchaseToEmber.convert(path, "purchase", object.getPurchase(), cache, include));
+		entity.setUsedBy(requirementToEmber.convert(path, "used-by", object.getUsedBy(), cache, include));
+		entity.setLocation(boxToEmber.convert(path, "location", object.getLocation(), cache, include));
+		entity.setHistory(lotHistoryToEmber.convert(path, "history", object.getHistory(), cache, include));
 
 		entity.setCanBeAssigned(object.isCanBeAssigned());
 		entity.setCanBeUnassigned(object.isCanBeUnassigned());

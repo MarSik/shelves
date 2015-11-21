@@ -10,10 +10,8 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.List;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
 import org.marsik.elshelves.backend.entities.User;
-import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EmberToList;
 import org.marsik.elshelves.backend.entities.converters.ListToEmber;
-import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ListService;
@@ -60,7 +58,7 @@ public class ListController extends AbstractRestController<List, ListApiModel, L
 
         list.addItem(item);
 
-        EmberModel.Builder<ListApiModel> model = new EmberModel.Builder<ListApiModel>(getDbToRest().convert(list, 1, new THashMap<>()));
+        EmberModel.Builder<ListApiModel> model = new EmberModel.Builder<ListApiModel>(getDbToRest().convert(list, new THashMap<>()));
         return model.build();
     }
 
@@ -75,7 +73,7 @@ public class ListController extends AbstractRestController<List, ListApiModel, L
         item.setId(item0);
         list.removeItem(item);
 
-        EmberModel.Builder<ListApiModel> model = new EmberModel.Builder<ListApiModel>(getDbToRest().convert(list, 1, new THashMap<>()));
+        EmberModel.Builder<ListApiModel> model = new EmberModel.Builder<ListApiModel>(getDbToRest().convert(list, new THashMap<>()));
         return model.build();
     }
 }

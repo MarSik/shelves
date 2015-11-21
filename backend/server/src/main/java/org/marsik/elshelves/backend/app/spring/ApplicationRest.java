@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.app.spring;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.FailureMode;
@@ -11,10 +14,12 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.app.jackson.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.servlet.WebFormSupportFilter;
 import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
+import org.marsik.elshelves.jackson.IdWhenStubSerializer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +38,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Deserializer;
 import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Serializer;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
@@ -125,10 +129,20 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
 		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
-        builder.modulesToInstall(new JodaModule());
+
+        SimpleModule wrapStubModule = new SimpleModule() {
+            @Override
+            public void setupModule(SetupContext context) {
+                super.setupModule(context);
+                context.addBeanSerializerModifier(new IdWhenStubSerializer());
+            }
+        };
+
+        builder.modulesToInstall(wrapStubModule, new JodaModule());
 
         builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
         builder.deserializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Deserializer());
+        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
 
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         return converter;

@@ -27,19 +27,19 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
     }
 
     @JsonProperty("previous")
-    UUID previousId;
+    LotHistoryApiModel previous;
 
     DateTime validSince;
     LotAction action;
 
     @JsonProperty("performedBy")
-    UUID performedById;
+    UserApiModel performedBy;
 
     @JsonProperty("location")
-    UUID locationId;
+    BoxApiModel location;
 
     @JsonProperty("assignedTo")
-    UUID assignedToId;
+    RequirementApiModel assignedTo;
 
     @Override
     public boolean equals(Object o) {

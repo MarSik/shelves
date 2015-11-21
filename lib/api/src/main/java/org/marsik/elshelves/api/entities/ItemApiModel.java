@@ -34,21 +34,6 @@ public class ItemApiModel extends LotApiModel {
     PartTypeApiModel type;
     SourceApiModel source;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    public Set<RequirementApiModel> getRequirements() {
-        return requirements;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public PartTypeApiModel getType() {
-        return type;
-    }
-
-    @JsonIdentityReference(alwaysAsId = true)
-    public SourceApiModel getSource() {
-        return source;
-    }
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);

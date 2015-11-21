@@ -97,22 +97,6 @@ public class LotApiModel extends AbstractEntityApiModel {
 	/**
 	 * Deprecated: only used for importing older data
 	 */
-	@JsonIdentityReference(alwaysAsId = true)
-	public Set<LotApiModel> getNext() {
-		return next;
-	}
-
-	/**
-	 * Deprecated: only used for importing older data
-	 */
-	@JsonIdentityReference(alwaysAsId = true)
-	public UserApiModel getPerformedBy() {
-		return performedBy;
-	}
-
-	/**
-	 * Deprecated: only used for importing older data
-	 */
 	public LotAction getAction() {
 		return status;
 	}
@@ -124,30 +108,6 @@ public class LotApiModel extends AbstractEntityApiModel {
 		status = action;
 	}
 
-	@JsonIdentityReference(alwaysAsId = true)
-    public BoxApiModel getLocation() {
-        return location;
-    }
-
-	@JsonIdentityReference(alwaysAsId = true)
-    public LotApiModel getPrevious() {
-        return previous;
-    }
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public PurchaseApiModel getPurchase() {
-		return purchase;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public RequirementApiModel getUsedBy() {
-		return usedBy;
-	}
-
-	@JsonIdentityReference(alwaysAsId = true)
-	public LotHistoryApiModel getHistory() {
-		return history;
-	}
 
 	@Override
 	public boolean equals(Object o) {

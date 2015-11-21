@@ -1,11 +1,9 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
-import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.converters.EmberToSource;
@@ -81,7 +79,7 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
         List<Requirement> newRequirements = new ArrayList<>();
         Item project = service.importRequirements(itemId, documentId, currentUser, newRequirements);
 
-        ItemApiModel itemApiModel = getDbToRest().convert(project, 1, new THashMap<>());
+        ItemApiModel itemApiModel = getDbToRest().convert(project, new THashMap<>());
 
         EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
         sideLoad(itemApiModel, builder);
@@ -97,16 +95,16 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     public EmberModel updateLot(@CurrentUser User currentUser,
                                 @PathVariable("id") UUID id,
                                 @RequestBody @Validated ItemApiModel item0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
-        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, new THashMap<>());
+        Item item = getRestToDb().convert(item0, new THashMap<>());
         LotSplitResult<Item> result = lotService.update(itemRepository.findById(id), item, currentUser);
 
         Map<UUID, Object> cache = new THashMap<>();
 
         EmberModel.Builder<ItemApiModel> modelBuilder = new EmberModel.Builder<>(
-                getDbToRest().convert(result.getRequested(), 1, cache));
+                getDbToRest().convert(result.getRequested(), cache));
         if (result.getRemainder() != null) {
             modelBuilder.sideLoad(
-                    getDbToRest().convert(result.getRemainder(), 1, cache));
+                    getDbToRest().convert(result.getRemainder(), cache));
         }
 
         return modelBuilder.build();
@@ -120,13 +118,13 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        Item item = getRestToDb().convert(item0, Integer.MAX_VALUE, cache);
-        Source source = emberToSource.convert(source0, Integer.MAX_VALUE, cache);
-        Type type = emberToType.convert(type0, Integer.MAX_VALUE, cache);
+        Item item = getRestToDb().convert(item0, cache);
+        Source source = emberToSource.convert(source0, cache);
+        Type type = emberToType.convert(type0, cache);
 
         item = getService().startProject(item, type, source, currentUser);
 
-        ItemApiModel itemApiModel = getDbToRest().convert(item, 1, new THashMap<>());
+        ItemApiModel itemApiModel = getDbToRest().convert(item, new THashMap<>());
 
         EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
         sideLoad(itemApiModel, builder);
