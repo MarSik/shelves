@@ -22,7 +22,7 @@ Before build do the following:
 git clone https://github.com/MarSik/jackson-databind.git
 
 pushd jackson-databind
-git checkout improve-unresolved-handling
+git checkout improve-unresolved-handling-2.6
 mvn clean install
 popd
 
