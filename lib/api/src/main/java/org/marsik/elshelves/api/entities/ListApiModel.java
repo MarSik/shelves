@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ItemIdResolver.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = ItemIdResolver.class)
 @EmberModelName("list")
 public class ListApiModel extends AbstractNamedEntityApiModel {
     Set<AbstractEntityApiModel> items;

@@ -1,10 +1,7 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
@@ -16,7 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = TransactionIdResolver.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = TransactionIdResolver.class)
 @EmberModelName("transaction")
 public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	public TransactionApiModel(UUID id) {

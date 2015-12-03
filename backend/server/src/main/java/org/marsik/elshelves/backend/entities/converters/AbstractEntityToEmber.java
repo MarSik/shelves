@@ -24,40 +24,58 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         return convert(null, null, object, cache, new THashSet<String>());
     }
 
+    private T createNew() {
+        try {
+            return type.newInstance();
+        } catch (InstantiationException|IllegalAccessException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public T convert(String path, String element, F object, Map<UUID, Object> cache, Set<String> include) {
         if (object == null) {
             return null;
         }
 
+        path = getMergedPath(path, element);
+
+        // First check whether we need the full object
+        // we need it when it is:
+        // - top level object
+        // - OR it was mentioned in the include list
+        // - OR it has no ID
+        if ((element != null
+                && (include == null || !include.contains(path)))
+                || object.getId() == null) {
+            T model = createNew();
+            if (model == null) {
+                return null;
+            }
+            model.setId(object.getId());
+            model.setEntityType(model.getEmberType());
+            model.setStub(true);
+            return model;
+        }
+
+        // Full object might already be in the cache
         if (cache.containsKey(object.getId())) {
             return (T)cache.get(object.getId());
         }
 
-        T model;
-
-        try {
-            model = type.newInstance();
-        } catch (InstantiationException|IllegalAccessException ex) {
-            ex.printStackTrace();
+        // New conversion
+        T model = createNew();
+        if (model == null) {
             return null;
         }
 
         model.setId(object.getId());
         model.setEntityType(model.getEmberType());
-
-        path = getMergedPath(path, element);
-
-        if ((element == null
-                || (include != null && include.contains(path)))
-                && object.getId() != null) {
-            cache.put(object.getId(), model);
-        } else {
-            model.setStub(true);
-            return model;
-        }
-
         model.setVersion(object.getVersion());
+
+        // Save to the cache
+        cache.put(object.getId(), model);
 
         return convert(path, object, model, cache, include);
     }

@@ -12,7 +12,7 @@ import org.marsik.elshelves.api.entities.idresolvers.AuthorizationIdResolver;
 import java.util.UUID;
 
 @EmberModelName("authorization")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = AuthorizationIdResolver.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = AuthorizationIdResolver.class)
 @Getter
 @Setter
 public class AuthorizationApiModel extends AbstractEntityApiModel {
