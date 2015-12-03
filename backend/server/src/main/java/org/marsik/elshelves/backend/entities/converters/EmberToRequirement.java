@@ -6,13 +6,16 @@ import org.marsik.elshelves.api.entities.RequirementApiModel;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiModel, Requirement> {
     @Autowired
     EmberToType emberToType;
@@ -23,8 +26,17 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 	@Autowired
 	EmberToLot emberToLot;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToRequirement() {
 		super(Requirement.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(RequirementApiModel.class, getTarget(), this);
+
 	}
 
 	@Override

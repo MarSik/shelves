@@ -59,7 +59,7 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 
 	PartTypeApiModel type;
 
-	Set<PolymorphicRecord> lots;
+	Set<LotApiModel> lots;
 
 
 	@Override

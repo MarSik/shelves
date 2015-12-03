@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.api.entities.AuthorizationApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
+import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -21,6 +23,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
+@DefaultEmberModel(AuthorizationApiModel.class)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Authorization extends IdentifiedEntity implements OwnedEntityInterface, UpdateableEntity {
     @NotEmpty

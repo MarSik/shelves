@@ -34,7 +34,7 @@ public class DocumentApiModel extends AbstractEntityApiModel {
     URL url;
 
 	UserApiModel belongsTo;
-	Set<PolymorphicRecord> describes;
+	Set<AbstractNamedEntityApiModel> describes;
 
 	@Override
 	public boolean equals(Object o) {

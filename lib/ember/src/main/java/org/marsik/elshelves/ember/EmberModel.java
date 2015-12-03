@@ -26,7 +26,7 @@ public final class EmberModel extends HashMap<String, Object> {
     }
 
 	public static class Builder<T> implements org.marsik.elshelves.ember.Builder<EmberModel> {
-        private final Map<String, Set<Object>> sideLoadedItems = new THashMap<String, Set<Object>>();
+        private final Set<Object> sideLoadedItems = new THashSet<Object>();
         private final Map<String, Object> metaData = new HashMap<String, Object>();
         private final String payloadName;
         private final Object payload;
@@ -39,7 +39,7 @@ public final class EmberModel extends HashMap<String, Object> {
 
         public Builder(final Object entity) {
             payload = entity;
-            payloadName = EmberModelHelper.getSingularName(entity.getClass());
+            payloadName = "data";
 
 			knownObjects.add(entity);
 			implicitSideloader(entity);
@@ -47,7 +47,7 @@ public final class EmberModel extends HashMap<String, Object> {
 
 		public Builder(final Class<T> clazz, final Iterable<T> entities) {
 			payload = entities;
-			payloadName = EmberModelHelper.getPluralName(clazz);
+			payloadName = "data";
 
 			for (T entity: entities) {
 				knownObjects.add(entity);
@@ -63,32 +63,13 @@ public final class EmberModel extends HashMap<String, Object> {
             return this;
         }
 
-        private Collection<Object> getSideLoadingBucket(Class<?> type) {
-            String bucket = EmberModelHelper.getPluralName(type);
-
-            if (!sideLoadedItems.containsKey(bucket)) {
-                sideLoadedItems.put(bucket, new THashSet<Object>());
-            }
-            return sideLoadedItems.get(bucket);
-        }
-
-        private Collection<Object> getSideLoadingBucket(String type) {
-            String bucket = English.plural(type);
-
-            if (!sideLoadedItems.containsKey(bucket)) {
-                sideLoadedItems.put(bucket, new THashSet<Object>());
-            }
-            return sideLoadedItems.get(bucket);
-        }
-
         public Builder<T> sideLoad(final Object entity) {
             if (entity != null) {
 				if (knownObjects.contains(entity)) {
 					return this;
 				}
 
-				Collection<Object> bucket = getSideLoadingBucket(entity.getClass());
-                bucket.add(entity);
+                sideLoadedItems.add(entity);
 				knownObjects.add(entity);
 				implicitSideloader(entity);
             }
@@ -106,8 +87,8 @@ public final class EmberModel extends HashMap<String, Object> {
 						continue;
 					}
 
-					Collection<Object> bucket = getSideLoadingBucket(polymorphic ? item.getClass() : clazz);
-					bucket.add(item);
+
+					sideLoadedItems.add(item);
 					knownObjects.add(item);
 					implicitSideloader(item);
 				}
@@ -117,13 +98,12 @@ public final class EmberModel extends HashMap<String, Object> {
 
         public <K> Builder<T> sideLoad(final String rootName, final Iterable<K> entities) {
             if (entities != null) {
-                Collection<Object> bucket = getSideLoadingBucket(rootName);
 				for (K item: entities) {
 					if (knownObjects.contains(item)) {
 						continue;
 					}
 
-					bucket.add(item);
+					sideLoadedItems.add(item);
 					knownObjects.add(item);
 					implicitSideloader(item);
 				}
@@ -188,7 +168,7 @@ public final class EmberModel extends HashMap<String, Object> {
         @Override
         public EmberModel build() {
             EmberModel sideLoader = new EmberModel();
-            sideLoader.putAll(sideLoadedItems);
+            sideLoader.put("sideload", sideLoadedItems);
 
             List<EmberPurge> purges = new ArrayList<>();
 

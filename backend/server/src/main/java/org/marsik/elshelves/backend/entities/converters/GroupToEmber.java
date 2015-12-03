@@ -8,13 +8,16 @@ import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class GroupToEmber extends AbstractEntityToEmber<Group, PartGroupApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
@@ -25,8 +28,17 @@ public class GroupToEmber extends AbstractEntityToEmber<Group, PartGroupApiModel
     @Autowired
     NumericPropertyToEmber numericPropertyToEmber;
 
+	@Autowired
+	EntityToEmberConversionService conversionService;
+
 	public GroupToEmber() {
 		super(PartGroupApiModel.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(Group.class, getTarget(), this);
+
 	}
 
 	@Override

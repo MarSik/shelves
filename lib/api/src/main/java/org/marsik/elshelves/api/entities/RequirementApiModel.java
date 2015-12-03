@@ -40,7 +40,7 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 
 	Long count;
 
-	Set<PolymorphicRecord> lots;
+	Set<LotApiModel> lots;
 
 	@Override
 	public boolean equals(Object o) {

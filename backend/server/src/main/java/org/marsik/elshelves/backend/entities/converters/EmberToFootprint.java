@@ -5,19 +5,31 @@ import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, Footprint> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToFootprint() {
 		super(Footprint.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(FootprintApiModel.class, getTarget(), this);
+
 	}
 
 	@Override

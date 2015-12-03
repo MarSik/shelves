@@ -598,12 +598,12 @@ public class BackupService {
             backup.getItems().add(item);
 
             type.setLots(new THashSet<>());
-            type.getLots().add(PolymorphicRecord.build(item));
+            type.getLots().add(item);
 
             PurchaseApiModel purchase = new PurchaseApiModel();
             purchase.setId(uuidGenerator.generate());
             purchase.setLots(new THashSet<>());
-            purchase.getLots().add(PolymorphicRecord.build(item));
+            purchase.getLots().add(item);
             purchase.setCount(1L);
             purchase.setType(type);
             backup.getPurchases().add(purchase);

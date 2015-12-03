@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
@@ -10,13 +11,16 @@ import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Sku;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Purchase> {
 	@Autowired
 	EmberToTransaction emberToTransaction;
@@ -27,8 +31,17 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 	@Autowired
 	EmberToType emberToType;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToPurchase() {
 		super(Purchase.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(PurchaseApiModel.class, getTarget(), this);
+
 	}
 
 	@Override
@@ -65,8 +78,10 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<Lot>());
-			for (PolymorphicRecord l: object.getLots()) {
-				model.addLot(new Lot(l.getId()));
+			for (LotApiModel l: object.getLots()) {
+				final Lot lot = conversionService.converter(l, Lot.class)
+						.convert(path, "lot", l, cache, include);
+				model.addLot(lot);
 			}
 		} else {
 			model.setLots(new IdentifiedEntity.UnprovidedSet<>());

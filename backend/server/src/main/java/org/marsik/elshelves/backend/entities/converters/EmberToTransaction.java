@@ -7,13 +7,16 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiModel, Transaction> {
 	@Autowired
 	EmberToUser emberToUser;
@@ -27,8 +30,17 @@ public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiMode
     @Autowired
     EmberToNamedObject emberToNamedObject;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToTransaction() {
 		super(Transaction.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(TransactionApiModel.class, getTarget(), this);
+
 	}
 
 	@Override

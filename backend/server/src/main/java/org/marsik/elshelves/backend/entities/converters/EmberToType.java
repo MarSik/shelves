@@ -9,13 +9,16 @@ import org.marsik.elshelves.backend.entities.Group;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 	@Autowired
 	EmberToFootprint emberToFootprint;
@@ -29,8 +32,17 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToType() {
 		super(Type.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(PartTypeApiModel.class, getTarget(), this);
+
 	}
 
 	@Override

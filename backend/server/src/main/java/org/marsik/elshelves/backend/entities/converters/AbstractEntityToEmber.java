@@ -15,6 +15,10 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         this.type = type;
     }
 
+    public Class<T> getTarget() {
+        return type;
+    }
+
     @Override
     public T convert(F object, Map<UUID, Object> cache) {
         return convert(null, null, object, cache, new THashSet<String>());
@@ -40,8 +44,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         }
 
         model.setId(object.getId());
-        model.setEntityType(object.getEmberType());
-        model.setVersion(object.getVersion());
+        model.setEntityType(model.getEmberType());
 
         path = getMergedPath(path, element);
 
@@ -53,6 +56,8 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
             model.setStub(true);
             return model;
         }
+
+        model.setVersion(object.getVersion());
 
         return convert(path, object, model, cache, include);
     }

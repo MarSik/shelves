@@ -37,7 +37,7 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 
     Set<FootprintApiModel> footprints;
 	Set<PartGroupApiModel> groups;
-	Set<PolymorphicRecord> lots;
+	Set<LotApiModel> lots;
     Set<PartTypeApiModel> seeAlso;
 
     Set<UUID> skus;

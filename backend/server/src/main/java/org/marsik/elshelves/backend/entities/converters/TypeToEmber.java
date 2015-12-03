@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.FootprintApiModel;
+import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
@@ -14,13 +15,16 @@ import org.marsik.elshelves.backend.entities.Sku;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.fields.PartCount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 	@Autowired
 	GroupToEmber groupToEmber;
@@ -34,8 +38,17 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 	@Autowired
 	NamedObjectToEmber namedObjectToEmber;
 
+	@Autowired
+	EntityToEmberConversionService conversionService;
+
 	public TypeToEmber() {
 		super(PartTypeApiModel.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(Type.class, getTarget(), this);
+
 	}
 
 	@Override
@@ -72,11 +85,10 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 		}
 
 		if (object.getLots() != null) {
-			model.setLots(new THashSet<PolymorphicRecord>());
+			model.setLots(new THashSet<>());
 			for (Lot l: object.getLots()) {
-				PolymorphicRecord r = new PolymorphicRecord();
-				r.setId(l.getId());
-				r.setType(l.getEmberType());
+				LotApiModel r = conversionService.converter(l, LotApiModel.class)
+						.convert(path, "lot", l, cache, include);
 				model.getLots().add(r);
 			}
 		}

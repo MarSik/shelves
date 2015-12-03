@@ -8,13 +8,15 @@ import lombok.Setter;
 import org.marsik.elshelves.ember.EmberModelName;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
 @EmberModelName("search")
 public class SearchResult extends AbstractEntityApiModel {
     String query;
-    Collection<PolymorphicRecord> items;
+    Collection<AbstractNamedEntityApiModel> items;
+    Set<String> include;
 
     @Override
     public boolean equals(Object o) {

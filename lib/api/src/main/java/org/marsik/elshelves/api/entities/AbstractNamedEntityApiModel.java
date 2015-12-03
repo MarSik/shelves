@@ -26,9 +26,9 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 	String name;
 	String summary;
 	String description;
-	boolean hasIcon = false;
-    boolean flagged = false;
-    boolean canBeDeleted = false;
+	Boolean hasIcon;
+    Boolean flagged;
+    Boolean canBeDeleted;
 	DateTime created;
 
 	Set<DocumentApiModel> describedBy;

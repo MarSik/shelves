@@ -15,6 +15,10 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         this.type = type;
     }
 
+    public Class<T> getTarget() {
+        return type;
+    }
+
     @Override
     public T convert(F object, Map<UUID, Object> cache) {
         return convert(null, null, object, cache, new THashSet<String>());
@@ -45,6 +49,8 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         if (!object.isStub()
                 && object.getId() != null) {
             cache.put(object.getId(), model);
+        } else {
+            return model;
         }
 
         return convert(null, object, model, cache, include);

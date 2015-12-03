@@ -4,13 +4,16 @@ import org.marsik.elshelves.api.entities.BoxApiModel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
     @Autowired
     EmberToUser emberToUser;
@@ -18,8 +21,16 @@ public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
 
+	@Autowired
+	EmberToEntityConversionService conversionService;
+
 	public EmberToBox() {
 		super(Box.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(BoxApiModel.class, getTarget(), this);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.NumericPropertyValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class NamedObjectToEmber {
 	@Autowired
 	UserToEmber userToEmber;
@@ -30,6 +32,9 @@ public class NamedObjectToEmber {
 
     @Autowired
     CodeToEmber codeToEmber;
+
+    @Autowired
+    EntityToEmberConversionService conversionService;
 
 	public AbstractNamedEntityApiModel convert(String path, NamedEntity object, AbstractNamedEntityApiModel model, Map<UUID, Object> cache, Set<String> include) {
 		model.setName(object.getName());

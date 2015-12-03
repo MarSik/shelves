@@ -5,14 +5,17 @@ import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.entities.Authorization;
 import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     @Autowired
     AuthorizationToEmber authorizationToEmber;
@@ -23,8 +26,16 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
     @Autowired
     GroupToEmber groupToEmber;
 
+    @Autowired
+    EntityToEmberConversionService conversionService;
+
     public UserToEmber() {
         super(UserApiModel.class);
+    }
+
+    @PostConstruct
+    void postConstruct() {
+        conversionService.register(User.class, getTarget(), this);
     }
 
 	@Override

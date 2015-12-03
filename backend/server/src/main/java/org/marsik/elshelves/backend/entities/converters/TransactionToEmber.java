@@ -8,13 +8,16 @@ import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class TransactionToEmber extends AbstractEntityToEmber<Transaction, TransactionApiModel> {
 	@Autowired
 	PurchaseToEmber purchaseToEmber;
@@ -28,8 +31,17 @@ public class TransactionToEmber extends AbstractEntityToEmber<Transaction, Trans
     @Autowired
     NamedObjectToEmber namedObjectToEmber;
 
+	@Autowired
+	EntityToEmberConversionService conversionService;
+
 	public TransactionToEmber() {
 		super(TransactionApiModel.class);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		conversionService.register(Transaction.class, getTarget(), this);
+
 	}
 
 	@Override

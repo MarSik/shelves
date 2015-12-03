@@ -3,16 +3,25 @@ package org.marsik.elshelves.backend.entities.converters;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class LotHistoryToEmber extends AbstractEntityToEmber<LotHistory, LotHistoryApiModel> {
     public LotHistoryToEmber() {
         super(LotHistoryApiModel.class);
+    }
+
+    @PostConstruct
+    void postConstruct() {
+        conversionService.register(LotHistory.class, getTarget(), this);
+
     }
 
     @Autowired
@@ -23,6 +32,9 @@ public class LotHistoryToEmber extends AbstractEntityToEmber<LotHistory, LotHist
 
     @Autowired
     RequirementToEmber requirementToEmber;
+
+    @Autowired
+    EntityToEmberConversionService conversionService;
 
     @Override
     public LotHistoryApiModel convert(String path, LotHistory object,

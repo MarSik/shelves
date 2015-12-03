@@ -1,21 +1,26 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
-import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.LotHistory;
-import org.marsik.elshelves.backend.entities.Requirement;
-import org.marsik.elshelves.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel, LotHistory> {
     public EmberToLotHistory() {
         super(LotHistory.class);
+    }
+
+    @PostConstruct
+    void postConstruct() {
+        conversionService.register(LotHistoryApiModel.class, getTarget(), this);
     }
 
     @Autowired
@@ -26,6 +31,9 @@ public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel,
 
     @Autowired
     EmberToRequirement emberToRequirement;
+
+    @Autowired
+    EmberToEntityConversionService conversionService;
 
     @Override
     public LotHistory convert(String path, LotHistoryApiModel object, LotHistory model, Map<UUID, Object> cache, Set<String> include) {

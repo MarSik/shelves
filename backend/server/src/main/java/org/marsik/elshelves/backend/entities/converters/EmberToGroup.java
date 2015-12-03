@@ -9,13 +9,16 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.NumericProperty;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group> {
 	@Autowired
 	EmberToNamedObject emberToNamedObject;
@@ -26,9 +29,17 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
     @Autowired
     EmberToType emberToType;
 
+    @Autowired
+    EmberToEntityConversionService conversionService;
+
 	public EmberToGroup() {
 		super(Group.class);
-	}
+    }
+
+    @PostConstruct
+    void postConstruct() {
+        conversionService.register(PartGroupApiModel.class, getTarget(), this);
+    }
 
 	@Override
 	public Group convert(String path, PartGroupApiModel object, Group model, Map<UUID, Object> cache, Set<String> include) {

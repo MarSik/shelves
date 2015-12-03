@@ -1,22 +1,34 @@
 package org.marsik.elshelves.backend.entities.converters;
 
+import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.backend.entities.Code;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
+@DependsOn("EntityToEmberConversionService")
 public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
     @Autowired
     UserToEmber userToEmber;
 
+    @Autowired
+    EntityToEmberConversionService conversionService;
+
     public CodeToEmber() {
         super(CodeApiModel.class);
+    }
+
+    @PostConstruct
+    void postConstruct() {
+        conversionService.register(Code.class, getTarget(), this);
     }
 
     @Override
@@ -27,9 +39,8 @@ public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
         model.setBelongsTo(userToEmber.convert(path, "belongs-to", object.getOwner(), cache, include));
 
         if (object.getReference() != null) {
-            PolymorphicRecord r = new PolymorphicRecord();
-            r.setId(object.getReference().getId());
-            r.setType(object.getReference().getEmberType());
+            AbstractNamedEntityApiModel r = conversionService.converter(object.getReference(), AbstractNamedEntityApiModel.class)
+                    .convert(path, "reference", object.getReference(), cache, include);
             model.setReference(r);
         }
 

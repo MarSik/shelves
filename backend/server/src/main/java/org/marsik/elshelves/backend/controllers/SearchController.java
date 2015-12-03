@@ -23,7 +23,7 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.POST)
     public EmberModel search(@CurrentUser User currentUser,
                              @RequestBody SearchResult query) {
-        SearchResult result = searchService.query(query.getQuery(), currentUser);
+        SearchResult result = searchService.query(query.getQuery(), currentUser, query.getInclude());
         EmberModel.Builder<SearchResult> searchResultBuilder = new EmberModel.Builder<SearchResult>(result);
         return searchResultBuilder.build();
     }

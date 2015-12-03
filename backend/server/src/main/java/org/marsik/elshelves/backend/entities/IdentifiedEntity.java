@@ -66,22 +66,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         return dbId == null;
     }
 
-    public String getEmberType() {
-        String type = "unknown";
-
-        DefaultEmberModel emberModelAnnotation = getClass().getAnnotation(DefaultEmberModel.class);
-        if (emberModelAnnotation != null) {
-            Class<? extends AbstractEntityApiModel> emberModel = emberModelAnnotation.value();
-            EmberModelName emberModelName = emberModel.getAnnotation(EmberModelName.class);
-            if (emberModelName != null) {
-                type = emberModelName.value();
-            }
-        }
-
-        return type;
-    }
-
-
     protected interface Updater<T> {
         void update(T value);
     }

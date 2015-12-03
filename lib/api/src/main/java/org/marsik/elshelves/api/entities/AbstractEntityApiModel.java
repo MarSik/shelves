@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.marsik.elshelves.ember.EmberEntity;
+import org.marsik.elshelves.ember.EmberModelName;
 import org.marsik.elshelves.jackson.StubSupport;
 
+import java.beans.Transient;
 import java.util.UUID;
 
 @Getter
@@ -55,5 +57,17 @@ public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : super.hashCode();
+    }
+
+    @JsonIgnore
+    public String getEmberType() {
+        String type = "unknown";
+
+        EmberModelName emberModelName = getClass().getAnnotation(EmberModelName.class);
+        if (emberModelName != null) {
+            type = emberModelName.value();
+        }
+
+        return type;
     }
 }

@@ -14,5 +14,5 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = ItemIdResolver.class)
 @EmberModelName("list")
 public class ListApiModel extends AbstractNamedEntityApiModel {
-    Set<PolymorphicRecord> items;
+    Set<AbstractEntityApiModel> items;
 }
