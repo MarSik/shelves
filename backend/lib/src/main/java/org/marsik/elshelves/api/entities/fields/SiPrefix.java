@@ -2,6 +2,8 @@ package org.marsik.elshelves.api.entities.fields;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.marsik.elshelves.ember.EmberModelName;
 
 @JsonFormat(shape= JsonFormat.Shape.OBJECT)
@@ -77,4 +79,7 @@ public enum SiPrefix {
 	public static SiPrefix forValue(String s) {
 		return SiPrefix.valueOf(s);
 	}
+
+	@JsonProperty("_type")
+	public final String emberType = "siprefix";
 }

@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "bower": "~0.10",
     "broccoli-asset-rev": "^2.0.2",
     "broccoli-clean-css": "1.0.0",
     "ember-c3-shim": "0.0.2",
@@ -52,6 +53,7 @@
     "ember-data": "1.13.5",
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
+    "ember-inflector": "1.9.3",
     "ember-promise": "1.2.0",
     "gulp-sass": "^2.0.4"
   }

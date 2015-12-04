@@ -138,7 +138,7 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
             }
         };
 
-        builder.modulesToInstall(wrapStubModule, new JodaModule());
+        builder.modulesToInstall(new JodaModule());
 
         builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
         builder.deserializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Deserializer());

@@ -2,7 +2,9 @@ package org.marsik.elshelves.api.entities.fields;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.ember.EmberModelName;
 
@@ -27,4 +29,7 @@ public enum FootprintType {
     public static FootprintType forValue(String s) {
         return FootprintType.valueOf(s);
     }
+
+    @JsonProperty("_type")
+    public final String emberType = "footprinttype";
 }

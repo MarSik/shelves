@@ -168,7 +168,7 @@ public final class EmberModel extends HashMap<String, Object> {
         @Override
         public EmberModel build() {
             EmberModel sideLoader = new EmberModel();
-            sideLoader.put("sideload", sideLoadedItems);
+            sideLoader.put("included", sideLoadedItems);
 
             List<EmberPurge> purges = new ArrayList<>();
 
