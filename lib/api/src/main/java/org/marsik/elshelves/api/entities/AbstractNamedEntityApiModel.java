@@ -22,6 +22,10 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 	public AbstractNamedEntityApiModel() {
 	}
 
+	public AbstractNamedEntityApiModel(String uuid) {
+		super(uuid);
+	}
+
 	@NotNull
 	String name;
 	String summary;

@@ -23,6 +23,10 @@ public class AuthorizationApiModel extends AbstractEntityApiModel {
     public AuthorizationApiModel() {
     }
 
+    public AuthorizationApiModel(String uuid) {
+        super(uuid);
+    }
+
     String name;
     String secret;
 

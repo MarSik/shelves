@@ -17,6 +17,10 @@ public abstract class AbstractOwnedEntityApiModel extends AbstractEntityApiModel
         super(id);
     }
 
+    public AbstractOwnedEntityApiModel(String uuid) {
+        super(uuid);
+    }
+
     UserApiModel belongsTo;
 
     @Override

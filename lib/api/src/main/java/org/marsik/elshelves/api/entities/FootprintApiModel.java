@@ -23,7 +23,11 @@ public class FootprintApiModel extends AbstractNamedEntityApiModel {
 	public FootprintApiModel() {
 	}
 
-	String kicad;
+    public FootprintApiModel(String uuid) {
+        super(uuid);
+    }
+
+    String kicad;
 
     Integer pads;
     Integer holes;

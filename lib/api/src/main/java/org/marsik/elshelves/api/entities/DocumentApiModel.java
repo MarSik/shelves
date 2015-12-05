@@ -24,6 +24,10 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 	public DocumentApiModel() {
 	}
 
+	public DocumentApiModel(String uuid) {
+		super(uuid);
+	}
+
 	String name;
 	String contentType;
 	Long size;

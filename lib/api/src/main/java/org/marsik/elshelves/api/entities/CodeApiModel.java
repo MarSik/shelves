@@ -22,6 +22,10 @@ public class CodeApiModel extends AbstractEntityApiModel {
     public CodeApiModel() {
     }
 
+    public CodeApiModel(String uuid) {
+        super(uuid);
+    }
+
     @NotNull
     String type; // CODE_TYPE - EAN, QR, UPC...
     @NotNull

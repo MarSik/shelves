@@ -26,7 +26,11 @@ public class UserApiModel extends AbstractEntityApiModel {
 	public UserApiModel() {
 	}
 
-	String name;
+    public UserApiModel(String uuid) {
+        super(uuid);
+    }
+
+    String name;
     String password;
     String email;
 

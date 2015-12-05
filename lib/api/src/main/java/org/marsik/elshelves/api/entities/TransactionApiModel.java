@@ -23,6 +23,10 @@ public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	public TransactionApiModel() {
 	}
 
+	public TransactionApiModel(String uuid) {
+		super(uuid);
+	}
+
 	DateTime date;
 
 	Set<PurchaseApiModel> items;

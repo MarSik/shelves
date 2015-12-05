@@ -25,6 +25,10 @@ public class UnitApiModel extends AbstractNamedEntityApiModel {
     public UnitApiModel() {
     }
 
+    public UnitApiModel(String uuid) {
+        super(uuid);
+    }
+
     String symbol;
 	Set<SiPrefix> prefixes;
 

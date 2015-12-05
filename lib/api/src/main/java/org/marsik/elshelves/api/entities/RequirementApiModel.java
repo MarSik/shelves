@@ -22,7 +22,11 @@ public class RequirementApiModel extends AbstractEntityApiModel {
 	public RequirementApiModel() {
 	}
 
-    String name;
+	public RequirementApiModel(String uuid) {
+		super(uuid);
+	}
+
+	String name;
     String summary;
 
 	/**

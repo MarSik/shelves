@@ -24,6 +24,10 @@ public class LotHistoryApiModel extends AbstractEntityApiModel {
     public LotHistoryApiModel() {
     }
 
+    public LotHistoryApiModel(String uuid) {
+        super(uuid);
+    }
+
     @JsonProperty("previous")
     LotHistoryApiModel previous;
 

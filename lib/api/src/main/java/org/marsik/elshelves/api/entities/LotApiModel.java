@@ -27,7 +27,11 @@ public class LotApiModel extends AbstractEntityApiModel {
 	public LotApiModel() {
 	}
 
-    BoxApiModel location;
+	public LotApiModel(String uuid) {
+		super(uuid);
+	}
+
+	BoxApiModel location;
 
 	LotAction status;
 

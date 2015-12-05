@@ -28,6 +28,10 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 	public PurchaseApiModel() {
 	}
 
+	public PurchaseApiModel(String uuid) {
+		super(uuid);
+	}
+
 	Long count;
 
 	@Min(0)

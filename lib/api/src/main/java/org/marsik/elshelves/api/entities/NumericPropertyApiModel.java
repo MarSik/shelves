@@ -25,6 +25,10 @@ public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     public NumericPropertyApiModel() {
     }
 
+    public NumericPropertyApiModel(String uuid) {
+        super(uuid);
+    }
+
     String symbol;
 
     @NotNull

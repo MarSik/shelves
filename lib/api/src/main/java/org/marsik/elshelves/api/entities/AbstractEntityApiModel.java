@@ -22,6 +22,11 @@ public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport
         this.id = uuid;
     }
 
+    public AbstractEntityApiModel(String uuid) {
+        this(UUID.fromString(uuid));
+        setStub(true);
+    }
+
     @JsonProperty("id")
     UUID id;
 

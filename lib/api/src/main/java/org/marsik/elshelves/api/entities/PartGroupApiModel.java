@@ -19,7 +19,11 @@ public class PartGroupApiModel extends AbstractNamedEntityApiModel {
 		super(id);
 	}
 
-	Set<PartGroupApiModel> groups;
+    public PartGroupApiModel(String uuid) {
+        super(uuid);
+    }
+
+    Set<PartGroupApiModel> groups;
     PartGroupApiModel parent;
 
     Set<PartTypeApiModel> types;

@@ -22,6 +22,10 @@ public class ItemApiModel extends LotApiModel {
     public ItemApiModel() {
     }
 
+    public ItemApiModel(String uuid) {
+        super(uuid);
+    }
+
     Set<RequirementApiModel> requirements;
     Boolean finished;
 

@@ -26,6 +26,10 @@ public class ProjectApiModel extends AbstractNamedEntityApiModel {
 	public ProjectApiModel() {
 	}
 
+	public ProjectApiModel(String uuid) {
+		super(uuid);
+	}
+
 	String description;
 
 	Set<RequirementApiModel> requirements;

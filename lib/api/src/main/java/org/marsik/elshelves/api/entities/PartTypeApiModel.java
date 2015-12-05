@@ -24,7 +24,11 @@ public class PartTypeApiModel extends AbstractNamedEntityApiModel {
 	public PartTypeApiModel() {
 	}
 
-	String description;
+    public PartTypeApiModel(String uuid) {
+        super(uuid);
+    }
+
+    String description;
 
 	String vendor;
 	String customId;

@@ -21,6 +21,10 @@ public class SourceApiModel extends AbstractNamedEntityApiModel {
 	public SourceApiModel() {
 	}
 
+	public SourceApiModel(String uuid) {
+		super(uuid);
+	}
+
 	String url;
 	String skuUrl;
 

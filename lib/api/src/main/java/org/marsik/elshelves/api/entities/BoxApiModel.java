@@ -22,6 +22,10 @@ public class BoxApiModel extends AbstractNamedEntityApiModel {
 	public BoxApiModel() {
 	}
 
+    public BoxApiModel(String uuid) {
+        super(uuid);
+    }
+
     Set<LotApiModel> lots;
 
     BoxApiModel parent;
