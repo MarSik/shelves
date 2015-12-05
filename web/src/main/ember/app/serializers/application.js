@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import DS from 'ember-data';
-import { pluralize, singularize } from 'ember-inflector';
 
 const dasherize = Ember.String.dasherize;
 
@@ -85,7 +84,7 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
    @return {String} the model's modelName
    */
   modelNameFromPayloadKey: function(key) {
-    return singularize(DS.normalizeModelName(key));
+    return Ember.Inflector.inflector.singularize(DS.normalizeModelName(key));
   },
 
   /**
