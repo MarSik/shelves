@@ -28,6 +28,10 @@ export default LotBase.extend({
   }),
 
   priceWithVat: function () {
+      if (!this.get('singlePrice')) {
+        return 0;
+      }
+
       if (this.get('vatIncluded')) {
           return this.get('singlePrice');
       } else {
@@ -36,6 +40,10 @@ export default LotBase.extend({
   }.property('vatIncluded', 'singlePrice', 'vat'),
 
   priceWithoutVat: function () {
+    if (!this.get('singlePrice')) {
+      return 0;
+    }
+
       if (!this.get('vatIncluded')) {
           return this.get('singlePrice');
       } else {

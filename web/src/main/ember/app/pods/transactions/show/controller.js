@@ -23,7 +23,13 @@ export default Ember.Controller.extend({
             purchase.save().then(function () {
               self.set('selectedItem', null);
             });
-        }
+        },
+
+      cancelPriceChange() {
+        var purchase = this.get('selectedItem');
+        purchase.rollback();
+        self.set('selectedItem', null);
+      }
     },
     boxSorting: ['fullName'],
     sortedBoxes: Ember.computed.sort('controllers.application.availableLocations', 'boxSorting'),
@@ -37,7 +43,7 @@ export default Ember.Controller.extend({
     selectedItem: null,
     exchangeRate: 1.00,
 
-    selectedItemPaidPrice: Ember.computed('selectedItem', 'exchangeRate', function () {
+    selectedItemPaidPrice: Ember.computed('selectedItem.singlePrice', 'selectedItem', 'exchangeRate', function () {
       var purchase = this.get('selectedItem');
       var exchangeRate = this.get('exchangeRate');
 

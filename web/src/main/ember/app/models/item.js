@@ -12,10 +12,6 @@ export default Lot.extend({
     // only used to start projects, write only
     type: belongsTo('type', {async: true, inverse: null}),
 
-    link: function() {
-        return "items.show";
-    }.property(),
-
   icon: function () {
     if (this.get("canBeUnsoldered")) {
       return "check-square-o";
