@@ -95,7 +95,7 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
    @return {String} normalized key
    */
   keyForAttribute: function(key, method) {
-    return dasherize(key);
+    return key;
   },
 
   /**
@@ -121,7 +121,7 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
    @return {String} normalized key
    */
   keyForRelationship: function(key, typeClass, method) {
-    return dasherize(key);
+    return key;
   },
 
 

@@ -130,14 +130,6 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
 		Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
 		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
 
-        SimpleModule wrapStubModule = new SimpleModule() {
-            @Override
-            public void setupModule(SetupContext context) {
-                super.setupModule(context);
-                context.addBeanSerializerModifier(new IdWhenStubSerializer());
-            }
-        };
-
         builder.modulesToInstall(new JodaModule());
 
         builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
