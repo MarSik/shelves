@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import org.marsik.elshelves.api.entities.BackupApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.EmberToEntityConversionService;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BackupService;
 import org.springframework.beans.factory.annotation.Autowired;

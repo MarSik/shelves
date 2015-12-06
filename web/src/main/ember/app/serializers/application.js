@@ -12,6 +12,9 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
 
     serializeIntoHash: function(hash, type, record, options) {
         var serialized = this.serialize(record, options);
+        serialized["_type"] = type.modelName;
+
+        console.log("SER", serialized);
 
         //Remove id from the payload for new records
         //Jackson was complaining when it received a null or 'new' id ...

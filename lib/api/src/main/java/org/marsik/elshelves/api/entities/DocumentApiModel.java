@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = DocumentIdResolver.class)
-@EmberModelName("document")
+@JsonTypeName("document")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+		include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		property = "_type",
+		visible = true,
+		defaultImpl = DocumentApiModel.class)
 public class DocumentApiModel extends AbstractEntityApiModel {
 	public DocumentApiModel(UUID id) {
 		super(id);

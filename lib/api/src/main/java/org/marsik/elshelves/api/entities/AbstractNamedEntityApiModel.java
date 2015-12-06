@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,6 +16,22 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+		include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		property = "_type")
+@JsonSubTypes({
+		@JsonSubTypes.Type(BoxApiModel.class),
+		@JsonSubTypes.Type(DocumentApiModel.class),
+		@JsonSubTypes.Type(FootprintApiModel.class),
+		@JsonSubTypes.Type(ListApiModel.class),
+		@JsonSubTypes.Type(NumericPropertyApiModel.class),
+		@JsonSubTypes.Type(PartGroupApiModel.class),
+		@JsonSubTypes.Type(PartTypeApiModel.class),
+		@JsonSubTypes.Type(ProjectApiModel.class),
+		@JsonSubTypes.Type(SourceApiModel.class),
+		@JsonSubTypes.Type(TransactionApiModel.class),
+		@JsonSubTypes.Type(UnitApiModel.class),
+})
 public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 	public AbstractNamedEntityApiModel(UUID id) {
 		super(id);

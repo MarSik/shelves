@@ -4,7 +4,6 @@ import gnu.trove.set.hash.THashSet;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.marsik.elshelves.ember.EmberModelName;
 
 @JsonFormat(shape=JsonFormat.Shape.OBJECT)
-@EmberModelName("footprinttype")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public enum FootprintType {
     WIRE,

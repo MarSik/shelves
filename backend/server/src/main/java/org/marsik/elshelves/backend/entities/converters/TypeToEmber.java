@@ -6,7 +6,6 @@ import org.marsik.elshelves.api.entities.FootprintApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
-import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.fields.SkuLink;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.Group;

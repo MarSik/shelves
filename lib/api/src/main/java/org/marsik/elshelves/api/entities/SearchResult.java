@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,7 +14,12 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EmberModelName("search")
+@JsonTypeName("search")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "_type",
+        visible = true,
+        defaultImpl = SearchResult.class)
 public class SearchResult extends AbstractEntityApiModel {
     String query;
     Collection<AbstractNamedEntityApiModel> items;

@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +13,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = BoxIdResolver.class)
-@EmberModelName("box")
+@JsonTypeName("box")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "_type",
+        visible = true,
+        defaultImpl = BoxApiModel.class)
 @Getter
 @Setter
 public class BoxApiModel extends AbstractNamedEntityApiModel {

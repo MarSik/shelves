@@ -2,6 +2,9 @@ package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,6 +20,20 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "_type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(AbstractOwnedEntityApiModel.class),
+        @JsonSubTypes.Type(AuthorizationApiModel.class),
+        @JsonSubTypes.Type(CodeApiModel.class),
+        @JsonSubTypes.Type(LotApiModel.class),
+        @JsonSubTypes.Type(LotHistoryApiModel.class),
+        @JsonSubTypes.Type(PurchaseApiModel.class),
+        @JsonSubTypes.Type(RequirementApiModel.class),
+        @JsonSubTypes.Type(UserApiModel.class)
+})
+@JsonTypeName("abstract")
 public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport {
     public AbstractEntityApiModel(UUID uuid) {
         this.id = uuid;
@@ -68,7 +85,7 @@ public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport
     public String getEmberType() {
         String type = "unknown";
 
-        EmberModelName emberModelName = getClass().getAnnotation(EmberModelName.class);
+        JsonTypeName emberModelName = getClass().getAnnotation(JsonTypeName.class);
         if (emberModelName != null) {
             type = emberModelName.value();
         }

@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,8 +13,13 @@ import org.marsik.elshelves.api.entities.idresolvers.AuthorizationIdResolver;
 
 import java.util.UUID;
 
-@EmberModelName("authorization")
+@JsonTypeName("authorization")
 @JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = AuthorizationIdResolver.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "_type",
+        visible = true,
+        defaultImpl = AuthorizationApiModel.class)
 @Getter
 @Setter
 public class AuthorizationApiModel extends AbstractEntityApiModel {

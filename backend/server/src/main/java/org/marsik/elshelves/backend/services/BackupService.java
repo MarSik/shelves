@@ -10,7 +10,6 @@ import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.LotHistoryApiModel;
 import org.marsik.elshelves.api.entities.PartGroupApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
-import org.marsik.elshelves.api.entities.PolymorphicRecord;
 import org.marsik.elshelves.api.entities.ProjectApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
@@ -42,6 +41,7 @@ import org.marsik.elshelves.backend.entities.converters.DocumentToEmber;
 import org.marsik.elshelves.backend.entities.converters.EmberToBox;
 import org.marsik.elshelves.backend.entities.converters.EmberToCode;
 import org.marsik.elshelves.backend.entities.converters.EmberToDocument;
+import org.marsik.elshelves.backend.entities.converters.EmberToEntityConversionService;
 import org.marsik.elshelves.backend.entities.converters.EmberToFootprint;
 import org.marsik.elshelves.backend.entities.converters.EmberToGroup;
 import org.marsik.elshelves.backend.entities.converters.EmberToItem;
@@ -274,6 +274,9 @@ public class BackupService {
 
     @Autowired
     EmberToList emberToList;
+
+    @Autowired
+    EmberToEntityConversionService conversionService;
 
 	protected <F extends IdentifiedEntity>  void relink(Set<F> allItems,
                                                         User currentUser,

@@ -1,6 +1,8 @@
 package org.marsik.elshelves.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -15,8 +17,13 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@EmberModelName("property")
+@JsonTypeName("property")
 @JsonIdentityInfo(generator = ObjectIdGenerators.None.class, property = "id", resolver = NumericPropertyIdResolver.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "_type",
+        visible = true,
+        defaultImpl = NumericPropertyApiModel.class)
 public class NumericPropertyApiModel extends AbstractNamedEntityApiModel {
     public NumericPropertyApiModel(UUID id) {
         super(id);
