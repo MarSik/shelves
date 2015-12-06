@@ -33,7 +33,6 @@ public class ItemToEmber extends AbstractEntityToEmber<Item, ItemApiModel> {
 	@PostConstruct
 	void postConstruct() {
 		conversionService.register(Item.class, getTarget(), this);
-
 	}
 
 	@Override

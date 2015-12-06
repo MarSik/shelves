@@ -1,5 +1,6 @@
 package org.marsik.elshelves.ember;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.atteo.evo.inflector.English;
 
 import java.util.Collections;
@@ -30,8 +31,8 @@ public class EmberModelHelper {
     }
 
     public static String getSingularName(final Class<?> clazz) {
-        if (clazz.isAnnotationPresent(EmberModelName.class)) {
-            return clazz.getAnnotation(EmberModelName.class).value();
+        if (clazz.isAnnotationPresent(JsonTypeName.class)) {
+            return clazz.getAnnotation(JsonTypeName.class).value();
         }
         else {
             return toLowerCamel(clazz.getSimpleName());

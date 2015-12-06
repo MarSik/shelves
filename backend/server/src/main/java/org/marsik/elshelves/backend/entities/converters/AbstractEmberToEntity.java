@@ -49,7 +49,9 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         if (!object.isStub()
                 && object.getId() != null) {
             cache.put(object.getId(), model);
-        } else {
+        }
+
+        if (object.isStub()) {
             return model;
         }
 

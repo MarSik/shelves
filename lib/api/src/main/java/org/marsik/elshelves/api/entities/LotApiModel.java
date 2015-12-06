@@ -65,13 +65,13 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	Set<String> serials;
 
-	boolean canBeSoldered;
-	boolean canBeUnsoldered;
-	boolean canBeAssigned;
-	boolean canBeUnassigned;
-    boolean canBeSplit;
-    boolean canBeMoved;
-    boolean valid;
+	Boolean canBeSoldered;
+	Boolean canBeUnsoldered;
+	Boolean canBeAssigned;
+	Boolean canBeUnassigned;
+    Boolean canBeSplit;
+    Boolean canBeMoved;
+    Boolean valid;
 
 	/**
 	 * Serial number

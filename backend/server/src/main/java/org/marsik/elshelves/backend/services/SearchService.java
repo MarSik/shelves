@@ -7,8 +7,11 @@ import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
 import org.marsik.elshelves.api.entities.SearchResult;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ import java.util.UUID;
 
 @Service
 public class SearchService {
+    private final static Logger logger = LoggerFactory.getLogger(SearchService.class);
+
     @Autowired
     UuidGenerator uuidGenerator;
 
@@ -60,7 +65,12 @@ public class SearchService {
         Map<UUID, Object> cache = new THashMap<>();
 
         for (NamedEntity n: result) {
-            AbstractNamedEntityApiModel record = conversionService.converter(n, AbstractNamedEntityApiModel.class)
+            final CachingConverter<NamedEntity, AbstractNamedEntityApiModel, UUID> converter = conversionService.converter(n, AbstractNamedEntityApiModel.class);
+            if (converter == null) {
+                logger.error("Could not find converter for {}.", n.getClass().getName());
+                continue;
+            }
+            AbstractNamedEntityApiModel record = converter
                     .convert(null, "item", n, cache, searchResult.getInclude());
             searchResult.getItems().add(record);
         }

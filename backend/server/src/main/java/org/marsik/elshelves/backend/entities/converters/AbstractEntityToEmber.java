@@ -43,12 +43,13 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
 
         // First check whether we need the full object
         // we need it when it is:
-        // - top level object
+        // - top level object AND it is not in the cache
         // - OR it was mentioned in the include list
         // - OR it has no ID
-        if ((element != null
-                && (include == null || !include.contains(path)))
-                || object.getId() == null) {
+        if (object.getId() != null
+                && element != null
+                && (cache.containsKey(object.getId())
+                    || (include == null || !include.contains(path)))) {
             T model = createNew();
             if (model == null) {
                 return null;
@@ -57,11 +58,6 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
             model.setEntityType(model.getEmberType());
             model.setStub(true);
             return model;
-        }
-
-        // Full object might already be in the cache
-        if (cache.containsKey(object.getId())) {
-            return (T)cache.get(object.getId());
         }
 
         // New conversion
