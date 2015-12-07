@@ -153,6 +153,10 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
     return normalizedPayload;
   },
 
+  pushPayload(store, payload) {
+    store.push(this._normalizeDocumentHelper(payload));
+  },
+
   /**
    @method _normalizeDocumentHelper
    @param {Object} documentHash
