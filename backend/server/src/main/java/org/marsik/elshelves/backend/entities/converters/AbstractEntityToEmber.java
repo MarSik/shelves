@@ -48,8 +48,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         // - OR it has no ID
         if (object.getId() != null
                 && element != null
-                && (cache.containsKey(object.getId())
-                    || (include == null || !include.contains(path)))) {
+                && (include == null || !include.contains(path))) {
             T model = createNew();
             if (model == null) {
                 return null;
@@ -69,6 +68,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         model.setId(object.getId());
         model.setEntityType(model.getEmberType());
         model.setVersion(object.getVersion());
+        model.setStub(false);
 
         // Save to the cache
         cache.put(object.getId(), model);
