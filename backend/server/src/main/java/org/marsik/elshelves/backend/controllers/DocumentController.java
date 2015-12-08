@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -116,6 +117,15 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 				.eTag(entity.getVersion().toString())
 				.lastModified(entity.getLastModified().getMillis())
 				.body(builder.build());
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	@Transactional
+	public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
+			@PathVariable("id") UUID uuid) throws BaseRestException {
+		service.delete(uuid, currentUser);
+		return new THashMap<>();
 	}
 
 	public EmberToDocument getRestToDb() {

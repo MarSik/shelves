@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Source;
@@ -129,6 +130,15 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
         EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
         sideLoad(itemApiModel, builder);
         return builder.build();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    @Transactional
+    public Map<Object, Object> deleteOne(@CurrentUser User currentUser,
+            @PathVariable("id") UUID uuid) throws BaseRestException {
+        service.delete(uuid, currentUser);
+        return new THashMap<>();
     }
 
     protected EmberToItem getRestToDb() {
