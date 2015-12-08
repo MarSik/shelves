@@ -19,6 +19,14 @@ export default Ember.ArrayController.extend({
         return Ember.isEmpty(this.get('paper')) || !this.get('paper.custom');
     }.property('paper', 'paper.custom'),
 
+    fieldEditable: function () {
+        if (this.get('knownPaper')) {
+            return "readonly";
+        } else {
+            return undefined;
+        }
+    }.property('knownPaper'),
+
     paperNotSelected: function() {
         return Ember.isEmpty(this.get('paper'));
     }.property('paper'),
