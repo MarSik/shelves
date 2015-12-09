@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import org.hibernate.proxy.HibernateProxy;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.ember.EmberModelName;
 
@@ -22,6 +23,11 @@ public class AbstractConversionService<S, D, U> {
     }
 
     public <F extends S, T extends D> CachingConverter<F, T, U> converter(F entity, Class<T> dest) {
+        if (entity instanceof HibernateProxy) {
+            entity = (F) ((HibernateProxy) entity).getHibernateLazyInitializer()
+                    .getImplementation();
+        }
+
         return (CachingConverter<F, T, U>) sourceConversionMap.get(entity.getClass());
     }
 

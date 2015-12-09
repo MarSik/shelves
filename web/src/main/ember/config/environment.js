@@ -35,7 +35,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV.APP.API_SERVER = 'http://localhost:8080';
+    ENV.APP.API_SERVER = 'http://192.168.2.252:8080';
     ENV.APP.API_BASE = '';
     ENV.APP.API_NAMESPACE = ENV.APP.API_BASE + 'v1';
   }
