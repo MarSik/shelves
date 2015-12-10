@@ -16,9 +16,11 @@
         {{#if model.codes}}
         <h3>Barcodes</h3>
 
+        <ul>
         {{#each model.codes as |code|}}
         {{bar-code model=code}}
         {{/each}}
+        </ul>
         {{/if}}
     </section>
     <section class="attachments columns small-12 large-6">
