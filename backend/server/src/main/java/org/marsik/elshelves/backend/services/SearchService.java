@@ -73,6 +73,7 @@ public class SearchService {
             searchResult.getItems().add(record);
         }
 
+        searchResult.setEntityType(searchResult.getEmberType());
         return searchResult;
     }
 }
