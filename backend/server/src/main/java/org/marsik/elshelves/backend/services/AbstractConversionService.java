@@ -22,13 +22,19 @@ public class AbstractConversionService<S, D, U> {
         }
     }
 
-    public <F extends S, T extends D> CachingConverter<F, T, U> converter(F entity, Class<T> dest) {
+    public static <G> G deproxy(Object entity) {
         if (entity instanceof HibernateProxy) {
-            entity = (F) ((HibernateProxy) entity).getHibernateLazyInitializer()
+            entity = ((HibernateProxy) entity).getHibernateLazyInitializer()
                     .getImplementation();
         }
 
-        return (CachingConverter<F, T, U>) sourceConversionMap.get(entity.getClass());
+        return (G) entity;
+    }
+
+    public <F extends S, T extends D> CachingConverter<F, T, U> converter(F entity, Class<T> dest) {
+        entity = deproxy(entity);
+        final CachingConverter<F, T, U> ftuCachingConverter = (CachingConverter<F, T, U>) sourceConversionMap.get(entity.getClass());
+        return ftuCachingConverter;
     }
 
     public <F extends S> CachingConverter<F, ? extends D, U> converter(F entity, String typeName) {

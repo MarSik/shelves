@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
+import org.marsik.elshelves.backend.services.AbstractConversionService;
 
 import java.util.Map;
 import java.util.Set;
@@ -71,7 +72,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         model.setVersion(object.getVersion());
         model.setStub(false);
 
-        convert(path, object, model, cache, include);
+        convert(path, AbstractConversionService.deproxy(object), model, cache, include);
 
         // Check whether we need to return a full object or just
         // the eference

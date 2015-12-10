@@ -30,11 +30,7 @@ public class SearchController {
         Map<UUID, Object> cache = new THashMap<>();
         SearchResult result = searchService.query(query.getQuery(), currentUser, cache, query.getInclude());
         EmberModel.Builder<SearchResult> searchResultBuilder = new EmberModel.Builder<SearchResult>(result);
-
-        for (AbstractEntityApiModel item: result.getItems()) {
-            cache.remove(item.getId());
-        }
-
+        cache.remove(result);
         searchResultBuilder.sideLoad(cache.values());
 
         return searchResultBuilder.build();

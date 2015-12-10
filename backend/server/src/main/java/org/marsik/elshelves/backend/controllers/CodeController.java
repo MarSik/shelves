@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -42,11 +43,12 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
     @Transactional(readOnly = true)
     @RequestMapping(value = "/{type}/{code}", method = RequestMethod.GET)
     public EmberModel getByTypeAndCode(@CurrentUser User user,
-                              @PathVariable("code") String code,
-                              @PathVariable("type") String type) throws PermissionDenied, EntityNotFound {
+                                       @PathVariable("code") String code,
+                                       @PathVariable("type") String type,
+                                       @RequestParam(value = "include", required = false) String include) throws PermissionDenied, EntityNotFound {
         Code c = getService().getByTypeAndCode(type, code, user);
         Map<UUID, Object> cache = new THashMap<>();
-        CodeApiModel res = getDbToRest().convert(c, cache);
+        CodeApiModel res = getDbToRest().convert(null, null, c, cache, processInclude(include));
         EmberModel.Builder<CodeApiModel> builder = new EmberModel.Builder<>(res);
         cache.remove(res.getId());
         builder.sideLoad(cache.values());
