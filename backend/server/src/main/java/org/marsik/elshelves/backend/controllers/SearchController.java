@@ -1,5 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
+import gnu.trove.map.hash.THashMap;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.SearchResult;
 import org.marsik.elshelves.backend.entities.User;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.UUID;
 
 @RequestMapping("/v1/searches")
 @RestController
@@ -23,8 +27,16 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.POST)
     public EmberModel search(@CurrentUser User currentUser,
                              @RequestBody SearchResult query) {
-        SearchResult result = searchService.query(query.getQuery(), currentUser, query.getInclude());
+        Map<UUID, Object> cache = new THashMap<>();
+        SearchResult result = searchService.query(query.getQuery(), currentUser, cache, query.getInclude());
         EmberModel.Builder<SearchResult> searchResultBuilder = new EmberModel.Builder<SearchResult>(result);
+
+        for (AbstractEntityApiModel item: result.getItems()) {
+            cache.remove(item.getId());
+        }
+
+        searchResultBuilder.sideLoad(cache.values());
+
         return searchResultBuilder.build();
     }
 }

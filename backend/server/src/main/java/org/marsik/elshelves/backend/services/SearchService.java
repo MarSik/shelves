@@ -32,7 +32,7 @@ public class SearchService {
     @Autowired
     EntityToEmberConversionService conversionService;
 
-    public SearchResult query(String q, User currentUser, Set<String> include) {
+    public SearchResult query(String q, User currentUser, Map<UUID, Object> cache, Set<String> include) {
         SearchResult searchResult = new SearchResult();
         searchResult.setId(uuidGenerator.generate());
         searchResult.setQuery(q);
@@ -61,8 +61,6 @@ public class SearchService {
         if (result == null) {
             return searchResult;
         }
-
-        Map<UUID, Object> cache = new THashMap<>();
 
         for (NamedEntity n: result) {
             final CachingConverter<NamedEntity, AbstractNamedEntityApiModel, UUID> converter = conversionService.converter(n, AbstractNamedEntityApiModel.class);

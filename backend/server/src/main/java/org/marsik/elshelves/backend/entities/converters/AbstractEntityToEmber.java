@@ -41,11 +41,11 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
 
         path = getMergedPath(path, element);
 
-        // First check whether we need the full object
-        // we need it when it is:
-        // - top level object AND it is not in the cache
-        // - OR it was mentioned in the include list
-        // - OR it has no ID
+        // First check whether we need the full object at all
+        // we do not need it when it is:
+        // - nested level object
+        // - AND it was not mentioned in the include list
+        // - AND it has ID
         if (object.getId() != null
                 && element != null
                 && (include == null || !include.contains(path))) {
@@ -59,7 +59,8 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
             return model;
         }
 
-        // New conversion
+        // We have to do the conversion all the time, because the
+        // include path might be different
         T model = createNew();
         if (model == null) {
             return null;
@@ -70,10 +71,28 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         model.setVersion(object.getVersion());
         model.setStub(false);
 
-        // Save to the cache
-        cache.put(object.getId(), model);
+        convert(path, object, model, cache, include);
 
-        return convert(path, object, model, cache, include);
+        // Check whether we need to return a full object or just
+        // the eference
+        // The full object is needed when
+        // - there is no ID
+        // - it is a top level object
+        // The cache will be used to populate the included list of
+        // the response
+        if (model.getId() == null
+                || element == null) {
+            return model;
+        } else {
+            cache.put(object.getId(), model);
+            T reference = createNew();
+            if (reference == null) {
+                return null;
+            }
+            reference.setId(object.getId());
+            reference.setEntityType(reference.getEmberType());
+            return reference;
+        }
     }
 
     private String getMergedPath(String base, String element) {

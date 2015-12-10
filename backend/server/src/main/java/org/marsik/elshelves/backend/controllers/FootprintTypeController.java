@@ -30,7 +30,7 @@ public class FootprintTypeController {
             }
         }
 
-        EmberModel.Builder<FootprintType> builder = new EmberModel.Builder<FootprintType>(FootprintType.class, allItems);
+        EmberModel.Builder<FootprintType> builder = new EmberModel.Builder<FootprintType>(allItems);
         return builder.build();
     }
 

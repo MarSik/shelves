@@ -30,7 +30,7 @@ public class SiPrefixController {
             }
         }
 
-        EmberModel.Builder<SiPrefix> builder = new EmberModel.Builder<SiPrefix>(SiPrefix.class, allItems);
+        EmberModel.Builder<SiPrefix> builder = new EmberModel.Builder<SiPrefix>(allItems);
         return builder.build();
     }
 

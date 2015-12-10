@@ -45,7 +45,7 @@ public final class EmberModel extends HashMap<String, Object> {
 			implicitSideloader(entity);
         }
 
-		public Builder(final Class<T> clazz, final Iterable<T> entities) {
+		public Builder(final Iterable<T> entities) {
 			payload = entities;
 			payloadName = "data";
 
@@ -76,27 +76,7 @@ public final class EmberModel extends HashMap<String, Object> {
             return this;
         }
 
-		public <K> Builder<T> sideLoad(final Class<K> clazz, final Iterable<K> entities) {
-			return sideLoad(clazz, entities, false);
-		}
-
-		public <K> Builder<T> sideLoad(final Class<K> clazz, final Iterable<? extends K> entities, boolean polymorphic) {
-			if (entities != null) {
-				for (K item: entities) {
-					if (knownObjects.contains(item)) {
-						continue;
-					}
-
-
-					sideLoadedItems.add(item);
-					knownObjects.add(item);
-					implicitSideloader(item);
-				}
-			}
-			return this;
-		}
-
-        public <K> Builder<T> sideLoad(final String rootName, final Iterable<K> entities) {
+        public <K> Builder<T> sideLoad(final Iterable<K> entities) {
             if (entities != null) {
 				for (K item: entities) {
 					if (knownObjects.contains(item)) {
@@ -146,7 +126,7 @@ public final class EmberModel extends HashMap<String, Object> {
 				if (!sideload.asType().equals(None.class)
 						&& Iterable.class.isAssignableFrom(f.getPropertyType())) {
 					try {
-						sideLoad((Class<Object>)sideload.asType(), (Iterable<Object>)getter.invoke(entity), sideload.polymorphic());
+						sideLoad((Iterable<Object>)getter.invoke(entity));
 					} catch (IllegalAccessException|InvocationTargetException ex) {
 						ex.printStackTrace();
 					}

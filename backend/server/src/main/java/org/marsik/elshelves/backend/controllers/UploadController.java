@@ -92,7 +92,7 @@ public class UploadController {
 		}
 
 
-		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(DocumentApiModel.class, result);
+		EmberModel.Builder<DocumentApiModel> b = new EmberModel.Builder<DocumentApiModel>(result);
 		return b.build();
 	}
 

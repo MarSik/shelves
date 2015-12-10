@@ -82,11 +82,14 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
             allDtos.add(getDbToRest().convert(null, null, entity, cache, processInclude(include)));
         }
 
-        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dtoClazz, allDtos);
+        EmberModel.Builder<E> builder = new EmberModel.Builder<E>(allDtos);
 
         for (E entity: allDtos) {
             sideLoad(entity, builder);
+            cache.remove(entity.getId());
         }
+
+        builder.sideLoad(cache.values());
 
         // Empty list
         if (allItems.isEmpty()) {
@@ -120,10 +123,14 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
                                              @PathVariable("id") UUID uuid,
                                              @RequestParam(value = "include", required = false) String include) throws BaseRestException {
         T entity = service.get(uuid, currentUser);
-        E dto = getDbToRest().convert(null, null, entity, new THashMap<>(), processInclude(include));
+        Map<UUID, Object> cache = new THashMap<>();
+        E dto = getDbToRest().convert(null, null, entity, cache, processInclude(include));
 
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(dto);
         sideLoad(dto, builder);
+
+        cache.remove(dto.getId());
+        builder.sideLoad(cache.values());
 
         return ResponseEntity
                 .ok()

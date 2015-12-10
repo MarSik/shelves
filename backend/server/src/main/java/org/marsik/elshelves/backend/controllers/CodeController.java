@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/codes")
 public class CodeController extends AbstractRestController<Code, CodeApiModel, CodeService> {
@@ -42,8 +45,11 @@ public class CodeController extends AbstractRestController<Code, CodeApiModel, C
                               @PathVariable("code") String code,
                               @PathVariable("type") String type) throws PermissionDenied, EntityNotFound {
         Code c = getService().getByTypeAndCode(type, code, user);
-        CodeApiModel res = getDbToRest().convert(c, new THashMap<>());
+        Map<UUID, Object> cache = new THashMap<>();
+        CodeApiModel res = getDbToRest().convert(c, cache);
         EmberModel.Builder<CodeApiModel> builder = new EmberModel.Builder<>(res);
+        cache.remove(res.getId());
+        builder.sideLoad(cache.values());
         return builder.build();
     }
 }

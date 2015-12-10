@@ -92,7 +92,7 @@ public class LotController {
             lots.add(lotToEmber.convert(l, cache));
         }
 
-        EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(LotApiModel.class, lots);
+        EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(lots);
         return modelBuilder.build();
     }
 
