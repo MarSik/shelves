@@ -14,6 +14,7 @@ import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.ember.EmberModel;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
 
 public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends BaseIdentifiedEntityRepository<T>, T>> {
@@ -113,6 +115,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
         return ResponseEntity
                 .ok()
                 .lastModified(lastModified.getLastModified().getMillis())
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
                 .body(builder.build());
     }
 
@@ -136,6 +139,7 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
                 .ok()
                 .eTag(dto.getVersion().toString())
                 .lastModified(entity.getLastModified().getMillis())
+                .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS))
                 .body(builder.build());
     }
 

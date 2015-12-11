@@ -6,7 +6,7 @@
 
 <div class="row">
 <ul class="button-group round">
-  <li><button class="small">Add barcode</button></li>
+  <li><button class="small" {{action 'addBarcode' model}}>Add barcode</button></li>
   <li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
   {{#if model.canBeDeleted}}
   <li>{{#confirm-button action='deleteEntity' param=model class='small alert button'}}Delete{{/confirm-button}}</li>

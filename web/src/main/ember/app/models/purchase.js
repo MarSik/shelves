@@ -23,9 +23,11 @@ export default LotBase.extend({
   transaction: belongsTo("transaction", {async: true}),
   lots: hasMany("lot", {inverse: null, async: true, polymorphic: true}),
 
-  missing: Ember.computed('delivered', 'count', function () {
+  /*missing: Ember.computed('delivered', 'count', function () {
       return this.get('count') - this.get('delivered')
-  }),
+  }),*/
+
+  missing: attr("number"),
 
   priceWithVat: function () {
       if (!this.get('singlePrice')) {

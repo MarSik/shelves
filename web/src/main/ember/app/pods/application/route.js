@@ -20,6 +20,20 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         addSticker: function (obj) {
             this.controllerFor('application').get('stickers').pushObject(obj);
         },
+        addBarcode(model) {
+            this.controllerFor('application').set('barcodedItem', model);
+        },
+        createBarcode(model, type, code) {
+            var c = this.store.createRecord('code', {
+              code: code,
+              type: type,
+              reference: model
+            });
+
+            c.save().catch(function (e) {
+              c.destroyRecord();
+            });
+        },
         download: function (entity, url) {
             var newDoc = this.store.createRecord('document', {
                 url: url

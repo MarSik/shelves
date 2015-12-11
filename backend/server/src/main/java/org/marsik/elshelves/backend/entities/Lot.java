@@ -309,6 +309,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		h.setPrevious(getHistory());
 		h.setPerformedBy(performedBy);
 		h.setAction(LotAction.EVENT);
+		h.setValidSince(new DateTime());
 		return h;
 	}
 

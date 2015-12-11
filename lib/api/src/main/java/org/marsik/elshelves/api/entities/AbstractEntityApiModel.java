@@ -22,7 +22,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "_type")
+        property = "_type",
+        defaultImpl = AbstractEntityApiModel.class,
+        visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(AbstractOwnedEntityApiModel.class),
         @JsonSubTypes.Type(AuthorizationApiModel.class),
@@ -34,7 +36,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(UserApiModel.class)
 })
 @JsonTypeName("abstract")
-public abstract class AbstractEntityApiModel implements EmberEntity, StubSupport {
+public class AbstractEntityApiModel implements EmberEntity, StubSupport {
     public AbstractEntityApiModel(UUID uuid) {
         this.id = uuid;
     }

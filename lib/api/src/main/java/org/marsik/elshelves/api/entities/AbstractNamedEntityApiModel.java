@@ -18,7 +18,9 @@ import java.util.UUID;
 @Setter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
 		include = JsonTypeInfo.As.EXISTING_PROPERTY,
-		property = "_type")
+		property = "_type",
+		defaultImpl = AbstractNamedEntityApiModel.class,
+		visible = true)
 @JsonSubTypes({
 		@JsonSubTypes.Type(BoxApiModel.class),
 		@JsonSubTypes.Type(DocumentApiModel.class),

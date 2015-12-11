@@ -5,3 +5,24 @@
 </div>
 
 {{growl-manager notifications=growl.notifications}}
+
+{{#modal-dialog condition=barcodedItem title="Add barcode"}}
+
+<dl>
+  <dt>Item</dt>
+  <dd>{{barcodedItem.fullName}}</dd>
+</dl>
+
+<dl>
+  <dt>Type</dt>
+  <dd>{{input value=barcodedType}}</dd>
+</dl>
+
+<dl>
+  <dt>Value</dt>
+  <dd>{{input value=barcodedValue}}</dd>
+</dl>
+
+<button {{action 'createBarcode' barcodedItem barcodedType barcodedValue}}>Create code</button>
+
+{{/modal-dialog}}
