@@ -27,12 +27,14 @@
 
 <ul class="button-group round">
 {{#if model.finished}}
-<li><button {{action 'reopen' model}}>Reopen</button></li>
+<li><button class="small" {{action 'reopen' model}}>Reopen</button></li>
 {{else}}
-<li><button {{action 'finish' model}}>Finish</button></li>
-<li><button {{action 'toggleAddRequirement'}} class="{{addRequirementClass}}">Add requirement</button></li>
-{{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="{{importRequirementsClass}}">Import requirements</button></li>{{/if}}
+<li><button class="small" {{action 'finish' model}}>Finish</button></li>
+<li><button {{action 'toggleAddRequirement'}} class="small {{addRequirementClass}}">Add requirement</button></li>
+{{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="small {{importRequirementsClass}}">Import requirements</button></li>{{/if}}
 {{/if}}
+<li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
+{{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button small'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </ul>
 
 <h3>Required parts</h3>
@@ -103,11 +105,6 @@ placeholder="Select a type" }}
 {{/if}}
 
 {{outlet}}
-
-<nav class="actions">
-    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
-    <button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
-</nav>
 
 {{#modal-dialog condition=showAlternativeDialog title="Add alternative"}}
     <form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>

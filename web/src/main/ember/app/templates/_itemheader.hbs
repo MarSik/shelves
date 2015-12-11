@@ -5,6 +5,16 @@
 </div>
 
 <div class="row">
+<ul class="button-group round">
+  <li><button class="small">Add barcode</button></li>
+  <li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
+  {{#if model.canBeDeleted}}
+  <li>{{#confirm-button action='deleteEntity' param=model class='small alert button'}}Delete{{/confirm-button}}</li>
+  {{/if}}
+</ul>
+</div>
+
+<div class="row">
     <section class="description columns small-12 large-6">
         <h3>Summary</h3>
         <p>{{#click-to-editarea content=model field='content.summary' placeholder='place for short summary'}}{{model.summary}}{{/click-to-editarea}}</p>

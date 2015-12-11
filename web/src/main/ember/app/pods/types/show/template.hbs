@@ -238,11 +238,6 @@
 </section>
 </div>
 
-<nav class="actions">
-    <button class='qr-button' {{action 'addSticker' model}}>{{fa-icon 'qrcode'}} Add to sticker list</button>
-    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
-</nav>
-
 {{#modal-dialog condition=moveLot title="Split or move a lot"}}
 
     <ul class="large-block-grid-3 small-block-grid-1">
