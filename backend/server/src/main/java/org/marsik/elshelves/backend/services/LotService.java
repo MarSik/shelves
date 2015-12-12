@@ -10,18 +10,18 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.Purchase;
-import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
-import org.marsik.elshelves.backend.repositories.RequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.UUID;
 
 @Service
@@ -116,12 +116,6 @@ public class LotService {
                 .currentUser(currentUser)
                 .relink(update);
 
-        // Prepare history object
-        if (lot.isRevisionNeeded(update)) {
-            LotHistory history = lot.createRevision(uuidGenerator, currentUser);
-            lot.setPreviousRevision(history);
-        }
-
         T taken = null;
 
         if (count > update.getCount()) {
@@ -130,20 +124,31 @@ public class LotService {
             taken.setVersion(null);
             taken.setId(uuidGenerator.generate());
             taken.setCount(update.getCount());
+
             taken.relink(context);
+            save(taken);
 
-            update.setCount(count - update.getCount());
-        }
+            // Prepare history object
+            if (taken.isRevisionNeeded(update)) {
+                LotHistory history = taken.createRevision(uuidGenerator, currentUser);
+                taken.setPreviousRevision(history);
+            }
 
-        lot.updateFrom(update);
+            saveHistory(taken);
+            taken.updateFrom(update);
 
-        save(taken);
+            save(taken);
 
-        // Save history
-        LotHistory curr = lot.getHistory();
-        while (curr != null && curr.isNew()) {
-            saveOrUpdate(curr);
-            curr = curr.getPrevious();
+            lot.setCount(count - update.getCount());
+        } else {
+            // Prepare history object
+            if (lot.isRevisionNeeded(update)) {
+                LotHistory history = lot.createRevision(uuidGenerator, currentUser);
+                lot.setPreviousRevision(history);
+            }
+
+            saveHistory(lot);
+            lot.updateFrom(update);
         }
 
         save(lot);
@@ -160,12 +165,27 @@ public class LotService {
         }
 	}
 
+    private <T extends Lot> void saveHistory(T lot) {
+        Deque<LotHistory> unsaved = new ArrayDeque<>();
+        LotHistory curr = lot.getHistory();
+
+        while (curr != null && curr.isNew()) {
+            unsaved.add(curr);
+            curr = curr.getPrevious();
+        }
+
+        // Save in order from the oldest to the newest
+        for (LotHistory h: unsaved) {
+            saveOrUpdate(h);
+        }
+    }
+
     protected Lot save(Lot entity) {
         if (entity == null) {
             return null;
         }
 
-        saveOrUpdate(entity.getHistory());
+        saveHistory(entity);
         return lotRepository.save(entity);
     }
 
