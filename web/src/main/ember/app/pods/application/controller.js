@@ -17,5 +17,9 @@ export default Ember.Controller.extend({
     {id: "DATA_MATRIX", name: "Data Matrix"},
     {id: "AZTEC", name: "Aztec"},
     {id: "PDF_417", name: "PDF 417"}
-  ]
+  ],
+
+  showCodeForModelPlural: Ember.computed("showCodeFor", function () {
+    return Ember.Inflector.inflector.pluralize(this.get('showCodeFor.constructor.modelName'));
+  })
 });

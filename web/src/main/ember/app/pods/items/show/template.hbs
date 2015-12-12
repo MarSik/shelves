@@ -34,6 +34,7 @@
 {{#if importableDocumentPresent}}<li><button {{action 'toggleImportRequirements'}} class="small {{importRequirementsClass}}">Import requirements</button></li>{{/if}}
 {{/if}}
 <li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
+<li><button class="small" {{action 'showBarcode' model}}>Show barcode</button></li>
 {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button small'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </ul>
 

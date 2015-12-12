@@ -26,8 +26,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/boxes")
 public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxService> {
-    BoxService boxService;
-
     @Autowired
     public BoxController(BoxService boxService,
                          BoxToEmber boxToEmber,
@@ -35,28 +33,5 @@ public class BoxController extends AbstractRestController<Box, BoxApiModel, BoxS
         super(BoxApiModel.class,
                 boxService,
                 boxToEmber, emberToBox);
-        this.boxService = boxService;
-    }
-
-    @Transactional
-    @RequestMapping(value = "/{uuid}/qr", produces = "image/png")
-    public void generateQr(HttpServletResponse response,
-                           @CurrentUser User currentUser,
-                           @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
-        Box box = boxService.get(uuid, currentUser);
-
-        response.setContentType("image/jpg");
-        response.setHeader("Content-Disposition", "attachment; filename=" + box.getName() + ".png");
-
-        ByteArrayOutputStream os = QRCode
-                .from("shv://boxes/"+uuid.toString())
-                .withSize(250, 250)
-                .withErrorCorrection(ErrorCorrectionLevel.M)
-                .to(ImageType.PNG)
-                .withCharset("utf-8")
-                .stream();
-
-        response.getOutputStream().write(os.toByteArray());
-        response.flushBuffer();
     }
 }

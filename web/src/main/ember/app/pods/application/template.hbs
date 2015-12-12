@@ -6,6 +6,18 @@
 
 {{growl-manager notifications=growl.notifications}}
 
+{{#modal-dialog condition=showCodeFor title=""}}
+<div class="row">
+  <div class="columns small-4">
+    {{entity-qr entity=showCodeFor models=showCodeForModelPlural}}
+  </div>
+  <div class="columns small-8">
+    <h2>{{showCodeFor.fullName}}</h2>
+    {{showCodeFor.summary}}
+  </div>
+</div>
+{{/modal-dialog}}
+
 {{#modal-dialog condition=barcodedItem title="Add barcode"}}
 
 <div class="row">

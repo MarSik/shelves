@@ -34,6 +34,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
               c.destroyRecord();
             });
         },
+        showBarcode(model) {
+            this.controllerFor('application').set('showCodeFor', model);
+        },
         download: function (entity, url) {
             var newDoc = this.store.createRecord('document', {
                 url: url

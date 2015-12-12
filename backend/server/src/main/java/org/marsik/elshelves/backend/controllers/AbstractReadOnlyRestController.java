@@ -1,12 +1,18 @@
 package org.marsik.elshelves.backend.controllers;
 
 import com.google.common.collect.Sets;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import net.glxn.qrgen.core.image.ImageType;
+import net.glxn.qrgen.javase.QRCode;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
+import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -14,6 +20,7 @@ import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.ember.EmberModel;
+import org.marsik.elshelves.ember.EmberModelHelper;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -141,6 +149,29 @@ public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extend
                 .lastModified(entity.getLastModified().getMillis())
                 .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS))
                 .body(builder.build());
+    }
+
+    @Transactional
+    @RequestMapping(value = "/{uuid}/qr", produces = "image/png")
+    public void generateQr(HttpServletResponse response,
+                           @CurrentUser User currentUser,
+                           @PathVariable("uuid") UUID uuid,
+                           @RequestParam(value = "size", required = false, defaultValue = "250") Integer size) throws IOException, PermissionDenied, EntityNotFound {
+        T item = getService().get(uuid, currentUser);
+
+        response.setContentType("image/jpg");
+        response.setHeader("Content-Disposition", "attachment; filename=" + uuid.toString() + ".png");
+
+        ByteArrayOutputStream os = QRCode
+                .from("shv://" + EmberModelHelper.getPluralName(dtoClazz) + "/" + item.getId().toString())
+                .withSize(size, size)
+                .withErrorCorrection(ErrorCorrectionLevel.M)
+                .to(ImageType.PNG)
+                .withCharset("utf-8")
+                .stream();
+
+        response.getOutputStream().write(os.toByteArray());
+        response.flushBuffer();
     }
 
     protected S getService() {
