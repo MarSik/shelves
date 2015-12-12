@@ -8,20 +8,30 @@
 
 {{#modal-dialog condition=barcodedItem title="Add barcode"}}
 
-<dl>
+<div class="row">
+<dl class="columns">
   <dt>Item</dt>
   <dd>{{barcodedItem.fullName}}</dd>
 </dl>
+</div>
 
-<dl>
+<div class="row">
+<dl class="columns large-6">
   <dt>Type</dt>
-  <dd>{{input value=barcodedType}}</dd>
+  <dd>{{ember-selectize
+    content=codeTypes
+    optionValuePath="content.id"
+    optionLabelPath="content.name"
+    selection=barcodedType
+    maxItems=1
+    placeholder="Select QR code type" }}</dd>
 </dl>
 
-<dl>
+<dl class="columns large-6">
   <dt>Value</dt>
   <dd>{{input value=barcodedValue}}</dd>
 </dl>
+</div>
 
 <button {{action 'createBarcode' barcodedItem barcodedType barcodedValue}}>Create code</button>
 

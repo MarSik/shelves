@@ -26,7 +26,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         createBarcode(model, type, code) {
             var c = this.store.createRecord('code', {
               code: code,
-              type: type,
+              type: type.id,
               reference: model
             });
 
