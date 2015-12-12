@@ -122,20 +122,22 @@ public class LotService {
             lot.setPreviousRevision(history);
         }
 
-        T rest = null;
+        T taken = null;
 
         if (count > update.getCount()) {
-            rest = (T)lot.shallowClone();
-            rest.setDbId(null);
-            rest.setVersion(null);
-            rest.setId(uuidGenerator.generate());
-            rest.setCount(count - update.getCount());
-            rest.relink(context);
+            taken = (T)lot.shallowClone();
+            taken.setDbId(null);
+            taken.setVersion(null);
+            taken.setId(uuidGenerator.generate());
+            taken.setCount(update.getCount());
+            taken.relink(context);
+
+            update.setCount(count - update.getCount());
         }
 
         lot.updateFrom(update);
 
-        save(rest);
+        save(taken);
 
         // Save history
         LotHistory curr = lot.getHistory();
@@ -146,12 +148,16 @@ public class LotService {
 
         save(lot);
 
-        /* TODO? Switch uuids and rest with lot so the old id belongs to the rest and the assigned / moved
-           lot has a new uuid. This should help with concurrent access (the second request might still have chance
+        /* The old id belongs to the rest and the assigned / moved lot has a new uuid.
+           This should help with concurrent access (the second request might still have chance
            to get the necessary count without reloading its cache.
          */
 
-		return new LotSplitResult<T>(lot, rest);
+        if (taken == null) {
+            return new LotSplitResult<T>(lot, null);
+        } else {
+            return new LotSplitResult<T>(taken, lot);
+        }
 	}
 
     protected Lot save(Lot entity) {

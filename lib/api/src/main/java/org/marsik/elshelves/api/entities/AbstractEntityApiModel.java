@@ -36,7 +36,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(UserApiModel.class)
 })
 @JsonTypeName("abstract")
-public class AbstractEntityApiModel implements EmberEntity, StubSupport {
+public class AbstractEntityApiModel implements EmberEntity, StubSupport, Cloneable {
     public AbstractEntityApiModel(UUID uuid) {
         this.id = uuid;
     }
@@ -93,5 +93,10 @@ public class AbstractEntityApiModel implements EmberEntity, StubSupport {
         }
 
         return type;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

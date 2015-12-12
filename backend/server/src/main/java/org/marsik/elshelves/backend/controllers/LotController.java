@@ -136,11 +136,25 @@ public class LotController {
 
         Map<UUID, Object> cache = new THashMap<>();
 
-        EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(
-                lotToEmber.convert(result.getRequested(), cache));
-        if (result.getRemainder() != null) {
+        EmberModel.Builder<LotApiModel> modelBuilder;
+
+        // The expected result of split action is the original (based on ID)
+        // lot with lower count, the taken lot is sideloaded
+
+        if (result.getRemainder() != null
+                && !result.getRemainder().getId().equals(id)) {
+            modelBuilder = new EmberModel.Builder<>(
+                    lotToEmber.convert(result.getRemainder(), cache));
+            modelBuilder.sideLoad(
+                    lotToEmber.convert(result.getRequested(), cache));
+        } else if (result.getRemainder() != null) {
+            modelBuilder = new EmberModel.Builder<>(
+                    lotToEmber.convert(result.getRequested(), cache));
             modelBuilder.sideLoad(
                     lotToEmber.convert(result.getRemainder(), cache));
+        } else {
+            modelBuilder = new EmberModel.Builder<>(
+                    lotToEmber.convert(result.getRequested(), cache));
         }
 
         return modelBuilder.build();
@@ -156,8 +170,23 @@ public class LotController {
 
         Lot lot = emberToLot.convert(lot0, new THashMap<>());
 
-        Lot result = lotService.delivery(lot, lot.getExpiration(), currentUser);
-        modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
+        if (lot0.getPurchase() != null && lot0.getPrevious() == null) {
+            Lot result = lotService.delivery(lot, lot.getExpiration(), currentUser);
+            modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
+        } else if (lot0.getPrevious() != null) {
+            // The expected result of split action is the new lot with expected count.
+            // The remainder is sideloaded.
+
+            LotSplitResult result = lotService.update(lotRepository.findById(lot0.getPrevious().getId()), lot, currentUser);
+            Map<UUID, Object> cache = new THashMap<>();
+
+            modelBuilder = new EmberModel.Builder<>(lotToEmber.convert(result.getRequested(), cache));
+            if (result.getRemainder() != null) {
+                modelBuilder.sideLoad(lotToEmber.convert(result.getRemainder(), cache));
+            }
+        } else {
+            throw new InvalidRequest();
+        }
 
         return modelBuilder.build();
     }

@@ -83,7 +83,6 @@ public class LotApiModel extends AbstractEntityApiModel {
 	 * Previous version of this Lot (history)
 	 * Only used for importing older data and requesting a partial Lot
 	 */
-	@Setter(value = AccessLevel.PRIVATE)
 	LotApiModel previous;
 
 	/**
