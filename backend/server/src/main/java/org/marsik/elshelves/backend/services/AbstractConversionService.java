@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import gnu.trove.map.hash.THashMap;
 import org.hibernate.proxy.HibernateProxy;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
@@ -17,8 +18,8 @@ public class AbstractConversionService<S, D, U> {
     public <F extends S, T extends D> void register(Class<F> source, Class<T> target, CachingConverter<F, T, U> converter) {
         sourceConversionMap.put(source, converter);
 
-        if (source.getAnnotation(EmberModelName.class) != null) {
-            typeNameConversionMap.put(source.getAnnotation(EmberModelName.class).value(), converter);
+        if (source.getAnnotation(JsonTypeName.class) != null) {
+            typeNameConversionMap.put(source.getAnnotation(JsonTypeName.class).value(), converter);
         }
     }
 
