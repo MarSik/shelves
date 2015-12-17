@@ -24,15 +24,18 @@
 
         <p>{{#click-to-editarea content=model field='content.description' placeholder='place for the full description'}}{{model.description}}{{/click-to-editarea}}</p>
 
-        {{#if model.codes}}
-        <h3>Barcodes</h3>
+      <h3>Barcodes</h3>
 
-        <ul>
+      {{#if model.codes}}
+      <ul>
         {{#each model.codes as |code|}}
         {{bar-code model=code}}
         {{/each}}
-        </ul>
-        {{/if}}
+        <li><a {{action 'addBarcode' model}}>Add barcode</a></li>
+      </ul>
+      {{else}}
+      <p class="placeholder">No barcode. <a {{action 'addBarcode' model}}>Associate one.</a></p>
+      {{/if}}
     </section>
     <section class="attachments columns small-12 large-6">
 

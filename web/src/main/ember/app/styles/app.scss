@@ -379,3 +379,9 @@ table.transaction-summary {
     text-transform: uppercase;
   }
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

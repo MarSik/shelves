@@ -30,8 +30,12 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
               reference: model
             });
 
+            var self = this;
+
             c.save().catch(function (e) {
               c.destroyRecord();
+            }).then(function () {
+              self.controllerFor('application').set('barcodedItem', undefined);
             });
         },
         showBarcode(model) {
@@ -74,6 +78,10 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 lot.rollback();
             });
         }
+    },
+    willTransition(transition) {
+      this.controllerFor('application').set('barcodedItem', undefined);
+      this.controllerFor('application').set('showCodeFor', undefined);
     },
     setupController: function(controller, model) {
         controller.set('model', model);

@@ -47,6 +47,7 @@
     </dl>
 </div>
 
+<div class="row">
 <section class="columns large-6 purchase">
    <h3>Summary</h3>
     <table class="transaction-summary">
@@ -65,6 +66,21 @@
     </table>
   </section>
 
+  <section class="columns large-6 purchase">
+    <h3>Barcodes</h3>
+
+    {{#if model.codes}}
+    <ul>
+      {{#each model.codes as |code|}}
+      {{bar-code model=code}}
+      {{/each}}
+      <li><a {{action 'addBarcode' model}}>Add barcode</a></li>
+    </ul>
+    {{else}}
+    <p class="placeholder">No barcode. <a {{action 'addBarcode' model}}>Associate one.</a></p>
+    {{/if}}
+  </section>
+</div>
   <section class="columns purchase">
     <h3>Items</h3>
     <table class="transaction-summary">
@@ -85,7 +101,7 @@
         {{#each sortedItems as |purchase|}}
         <tbody class="delivery">
         <tr>
-            <td>
+            <td class="truncate">
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
             <td class="sku">{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}} -
