@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.marsik.elshelves.api.entities.DocumentApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.User;
@@ -70,8 +71,12 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<EmberModel> upload(@CurrentUser User currentUser,
-											 @RequestParam("file") MultipartFile file,
+											 @RequestParam(value = "file", required = false) MultipartFile file,
 											 @RequestParam("entity") @Valid DocumentApiModel entity) throws IOException, BaseRestException {
+
+		if (file == null && entity.getUrl() == null) {
+			throw new InvalidRequest();
+		}
 
 		Document incoming = getRestToDb().convert(entity, new THashMap<>());
 		incoming = service.create(incoming, currentUser);
@@ -84,7 +89,9 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
 		sideLoad(entity, builder);
 
-		getService().processUpload(incoming, file);
+		if (file != null) {
+			getService().processUpload(incoming, file);
+		}
 
 		return ResponseEntity
 				.ok()
