@@ -28,5 +28,7 @@ export default IdentifiedBase.extend({
 
     icon: function () {
         return "circle-thin";
-    }.property()
+    }.property(),
+
+    fullName: Ember.computed.alias('name')
 });
