@@ -46,7 +46,6 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
 		super(uuid);
 	}
 
-	@NotNull
 	String name;
 	String summary;
 	String description;
