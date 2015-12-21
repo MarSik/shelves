@@ -89,31 +89,31 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     preloadData: function (self, controller) {
         if (self.get('session.isAuthenticated')) {
-            controller.set('availableFootprints', self.store.filter("footprint", {}, function (i) {
+            controller.set('availableFootprints', self.store.filter("footprint", function (i) {
                 return !i.get('isNew');
             }));
             controller.set('availableFootprintTypes', self.store.filter("footprinttype", {}, function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableGroups', self.store.filter('group', {}, function (i) {
+            controller.set('availableGroups', self.store.filter('group', function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableTypes', self.store.filter('type', {}, function (i) {
+            controller.set('availableTypes', self.store.filter('type', function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableLocations', self.store.filter('box', {}, function (i) {
+            controller.set('availableLocations', self.store.filter('box', function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableSources', self.store.filter('source', {}, function (i) {
+            controller.set('availableSources', self.store.filter('source', function (i) {
                 return !i.get('isNew');
             }));
             controller.set('availableSiPrefixes', self.store.filter('siprefix', {}, function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableUnits', self.store.filter('unit', {}, function (i) {
+            controller.set('availableUnits', self.store.filter('unit', function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('availableProperties', self.store.filter('property', {}, function (i) {
+            controller.set('availableProperties', self.store.filter('property', function (i) {
                 return !i.get('isNew');
             }));
             controller.set('stickers', []);

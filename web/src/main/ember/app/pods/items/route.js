@@ -61,6 +61,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Projects');
     },
     model: function () {
-        return this.store.peekAll('item');
+        return Ember.A();
     }
 });

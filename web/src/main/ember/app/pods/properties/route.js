@@ -4,9 +4,7 @@ import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixi
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model: function () {
-        return this.store.filter('property', function (fp) {
-            return !fp.get('isNew');
-        });
+        return Ember.A();
     },
     activate: function() {
         $(document).attr('title', 'shelves - Properties');

@@ -23,7 +23,7 @@
             <td>{{#link-to 'transactions.show' trans}}{{trans.source.name}}{{/link-to}}</td>
             <td>{{trans.date}}</td>
             <td>{{trans.name}}</td>
-            <td>{{trans.missing}}</td>
+            <td>{{is-loading cond=trans.items value=trans.missing}}</td>
             <td>{{trans.totalCount}}</td>
             </tr>
       </tbody>

@@ -18,5 +18,10 @@ export default Ember.Route.extend({
         var fp = this.store.createRecord('type', {
         });
         return fp;
+    },
+
+    afterModel() {
+      this.store.findAll('footprint');
+      this.store.findAll('group');
     }
 });

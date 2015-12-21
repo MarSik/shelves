@@ -40,5 +40,9 @@ export default Ember.Route.extend({
           lot.revert();
         });
       }
+    },
+
+    afterModel() {
+      this.store.findAll('type');
     }
 });

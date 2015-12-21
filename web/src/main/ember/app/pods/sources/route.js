@@ -20,6 +20,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         $(document).attr('title', 'shelves - Sources');
     },
     model: function () {
-        return this.store.peekAll('source');
+        return Ember.A();
     }
 });

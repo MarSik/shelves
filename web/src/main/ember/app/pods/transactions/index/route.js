@@ -36,5 +36,9 @@ export default Ember.Route.extend({
         return this.store.createRecord('transaction', {
             date: new Date()
         });
+    },
+    afterModel() {
+      this.store.findAll('type');
+      this.store.findAll('source');
     }
 });
