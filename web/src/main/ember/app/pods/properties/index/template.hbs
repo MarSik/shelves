@@ -4,7 +4,7 @@
   <button {{action 'showCreateProperty'}}>{{fa-icon 'plus'}} Create property</button>
 
   <ul class="small-block-grid-2 large-block-grid-4">
-        {{#each this as |property|}}
+        {{#each model as |property|}}
         <li>
             {{#link-to 'properties.show' property}}{{property.name}}{{/link-to}}<br/>
             <aside>{{property.symbol}} [ {{#link-to 'units.show' property.unit}}{{property.unit.symbol}}{{/link-to}} ]</aside>

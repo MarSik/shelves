@@ -44,7 +44,7 @@ public class NamedObjectToEmber {
         model.setCanBeDeleted(object.canBeDeleted());
 		model.setCreated(object.getCreated());
 
-        if (object.getCodes() != null) {
+        if (object.getCodes() != null && !object.getCodes().isEmpty()) {
             model.setCodes(new THashSet<CodeApiModel>());
             for (Code c: object.getCodes()) {
                 model.getCodes().add(codeToEmber.convert(path, "code", c, cache, include));
@@ -53,7 +53,7 @@ public class NamedObjectToEmber {
 
 		model.setBelongsTo(userToEmber.convert(path, "owner", object.getOwner(), cache, include));
 
-		if (object.getDescribedBy() != null) {
+		if (object.getDescribedBy() != null && !object.getDescribedBy().isEmpty()) {
 			model.setDescribedBy(new THashSet<DocumentApiModel>());
 
 			for (Document d: object.getDescribedBy()) {
@@ -61,7 +61,7 @@ public class NamedObjectToEmber {
 			}
 		}
 
-        if (object.getProperties() != null) {
+        if (object.getProperties() != null && !object.getProperties().isEmpty()) {
             model.setValues(new THashMap<UUID, Long>());
             model.setProperties(new THashSet<NumericPropertyApiModel>());
 

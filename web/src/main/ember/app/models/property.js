@@ -7,8 +7,8 @@ var attr = DS.attr,
 
 export default NamedBase.extend({
     symbol: attr('string'),
-    base: belongsTo('siprefix', {async: true}),
-    unit: belongsTo("unit", {async: true}),
+    base: belongsTo('siprefix', {async: true, inverse: null}),
+    unit: belongsTo("unit", {async: true, inverse: null}),
 
     niceName: Ember.computed('name', 'symbol', 'unit', 'unit.symbol', {
         set(key, value) {
