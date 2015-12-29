@@ -1,7 +1,7 @@
 <h2>Stickers</h2>
 
 <ul>
-    {{#each this as |obj|}}
+    {{#each model as |obj|}}
         <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove button">{{fa-icon 'times'}}</button></li>
     {{/each}}
 </ul>

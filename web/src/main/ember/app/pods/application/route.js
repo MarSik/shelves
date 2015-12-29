@@ -85,6 +85,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     setupController: function(controller, model) {
         controller.set('model', model);
+        controller.set('stickers', Ember.A());
         this.get('preloadData')(this, controller);
     },
     preloadData: function (self, controller) {
