@@ -62,9 +62,9 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         relinkContext
                 .currentUser(currentUser)
                 .addToCache(entity)
-                .fixOwner(entity, currentUser);
+                .fixOwner(entity, currentUser)
+                .fixUuid(entity);
 
-        entity.setId(uuidGenerator.generate());
         entity.setLastModified(new DateTime());
         entity.relink(relinkContext);
 

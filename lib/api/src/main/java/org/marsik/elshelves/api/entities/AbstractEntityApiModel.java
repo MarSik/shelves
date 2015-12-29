@@ -99,4 +99,8 @@ public class AbstractEntityApiModel implements EmberEntity, StubSupport, Cloneab
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+    public boolean isValid() {
+        return id != null && version != null;
+    }
 }

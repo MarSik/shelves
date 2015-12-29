@@ -153,7 +153,7 @@ public class RelinkService {
          * @return The value entity prepared for import
          */
         @SuppressWarnings("unchecked")
-        public <T extends IdentifiedEntity> T fixUuid(T value)  {
+        public <T extends IdentifiedEntityInterface> T fixUuid(T value)  {
             if (value.getId() == null) {
                 value.setId(uuidGenerator.generate());
                 log.warn("Entity {} without UUID -> {}", value.getClass().getName(), value.getId().toString());
