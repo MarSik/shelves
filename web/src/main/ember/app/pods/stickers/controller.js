@@ -32,14 +32,18 @@ export default Ember.ArrayController.extend({
     }.property('paper'),
 
     paperDetailStyle: function () {
-        if (this.get('knownPaper')) {
-            return "display: none;";
+        if (this.get('paperNotSelected')) {
+          return "unselected-paper";
+        } else if (this.get('knownPaper')) {
+            return "known-paper";
         } else {
             return "";
         }
-    }.property('knownPaper'),
+    }.property('knownPaper', 'paperNotSelected'),
 
     cannotPrint: function () {
         return this.get('paperNotSelected') || Ember.isEmpty(this.get('model'));
-    }.property('paperNotSelected', 'model.@each')
+    }.property('paperNotSelected', 'model.@each'),
+
+    paperSlotSkip: 0
 });

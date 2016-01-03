@@ -25,6 +25,13 @@ public class StickerSettings {
     PageSize page = PageSize.A4;
 
     /**
+     * Skip first "skip" positions on paper
+     */
+    @Min(0)
+    @Max(128)
+    Integer skip = 0;
+
+    /**
      * Font size for the first row
      */
     @NotNull

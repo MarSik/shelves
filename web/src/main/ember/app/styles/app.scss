@@ -385,3 +385,13 @@ table.transaction-summary {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.known-paper, .unselected-paper {
+  li {
+    display: none;
+  }
+}
+
+.known-paper  li.always-on {
+  display: block;
+}

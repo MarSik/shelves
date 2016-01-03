@@ -145,7 +145,7 @@ public class StickerService {
                 pageMapping.pageFormat.getHeight() : pageMapping.pageFormat.getWidth();
 
         int pageCount = 0;
-        int stickerCount = 0;
+        int stickerCount = settings.getSkip() % (pageCount * settings.getStickerHorizontalCount() * settings.getStickerVerticalCount());
 
         // Load unicode fonts
         PDFont titleFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans-Bold.ttf"));
