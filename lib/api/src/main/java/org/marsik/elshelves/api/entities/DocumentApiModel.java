@@ -23,7 +23,7 @@ import java.util.UUID;
 		property = "_type",
 		visible = true,
 		defaultImpl = DocumentApiModel.class)
-public class DocumentApiModel extends AbstractEntityApiModel {
+public class DocumentApiModel extends AbstractNamedEntityApiModel {
 	public DocumentApiModel(UUID id) {
 		super(id);
 	}
@@ -35,7 +35,6 @@ public class DocumentApiModel extends AbstractEntityApiModel {
 		super(uuid);
 	}
 
-	String name;
 	String contentType;
 	Long size;
 	DateTime created;

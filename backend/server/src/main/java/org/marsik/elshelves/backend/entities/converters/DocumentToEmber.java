@@ -37,7 +37,7 @@ public class DocumentToEmber extends AbstractEntityToEmber<Document, DocumentApi
 
 	@Override
 	public DocumentApiModel convert(String path, Document object, DocumentApiModel model, Map<UUID, Object> cache, Set<String> include) {
-		model.setName(object.getName());
+		namedObjectToEmber.convert(path, object, model, cache, include);
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());

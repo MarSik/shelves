@@ -13,6 +13,12 @@ Router.map(function() {
     });
   });
 
+  this.resource("documents", function() {
+    this.route("show", {
+      path: "/:document_id"
+    });
+  });
+
   this.resource("boxes", function() {
     this.route("show", {
       path: "/:box_id"

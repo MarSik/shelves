@@ -24,6 +24,9 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 	@Autowired
 	EmberToEntityConversionService conversionService;
 
+	@Autowired
+	EmberToNamedObject emberToNamedObject;
+
 	public EmberToDocument() {
 		super(Document.class);
 	}
@@ -31,13 +34,11 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 	@PostConstruct
 	void postConstruct() {
 		conversionService.register(DocumentApiModel.class, getTarget(), this);
-
 	}
 
 	@Override
 	public Document convert(String path, DocumentApiModel object, Document model, Map<UUID, Object> cache, Set<String> include) {
-		model.setId(object.getId());
-		model.setName(object.getName());
+		emberToNamedObject.convert(path, object, model, cache, include);
 		model.setContentType(object.getContentType());
 		model.setCreated(object.getCreated());
 		model.setSize(object.getSize());
