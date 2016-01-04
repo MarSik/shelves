@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.marsik.elshelves.ember.EmberModelName;
 
 @JsonFormat(shape= JsonFormat.Shape.OBJECT)
@@ -75,8 +76,18 @@ public enum SiPrefix {
     }
 
 	@JsonCreator
-	public static SiPrefix forValue(String s) {
-		return SiPrefix.valueOf(s);
+	public static SiPrefix forValue(JsonNode s) {
+		if (s.isObject()) {
+			return s.get("id") == null ? NONE : SiPrefix.valueOf(s.get("id").asText());
+		} else if (s.isTextual()) {
+			return SiPrefix.valueOf(s.asText());
+		} else if (s.isNull()) {
+			return null;
+		} else if (s.isNumber()) {
+			return SiPrefix.values()[s.asInt()];
+		} else {
+			return null;
+		}
 	}
 
 	@JsonProperty("_type")
