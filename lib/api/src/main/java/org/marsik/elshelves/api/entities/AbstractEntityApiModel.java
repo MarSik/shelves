@@ -101,7 +101,7 @@ public class AbstractEntityApiModel implements EmberEntity, StubSupport, Cloneab
     }
 
     @JsonIgnore
-    public boolean isValid() {
+    public boolean doesExist() {
         return id != null && version != null;
     }
 }
