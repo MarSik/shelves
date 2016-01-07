@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.fields;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.JsonNode;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.services.StorageManager;
 
@@ -47,7 +48,17 @@ public enum SourceDownloader {
 	}
 
 	@JsonCreator
-	public static SourceDownloader forValue(String s) {
-		return SourceDownloader.valueOf(s);
+	public static SourceDownloader forValue(JsonNode s) {
+		if (s.isObject()) {
+			return s.get("id") == null ? NONE : SourceDownloader.valueOf(s.get("id").asText());
+		} else if (s.isTextual()) {
+			return SourceDownloader.valueOf(s.asText());
+		} else if (s.isNull()) {
+			return null;
+		} else if (s.isNumber()) {
+			return SourceDownloader.values()[s.asInt()];
+		} else {
+			return null;
+		}
 	}
 }
