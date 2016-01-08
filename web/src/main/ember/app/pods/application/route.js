@@ -18,7 +18,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             this._super();
         },
         addSticker: function (obj) {
-            this.controllerFor('application').get('stickers').pushObject(obj);
+            this.store.createRecord('sticker', {
+              object: obj
+            }).save();
         },
         addBarcode(model) {
             this.controllerFor('application').set('barcodedItem', model);
@@ -85,8 +87,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     setupController: function(controller, model) {
         controller.set('model', model);
-        controller.set('stickers', Ember.A());
-        this.get('preloadData')(this, controller);
+        return this.preloadData(this, controller);
     },
     preloadData: function (self, controller) {
         if (self.get('session.isAuthenticated')) {
@@ -117,7 +118,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             controller.set('availableProperties', self.store.filter('property', function (i) {
                 return !i.get('isNew');
             }));
-            controller.set('stickers', []);
 
             self.store.createRecord('page', {
                 name: "A4",
@@ -212,6 +212,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             });
 
             controller.set('availablePapers', self.store.all('page'));
+            var stickers = self.store.findAll('sticker');
+            controller.set('stickers', stickers);
+            return stickers;
         }
     }
 });

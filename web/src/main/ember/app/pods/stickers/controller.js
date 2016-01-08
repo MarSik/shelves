@@ -5,13 +5,16 @@ export default Ember.ArrayController.extend({
     actions: {
         clearStickers: function () {
             console.log('Clearing sticker...');
-            this.clear();
+            this.store.unloadAll('sticker');
         },
         removeSticker: function (sticker) {
-            this.removeObject(sticker);
+            sticker.destroyRecord();
         },
         addSticker: function (sticker) {
-            this.pushObject(sticker);
+            var ns = this.store.createRecord('sticker', {
+              object: sticker.get('object')
+            });
+            ns.save();
         }
     },
 

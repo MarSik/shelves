@@ -9,6 +9,7 @@ import org.marsik.elshelves.api.entities.fields.FootprintType;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
+import org.marsik.elshelves.backend.services.StickerCapable;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @DefaultEmberModel(FootprintApiModel.class)
-public class Footprint extends NamedEntity {
+public class Footprint extends NamedEntity implements StickerCapable {
 	String kicad;
 
 	/**
@@ -114,5 +115,10 @@ public class Footprint extends NamedEntity {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	@Override
+	public String getBaseUrl() {
+		return "/footprints";
 	}
 }

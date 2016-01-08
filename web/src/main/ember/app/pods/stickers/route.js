@@ -4,7 +4,7 @@ import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixi
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model: function () {
-        return this.controllerFor('application').get('stickers');
+        return this.store.findAll('sticker');
     },
     activate: function() {
         $(document).attr('title', 'shelves - Stickers');
