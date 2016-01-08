@@ -204,7 +204,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 stickerWidthMm: 70,
                 stickerHeightMm: 36,
                 stickerTopMarginMm: 1,
-                stickerLeftMarginMm: 1,
+                stickerLeftMarginMm: 3,
                 rightSpaceMm: 0,
                 bottomSpaceMm: 0,
                 titleFontSize: 12,

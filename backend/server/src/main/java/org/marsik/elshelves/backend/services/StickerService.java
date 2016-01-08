@@ -145,15 +145,15 @@ public class StickerService {
                 pageMapping.pageFormat.getHeight() : pageMapping.pageFormat.getWidth();
 
         int pageCount = 0;
-        int stickerCount = settings.getSkip() % (pageCount * settings.getStickerHorizontalCount() * settings.getStickerVerticalCount());
+        int stickerCount = settings.getSkip() % (settings.getStickerHorizontalCount() * settings.getStickerVerticalCount());
 
         // Load unicode fonts
         PDFont titleFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans-Bold.ttf"));
         PDFont summaryFont = PDType0Font.load(document, this.getClass().getResourceAsStream("/org/marsik/elshelves/backend/fonts/DejaVuSans.ttf"));
 
 
-        Float codeEdgeSize = MM_TO_UNITS * Math.min(settings.getStickerHeightMm() - 2*settings.getStickerTopMarginMm(),
-                settings.getStickerWidthMm()) - 2*settings.getStickerLeftMarginMm() - getFontHeight(titleFont, settings.getTitleFontSize());
+        Float codeEdgeSize = Math.min(MM_TO_UNITS * settings.getStickerHeightMm() - 2 * MM_TO_UNITS * settings.getStickerTopMarginMm() - getFontHeight(titleFont, settings.getTitleFontSize()),
+                MM_TO_UNITS * settings.getStickerWidthMm() - 2 * MM_TO_UNITS * settings.getStickerLeftMarginMm());
 
 		Float titleWidth = MM_TO_UNITS * (settings.getStickerWidthMm() - 2*settings.getStickerLeftMarginMm());
 		Float summaryWidth = (MM_TO_UNITS * (settings.getStickerWidthMm() - 2*settings.getStickerLeftMarginMm())) - codeEdgeSize;
