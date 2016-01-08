@@ -9,6 +9,9 @@ export default Ember.ArrayController.extend({
         },
         removeSticker: function (sticker) {
             this.removeObject(sticker);
+        },
+        addSticker: function (sticker) {
+            this.pushObject(sticker);
         }
     },
 
@@ -45,5 +48,8 @@ export default Ember.ArrayController.extend({
         return this.get('paperNotSelected') || Ember.isEmpty(this.get('model'));
     }.property('paperNotSelected', 'model.@each'),
 
-    paperSlotSkip: 0
+    paperSlotSkip: 0,
+
+    sortProperties: ['fullName'],
+    sortAscending: true
 });

@@ -109,9 +109,12 @@
 
 <h2>Stickers</h2>
 
-<ul>
+<ul class="row">
   {{#each model key="@index" as |obj|}}
-  <li>{{obj.name}} <button {{action 'removeSticker' obj}} class="remove button">{{fa-icon 'times'}}</button></li>
+  <li class="columns small-6 large-3 sticker">{{fa-icon obj.icon}} {{obj.fullName}}
+    <button {{action 'removeSticker' obj}} class="remove button single-line">{{fa-icon 'times'}}</button>
+    <button {{action 'addSticker' obj}} class="button single-line">{{fa-icon 'plus'}}</button>
+  </li>
   {{/each}}
 </ul>
 
