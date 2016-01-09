@@ -5,7 +5,11 @@ export default Ember.ArrayController.extend({
     actions: {
         clearStickers: function () {
             console.log('Clearing sticker...');
-            this.store.unloadAll('sticker');
+            this.store.findAll('sticker').then(function (arr) {
+              arr.forEach(function (st) {
+                st.destroyRecord();
+              })
+            });
         },
         removeSticker: function (sticker) {
             sticker.destroyRecord();

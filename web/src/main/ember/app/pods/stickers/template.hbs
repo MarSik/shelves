@@ -115,6 +115,8 @@
     <button {{action 'removeSticker' obj}} class="remove button single-line">{{fa-icon 'times'}}</button>
     <button {{action 'addSticker' obj}} class="button single-line">{{fa-icon 'plus'}}</button>
   </li>
+  {{else}}
+  <li class="placeholder">No stickers were selected yet. Nothing to print.</li>
   {{/each}}
 </ul>
 

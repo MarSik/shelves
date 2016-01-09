@@ -33,6 +33,23 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
         Ember.merge(hash, serialized);
     },
 
+  serializePolymorphicType: function(snapshot, json, relationship) {
+    var key = relationship.key,
+        belongsTo = snapshot.belongsTo(key),
+        belongsToId = snapshot.belongsTo(key, { id: true });
+
+    // if provided, use the mapping provided by `attrs` in
+    // the serializer
+    var payloadKey = this._getMappedKey(key);
+    if (payloadKey === key && this.keyForRelationship) {
+      payloadKey = this.keyForRelationship(key, "belongsTo", "serialize");
+    }
+
+    if (!Ember.isNone(belongsTo)) {
+      json[payloadKey] = {id: belongsToId, _type: belongsTo.modelName};
+    }
+  },
+
     extractMeta: function (store, type, payload) {
         // Read the meta information about objects that should be
         // reloaded - purge them from the store to force reload
