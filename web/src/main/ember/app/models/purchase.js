@@ -65,6 +65,6 @@ export default LotBase.extend({
   }.property('lots.@each.count'),
 
   fullyDelivered: function() {
-      return this.get('missing') === 0;
+      return this.get('missing') <= 0;
   }.property('missing')
 });
