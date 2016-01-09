@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,7 +46,8 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
     @ResponseBody
     @Transactional
     public ResponseEntity<EmberModel> create(@CurrentUser User currentUser,
-                             @Valid @RequestBody E item) throws OperationNotPermitted {
+                                             @Valid @RequestBody E item,
+                                             HttpServletRequest request) throws OperationNotPermitted {
         T incoming = getRestToDb().convert(item, new THashMap<>());
         incoming = service.create(incoming, currentUser);
 
@@ -56,7 +59,7 @@ public class AbstractRestController<T extends UpdateableEntity, E extends Abstra
         EmberModel.Builder<E> builder = new EmberModel.Builder<E>(entity);
         sideLoad(entity, builder);
         return ResponseEntity
-                .ok()
+                .created(URI.create(request.getRequestURL() + "/" + entity.getId().toString()))
                 .eTag(entity.getVersion().toString())
                 .lastModified(incoming.getLastModified().getMillis())
                 .body(builder.build());

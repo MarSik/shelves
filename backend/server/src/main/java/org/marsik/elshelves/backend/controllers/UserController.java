@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Set;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @Override
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<EmberModel> create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user) throws OperationNotPermitted {
+    public ResponseEntity<EmberModel> create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user, HttpServletRequest request) throws OperationNotPermitted {
         String verificationCode = userDetailsService.createUser(user);
         mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
 

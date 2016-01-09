@@ -26,6 +26,7 @@ import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ItemService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +37,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +116,7 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
 
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
-    public EmberModel create(@CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
+    public ResponseEntity<EmberModel> create(HttpServletRequest request, @CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
         SourceApiModel source0 = item0.getSource();
         PartTypeApiModel type0 = item0.getType();
 
@@ -124,12 +127,18 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
         Type type = emberToType.convert(type0, cache);
 
         item = getService().startProject(item, type, source, currentUser);
+        getService().flush();
 
         ItemApiModel itemApiModel = getDbToRest().convert(item, new THashMap<>());
 
         EmberModel.Builder<ItemApiModel> builder = new EmberModel.Builder<ItemApiModel>(itemApiModel);
         sideLoad(itemApiModel, builder);
-        return builder.build();
+
+        return ResponseEntity
+                .created(URI.create(request.getRequestURL() + "/" + item.getId().toString()))
+                .eTag(item.getVersion().toString())
+                .lastModified(item.getLastModified().getMillis())
+                .body(builder.build());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
