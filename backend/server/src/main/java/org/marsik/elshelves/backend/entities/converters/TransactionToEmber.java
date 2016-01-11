@@ -49,6 +49,7 @@ public class TransactionToEmber extends AbstractEntityToEmber<Transaction, Trans
 		namedObjectToEmber.convert(path, object, model, cache, include);
 
 		model.setDate(object.getDate());
+		model.setExpectedDelivery(object.getExpectedDelivery());
 
 		/* Backup way of getting the transaction date to workaround a bug in older version
 		   of EmberToLot converter */

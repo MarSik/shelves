@@ -10,6 +10,7 @@ export default NamedBase.extend({
   version: attr(),
   name: attr('string'),
     date: attr('date'),
+    expectedDelivery: attr('date'),
     items: hasMany("purchase", {async: true}),
     belongsTo: belongsTo("user", {async: true}),
     source: belongsTo("source", {async: true}),

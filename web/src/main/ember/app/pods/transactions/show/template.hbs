@@ -36,6 +36,11 @@
     </dl>
 
     <dl class="columns large-4">
+        <dt>Expected delivery</dt>
+        <dd>{{#click-to-editdate content=model field='content.expectedDelivery' editable=editEnabled}}{{model.expectedDelivery}}{{/click-to-editdate}}</dd>
+    </dl>
+
+    <dl class="columns large-4">
         <dt>Status</dt>
         <dd>
             {{#if model.locked}}

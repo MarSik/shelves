@@ -28,6 +28,9 @@ public class Transaction extends NamedEntity implements StickerCapable {
 	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	DateTime date;
 
+	@org.hibernate.annotations.Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	DateTime expectedDelivery;
+
 	@OneToMany(mappedBy = "transaction",
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.PERSIST,
@@ -83,7 +86,7 @@ public class Transaction extends NamedEntity implements StickerCapable {
 
 		update(update.getDate(), this::setDate);
 		update(update.getSource(), this::setSource);
-
+		update(update.getExpectedDelivery(), this::setExpectedDelivery);
 
 		super.updateFrom(update0);
 	}

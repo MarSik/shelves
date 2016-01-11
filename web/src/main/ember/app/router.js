@@ -106,11 +106,11 @@ Router.map(function() {
   });
 });
 
-Router.reopen({
+/*Router.reopen({
     notifyPiwik: function() {
         _paq.push(['setDocumentTitle', document.title]);
         _paq.push(['trackPageView']);
     }.on('didTransition')
-});
+});*/
 
 export default Router;

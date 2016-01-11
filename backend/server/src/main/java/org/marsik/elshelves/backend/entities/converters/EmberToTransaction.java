@@ -49,6 +49,7 @@ public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiMode
 
 		model.setSource(emberToSource.convert(path, "source", object.getSource(), cache, include));
 		model.setDate(object.getDate());
+		model.setExpectedDelivery(object.getExpectedDelivery());
 
 		if (object.getItems() != null) {
 			model.setItems(new THashSet<Purchase>());

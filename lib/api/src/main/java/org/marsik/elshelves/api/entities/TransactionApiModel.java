@@ -35,6 +35,7 @@ public class TransactionApiModel extends AbstractNamedEntityApiModel {
 	}
 
 	DateTime date;
+	DateTime expectedDelivery;
 
 	Set<PurchaseApiModel> items;
 	SourceApiModel source;
