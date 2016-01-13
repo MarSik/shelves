@@ -3,15 +3,27 @@ package org.marsik.elshelves.backend.test.integration;
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.marsik.elshelves.api.entities.UserApiModel;
+import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jayway.restassured.RestAssured.given;
 
 public class CreateUserTest extends BaseWebTest {
+    @Autowired
+    UserRepository userRepository;
+
     @Test
     public void testSimpleUserCreation() throws Exception {
         UserApiModel user = new UserApiModel();
         user.setName("Test user");
-        user.setEmail("test@user.com");
+        user.setEmail("test@user.test");
+
+        final User oldUser = userRepository.getUserByEmail(user.getEmail());
+        if (oldUser != null) {
+            userRepository.delete(oldUser);
+            userRepository.flush();
+        }
 
         given().
                 contentType(ContentType.JSON).
