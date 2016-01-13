@@ -16,6 +16,8 @@ Requirements:
 
 Java 1.7 SDK (OpenJDK works fine)
 Maven 3
+MySQL (create empty elshelves_unittest database, with root:<no password> access)
+Memcached
 
 Before build do the following:
 
