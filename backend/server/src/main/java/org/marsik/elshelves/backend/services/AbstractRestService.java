@@ -13,6 +13,7 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.RevisionsSupport;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +24,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> {
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity>
+        implements AbstractRestServiceIntf<R,T> {
     final R repository;
     final UuidGenerator uuidGenerator;
 
@@ -39,7 +41,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         this.uuidGenerator = uuidGenerator;
     }
 
-    public R getRepository() {
+    @Override public R getRepository() {
         return repository;
     }
 
@@ -58,7 +60,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 	}
 
     protected T createEntity(T entity, User currentUser) {
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        Relinker relinkContext = relinkService.newRelinker();
         relinkContext
                 .currentUser(currentUser)
                 .addToCache(entity)
@@ -71,7 +73,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
-	protected void deleteEntity(T entity) throws OperationNotPermitted {
+	public void deleteEntity(T entity) throws OperationNotPermitted {
 		repository.delete(entity);
 	}
 
@@ -90,7 +92,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
         entity.updateFrom(update);
 
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        Relinker relinkContext = relinkService.newRelinker();
         relinkContext
                 .currentUser(currentUser)
                 .addToCache(currentUser)
@@ -106,7 +108,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
-    @CircuitBreaker
+    @Override @CircuitBreaker
     public Collection<T> getAllItems(User currentUser) {
         Set<T> dtos = new THashSet<>();
         for (T entity: getAllEntities(currentUser)) {
@@ -115,7 +117,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return dtos;
     }
 
-    @CircuitBreaker
+    @Override @CircuitBreaker
     public T create(T entity, User currentUser) throws OperationNotPermitted {
         entity = createEntity(entity, currentUser);
         entity.setCreated(new DateTime());
@@ -123,7 +125,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
-    @CircuitBreaker
+    @Override @CircuitBreaker
     public T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
         T one = getSingleEntity(uuid);
 
@@ -138,7 +140,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return one;
     }
 
-    @CircuitBreaker
+    @Override @CircuitBreaker
     public boolean delete(UUID uuid, User currentUser) throws BaseRestException {
         T one = getSingleEntity(uuid);
 
@@ -158,7 +160,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return true;
     }
 
-    @CircuitBreaker
+    @Override @CircuitBreaker
     public T update(T update, User currentUser) throws BaseRestException {
         T one = getSingleEntity(update.getId());
 
@@ -208,7 +210,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
         return entity;
     }
 
-    public void flush() {
+    @Override public void flush() {
         repository.flush();
     }
 }

@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.services;
 
-import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Group;
@@ -15,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 
 @Service
 public class SanityService {

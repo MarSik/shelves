@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import org.marsik.elshelves.backend.dtos.MailgunEmailReceived;
+import org.marsik.elshelves.backend.services.MailService;
 import org.marsik.elshelves.backend.services.MailgunService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class MailgunController {
     static final private Logger logger = LoggerFactory.getLogger(MailgunController.class);
 
     @Autowired
-    MailgunService mailgunService;
+    MailService mailgunService;
 
     /**
      * Generic email receiver

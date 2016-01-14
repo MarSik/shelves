@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
+import org.marsik.elshelves.backend.services.MailService;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -13,7 +14,6 @@ import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
-import org.marsik.elshelves.backend.services.MailgunService;
 import org.marsik.elshelves.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,14 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users")
 public class UserController extends AbstractRestController<User, UserApiModel, UserService> {
     @Autowired
-    MailgunService mailgunService;
+    MailService mailService;
 
 	ElshelvesUserDetailsService userDetailsService;
 
@@ -66,7 +65,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
 		String verificationCode = userDetailsService.startNewVerification(email);
 		if (verificationCode == null) return;
 
-		mailgunService.sendVerificationCode(email, verificationCode);
+		mailService.sendVerificationCode(email, verificationCode);
 	}
 
     @Transactional
@@ -81,7 +80,7 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<EmberModel> create(@CurrentUser User currentUser, @Valid @RequestBody UserApiModel user, HttpServletRequest request) throws OperationNotPermitted {
         String verificationCode = userDetailsService.createUser(user);
-        mailgunService.sendVerificationCode(user.getEmail(), verificationCode);
+        mailService.sendVerificationCode(user.getEmail(), verificationCode);
 
         return ResponseEntity
                 .ok()

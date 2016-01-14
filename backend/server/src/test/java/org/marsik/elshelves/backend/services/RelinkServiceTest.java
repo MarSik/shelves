@@ -1,30 +1,31 @@
 package org.marsik.elshelves.backend.services;
 
-import gnu.trove.map.hash.THashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.marsik.elshelves.backend.entities.Box;
-import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.User;
+import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.IdentifiedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.doReturn;
 public class RelinkServiceTest {
 
     @InjectMocks
-    RelinkService relinkService;
+    RelinkServiceImpl relinkService;
 
     @Mock
     OwnedEntityRepository ownedEntityRepository;
@@ -40,23 +41,17 @@ public class RelinkServiceTest {
     @Mock
     IdentifiedEntityRepository identifiedEntityRepository;
 
+    @Spy
+    UuidGenerator uuidGenerator = new UuidGeneratorImpl();
+
     @Configuration
     static class TestConfig {
-        @Bean
-        public UuidGenerator uuidGenerator() {
-            return new UuidGeneratorImpl();
-        }
     }
-
-    @Autowired
-    UuidGenerator uuidGenerator;
 
     @Before
     public void setUp() {
         // Init mocks
         MockitoAnnotations.initMocks(this);
-
-        relinkService.uuidGenerator = uuidGenerator;
 
         // Simulate empty database
         doReturn(null).when(ownedEntityRepository).findById(any(UUID.class));
@@ -80,7 +75,7 @@ public class RelinkServiceTest {
         lot.getHistory().setPerformedBy(oldUser);
         lot.setOwner(newUser);
 
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        Relinker relinkContext = relinkService.newRelinker();
         relinkContext.addToCache(newUser);
         relinkContext.addToCache(oldUser.getId(), newUser);
         relinkContext.addToCache(lot);
@@ -112,7 +107,7 @@ public class RelinkServiceTest {
         lot.setLocation(box);
         lot.getHistory().setLocation(box);
 
-        RelinkService.RelinkContext relinkContext = relinkService.newRelinker();
+        Relinker relinkContext = relinkService.newRelinker();
         relinkContext.addToCache(newUser);
 
         relinkContext

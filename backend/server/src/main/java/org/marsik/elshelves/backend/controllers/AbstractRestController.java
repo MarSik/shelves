@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
+import org.marsik.elshelves.backend.services.AbstractRestServiceIntf;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -25,7 +26,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
-public class AbstractRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends BaseIdentifiedEntityRepository<T>, T>> extends AbstractReadOnlyRestController<T,E,S> {
+public class AbstractRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestServiceIntf<? extends BaseIdentifiedEntityRepository<T>, T>> extends AbstractReadOnlyRestController<T,E,S> {
 
     final CachingConverter<E, T, UUID> restToDb;
 

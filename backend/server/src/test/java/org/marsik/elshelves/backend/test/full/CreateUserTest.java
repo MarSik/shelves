@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.test.integration;
+package org.marsik.elshelves.backend.test.full;
 
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.jayway.restassured.RestAssured.given;
 
-public class CreateUserTest extends BaseWebTest {
+public class CreateUserTest extends BaseFullIntegrationTest {
     @Autowired
     UserRepository userRepository;
 

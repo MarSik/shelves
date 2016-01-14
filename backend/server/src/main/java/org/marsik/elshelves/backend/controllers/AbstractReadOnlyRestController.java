@@ -19,6 +19,7 @@ import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.AbstractRestService;
+import org.marsik.elshelves.backend.services.AbstractRestServiceIntf;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.ember.EmberModelHelper;
 import org.springframework.http.CacheControl;
@@ -41,7 +42,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
 
-public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestService<? extends BaseIdentifiedEntityRepository<T>, T>> {
+public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestServiceIntf<? extends BaseIdentifiedEntityRepository<T>, T>> {
     final Class<E> dtoClazz;
     final S service;
     final CachingConverter<T, E, UUID> dbToRest;

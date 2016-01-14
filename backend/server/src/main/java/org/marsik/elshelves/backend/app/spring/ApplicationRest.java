@@ -127,8 +127,12 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Bean
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
-		Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
-		builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
+        return getJacksonConverter();
+    }
+
+    public static MappingJackson2HttpMessageConverter getJacksonConverter() {
+        Jackson2ObjectMapperBuilder builder = new Jackson2CustomContextMapperBuilder();
+        builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
 
         builder.modulesToInstall(new JodaModule());
 

@@ -1,5 +1,6 @@
 package org.marsik.elshelves;
 
+import org.marsik.elshelves.backend.app.spring.NoAutoscan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan
+@ComponentScan(excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
 public class ApplicationLauncher extends SpringBootServletInitializer {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.test.integration;
+package org.marsik.elshelves.backend.test.full;
 
 import com.jayway.restassured.RestAssured;
 import org.junit.Before;
@@ -8,7 +8,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -18,8 +17,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = { ApplicationLauncher.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 @IntegrationTest("server.port:0")
-@ActiveProfiles("integration")
-public abstract class BaseWebTest {
+@ActiveProfiles({"test", "integration"})
+public abstract class BaseFullIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;

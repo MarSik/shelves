@@ -21,7 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @Service
-public class MailgunService {
+public class MailgunService implements MailService {
 	private static final Logger log = LoggerFactory.getLogger(MailgunService.class);
 
 	@Value("${mailgun.url:https://api.mailgun.net/v2/shelves.cz/messages}")
@@ -92,7 +92,7 @@ public class MailgunService {
 		}
 	}
 
-    public boolean sendVerificationCode(String email, String code) {
+    @Override public boolean sendVerificationCode(String email, String code) {
 
 		String message = "Thanks for registering. Your verification code is: \n\n" + code + "\n\n"
 				+ "You can confirm the account by clicking on the following link: \n\n"
