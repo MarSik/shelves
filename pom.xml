@@ -31,21 +31,21 @@
 
         <spring.version>4.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
-        <spring.security.oauth.version>2.0.7.RELEASE</spring.security.oauth.version>
+        <spring.security.oauth.version>2.0.8.RELEASE</spring.security.oauth.version>
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
 
-        <jetty.version>9.3.5.v20151012</jetty.version>
-        <jetty-jsp.version>9.2.13.v20150730</jetty-jsp.version>
+        <jetty.version>9.3.6.v20151106</jetty.version>
+        <jetty-jsp.version>9.2.14.v20151106</jetty-jsp.version>
         <servlet-api.version>3.1.0</servlet-api.version>
 
         <querydsl.version>4.0.5</querydsl.version>
 
         <hystrix.version>1.3.16</hystrix.version>
         <freemarker.version>2.3.21</freemarker.version>
-        <hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
+        <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
         <pdfbox.version>2.0.0-RC2</pdfbox.version>
-        <jackson.version>2.6.1</jackson.version>
+        <jackson.version>2.6.4</jackson.version>
         <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
         <tika.version>1.7</tika.version>
         <lombok.version>1.16.6</lombok.version>
