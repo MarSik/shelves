@@ -13,7 +13,7 @@ import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -63,6 +63,12 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
      */
     @Size(min = 3, max = 3)
     String currency;
+
+    /**
+     * External service IDs
+     */
+    @ElementCollection(targetClass = String.class)
+    Set<String> externalIds = new THashSet<>();
 
     public void addAuthorization(Authorization a) {
         a.setOwner(this);
@@ -127,8 +133,13 @@ public class User extends IdentifiedEntity implements OwnedEntityInterface, Stic
         update(update.getLostAndFound(), this::setLostAndFound);
 
         update(update.getCurrency(), this::setCurrency);
+        update(update.getExternalIds(), this::setExternalIds);
 
         reconcileLists(update.getAuthorizations(), this::getAuthorizations, this::addAuthorization, this::removeAuthorization);
+    }
+
+    public void registerInExternal(String id) {
+        externalIds.add(id);
     }
 
     @Override

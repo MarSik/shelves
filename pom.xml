@@ -57,6 +57,8 @@
         <mysql-connector.version>5.1.36</mysql-connector.version>
         <joda.money.version>0.10.0</joda.money.version>
 
+        <google.api.version>1.21.0</google.api.version>
+
         <!-- computer vision libs //-->
 
         <!-- Use the following command to import processing core jar to local

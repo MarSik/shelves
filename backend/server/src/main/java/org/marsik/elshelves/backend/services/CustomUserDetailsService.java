@@ -136,6 +136,18 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
         return user.getVerificationCode();
     }
 
+    public User createUser(String email, String externalId) {
+        User user = new User();
+        user.setEmail(email);
+        user.getExternalIds().add(externalId);
+        user.setId(uuidGenerator.generate());
+        user.setRegistrationDate(new DateTime());
+        user.setCreated(new DateTime());
+        user.setLastModified(user.getCreated());
+
+        return userRepository.save(user);
+    }
+
 	@Override
     @CircuitBreaker("startUserVerification")
 	public String startNewVerification(String email) {

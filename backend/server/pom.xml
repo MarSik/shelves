@@ -371,6 +371,13 @@
             <artifactId>usertype.core</artifactId>
             <version>4.0.0.GA</version>
         </dependency>
+
+        <!-- Google API client //-->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>${google.api.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

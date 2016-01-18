@@ -10,9 +10,14 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableAuthorizationServer
@@ -28,6 +33,11 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
     @Bean
     public TokenStore tokenStore() {
         return memcacheTokenStore;
+    }
+
+    @Bean
+    public GoogleTokenGranter googleTokenGranter() {
+        return new GoogleTokenGranter();
     }
 
     @Override
@@ -46,6 +56,12 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore());
         endpoints.authenticationManager(authenticationManager);
+
+        List<TokenGranter> tokenGranters = new ArrayList<>();
+        tokenGranters.add(endpoints.getTokenGranter());
+        tokenGranters.add(googleTokenGranter());
+
+        endpoints.tokenGranter(new CompositeTokenGranter(tokenGranters));
     }
 
     @Bean
