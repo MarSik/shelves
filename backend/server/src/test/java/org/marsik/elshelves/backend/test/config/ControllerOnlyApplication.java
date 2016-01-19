@@ -18,6 +18,7 @@ import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.FileAnalysisDoneHandler;
 import org.marsik.elshelves.backend.services.FootprintService;
+import org.marsik.elshelves.backend.services.GithubOauthService;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.marsik.elshelves.backend.services.GroupService;
 import org.marsik.elshelves.backend.services.ItemService;
@@ -213,5 +214,10 @@ public class ControllerOnlyApplication {
     @Bean
     public MockitoFactoryBean<GoogleOauthService> googleOauthService() {
         return new MockitoFactoryBean<>(GoogleOauthService.class);
+    }
+
+    @Bean
+    public MockitoFactoryBean<GithubOauthService> githubOauthServiceMockitoFactoryBean() {
+        return new MockitoFactoryBean<>(GithubOauthService.class);
     }
 }

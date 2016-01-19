@@ -5,6 +5,7 @@ import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.GithubOauthService;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,9 @@ public class FederatedLogin {
     @Autowired
     MappingJackson2HttpMessageConverter converter;
 
+    @Autowired
+    GithubOauthService githubOauthService;
+
     @RequestMapping("/google/done")
     public void googleLoginDone(
             @CurrentUser User currentUser,
@@ -63,5 +67,29 @@ public class FederatedLogin {
 
         String url = authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(authPage).build();
         response.sendRedirect(url);
+    }
+
+    @RequestMapping("/github/login")
+    public void githubLoginStart(HttpServletResponse response) throws IOException, GeneralSecurityException {
+        response.sendRedirect(githubOauthService.getAuthStartUrl());
+    }
+
+    @RequestMapping("/github/done")
+    public void githubLoginDone(
+            @CurrentUser User currentUser,
+            HttpServletResponse response,
+            @RequestParam("code") String code,
+            @RequestParam("state") String state) throws IOException, GeneralSecurityException, BaseRestException {
+
+
+        // Compute login command for the Ember app that instructs it to perform a oauth request with
+        // google type grant
+        Map<String, String> authFormula = new THashMap<>();
+        authFormula.put("grant_type", "github");
+        authFormula.put("code", code);
+        authFormula.put("state", state);
+
+        final String jsonAuthFormula = converter.getObjectMapper().writeValueAsString(authFormula);
+        response.sendRedirect(donePage + "?auth=" + Base64.getEncoder().encodeToString(jsonAuthFormula.getBytes("UTF8")));
     }
 }

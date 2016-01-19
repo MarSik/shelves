@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.app.security;
 
+import org.marsik.elshelves.backend.services.GithubOauthService;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +36,9 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
     @Autowired
     GoogleOauthService googleOauthService;
 
+    @Autowired
+    GithubOauthService githubOauthService;
+
     @Bean
     public TokenStore tokenStore() {
         return memcacheTokenStore;
@@ -63,6 +67,11 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
                 endpoints.getOAuth2RequestFactory(),
                 googleOauthService
                 ));
+        tokenGranters.add(new GithubTokenGranter(endpoints.getTokenServices(),
+                endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory(),
+                githubOauthService
+        ));
         tokenGranters.add(endpoints.getTokenGranter());
 
         endpoints.tokenGranter(new CompositeTokenGranter(tokenGranters));

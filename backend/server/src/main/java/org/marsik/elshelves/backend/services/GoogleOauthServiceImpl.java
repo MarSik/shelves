@@ -35,9 +35,6 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
     private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     private static final String GOOGLE_EXTERNAL_ID = "@google.oauth.connect";
 
-    @Value("${shelves.security.donePage}")
-    private String donePage;
-
     @Value("${shelves.security.authPage}")
     private String authPage;
 

@@ -43,9 +43,13 @@
     <section class="columns small-12">
       <h2>Login using external service</h2>
 
-      <a href="{{apilink "/federated/google/login"}}" class="columns small-2 button">{{fa-icon 'google'}} Google</a>
+      <p>
+        <a href="{{apilink "/federated/google/login"}}" class="button">{{fa-icon 'google' size=2}} Google</a>
+        <a href="{{apilink "/federated/github/login"}}" class="button">{{fa-icon 'github' size=2}} Github</a>
+      </p>
     </section>
-
+</div>
+<div class="row">
     <section class="small-12 large-6 columns" id="login-form">
     <h2>Login</h2>
     <form {{action 'authenticate' on='submit'}}>
