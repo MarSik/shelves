@@ -9,7 +9,6 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.entities.User;
@@ -18,12 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +32,8 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
     private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     private static final String GOOGLE_EXTERNAL_ID = "@google.oauth.connect";
 
-    @Value("${shelves.security.authPage}")
-    private String authPage;
+    @Value("${google.oauth2.donePage}")
+    private String donePage;
 
     @Value("${google.oauth2.client.id}")
     private String clientId;
@@ -77,7 +74,7 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
     public User getOrRegisterUser(User currentUser, String state, String code) throws GeneralSecurityException, IOException,
             BaseRestException {
         GoogleAuthorizationCodeFlow authorizationCodeFlow = getGoogleAuthFlow();
-        GoogleTokenResponse token = authorizationCodeFlow.newTokenRequest(code).setRedirectUri(authPage).execute();
+        GoogleTokenResponse token = authorizationCodeFlow.newTokenRequest(code).setRedirectUri(donePage).execute();
         final Credential credential = authorizationCodeFlow.createAndStoreCredential(token, null);
 
         final NetHttpTransport googleHttpTransport = GoogleNetHttpTransport.newTrustedTransport();

@@ -27,8 +27,8 @@ public class FederatedLogin {
     @Value("${shelves.security.donePage}")
     private String donePage;
 
-    @Value("${shelves.security.authPage}")
-    private String authPage;
+    @Value("${google.oauth2.donePage}")
+    private String googleRedirectPage;
 
     @Autowired
     GoogleOauthService googleOauthService;
@@ -65,7 +65,7 @@ public class FederatedLogin {
 
         GoogleAuthorizationCodeFlow authorizationCodeFlow = googleOauthService.getGoogleAuthFlow();
 
-        String url = authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(authPage).build();
+        String url = authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(googleRedirectPage).build();
         response.sendRedirect(url);
     }
 
