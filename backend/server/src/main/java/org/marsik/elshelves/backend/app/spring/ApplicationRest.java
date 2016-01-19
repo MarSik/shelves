@@ -1,8 +1,6 @@
 package org.marsik.elshelves.backend.app.spring;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.FailureMode;
@@ -14,12 +12,11 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.app.jackson.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.servlet.WebFormSupportFilter;
 import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
-import org.marsik.elshelves.jackson.IdWhenStubSerializer;
+import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +26,7 @@ import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletConta
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -58,6 +56,7 @@ import java.util.Locale;
 @EnableWebMvc
 @Configuration
 @EnableAspectJAutoProxy
+@ComponentScan(basePackageClasses = GoogleOauthService.class)
 public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Value("${http2.max-streams:10}")

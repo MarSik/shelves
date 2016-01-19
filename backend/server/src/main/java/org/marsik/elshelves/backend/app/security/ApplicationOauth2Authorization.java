@@ -1,8 +1,10 @@
 package org.marsik.elshelves.backend.app.security;
 
+import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,13 +16,13 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @EnableAuthorizationServer
+@ComponentScan(basePackageClasses = GoogleOauthService.class)
 public class ApplicationOauth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -30,14 +32,12 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    GoogleOauthService googleOauthService;
+
     @Bean
     public TokenStore tokenStore() {
         return memcacheTokenStore;
-    }
-
-    @Bean
-    public GoogleTokenGranter googleTokenGranter() {
-        return new GoogleTokenGranter();
     }
 
     @Override
@@ -58,8 +58,12 @@ public class ApplicationOauth2Authorization extends AuthorizationServerConfigure
         endpoints.authenticationManager(authenticationManager);
 
         List<TokenGranter> tokenGranters = new ArrayList<>();
+        tokenGranters.add(new GoogleTokenGranter(endpoints.getTokenServices(),
+                endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory(),
+                googleOauthService
+                ));
         tokenGranters.add(endpoints.getTokenGranter());
-        tokenGranters.add(googleTokenGranter());
 
         endpoints.tokenGranter(new CompositeTokenGranter(tokenGranters));
     }

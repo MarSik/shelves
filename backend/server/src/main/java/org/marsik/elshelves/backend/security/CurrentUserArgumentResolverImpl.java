@@ -67,7 +67,7 @@ public class CurrentUserArgumentResolverImpl implements CurrentUserArgumentResol
             UserRepository userRepository =
                     applicationContext.getBean("userRepository", UserRepository.class);
 
-            return userRepository.getUserByEmail(principal.getName());
+            return userRepository.findById(UUID.fromString(principal.getName()));
         }
     }
 }

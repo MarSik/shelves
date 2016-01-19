@@ -40,6 +40,12 @@
 
 {{else}}
 <div class="row">
+    <section class="columns small-12">
+      <h2>Login using external service</h2>
+
+      <a href="{{apilink "/federated/google/login"}}" class="columns small-2 button">{{fa-icon 'google'}} Google</a>
+    </section>
+
     <section class="small-12 large-6 columns" id="login-form">
     <h2>Login</h2>
     <form {{action 'authenticate' on='submit'}}>

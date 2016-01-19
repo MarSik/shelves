@@ -12,9 +12,6 @@ import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import java.util.Collection;
 import java.util.UUID;
 
-/**
- * Created by msivak on 1/14/16.
- */
 public interface AbstractRestServiceIntf<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> {
     R getRepository();
 

@@ -18,6 +18,7 @@ import org.marsik.elshelves.backend.services.DocumentService;
 import org.marsik.elshelves.backend.services.ElshelvesUserDetailsService;
 import org.marsik.elshelves.backend.services.FileAnalysisDoneHandler;
 import org.marsik.elshelves.backend.services.FootprintService;
+import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.marsik.elshelves.backend.services.GroupService;
 import org.marsik.elshelves.backend.services.ItemService;
 import org.marsik.elshelves.backend.services.ListService;
@@ -34,7 +35,6 @@ import org.marsik.elshelves.backend.services.TransactionService;
 import org.marsik.elshelves.backend.services.TypeService;
 import org.marsik.elshelves.backend.services.UnitService;
 import org.marsik.elshelves.backend.services.UserService;
-import org.marsik.elshelves.backend.services.UserServiceImpl;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.marsik.elshelves.backend.services.UuidGeneratorImpl;
 import org.marsik.elshelves.backend.test.util.MockitoFactoryBean;
@@ -45,7 +45,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class })
+@ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class },
+        excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
 @NoAutoscan
 public class ControllerOnlyApplication {
@@ -207,5 +208,10 @@ public class ControllerOnlyApplication {
     @Bean
     MappingJackson2HttpMessageConverter emberJackson2HttpMessageConverter() {
         return ApplicationRest.getJacksonConverter();
+    }
+
+    @Bean
+    public MockitoFactoryBean<GoogleOauthService> googleOauthService() {
+        return new MockitoFactoryBean<>(GoogleOauthService.class);
     }
 }

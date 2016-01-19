@@ -13,6 +13,7 @@ import org.marsik.elshelves.backend.entities.converters.EmberToUser;
 import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.repositories.AuthorizationRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
+import org.marsik.elshelves.backend.security.SimpleAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +22,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CustomUserDetailsService implements ElshelvesUserDetailsService, Serializable {
+public class CustomUserDetailsService implements ElshelvesUserDetailsService {
     private static final long serialVersionUID = 1L;
 
     @Autowired
@@ -48,6 +51,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
 	@Autowired
 	transient UserToEmber userToEmber;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @CircuitBreaker
     @Transactional(readOnly = true)
     public User getUser(String email) {
@@ -64,18 +70,8 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
             Authorization auth = authorizationRepository.findById(UUID.fromString(email));
             if (auth != null) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new GrantedAuthority() {
-                    @Override
-                    public String getAuthority() {
-                        return "ROLE_MOBILE";
-                    }
-                });
-                authorities.add(new GrantedAuthority() {
-                    @Override
-                    public String getAuthority() {
-                        return "ROLE_USER";
-                    }
-                });
+                authorities.add(new SimpleAuthority("ROLE_MOBILE"));
+                authorities.add(new SimpleAuthority("ROLE_USER"));
 
                 return new org.springframework.security.core.userdetails.User(
                         auth.getId().toString(),
@@ -97,26 +93,17 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
 		}
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "ROLE_USER";
-            }
-        });
-        authorities.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "ROLE_IDENTITY";
-            }
-        });
+        authorities.add(new SimpleAuthority("ROLE_USER"));
+        authorities.add(new SimpleAuthority("ROLE_IDENTITY"));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
+                user.getId().toString(),
                 user.getPassword(),
                 authorities);
     }
 
     @Override
+    @Transactional
     @CircuitBreaker("createUser")
     public String createUser(UserApiModel userInfo) throws OperationNotPermitted {
 		if (userRepository.getUserByEmail(userInfo.getEmail()) != null) {
@@ -136,16 +123,31 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService, Se
         return user.getVerificationCode();
     }
 
-    public User createUser(String email, String externalId) {
-        User user = new User();
-        user.setEmail(email);
+    @Transactional
+    public User createOrAttachUser(String email, String externalId) {
+        User user = userRepository.getUserByExternalIds(externalId);
+
+        if (user != null) {
+            return user;
+        } else if (email != null) {
+            user = userRepository.getUserByEmail(email);
+        }
+
+        if (user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setId(uuidGenerator.generate());
+            user.setRegistrationDate(new DateTime());
+            user.setCreated(new DateTime());
+        }
+
         user.getExternalIds().add(externalId);
-        user.setId(uuidGenerator.generate());
-        user.setRegistrationDate(new DateTime());
-        user.setCreated(new DateTime());
         user.setLastModified(user.getCreated());
 
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        userRepository.flush();
+        entityManager.detach(user);
+        return user;
     }
 
 	@Override

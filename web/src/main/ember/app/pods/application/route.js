@@ -85,6 +85,26 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
       this.controllerFor('application').set('barcodedItem', undefined);
       this.controllerFor('application').set('showCodeFor', undefined);
     },
+    getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    },
+    beforeModel(transition) {
+      var authRule = this.getParameterByName('auth');
+      console.log("Auth rule: ", authRule);
+
+      if (!Ember.isEmpty(authRule)) {
+        var sAuth = atob(authRule);
+        console.log("sAuth: ", sAuth);
+        var jAuth = JSON.parse(sAuth);
+        if (!Ember.isEmpty(jAuth)) {
+          console.log("Performing injected authentication request.");
+          return this.get('session').authenticate('oauth2-w-auth:oauth2-password-grant', jAuth);
+        }
+      }
+    },
     setupController: function(controller, model) {
         controller.set('model', model);
         return this.preloadData(this, controller);
