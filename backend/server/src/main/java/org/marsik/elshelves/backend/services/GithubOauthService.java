@@ -2,7 +2,6 @@ package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.GithubIdentity;
-import org.marsik.elshelves.backend.security.GithubTokenRequest;
 import org.marsik.elshelves.backend.security.GithubTokenResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ public class GithubOauthService {
     private static final String AUTH_ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
     private static final String USER_INFO = "https://api.github.com/user";
 
-    private static final String GOOGLE_EXTERNAL_ID = "@github.oauth";
+    private static final String GITHUB_EXTERNAL_ID = "@github.oauth";
 
     @Value("${github.oauth2.client.id}")
     private String clientId;
@@ -58,7 +56,7 @@ public class GithubOauthService {
         return AUTH_START_URL + "?client_id=" + clientId + "&scope=user:email&state=" + stateToken;
     }
 
-    public User getUserEmail(String code, String state) {
+    public User getOrRegisterUser(User existingUser, String code, String state) {
         MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
         request.add("client_id", clientId);
         request.add("client_secret", clientSecret);
@@ -75,8 +73,13 @@ public class GithubOauthService {
 
         ResponseEntity<GithubIdentity> response = rest.exchange(USER_INFO, HttpMethod.GET, entity, GithubIdentity.class);
 
-        User user = userDetailsService.createOrAttachUser(response.getBody().getEmail(),
-                response.getBody().getLogin() + GOOGLE_EXTERNAL_ID);
-        return user;
+        if (existingUser == null) {
+            existingUser = userDetailsService.createOrAttachUser(response.getBody().getEmail(),
+                    response.getBody().getLogin() + GITHUB_EXTERNAL_ID);
+        } else {
+            existingUser = userDetailsService.attachUser(existingUser, response.getBody().getLogin() + GITHUB_EXTERNAL_ID);
+        }
+
+        return existingUser;
     }
 }

@@ -1,6 +1,5 @@
 package org.marsik.elshelves.backend.controllers;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.entities.User;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
 
@@ -26,9 +24,6 @@ import java.util.Map;
 public class FederatedLogin {
     @Value("${shelves.security.donePage}")
     private String donePage;
-
-    @Value("${google.oauth2.donePage}")
-    private String googleRedirectPage;
 
     @Autowired
     GoogleOauthService googleOauthService;
@@ -39,35 +34,37 @@ public class FederatedLogin {
     @Autowired
     GithubOauthService githubOauthService;
 
+    private void genericOauthDoneRedirect(HttpServletResponse response,
+            String grantType, String code, String state) throws IOException {
+        // Compute login command for the Ember app that instructs it to perform a oauth request with
+        // google type grant
+        Map<String, String> authFormula = new THashMap<>();
+        authFormula.put("grant_type", grantType);
+        authFormula.put("code", code);
+        authFormula.put("state", state);
+
+        final String jsonAuthFormula = converter.getObjectMapper().writeValueAsString(authFormula);
+        response.sendRedirect(
+                donePage + "?auth=" + Base64.getEncoder().encodeToString(jsonAuthFormula.getBytes("UTF8")));
+    }
+
+    // Google federated login
+
+    @RequestMapping("/google/login")
+    public void googleLoginStart(HttpServletResponse response) throws IOException, GeneralSecurityException {
+        response.sendRedirect(googleOauthService.getAuthStartUrl());
+    }
+
     @RequestMapping("/google/done")
     public void googleLoginDone(
             @CurrentUser User currentUser,
             HttpServletResponse response,
             @RequestParam("code") String code,
             @RequestParam("state") String state) throws IOException, GeneralSecurityException, BaseRestException {
-
-
-        // Compute login command for the Ember app that instructs it to perform a oauth request with
-        // google type grant
-        Map<String, String> authFormula = new THashMap<>();
-        authFormula.put("grant_type", "google");
-        authFormula.put("code", code);
-        authFormula.put("state", state);
-
-        final String jsonAuthFormula = converter.getObjectMapper().writeValueAsString(authFormula);
-        response.sendRedirect(donePage + "?auth=" + Base64.getEncoder().encodeToString(jsonAuthFormula.getBytes("UTF8")));
+        genericOauthDoneRedirect(response, "google", code, state);
     }
 
-    @RequestMapping("/google/login")
-    public void googleLoginStart(HttpServletResponse response) throws IOException, GeneralSecurityException {
-        SecureRandom sr1 = new SecureRandom();
-        String stateToken = "google;" + sr1.nextInt();
-
-        GoogleAuthorizationCodeFlow authorizationCodeFlow = googleOauthService.getGoogleAuthFlow();
-
-        String url = authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(googleRedirectPage).build();
-        response.sendRedirect(url);
-    }
+    // Github federated login
 
     @RequestMapping("/github/login")
     public void githubLoginStart(HttpServletResponse response) throws IOException, GeneralSecurityException {
@@ -80,16 +77,6 @@ public class FederatedLogin {
             HttpServletResponse response,
             @RequestParam("code") String code,
             @RequestParam("state") String state) throws IOException, GeneralSecurityException, BaseRestException {
-
-
-        // Compute login command for the Ember app that instructs it to perform a oauth request with
-        // google type grant
-        Map<String, String> authFormula = new THashMap<>();
-        authFormula.put("grant_type", "github");
-        authFormula.put("code", code);
-        authFormula.put("state", state);
-
-        final String jsonAuthFormula = converter.getObjectMapper().writeValueAsString(authFormula);
-        response.sendRedirect(donePage + "?auth=" + Base64.getEncoder().encodeToString(jsonAuthFormula.getBytes("UTF8")));
+        genericOauthDoneRedirect(response, "github", code, state);
     }
 }

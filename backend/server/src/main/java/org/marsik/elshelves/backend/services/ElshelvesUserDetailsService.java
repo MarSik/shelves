@@ -12,4 +12,5 @@ public interface ElshelvesUserDetailsService extends UserDetailsService {
     User getUser(String email);
 	public String startNewVerification(String email);
     User createOrAttachUser(String email, String externalId);
+    User attachUser(User user, String externalId);
 }

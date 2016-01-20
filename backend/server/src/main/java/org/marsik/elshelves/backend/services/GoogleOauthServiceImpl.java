@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +88,8 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
         final HttpResponse response = request.execute();
         final String responseData = response.parseAsString();
 
-        GoogleIdentity identity = messageConverter.getObjectMapper().readerFor(GoogleIdentity.class).readValue(responseData);
+        GoogleIdentity identity = messageConverter.getObjectMapper().readerFor(GoogleIdentity.class).readValue(
+                responseData);
 
         if (currentUser == null) {
             if (identity.getVerifiedEmail()) {
@@ -97,11 +99,17 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
                 return null;
             }
         } else {
-            currentUser.getExternalIds().add(identity.getId() + GOOGLE_EXTERNAL_ID);
-            userService.update(currentUser, currentUser);
+            currentUser = userDetailsService.attachUser(currentUser, identity.getId() + GOOGLE_EXTERNAL_ID);
         }
 
         return currentUser;
     }
 
+    @Override
+    public String getAuthStartUrl() throws GeneralSecurityException, IOException {
+        SecureRandom sr1 = new SecureRandom();
+        String stateToken = "google;" + sr1.nextInt();
+        GoogleAuthorizationCodeFlow authorizationCodeFlow = getGoogleAuthFlow();
+        return authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(donePage).build();
+    }
 }

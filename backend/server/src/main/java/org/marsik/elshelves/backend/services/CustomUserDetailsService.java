@@ -123,6 +123,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         return user.getVerificationCode();
     }
 
+    @Override
     @Transactional
     public User createOrAttachUser(String email, String externalId) {
         User user = userRepository.getUserByExternalIds(externalId);
@@ -150,7 +151,19 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
         return user;
     }
 
-	@Override
+    @Override
+    @Transactional
+    public User attachUser(User user, String externalId) {
+        User realUser = userRepository.findById(user.getId());
+        realUser.getExternalIds().add(externalId);
+        realUser.setLastModified(new DateTime());
+        userRepository.save(realUser);
+        userRepository.flush();
+        entityManager.detach(realUser);
+        return realUser;
+    }
+
+    @Override
     @CircuitBreaker("startUserVerification")
 	public String startNewVerification(String email) {
 		User u = userRepository.getUserByEmail(email);

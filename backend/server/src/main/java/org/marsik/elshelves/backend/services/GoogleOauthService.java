@@ -12,4 +12,6 @@ public interface GoogleOauthService {
 
     User getOrRegisterUser(User currentUser, String state, String code) throws GeneralSecurityException, IOException,
             BaseRestException;
+
+    String getAuthStartUrl() throws GeneralSecurityException, IOException;
 }
