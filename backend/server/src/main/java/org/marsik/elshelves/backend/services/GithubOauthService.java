@@ -74,7 +74,9 @@ public class GithubOauthService {
         ResponseEntity<GithubIdentity> response = rest.exchange(USER_INFO, HttpMethod.GET, entity, GithubIdentity.class);
 
         if (existingUser == null) {
-            existingUser = userDetailsService.createOrAttachUser(response.getBody().getEmail(),
+            existingUser = userDetailsService.createOrAttachUser(
+                    response.getBody().getLogin(),
+                    response.getBody().getEmail(),
                     response.getBody().getLogin() + GITHUB_EXTERNAL_ID);
         } else {
             existingUser = userDetailsService.attachUser(existingUser, response.getBody().getLogin() + GITHUB_EXTERNAL_ID);

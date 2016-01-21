@@ -93,7 +93,9 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
 
         if (currentUser == null) {
             if (identity.getVerifiedEmail()) {
-                currentUser = userDetailsService.createOrAttachUser(identity.getEmail(),
+                currentUser = userDetailsService.createOrAttachUser(
+                        identity.getName(),
+                        identity.getEmail(),
                         identity.getId() + GOOGLE_EXTERNAL_ID);
             } else {
                 return null;

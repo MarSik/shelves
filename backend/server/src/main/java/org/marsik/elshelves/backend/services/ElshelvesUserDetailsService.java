@@ -11,6 +11,6 @@ public interface ElshelvesUserDetailsService extends UserDetailsService {
     UserApiModel verifyUser(String code) throws PermissionDenied;
     User getUser(String email);
 	public String startNewVerification(String email);
-    User createOrAttachUser(String email, String externalId);
+    User createOrAttachUser(String name, String email, String externalId);
     User attachUser(User user, String externalId);
 }

@@ -125,7 +125,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
     @Override
     @Transactional
-    public User createOrAttachUser(String email, String externalId) {
+    public User createOrAttachUser(String name, String email, String externalId) {
         User user = userRepository.getUserByExternalIds(externalId);
 
         if (user != null) {
@@ -138,6 +138,7 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
             user = new User();
             user.setEmail(email);
             user.setId(uuidGenerator.generate());
+            user.setName(name);
             user.setRegistrationDate(new DateTime());
             user.setCreated(new DateTime());
         }
