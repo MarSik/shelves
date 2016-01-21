@@ -17,13 +17,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URLEncoder;
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 @Service
-public class GithubOauthService {
+public class GithubOauthService implements BaseOauthService {
     private static final Logger logger = LoggerFactory.getLogger(GithubOauthService.class);
 
     private static final String AUTH_START_URL = "https://github.com/login/oauth/authorize";
@@ -44,19 +43,21 @@ public class GithubOauthService {
     @Autowired
     ElshelvesUserDetailsService userDetailsService;
 
-    public String getAuthStartUrl() {
-        SecureRandom sr1 = new SecureRandom();
-        String stateToken = null;
-        try {
-            stateToken = URLEncoder.encode("github;" + sr1.nextInt(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return AUTH_START_URL + "?client_id=" + clientId + "&scope=user:email&state=" + stateToken;
+    @Override
+    public String getAuthStartUrl() throws IOException {
+        return AUTH_START_URL
+                + "?client_id="
+                + clientId
+                + "&scope=user:email&state="
+                + URLEncoder.encode(userDetailsService.startExternalLoginRequest("github"), "UTF-8");
     }
 
+    @Override
     public User getOrRegisterUser(User existingUser, String code, String state) {
+        if (!userDetailsService.verifyExternalLoginRequest(state)) {
+            return null;
+        }
+
         MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
         request.add("client_id", clientId);
         request.add("client_secret", clientSecret);

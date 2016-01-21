@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.services;
 
 import gnu.trove.map.hash.THashMap;
+import net.spy.memcached.MemcachedClient;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.UserApiModel;
@@ -14,6 +15,8 @@ import org.marsik.elshelves.backend.entities.converters.UserToEmber;
 import org.marsik.elshelves.backend.repositories.AuthorizationRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.security.SimpleAuthority;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,13 +27,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class CustomUserDetailsService implements ElshelvesUserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(ElshelvesUserDetailsService.class);
+
     private static final long serialVersionUID = 1L;
 
     @Autowired
@@ -53,6 +63,9 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private MemcachedClient memcachedClient;
 
     @CircuitBreaker
     @Transactional(readOnly = true)
@@ -205,5 +218,30 @@ public class CustomUserDetailsService implements ElshelvesUserDetailsService {
 		response.setPassword(password);
 
         return response;
+    }
+
+    @Override
+    public String startExternalLoginRequest(String service) throws IOException {
+        SecureRandom sr1 = new SecureRandom();
+        String stateToken = "github;" + sr1.nextInt();
+        try {
+            memcachedClient.add("ELP-" + stateToken, 90, true).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            throw new IOException("Could not generate token.");
+        }
+        logger.info("Starting external login process no. " + stateToken);
+        return stateToken;
+    }
+
+    @Override
+    public boolean verifyExternalLoginRequest(String stateToken) {
+        try {
+            logger.info("Ending external login process no. " + stateToken);
+            return memcachedClient.delete("ELP-" + stateToken).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

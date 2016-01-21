@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
+import net.spy.memcached.MemcachedClient;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.security.CurrentUser;
@@ -30,6 +31,9 @@ public class FederatedLogin {
 
     @Autowired
     MappingJackson2HttpMessageConverter converter;
+
+    @Autowired
+    MemcachedClient memcachedClient;
 
     @Autowired
     GithubOauthService githubOauthService;

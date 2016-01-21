@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +73,11 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
     @Override
     public User getOrRegisterUser(User currentUser, String state, String code) throws GeneralSecurityException, IOException,
             BaseRestException {
+
+        if (!userDetailsService.verifyExternalLoginRequest(state)) {
+            return null;
+        }
+
         GoogleAuthorizationCodeFlow authorizationCodeFlow = getGoogleAuthFlow();
         GoogleTokenResponse token = authorizationCodeFlow.newTokenRequest(code).setRedirectUri(donePage).execute();
         final Credential credential = authorizationCodeFlow.createAndStoreCredential(token, null);
@@ -109,9 +113,10 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
 
     @Override
     public String getAuthStartUrl() throws GeneralSecurityException, IOException {
-        SecureRandom sr1 = new SecureRandom();
-        String stateToken = "google;" + sr1.nextInt();
         GoogleAuthorizationCodeFlow authorizationCodeFlow = getGoogleAuthFlow();
-        return authorizationCodeFlow.newAuthorizationUrl().setState(stateToken).setRedirectUri(donePage).build();
+        return authorizationCodeFlow.newAuthorizationUrl()
+                .setState(userDetailsService.startExternalLoginRequest("google"))
+                .setRedirectUri(donePage)
+                .build();
     }
 }

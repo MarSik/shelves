@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @ControllerAdvice
 public class ExceptionHandlingController {
-	@ExceptionHandler(IOException.class)
+	@ExceptionHandler({IOException.class, GeneralSecurityException.class})
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public void handleIoException() {
 
@@ -19,6 +20,12 @@ public class ExceptionHandlingController {
 	@ExceptionHandler(FileNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public void handleFileNotFound() {
+
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	public void handleBadValues() {
 
 	}
 }

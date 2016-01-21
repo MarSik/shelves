@@ -19,6 +19,10 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         loading: function() {
             this.intermediateTransitionTo("loading");
         },
+        error: function(error, transition) {
+            Ember.onerror(error);
+            return true;
+        },
         addSticker: function (obj) {
             this.store.createRecord('sticker', {
               object: obj
