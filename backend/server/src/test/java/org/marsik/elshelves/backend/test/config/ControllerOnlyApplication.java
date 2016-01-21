@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.test.config;
 
+import net.spy.memcached.MemcachedClient;
 import org.marsik.elshelves.backend.app.spring.ApplicationRest;
 import org.marsik.elshelves.backend.app.spring.NoAutoscan;
 import org.marsik.elshelves.backend.controllers.UserController;
@@ -219,5 +220,10 @@ public class ControllerOnlyApplication {
     @Bean
     public MockitoFactoryBean<GithubOauthService> githubOauthServiceMockitoFactoryBean() {
         return new MockitoFactoryBean<>(GithubOauthService.class);
+    }
+
+    @Bean
+    public MockitoFactoryBean<MemcachedClient> memcachedClientMockitoFactoryBean() {
+        return new MockitoFactoryBean<>(MemcachedClient.class);
     }
 }
