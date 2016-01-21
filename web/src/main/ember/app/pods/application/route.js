@@ -13,9 +13,11 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             });
         },
         sessionAuthenticationSucceeded: function () {
-            var controller = this.get('controller');
-            this.get('preloadData')(this, controller);
             this._super();
+            this.refresh();
+        },
+        loading: function() {
+            this.intermediateTransitionTo("loading");
         },
         addSticker: function (obj) {
             this.store.createRecord('sticker', {
@@ -91,17 +93,20 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         results = regex.exec(location.search);
       return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     },
-    beforeModel(transition) {
+    model() {
       var authRule = this.getParameterByName('auth');
       console.log("Auth rule: ", authRule);
 
-      if (!Ember.isEmpty(authRule)) {
+      if (!this.get('session.isAuthenticated')
+          && !Ember.isEmpty(authRule)) {
         var sAuth = atob(authRule);
         console.log("sAuth: ", sAuth);
         var jAuth = JSON.parse(sAuth);
         if (!Ember.isEmpty(jAuth)) {
           console.log("Performing injected authentication request.");
-          return this.get('session').authenticate('oauth2-w-auth:oauth2-password-grant', jAuth);
+          return this.get('session').authenticate('oauth2-w-auth:oauth2-password-grant', jAuth).then(null, function () {
+            return "Authentication failed.";
+          });
         }
       }
     },

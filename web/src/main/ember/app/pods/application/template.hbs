@@ -1,6 +1,7 @@
 {{title-bar stickerCount=stickers.length searchAction='search'}}
 
 <div class="main-content">
+    {{#if model}}<p class="alert-box warning">{{fa-icon 'exclamation-triangle'}} {{model}}</p>{{/if}}
     {{outlet}}
 </div>
 
