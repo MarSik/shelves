@@ -408,8 +408,8 @@ public class BackupServiceImpl implements BackupService {
         for (T i0: items) {
             F i = converter.convert(i0, conversionCache);
 
-            if (i instanceof OwnedEntityInterface) {
-                relinkContext.fixOwner((OwnedEntityInterface)i, currentUser);
+            if (i != null) {
+                relinkContext.fixOwner(i, currentUser);
             }
 
             pool.add(i);
