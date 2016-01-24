@@ -19,6 +19,12 @@ export default Ember.ArrayController.extend({
               object: sticker.get('object')
             });
             ns.save();
+        },
+        randomCode() {
+            var randomCode = this.store.createRecord('sticker', {
+              object: null
+            });
+            randomCode.save();
         }
     },
 

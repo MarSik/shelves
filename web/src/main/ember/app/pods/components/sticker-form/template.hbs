@@ -1,6 +1,6 @@
 {{input type='hidden' name='access_token' value=access_token}}
 {{#each items key="@index" as |item|}}
-    {{input type='hidden' name='uuids[]' value=item.object.id}}
+    {{input type='hidden' name='uuids[]' value=item.stickerId}}
 {{/each}}
 
 {{yield}}

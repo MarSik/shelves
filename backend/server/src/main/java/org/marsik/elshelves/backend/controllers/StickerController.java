@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.StickerService;
+import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,37 @@ public class StickerController {
 	@Autowired
 	OwnedEntityRepository ownedEntityRepository;
 
+	@Autowired
+	UuidGenerator uuidGenerator;
+
+	private static class RandomSticker implements StickerCapable {
+		private final UUID id;
+
+		public RandomSticker(UUID id) {
+			this.id = id;
+		}
+
+		@Override
+		public UUID getId() {
+			return id;
+		}
+
+		@Override
+		public String getName() {
+			return null;
+		}
+
+		@Override
+		public String getSummary() {
+			return null;
+		}
+
+		@Override
+		public String getBaseUrl() {
+			return "id";
+		}
+	}
+
 	@Transactional(readOnly = true)
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(produces = "application/pdf")
@@ -52,6 +84,11 @@ public class StickerController {
 
 		List<StickerCapable> objects = new ArrayList<>();
 		for (UUID uuid: uuids) {
+			if (uuid.equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))) {
+				objects.add(new RandomSticker(uuidGenerator.generate()));
+				continue;
+			}
+
 			OwnedEntity e = ownedEntityRepository.findById(uuid);
 			if (e == null) {
 				throw new EntityNotFound();
@@ -65,7 +102,7 @@ public class StickerController {
 				throw new InvalidRequest();
 			}
 
-			objects.add((StickerCapable)e);
+			objects.add((StickerCapable) e);
 		}
 
 		StickerService.Result pdf = stickerService.generateStickers(stickerSettings, objects);
