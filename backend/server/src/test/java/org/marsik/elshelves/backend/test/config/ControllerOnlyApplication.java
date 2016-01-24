@@ -22,6 +22,8 @@ import org.marsik.elshelves.backend.services.FootprintService;
 import org.marsik.elshelves.backend.services.GithubOauthService;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.marsik.elshelves.backend.services.GroupService;
+import org.marsik.elshelves.backend.services.IdentifiedEntityService;
+import org.marsik.elshelves.backend.services.IdentifiedEntityServiceInterface;
 import org.marsik.elshelves.backend.services.ItemService;
 import org.marsik.elshelves.backend.services.ListService;
 import org.marsik.elshelves.backend.services.LotService;
@@ -200,6 +202,11 @@ public class ControllerOnlyApplication {
     @Bean
     public MockitoFactoryBean<UserService> userServiceMockitoFactoryBean() {
         return new MockitoFactoryBean<>(UserService.class);
+    }
+
+    @Bean
+    public MockitoFactoryBean<IdentifiedEntityServiceInterface> identifiedEntityServiceMockitoFactoryBean() {
+        return new MockitoFactoryBean<>(IdentifiedEntityServiceInterface.class);
     }
 
     @Bean

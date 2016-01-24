@@ -7,6 +7,7 @@ import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.ember.EmberModelName;
 
 import java.util.Map;
+import java.util.Set;
 
 public class AbstractConversionService<S, D, U> {
     Map<Class<? extends S>,

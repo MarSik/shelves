@@ -12,18 +12,18 @@ import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import java.util.Collection;
 import java.util.UUID;
 
-public interface AbstractRestServiceIntf<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> {
+public interface AbstractRestServiceIntf<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> extends AbstractReadOnlyRestServiceInterface<T> {
     R getRepository();
 
-    @CircuitBreaker Collection<T> getAllItems(User currentUser);
+    Collection<T> getAllItems(User currentUser);
 
-    @CircuitBreaker T create(T entity, User currentUser) throws OperationNotPermitted;
+    T create(T entity, User currentUser) throws OperationNotPermitted;
 
-    @CircuitBreaker T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound;
+    T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound;
 
-    @CircuitBreaker boolean delete(UUID uuid, User currentUser) throws BaseRestException;
+    boolean delete(UUID uuid, User currentUser) throws BaseRestException;
 
-    @CircuitBreaker T update(T update, User currentUser) throws BaseRestException;
+    T update(T update, User currentUser) throws BaseRestException;
 
     void flush();
 }

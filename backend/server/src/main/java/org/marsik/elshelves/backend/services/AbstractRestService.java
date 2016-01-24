@@ -24,9 +24,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity>
-        implements AbstractRestServiceIntf<R,T> {
-    final R repository;
+public abstract class AbstractRestService<R extends BaseIdentifiedEntityRepository<T>, T extends UpdateableEntity> extends AbstractReadOnlyRestService<R, T>
+        implements AbstractRestServiceIntf<R, T> {
     final UuidGenerator uuidGenerator;
 
 	@Autowired
@@ -37,26 +36,12 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
     public AbstractRestService(R repository,
                                UuidGenerator uuidGenerator) {
-        this.repository = repository;
+        super(repository);
         this.uuidGenerator = uuidGenerator;
     }
 
-    @Override public R getRepository() {
-        return repository;
-    }
-
-	public UuidGenerator getUuidGenerator() {
+    public UuidGenerator getUuidGenerator() {
 		return uuidGenerator;
-	}
-
-	protected abstract Iterable<T> getAllEntities(User currentUser);
-
-    protected T getSingleEntity(UUID uuid) {
-        return repository.findById(uuid);
-    }
-
-	protected int conversionDepth() {
-		return 1;
 	}
 
     protected T createEntity(T entity, User currentUser) {
@@ -109,35 +94,11 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
     }
 
     @Override @CircuitBreaker
-    public Collection<T> getAllItems(User currentUser) {
-        Set<T> dtos = new THashSet<>();
-        for (T entity: getAllEntities(currentUser)) {
-            dtos.add(entity);
-        }
-        return dtos;
-    }
-
-    @Override @CircuitBreaker
     public T create(T entity, User currentUser) throws OperationNotPermitted {
         entity = createEntity(entity, currentUser);
         entity.setCreated(new DateTime());
         entity = save(entity);
         return entity;
-    }
-
-    @Override @CircuitBreaker
-    public T get(UUID uuid, User currentUser) throws PermissionDenied, EntityNotFound {
-        T one = getSingleEntity(uuid);
-
-		if (one == null) {
-			throw new EntityNotFound();
-		}
-
-        if (!one.getOwner().equals(currentUser)) {
-            throw new PermissionDenied();
-        }
-
-        return one;
     }
 
     @Override @CircuitBreaker

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
+import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,7 +34,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 @EntityListeners(AuditingEntityListener.class)
-public class IdentifiedEntity implements IdentifiedEntityInterface {
+public class IdentifiedEntity implements IdentifiedEntityInterface, UpdateableEntity {
     @Id
     @GeneratedValue
     Long dbId;
@@ -164,5 +165,30 @@ public class IdentifiedEntity implements IdentifiedEntityInterface {
         public UnprovidedSet() {
             super(0);
         }
+    }
+
+    @Override
+    public void updateFrom(UpdateableEntity update) throws OperationNotPermitted {
+
+    }
+
+    @Override
+    public User getOwner() {
+        return null;
+    }
+
+    @Override
+    public void setOwner(User owner) {
+
+    }
+
+    @Override
+    public boolean canBeDeleted() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeUpdated() {
+        return false;
     }
 }

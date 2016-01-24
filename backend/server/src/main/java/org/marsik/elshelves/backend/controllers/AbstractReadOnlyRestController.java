@@ -13,11 +13,13 @@ import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Box;
+import org.marsik.elshelves.backend.entities.OwnedEntityInterface;
 import org.marsik.elshelves.backend.entities.UpdateableEntity;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.repositories.BaseIdentifiedEntityRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
+import org.marsik.elshelves.backend.services.AbstractReadOnlyRestServiceInterface;
 import org.marsik.elshelves.backend.services.AbstractRestService;
 import org.marsik.elshelves.backend.services.AbstractRestServiceIntf;
 import org.marsik.elshelves.ember.EmberModel;
@@ -42,18 +44,18 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
 
-public class AbstractReadOnlyRestController<T extends UpdateableEntity, E extends AbstractEntityApiModel, S extends AbstractRestServiceIntf<? extends BaseIdentifiedEntityRepository<T>, T>> {
+public class AbstractReadOnlyRestController<T extends OwnedEntityInterface, E extends AbstractEntityApiModel, S extends AbstractReadOnlyRestServiceInterface<T>> {
     final Class<E> dtoClazz;
     final S service;
-    final CachingConverter<T, E, UUID> dbToRest;
+    final CachingConverter<? super T, E, UUID> dbToRest;
 
-    public AbstractReadOnlyRestController(Class<E> dtoClazz, CachingConverter<T, E, UUID> dbToRest, S service) {
+    public AbstractReadOnlyRestController(Class<E> dtoClazz, CachingConverter<? super T, E, UUID> dbToRest, S service) {
         this.dtoClazz = dtoClazz;
         this.dbToRest = dbToRest;
         this.service = service;
     }
 
-    public CachingConverter<T, E, UUID> getDbToRest() {
+    public CachingConverter<? super T, E, UUID> getDbToRest() {
         return dbToRest;
     }
 
