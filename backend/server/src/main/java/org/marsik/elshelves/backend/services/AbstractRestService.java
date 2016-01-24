@@ -95,7 +95,13 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
     @Override @CircuitBreaker
     public T create(T entity, User currentUser) throws OperationNotPermitted {
+        UUID expectedUuid = entity.getId();
         entity = createEntity(entity, currentUser);
+        if (!entity.getId().equals(expectedUuid)
+                && expectedUuid != null) {
+            throw new OperationNotPermitted();
+        }
+
         entity.setCreated(new DateTime());
         entity = save(entity);
         return entity;
