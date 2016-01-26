@@ -11,4 +11,6 @@ public interface BaseOauthService {
 
     User getOrRegisterUser(User existingUser, String code, String state) throws GeneralSecurityException, IOException,
             BaseRestException;
+
+    boolean isConfigured();
 }

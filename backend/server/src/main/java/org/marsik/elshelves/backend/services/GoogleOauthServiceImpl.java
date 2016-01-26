@@ -119,4 +119,12 @@ public class GoogleOauthServiceImpl implements GoogleOauthService {
                 .setRedirectUri(donePage)
                 .build();
     }
+
+    @Override
+    public boolean isConfigured() {
+        return clientId != null
+                && !clientId.isEmpty()
+                && clientSecret != null
+                && !clientSecret.isEmpty();
+    }
 }

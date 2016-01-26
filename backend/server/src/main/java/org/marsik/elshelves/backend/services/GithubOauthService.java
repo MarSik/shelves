@@ -85,4 +85,12 @@ public class GithubOauthService implements BaseOauthService {
 
         return existingUser;
     }
+
+    @Override
+    public boolean isConfigured() {
+        return clientId != null
+                && !clientId.isEmpty()
+                && clientSecret != null
+                && !clientSecret.isEmpty();
+    }
 }
