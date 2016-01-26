@@ -4,6 +4,7 @@ import ENV from '../../config/environment';
 /* global $ */
 
 export default Ember.Controller.extend({
+    app: Ember.inject.controller('application'),
     actions: {
         register: function() {
             var store = this.store;
