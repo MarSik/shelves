@@ -40,7 +40,7 @@ public class TransactionToEmber extends AbstractEntityToEmber<Transaction, Trans
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Transaction.class, getTarget(), this);
+		conversionService.register(Transaction.class, this);
 
 	}
 

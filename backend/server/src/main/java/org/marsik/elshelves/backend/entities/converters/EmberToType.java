@@ -41,7 +41,7 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(PartTypeApiModel.class, getTarget(), this);
+		conversionService.register(PartTypeApiModel.class, this);
 
 	}
 

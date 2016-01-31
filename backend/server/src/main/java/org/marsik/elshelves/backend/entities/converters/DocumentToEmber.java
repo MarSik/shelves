@@ -32,7 +32,7 @@ public class DocumentToEmber extends AbstractEntityToEmber<Document, DocumentApi
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Document.class, getTarget(), this);
+		conversionService.register(Document.class, this);
 	}
 
 	@Override

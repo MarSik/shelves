@@ -46,7 +46,7 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Type.class, getTarget(), this);
+		conversionService.register(Type.class, this);
 
 	}
 

@@ -14,7 +14,8 @@ public enum LotAction {
 	DESTROYED,
     EVENT,
     FINISHED,
-    REOPENED;
+    REOPENED,
+    MIXED; // MIXED state is used when the lot was mixed with other lots and it is not possible to distinguish the different lots anymore (MixedLot was created)
 
     @JsonCreator
     public static LotAction forValue(JsonNode s) {

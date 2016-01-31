@@ -20,7 +20,7 @@ public class LotHistoryToEmber extends AbstractEntityToEmber<LotHistory, LotHist
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(LotHistory.class, getTarget(), this);
+        conversionService.register(LotHistory.class, this);
 
     }
 

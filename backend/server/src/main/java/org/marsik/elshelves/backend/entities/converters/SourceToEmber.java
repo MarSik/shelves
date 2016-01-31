@@ -26,7 +26,7 @@ public class SourceToEmber extends AbstractEntityToEmber<Source, SourceApiModel>
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Source.class, getTarget(), this);
+		conversionService.register(Source.class, this);
 
 	}
 

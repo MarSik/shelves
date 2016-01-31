@@ -90,10 +90,9 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
             Type type,
             Source source,
             User currentUser) {
-        Purchase purchase = item.getPurchase();
-        Transaction transaction = purchase != null ? purchase.getTransaction() : null;
         List<IdentifiedEntity> created = new ArrayList<>();
 
+        item.setType(type);
         item.setId(uuidGenerator.generate());
 
         Relinker relinkContext = relinkService.newRelinker();
@@ -110,18 +109,7 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
             type = relinkContext.findExisting(type);
         }
 
-        if (purchase == null) {
-            purchase = new Purchase();
-            purchase.setCount(1L);
-            purchase.setId(uuidGenerator.generate());
-            purchase.addLot(item);
-            purchase.setType(type);
-
-            created.add(purchase);
-            item.setPurchase(purchase);
-        }
-
-        type.addPurchase(purchase);
+        type.addLot(item);
 
         if (source == null) {
             source = currentUser.getProjectSource();
@@ -137,18 +125,6 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
             identifiedEntityRepository.save(currentUser);
         }
 
-        if (transaction == null) {
-            transaction = new Transaction();
-            transaction.setId(uuidGenerator.generate());
-            transaction.setName(item.getSerials().isEmpty() ? "Project start" : item.getSerials().iterator().next());
-            transaction.setDate(new DateTime());
-            transaction.addItem(purchase);
-            transaction.setSource(source);
-
-            created.add(transaction);
-            purchase.setTransaction(transaction);
-        }
-
         LotHistory history = new LotHistory();
         history.setId(uuidGenerator.generate());
         history.setValidSince(new DateTime());
@@ -160,7 +136,7 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
         item.setRequires(new THashSet<>());
         item.setStatus(LotAction.DELIVERY);
         item.setHistory(history);
-        item.setPurchase(purchase);
+        item.setType(type);
         created.add(item);
 
         for (IdentifiedEntity en: created) {
@@ -178,8 +154,6 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
 
         identifiedEntityRepository.save(type);
         identifiedEntityRepository.save(source);
-        identifiedEntityRepository.save(transaction);
-        identifiedEntityRepository.save(purchase);
         identifiedEntityRepository.save(created);
         identifiedEntityRepository.save(item);
         identifiedEntityRepository.save(history);
@@ -190,7 +164,7 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
     @Override
     protected Item save(Item entity) {
         saveOrUpdate(entity.getHistory());
-        saveOrUpdate(entity.getPurchase());
+        saveOrUpdate(entity.getType());
         for (Requirement r: entity.getRequires()) {
             saveOrUpdate(r);
         }

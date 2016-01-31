@@ -126,13 +126,13 @@ public class Purchase extends OwnedEntity {
 	}
 
     @OneToMany(mappedBy = "purchase", fetch = FetchType.LAZY)
-	Set<Lot> lots = new THashSet<>();
+	Set<PurchasedLot> lots = new THashSet<>();
 
-	public void addLot(Lot l) {
+	public void addLot(PurchasedLot l) {
 		l.setPurchase(this);
 	}
 
-	public void removeLot(Lot l) {
+	public void removeLot(PurchasedLot l) {
 		l.setPurchase(null);
 	}
 

@@ -35,7 +35,7 @@ public class BoxToEmber extends AbstractEntityToEmber<Box,BoxApiModel> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Box.class, getTarget(), this);
+		conversionService.register(Box.class, this);
 
 	}
 

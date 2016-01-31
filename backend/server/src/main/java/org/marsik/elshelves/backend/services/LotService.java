@@ -6,6 +6,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.PurchasedLot;
 import org.marsik.elshelves.backend.entities.User;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ public interface LotService {
 
     Lot get(UUID id, User currentUser) throws PermissionDenied, EntityNotFound;
 
-    Lot delivery(Lot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied,
+    Lot delivery(PurchasedLot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied,
             OperationNotPermitted;
 
     <T extends Lot> LotSplitResult<T> update(T lot, T update, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted;

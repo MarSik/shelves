@@ -37,7 +37,7 @@ public class RequirementToEmber extends AbstractEntityToEmber<Requirement, Requi
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Requirement.class, getTarget(), this);
+		conversionService.register(Requirement.class, this);
 
 	}
 

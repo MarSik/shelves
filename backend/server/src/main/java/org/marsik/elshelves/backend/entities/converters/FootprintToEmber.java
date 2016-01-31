@@ -27,7 +27,7 @@ public class  FootprintToEmber extends AbstractEntityToEmber<Footprint, Footprin
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Footprint.class, getTarget(), this);
+		conversionService.register(Footprint.class, this);
 
 	}
 

@@ -20,7 +20,7 @@ public class EmberToLotHistory extends AbstractEmberToEntity<LotHistoryApiModel,
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(LotHistoryApiModel.class, getTarget(), this);
+        conversionService.register(LotHistoryApiModel.class, this);
     }
 
     @Autowired

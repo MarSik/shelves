@@ -35,7 +35,7 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(RequirementApiModel.class, getTarget(), this);
+		conversionService.register(RequirementApiModel.class, this);
 
 	}
 

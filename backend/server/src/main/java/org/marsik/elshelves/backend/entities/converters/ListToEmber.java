@@ -29,7 +29,7 @@ public class ListToEmber extends AbstractEntityToEmber<List, ListApiModel> {
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(List.class, getTarget(), this);
+        conversionService.register(List.class, this);
 
     }
 

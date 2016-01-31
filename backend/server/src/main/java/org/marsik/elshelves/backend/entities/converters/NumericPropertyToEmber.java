@@ -29,7 +29,7 @@ public class NumericPropertyToEmber extends AbstractEntityToEmber<NumericPropert
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(NumericProperty.class, getTarget(), this);
+        conversionService.register(NumericProperty.class, this);
 
     }
 

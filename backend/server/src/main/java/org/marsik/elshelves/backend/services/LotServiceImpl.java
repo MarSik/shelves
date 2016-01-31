@@ -10,6 +10,7 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntityInterface;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.Purchase;
+import org.marsik.elshelves.backend.entities.PurchasedLot;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
@@ -71,7 +72,7 @@ public class LotServiceImpl implements LotService {
 		return lot;
 	}
 
-	@Override public Lot delivery(Lot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+	@Override public Lot delivery(PurchasedLot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.findById(newLot0.getPurchase().getId());
 		Box location = boxRepository.findById(newLot0.getLocation().getId());
 
@@ -87,7 +88,7 @@ public class LotServiceImpl implements LotService {
 			throw new PermissionDenied();
 		}
 
-		Lot lot = Lot.delivery(purchase,
+		PurchasedLot lot = PurchasedLot.delivery(purchase,
                 uuidGenerator.generate(),
                 newLot0.getCount(),
                 location,

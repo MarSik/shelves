@@ -16,7 +16,7 @@ public class AbstractConversionService<S, D, U> {
     Map<String,
             CachingConverter<? extends S, ? extends D, U>> typeNameConversionMap = new THashMap<>();
 
-    public <F extends S, T extends D> void register(Class<F> source, Class<T> target, CachingConverter<F, T, U> converter) {
+    public <F extends S, T extends D> void register(Class<F> source, CachingConverter<F, T, U> converter) {
         sourceConversionMap.put(source, converter);
 
         if (source.getAnnotation(JsonTypeName.class) != null) {

@@ -28,7 +28,7 @@ public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, F
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(FootprintApiModel.class, getTarget(), this);
+		conversionService.register(FootprintApiModel.class, this);
 
 	}
 

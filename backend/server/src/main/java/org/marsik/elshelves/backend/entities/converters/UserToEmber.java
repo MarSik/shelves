@@ -35,7 +35,7 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(User.class, getTarget(), this);
+        conversionService.register(User.class, this);
     }
 
 	@Override

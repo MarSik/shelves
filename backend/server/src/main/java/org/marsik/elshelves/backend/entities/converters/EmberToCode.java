@@ -21,7 +21,7 @@ public class EmberToCode extends AbstractEmberToEntity<CodeApiModel, Code> {
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(CodeApiModel.class, getTarget(), this);
+        conversionService.register(CodeApiModel.class, this);
     }
 
     @Autowired

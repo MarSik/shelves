@@ -20,7 +20,7 @@ public class EmberToNumericProperty extends AbstractEmberToEntity<NumericPropert
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(NumericPropertyApiModel.class, getTarget(), this);
+        conversionService.register(NumericPropertyApiModel.class, this);
     }
 
     @Autowired

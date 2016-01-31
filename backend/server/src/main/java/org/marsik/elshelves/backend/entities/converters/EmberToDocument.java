@@ -33,7 +33,7 @@ public class EmberToDocument extends AbstractEmberToEntity<DocumentApiModel, Doc
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(DocumentApiModel.class, getTarget(), this);
+		conversionService.register(DocumentApiModel.class, this);
 	}
 
 	@Override

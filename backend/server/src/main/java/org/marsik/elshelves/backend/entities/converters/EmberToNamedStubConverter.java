@@ -1,9 +1,6 @@
 package org.marsik.elshelves.backend.entities.converters;
 
-import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.api.entities.AbstractNamedEntityApiModel;
-import org.marsik.elshelves.api.entities.SourceApiModel;
-import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.NamedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -26,7 +23,7 @@ public class EmberToNamedStubConverter extends AbstractEmberToEntity<AbstractNam
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(AbstractNamedEntityApiModel.class, getTarget(), this);
+        conversionService.register(AbstractNamedEntityApiModel.class, this);
     }
 
     @Override

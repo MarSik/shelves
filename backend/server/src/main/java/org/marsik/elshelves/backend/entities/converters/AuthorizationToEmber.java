@@ -21,7 +21,7 @@ public class AuthorizationToEmber extends AbstractEntityToEmber<Authorization, A
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(Authorization.class, getTarget(), this);
+        conversionService.register(Authorization.class, this);
     }
 
     @Override

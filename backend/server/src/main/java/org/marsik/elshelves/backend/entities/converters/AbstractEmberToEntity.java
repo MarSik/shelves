@@ -15,7 +15,7 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         this.type = type;
     }
 
-    public Class<T> getTarget() {
+    public Class<? extends T> getTarget(F object) {
         return type;
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractEmberToEntity<F extends AbstractEntityApiModel, T 
         T model;
 
         try {
-            model = type.newInstance();
+            model = getTarget(object).newInstance();
         } catch (InstantiationException|IllegalAccessException ex) {
             ex.printStackTrace();
             return null;

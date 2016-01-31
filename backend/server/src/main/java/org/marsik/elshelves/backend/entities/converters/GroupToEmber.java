@@ -37,7 +37,7 @@ public class GroupToEmber extends AbstractEntityToEmber<Group, PartGroupApiModel
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Group.class, getTarget(), this);
+		conversionService.register(Group.class, this);
 
 	}
 

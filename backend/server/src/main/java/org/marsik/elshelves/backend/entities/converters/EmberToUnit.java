@@ -27,7 +27,7 @@ public class EmberToUnit extends AbstractEmberToEntity<UnitApiModel, Unit> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(UnitApiModel.class, getTarget(), this);
+		conversionService.register(UnitApiModel.class, this);
 
 	}
 

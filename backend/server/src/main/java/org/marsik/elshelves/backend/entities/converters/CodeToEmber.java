@@ -27,7 +27,7 @@ public class CodeToEmber extends AbstractEntityToEmber<Code, CodeApiModel> {
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(Code.class, getTarget(), this);
+        conversionService.register(Code.class, this);
     }
 
     @Override

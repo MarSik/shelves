@@ -29,7 +29,7 @@ public class EmberToList extends AbstractEmberToEntity<ListApiModel, List> {
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(ListApiModel.class, getTarget(), this);
+        conversionService.register(ListApiModel.class, this);
     }
 
     @Override

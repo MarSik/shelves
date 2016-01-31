@@ -42,6 +42,8 @@ public class LotApiModel extends AbstractEntityApiModel {
 		super(uuid);
 	}
 
+	PartTypeApiModel type;
+
 	BoxApiModel location;
 
 	LotAction status;
@@ -51,6 +53,8 @@ public class LotApiModel extends AbstractEntityApiModel {
 	RequirementApiModel usedBy;
 
     DateTime expiration;
+
+	Set<LotApiModel> parents;
 
 	/**
 	 * Used only for data restore from old data.

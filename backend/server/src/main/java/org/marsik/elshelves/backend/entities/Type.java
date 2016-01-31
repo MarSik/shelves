@@ -110,21 +110,8 @@ public class Type extends NamedEntity implements StickerCapable {
 		t.getSeeAlsoIncoming().remove(t);
 	}
 
-	public Iterable<Lot> getLots() {
-		List<Lot> lots = new ArrayList<>();
-
-		if (getPurchases() == null) {
-			return lots;
-		}
-
-		for (Purchase p: getPurchases()) {
-			for (Lot l: p.getLots()) {
-				lots.add(l);
-			}
-		}
-
-		return lots;
-	}
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
+	Set<Lot> lots;
 
 	@Override
 	public boolean canBeDeleted() {
@@ -196,5 +183,9 @@ public class Type extends NamedEntity implements StickerCapable {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	public void addLot(Lot lot) {
+		lot.setType(this);
 	}
 }

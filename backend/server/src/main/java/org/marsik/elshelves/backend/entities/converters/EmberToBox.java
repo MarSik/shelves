@@ -30,7 +30,7 @@ public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(BoxApiModel.class, getTarget(), this);
+		conversionService.register(BoxApiModel.class, this);
 	}
 
 	@Override

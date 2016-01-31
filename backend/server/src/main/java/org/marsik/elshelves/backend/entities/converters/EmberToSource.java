@@ -26,7 +26,7 @@ public class EmberToSource extends AbstractEmberToEntity<SourceApiModel, Source>
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(SourceApiModel.class, getTarget(), this);
+		conversionService.register(SourceApiModel.class, this);
 
 	}
 

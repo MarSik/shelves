@@ -39,7 +39,7 @@ public class EmberToTransaction extends AbstractEmberToEntity<TransactionApiMode
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(TransactionApiModel.class, getTarget(), this);
+		conversionService.register(TransactionApiModel.class, this);
 
 	}
 

@@ -42,6 +42,16 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	}
 
 	@NotNull
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	Type type;
+
+	public void setType(Type t) {
+		if (type != null) type.getLots().remove(this);
+		type = t;
+		if (type != null) type.getLots().add(this);
+	}
+
+	@NotNull
 	@Min(1)
 	Long count;
 
@@ -53,17 +63,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	        optional = false)
 	@NotNull
 	LotHistory history;
-
-	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY,
-			optional = false)
-	Purchase purchase;
-
-	public void setPurchase(Purchase p) {
-		if (purchase != null) purchase.getLots().remove(this);
-		purchase = p;
-		if (purchase != null) purchase.getLots().add(this);
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	Box location;
@@ -123,23 +122,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		return getHistory();
 	}
 
-	public static Lot delivery(Purchase purchase, UUID uuid, Long count,
-							   Box location, DateTime expiration, User performedBy, UuidGenerator uuidGenerator) {
-		Lot l = new Lot();
-		l.setOwner(purchase.getOwner());
-		l.setId(uuid);
-		l.setLocation(location);
-		l.setCount(count);
-		l.setPurchase(purchase);
-		l.setExpiration(expiration);
-		l.setStatus(LotAction.DELIVERY);
-
-		LotHistory h = l.recordChange(null, performedBy, uuidGenerator);
-		h.setLocation(location);
-
-		return l;
-	}
-
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
@@ -189,7 +171,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 	@Override
 	public String getSummary() {
-		return getPurchase().getTransaction().getName();
+		return "";
 	}
 
 	@Override
@@ -203,11 +185,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 	public boolean canBeUpdated() {
 		return false;
-	}
-
-	@Transient
-	public Type getType() {
-		return getPurchase() == null ? null : getPurchase().getType();
 	}
 
 	@Override
@@ -271,10 +248,10 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 	@Override
 	public void relink(Relinker relinker) {
-		relinkItem(relinker, getPurchase(), this::setPurchase);
 		relinkItem(relinker, getLocation(), this::setLocation);
 		relinkItem(relinker, getUsedBy(), this::setUsedBy);
 		relinkItem(relinker, getHistory(), this::setHistory);
+		relinkItem(relinker, getType(), this::setType);
 		super.relink(relinker);
 	}
 

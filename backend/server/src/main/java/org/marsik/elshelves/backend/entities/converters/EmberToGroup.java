@@ -38,7 +38,7 @@ public class EmberToGroup extends AbstractEmberToEntity<PartGroupApiModel, Group
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(PartGroupApiModel.class, getTarget(), this);
+        conversionService.register(PartGroupApiModel.class, this);
     }
 
 	@Override

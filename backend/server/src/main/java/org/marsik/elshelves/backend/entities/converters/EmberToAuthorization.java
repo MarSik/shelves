@@ -20,7 +20,7 @@ public class EmberToAuthorization extends AbstractEmberToEntity<AuthorizationApi
 
     @PostConstruct
     void postConstruct() {
-        conversionService.register(AuthorizationApiModel.class, getTarget(), this);
+        conversionService.register(AuthorizationApiModel.class, this);
     }
 
     @Autowired

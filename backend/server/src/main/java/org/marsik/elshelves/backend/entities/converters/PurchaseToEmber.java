@@ -38,7 +38,7 @@ public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApi
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Purchase.class, getTarget(), this);
+		conversionService.register(Purchase.class, this);
 
 	}
 

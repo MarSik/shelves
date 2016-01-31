@@ -16,7 +16,7 @@ public abstract class AbstractEntityToEmber<F extends IdentifiedEntity, T extend
         this.type = type;
     }
 
-    public Class<T> getTarget() {
+    public Class<? extends T> getTarget(F inst) {
         return type;
     }
 

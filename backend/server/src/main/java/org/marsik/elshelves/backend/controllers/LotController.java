@@ -5,6 +5,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
+import org.marsik.elshelves.backend.entities.PurchasedLot;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
@@ -171,7 +172,7 @@ public class LotController {
         Lot lot = emberToLot.convert(lot0, new THashMap<>());
 
         if (lot0.getPurchase() != null && lot0.getPrevious() == null) {
-            Lot result = lotService.delivery(lot, lot.getExpiration(), currentUser);
+            Lot result = lotService.delivery((PurchasedLot)lot, lot.getExpiration(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
         } else if (lot0.getPrevious() != null) {
             // The expected result of split action is the new lot with expected count.
@@ -198,8 +199,7 @@ public class LotController {
 						   @CurrentUser User currentUser,
 						   @PathVariable("uuid") UUID uuid) throws IOException, PermissionDenied, EntityNotFound {
 		Lot lot = lotService.get(uuid, currentUser);
-		Purchase purchase = purchaseService.get(lot.getPurchase().getId(), currentUser);
-		Type type = typeService.get(purchase.getType().getId(), currentUser);
+		Type type = typeService.get(lot.getType().getId(), currentUser);
 
 		response.setContentType("image/jpg");
 		response.setHeader("Content-Disposition", "attachment; filename=" + type.getName() + "-" + lot.getId().toString() + ".png");

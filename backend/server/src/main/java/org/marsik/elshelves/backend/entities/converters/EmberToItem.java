@@ -33,7 +33,7 @@ public class EmberToItem extends AbstractEmberToEntity<ItemApiModel, Item> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(ItemApiModel.class, getTarget(), this);
+		conversionService.register(ItemApiModel.class, this);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class UnitToEmber extends AbstractEntityToEmber<Unit, UnitApiModel> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(Unit.class, getTarget(), this);
+		conversionService.register(Unit.class, this);
 
 	}
 

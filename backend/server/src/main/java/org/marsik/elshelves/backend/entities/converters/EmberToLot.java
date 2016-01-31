@@ -2,8 +2,11 @@ package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
+import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
+import org.marsik.elshelves.backend.entities.MixedLot;
+import org.marsik.elshelves.backend.entities.PurchasedLot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @DependsOn("EntityToEmberConversionService")
@@ -40,7 +44,7 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 
 	@PostConstruct
 	void postConstruct() {
-		conversionService.register(LotApiModel.class, getTarget(), this);
+		conversionService.register(LotApiModel.class, this);
 	}
 
 	@Override
@@ -54,7 +58,14 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 
 		model.setExpiration(object.getExpiration());
 		model.setLocation(emberToBox.convert(path, "location", object.getLocation(), cache, include));
-		model.setPurchase(emberToPurchase.convert(path, "purchase", object.getPurchase(), cache, include));
+		if (model instanceof PurchasedLot) {
+			((PurchasedLot) model).setPurchase(emberToPurchase.convert(path, "purchase", object.getPurchase(), cache, include));
+		}
+		if (model instanceof MixedLot) {
+			((MixedLot) model).setParents(object.getParents().stream()
+					.map((l) -> convert(path, "parent", l, cache, include))
+					.collect(Collectors.toSet()));
+		}
 		model.setUsedBy(emberToRequirement.convert(path, "used-by", object.getUsedBy(), cache, include));
 		model.setSerials(object.getSerials());
 		model.setHistory(emberToLotHistory.convert(path, "history", object.getHistory(), cache, include));
@@ -72,5 +83,16 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 		}
 
 		return model;
+	}
+
+	@Override
+	public Class<? extends Lot> getTarget(LotApiModel object) {
+		if (object.getPurchase() != null) {
+			return PurchasedLot.class;
+		} else if (object.getParents() != null && !object.getParents().isEmpty()) {
+			return MixedLot.class;
+		}
+
+		return super.getTarget(object);
 	}
 }
