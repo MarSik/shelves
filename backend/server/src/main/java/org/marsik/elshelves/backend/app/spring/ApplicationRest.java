@@ -15,6 +15,8 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.marsik.elshelves.backend.app.jackson.Jackson2CustomContextMapperBuilder;
 import org.marsik.elshelves.backend.app.servlet.WebFormSupportFilter;
 import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
+import org.marsik.elshelves.backend.controllers.UserController;
+import org.marsik.elshelves.backend.entities.converters.AbstractEmberToEntity;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.modelmapper.ModelMapper;
@@ -54,9 +56,10 @@ import java.util.List;
 import java.util.Locale;
 
 @EnableWebMvc
+@ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class },
+        excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackageClasses = GoogleOauthService.class)
 public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Value("${http2.max-streams:10}")
@@ -155,59 +158,8 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
         return mm;
     }
 
-    @Bean
-    MemcachedClient getMemcachedClientFactory() {
-        MemcachedClientFactoryBean memcached = new MemcachedClientFactoryBean();
-        memcached.setServers("127.0.0.1:11211");
-        memcached.setProtocol(ConnectionFactoryBuilder.Protocol.BINARY);
-        SerializingTranscoder transcoder = new SerializingTranscoder();
-        transcoder.setCompressionThreshold(1024);
-        memcached.setTranscoder(transcoder);
-        memcached.setOpTimeout(1000);
-        memcached.setTimeoutExceptionThreshold(1998);
-        memcached.setLocatorType(ConnectionFactoryBuilder.Locator.CONSISTENT);
-        memcached.setFailureMode(FailureMode.Redistribute);
-        memcached.setUseNagleAlgorithm(false);
-
-        try {
-            return (MemcachedClient) (memcached.getObject());
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("/favicon.ico");
-    }
-
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("WEB-INF/locale/messages");
-        messageSource.setCacheSeconds(1);
-        messageSource.setFallbackToSystemLocale(true);
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
-
-    @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor(){
-        LocaleChangeInterceptor localeChangeInterceptor=new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-        return localeChangeInterceptor;
-    }
-
-    @Bean(name = "localeResolver")
-    public LocaleResolver localeResolver(){
-        SessionLocaleResolver localeResolver=new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(new Locale("cs","CZ"));
-        return localeResolver;
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        super.addInterceptors(registry);
-        registry.addInterceptor(localeChangeInterceptor());
     }
 }

@@ -7,6 +7,7 @@ import org.marsik.elshelves.backend.app.security.MemcacheTokenStore;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.services.IdentifiedEntityService;
+import org.marsik.elshelves.backend.services.IdentifiedEntityServiceInterface;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,10 +22,10 @@ import static org.mockito.Mockito.doReturn;
 
 public class IdsControllerTest extends BaseIntegrationTest {
     @Autowired
-    IdentifiedEntityService service;
+    IdentifiedEntityServiceInterface service;
 
     @Test
-    @Ignore
+    //@Ignore
     public void testListIdsRestriction() throws Exception {
         given().
                 contentType(ContentType.JSON).
@@ -35,7 +36,7 @@ public class IdsControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void testListIds() throws Exception {
         Box b = new Box();
         b.setId(UUID.randomUUID());

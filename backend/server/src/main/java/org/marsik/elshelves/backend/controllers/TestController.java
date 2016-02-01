@@ -15,9 +15,6 @@ public class TestController {
     @Autowired
     TestRepository testRepository;
 
-    @Autowired
-    PlatformTransactionManager transactionManager;
-
     @Transactional
     @RequestMapping("/transaction")
     @CircuitBreaker

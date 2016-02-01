@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.test.config;
 
 import net.spy.memcached.MemcachedClient;
+import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.app.spring.ApplicationRest;
 import org.marsik.elshelves.backend.app.spring.NoAutoscan;
 import org.marsik.elshelves.backend.controllers.UserController;
@@ -11,6 +12,8 @@ import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.repositories.TestRepository;
+import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
+import org.marsik.elshelves.backend.security.CurrentUserArgumentResolverImpl;
 import org.marsik.elshelves.backend.services.AuthorizationService;
 import org.marsik.elshelves.backend.services.BackupService;
 import org.marsik.elshelves.backend.services.BoxService;
@@ -42,18 +45,32 @@ import org.marsik.elshelves.backend.services.UserService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
 import org.marsik.elshelves.backend.services.UuidGeneratorImpl;
 import org.marsik.elshelves.backend.test.util.MockitoFactoryBean;
+import org.omg.CORBA.Current;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
+import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@SpringBootApplication
-@ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class },
-        excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
 @NoAutoscan
+@EnableTransactionManagement
 public class ControllerOnlyApplication {
+    @Bean
+    EmbeddedServletContainerFactory getJetty() {
+        return new JettyEmbeddedServletContainerFactory();
+    }
+
     @Bean
     public MockitoFactoryBean<AuthorizationService> authorizationServiceMockitoFactoryBean() {
         return new MockitoFactoryBean<>(AuthorizationService.class);
@@ -233,4 +250,21 @@ public class ControllerOnlyApplication {
     public MockitoFactoryBean<MemcachedClient> memcachedClientMockitoFactoryBean() {
         return new MockitoFactoryBean<>(MemcachedClient.class);
     }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigIn() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public CurrentUserArgumentResolver currentUserArgumentResolver(ApplicationContext context) {
+        return new CurrentUserArgumentResolverImpl(context);
+    }
+
+    @Bean
+    public RenamingProcessor renamingProcessor() {
+        return new RenamingProcessor();
+    }
+
+
 }

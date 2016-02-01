@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringApplicationConfiguration(classes = { ConverterOnlyApplication.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles({"test", "unittest"})
-public class BaseConverterTest {
+public abstract class BaseConverterTest {
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/id")
+@RequestMapping("/v1/id")
 public class IdController extends AbstractReadOnlyRestController<OwnedEntity, AbstractEntityApiModel, IdentifiedEntityServiceInterface> {
     @Autowired
     public IdController(EntityToEmberConversionService dbToRest, IdentifiedEntityServiceInterface service) {
