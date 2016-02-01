@@ -125,19 +125,19 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
-				&& !getStatus().equals(LotAction.DESTROYED)
-				&& !getStatus().equals(LotAction.SOLDERED);
+				&& !LotAction.DESTROYED.equals(getStatus())
+				&& !LotAction.SOLDERED.equals(getStatus());
 	}
 
 	public boolean isCanBeUnsoldered() {
 		return isValid()
-                && getStatus().equals(LotAction.SOLDERED);
+                && LotAction.SOLDERED.equals(getStatus());
 	}
 
 	public boolean isCanBeAssigned() {
 		return isValid()
                 && getUsedBy() == null
-				&& !getStatus().equals(LotAction.DESTROYED);
+				&& LotAction.DESTROYED.equals(getStatus());
 	}
 
 	public boolean isCanBeUnassigned() {
@@ -161,7 +161,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
      * represents a historical state only.
      */
     public boolean isValid() {
-        return !getStatus().equals(LotAction.DESTROYED);
+        return getStatus() != null && !getStatus().equals(LotAction.DESTROYED);
     }
 
 	@Override
