@@ -19,16 +19,16 @@ export default LotBase.extend({
   location: belongsTo("box", {async: true}),
   previous: belongsTo("lot", {async: true}),
   status: attr(),
-  purchase: belongsTo('purchase', {async: true}),
   expiration: attr('date'),
   serials: attr(),
   history: belongsTo("history", {async: true}),
 
   usedBy: belongsTo('requirement', {async: true}),
 
-  type: function () {
-      return this.get('purchase.type');
-  }.property('purchase.type'),
+  type: belongsTo('type', {async: true}),
+
+  purchase: belongsTo('purchase', {async: true}),
+  parents: hasMany("lot", {async: true}),
 
   canBeAssigned: attr(),
   canBeSoldered: attr(),
@@ -67,6 +67,6 @@ export default LotBase.extend({
   }),
 
   fullName: function () {
-    return this.get('purchase.type.name') + " " + this.get('serial');
-  }.property('purchase.type.name', 'serial')
+    return this.get('type.name') + " " + this.get('serial');
+  }.property('type.name', 'serial')
 });
