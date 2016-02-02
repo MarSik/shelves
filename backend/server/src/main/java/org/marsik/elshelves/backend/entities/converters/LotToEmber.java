@@ -45,6 +45,8 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 	@PostConstruct
 	void postConstruct() {
 		conversionService.register(Lot.class, this);
+		conversionService.register(MixedLot.class, this);
+		conversionService.register(PurchasedLot.class, this);
 	}
 
 	public LotApiModel convert(String path, Lot object, LotApiModel entity, Map<UUID, Object> cache, Set<String> include) {
