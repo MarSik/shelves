@@ -44,7 +44,7 @@
         <freemarker.version>2.3.21</freemarker.version>
         <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
-        <pdfbox.version>2.0.0-RC2</pdfbox.version>
+        <pdfbox.version>2.0.0-RC3</pdfbox.version>
         <jackson.version>2.6.4</jackson.version>
         <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
         <tika.version>1.7</tika.version>
