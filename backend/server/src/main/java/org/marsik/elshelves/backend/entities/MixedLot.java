@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -17,9 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,37 +33,48 @@ public class MixedLot extends Lot {
     @OneToMany(fetch = FetchType.LAZY)
     Set<Lot> parents;
 
-    public void addParent(Lot source) {
+    public boolean addPossibleSource(Lot source) {
         if (!parents.isEmpty()) {
             verifyLotsMixable(parents.iterator().next(), source);
         }
-        count += source.getCount();
+        return parents.add(source);
     }
 
-    public void removeParent(Lot source) {
-        if (parents.remove(source)) {
+    public boolean removePossibleSource(Lot source) {
+        return parents.remove(source);
+    }
+
+    public void addPartsToMix(Lot source) {
+        if (addPossibleSource(source)) {
+            count += source.getCount();
+        }
+    }
+
+    public void removePartsFromMix(Lot source) {
+        if (removePossibleSource(source)) {
             count -= source.getCount();
         }
     }
 
     @Override
     public void relink(Relinker relinker) {
-        relinkList(relinker, this::getParents, this::addParent, this::removeParent);
+        relinkList(relinker, this::getParents, this::addPossibleSource, this::removePossibleSource);
         super.relink(relinker);
     }
 
-    public static MixedLot from(UuidGenerator uuidGenerator, Lot... lots) {
+    public static MixedLot from(UuidGenerator uuidGenerator, Collection<Lot> lots) {
         if (!Objects.nonNull(lots)) {
             throw new IllegalArgumentException("MixedLot has to have parents");
         }
 
-        if (lots.length == 0) {
+        if (lots.size() == 0) {
             throw new IllegalArgumentException("MixedLot has to have parents");
         }
 
-        LotAction action = lots[0].getStatus();
-        Type t = lots[0].getType();
-        Requirement req = lots[0].getUsedBy();
+        final Lot firstLot = lots.iterator().next();
+        LotAction action = firstLot.getStatus();
+        Type t = firstLot.getType();
+        Requirement req = firstLot.getUsedBy();
 
         MixedLot mixedLot = new MixedLot();
         mixedLot.setId(uuidGenerator.generate());
@@ -73,7 +82,7 @@ public class MixedLot extends Lot {
         mixedLot.setCount(0L);
         mixedLot.setStatus(action);
         mixedLot.setUsedBy(req);
-        mixedLot.setLocation(lots[0].getLocation());
+        mixedLot.setLocation(firstLot.getLocation());
         mixedLot.setHistory(new LotHistory());
         mixedLot.getHistory().setId(uuidGenerator.generate());
         mixedLot.getHistory().setAction(LotAction.DELIVERY);
@@ -82,13 +91,14 @@ public class MixedLot extends Lot {
         mixedLot.getHistory().setValidSince(new DateTime());
 
         for (Lot l : lots) {
-            mixedLot.addParent(l);
-            l.setStatus(LotAction.MIXED);
-            l.setUsedBy(null);
-            l.setLocation(null);
+            mixedLot.addPartsToMix(l);
         }
 
         return mixedLot;
+    }
+
+    public static MixedLot from(UuidGenerator uuidGenerator, Lot... lots) {
+        return from(uuidGenerator, Arrays.asList(lots));
     }
 
     private static void verifyLotsMixable(Lot origin, Lot l) {

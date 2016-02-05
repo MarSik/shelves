@@ -72,22 +72,6 @@ public class NamedEntity extends OwnedEntity
 		v.setEntity(null);
 	}
 
-    /**
-     * Barcode associated with this entity
-     */
-	@OneToMany(mappedBy = "reference",
-			fetch = FetchType.LAZY,
-			orphanRemoval = true)
-    Set<Code> codes = new THashSet<>();
-
-	public void addCode(Code c) {
-		c.setReference(this);
-	}
-
-	public void removeCode(Code c) {
-		c.setReference(null);
-	}
-
 	@Override
 	public boolean canBeDeleted() {
 		return false;
@@ -121,7 +105,6 @@ public class NamedEntity extends OwnedEntity
 		update(update.getFlagged(), this::setFlagged);
 
 		reconcileLists(update.getDescribedBy(), this::getDescribedBy, this::addDescribedBy, this::removeDescribedBy);
-		reconcileLists(update.getCodes(), this::getCodes, this::addCode, this::removeCode);
 		reconcileLists(update.getProperties(), this::getProperties, this::addProperty, this::removeProperty);
 
 		super.updateFrom(update);
@@ -130,7 +113,6 @@ public class NamedEntity extends OwnedEntity
 	@Override
 	public void relink(Relinker relinker) {
 		relinkList(relinker, this::getDescribedBy, this::addDescribedBy, this::removeDescribedBy);
-		relinkList(relinker, this::getCodes, this::addCode, this::removeCode);
 		relinkItem(relinker, getPreviousRevision(), this::setPreviousRevision);
 
 		// Make a copy to prefent concurrent modification exception

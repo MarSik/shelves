@@ -33,15 +33,15 @@ public class Code extends OwnedEntity implements UpdateableEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
-    NamedEntity reference;
+    OwnedEntity reference;
 
-    public void setReference(NamedEntity n) {
+    public void setReference(OwnedEntity n) {
         if (reference != null) reference.getCodes().remove(this);
         reference = n;
         if (reference != null) reference.getCodes().add(this);
     }
 
-    public void unsetReference(NamedEntity v) {
+    public void unsetReference(OwnedEntity v) {
         assert v.equals(reference);
         setReference(null);
     }

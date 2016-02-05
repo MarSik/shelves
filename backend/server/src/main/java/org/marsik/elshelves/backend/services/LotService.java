@@ -20,5 +20,5 @@ public interface LotService {
     Lot delivery(PurchasedLot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied,
             OperationNotPermitted;
 
-    <T extends Lot> LotSplitResult<T> update(T lot, T update, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted;
+    LotSplitResult update(Lot lot, Lot update, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted;
 }

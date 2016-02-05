@@ -1,30 +1,31 @@
 package org.marsik.elshelves.backend.controllers;
 
 import gnu.trove.map.hash.THashMap;
-import org.marsik.elshelves.api.entities.SourceApiModel;
-import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
-import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
-import org.marsik.elshelves.backend.dtos.LotSplitResult;
-import org.marsik.elshelves.backend.entities.Source;
-import org.marsik.elshelves.backend.entities.Type;
-import org.marsik.elshelves.backend.entities.converters.EmberToSource;
-import org.marsik.elshelves.backend.entities.converters.EmberToType;
-import org.marsik.elshelves.backend.repositories.ItemRepository;
-import org.marsik.elshelves.backend.services.LotService;
-import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
+import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
+import org.marsik.elshelves.backend.controllers.exceptions.InvalidRequest;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
+import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
+import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToItem;
+import org.marsik.elshelves.backend.entities.converters.EmberToSource;
+import org.marsik.elshelves.backend.entities.converters.EmberToType;
+import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
 import org.marsik.elshelves.backend.entities.converters.ItemToEmber;
+import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.ItemService;
+import org.marsik.elshelves.backend.services.LotService;
 import org.marsik.elshelves.backend.services.UuidGenerator;
+import org.marsik.elshelves.ember.EmberModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +76,9 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     @Autowired
     ItemRepository itemRepository;
 
+    @Autowired
+    EntityToEmberConversionService conversionService;
+
     @RequestMapping("/{uuid}/import")
     @Transactional
     public EmberModel importFromSchematics(@CurrentUser User currentUser,
@@ -100,15 +104,15 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
                                 @PathVariable("id") UUID id,
                                 @RequestBody @Validated ItemApiModel item0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
         Item item = getRestToDb().convert(item0, new THashMap<>());
-        LotSplitResult<Item> result = lotService.update(itemRepository.findById(id), item, currentUser);
+        LotSplitResult result = lotService.update(itemRepository.findById(id), item, currentUser);
 
         Map<UUID, Object> cache = new THashMap<>();
 
         EmberModel.Builder<ItemApiModel> modelBuilder = new EmberModel.Builder<>(
-                getDbToRest().convert(result.getRequested(), cache));
+                conversionService.convert(result.getRequested(), cache));
         if (result.getRemainder() != null) {
             modelBuilder.sideLoad(
-                    getDbToRest().convert(result.getRemainder(), cache));
+                    conversionService.convert(result.getRemainder(), cache));
         }
 
         return modelBuilder.build();

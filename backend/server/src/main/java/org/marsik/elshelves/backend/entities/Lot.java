@@ -299,4 +299,10 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	public void setPreviousRevision(LotHistory revision) {
 		setHistory(revision);
 	}
+
+	public void unlinkWithStatus(LotAction action) {
+		setStatus(action);
+		setUsedBy(null);
+		setLocation(null);
+	}
 }

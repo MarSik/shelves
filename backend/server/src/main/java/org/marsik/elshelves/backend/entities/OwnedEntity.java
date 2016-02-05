@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +28,23 @@ public abstract class OwnedEntity extends IdentifiedEntity
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@NotNull
 	User owner;
+
+
+	/**
+	 * Barcode associated with this entity
+	 */
+	@OneToMany(mappedBy = "reference",
+			fetch = FetchType.LAZY,
+			orphanRemoval = true)
+	Set<Code> codes = new THashSet<>();
+
+	public void addCode(Code c) {
+		c.setReference(this);
+	}
+
+	public void removeCode(Code c) {
+		c.setReference(null);
+	}
 
 	public abstract boolean canBeDeleted();
 
@@ -50,11 +70,13 @@ public abstract class OwnedEntity extends IdentifiedEntity
 		}
 
 		update(update.getOwner(), this::setOwner);
+		reconcileLists(((OwnedEntity) update).getCodes(), this::getCodes, this::addCode, this::removeCode);
 	}
 
 	@Override
 	public void relink(Relinker relinker) {
 		relinkItem(relinker, getOwner(), this::setOwner);
+		relinkList(relinker, this::getCodes, this::addCode, this::removeCode);
 
 		super.relink(relinker);
 	}

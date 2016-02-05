@@ -112,7 +112,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface, UpdateableEn
     }
 
     public void relink(Relinker relinker) {
-
     }
 
     protected <T extends IdentifiedEntity> void relinkItem(Relinker relinker, T item, Updater<T> setter) {
@@ -169,7 +168,6 @@ public class IdentifiedEntity implements IdentifiedEntityInterface, UpdateableEn
 
     @Override
     public void updateFrom(UpdateableEntity update) throws OperationNotPermitted {
-
     }
 
     @Override
