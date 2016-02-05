@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.services;
 
+import com.google.common.annotations.VisibleForTesting;
 import gnu.trove.map.hash.THashMap;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -197,7 +198,8 @@ public class LotServiceImpl implements LotService {
      * @param lot one changed / moved lot to be used as search template
      * @return Mixed version of the lot if the lot was changed
      */
-    private Lot lotMixer(Lot lot) {
+    @VisibleForTesting
+    protected Lot lotMixer(Lot lot) {
         if (lot == null) {
             return null;
         }
@@ -247,6 +249,11 @@ public class LotServiceImpl implements LotService {
             // Just to make sure we are not creating cyclic dependency
             // or deleting the mixed lot
             unassigned.remove(mixedLot);
+
+            // Make sure all parents are added
+            for (Lot source: unassigned) {
+                mixedLot.addPartsToMix(source);
+            }
 
             for (Lot possibleSource: candidates) {
                 // Avoid cyclic dependencies

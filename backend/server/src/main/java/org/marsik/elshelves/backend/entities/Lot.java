@@ -161,7 +161,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
      * represents a historical state only.
      */
     public boolean isValid() {
-        return getStatus() != null && !getStatus().equals(LotAction.DESTROYED);
+        return getStatus() != null && !getStatus().equals(LotAction.DESTROYED) && !getStatus().equals(LotAction.MIXED);
     }
 
 	@Override

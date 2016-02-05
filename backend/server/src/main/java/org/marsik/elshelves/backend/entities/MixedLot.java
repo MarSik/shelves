@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.entities;
 
+import gnu.trove.set.hash.THashSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class MixedLot extends Lot {
     @NotEmpty
     @JoinTable(name = "mixed_lot_parents")
     @OneToMany(fetch = FetchType.LAZY)
-    Set<Lot> parents;
+    Set<Lot> parents = new THashSet<>();
 
     public boolean addPossibleSource(Lot source) {
         if (!parents.isEmpty()) {
