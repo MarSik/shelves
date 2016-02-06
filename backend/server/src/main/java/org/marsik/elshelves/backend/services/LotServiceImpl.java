@@ -15,6 +15,7 @@ import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.MixedLot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
@@ -110,7 +112,7 @@ public class LotServiceImpl implements LotService {
 
 		purchase.addLot(lot);
 
-		return lotMixer(lot);
+		return lotMixer(lot, new THashMap<>());
 	}
 
 
@@ -172,8 +174,9 @@ public class LotServiceImpl implements LotService {
         /*
            Perform Lot mixing
          */
-        lot = lotMixer(lot);
-        taken = lotMixer(taken);
+        Map<UUID, Lot> cache = new THashMap<>();
+        lot = lotMixer(lot, cache);
+        taken = lotMixer(taken, cache);
 
         /* The old id belongs to the rest and the assigned / moved lot has a new uuid.
            This should help with concurrent access (the second request might still have chance
@@ -199,9 +202,13 @@ public class LotServiceImpl implements LotService {
      * @return Mixed version of the lot if the lot was changed
      */
     @VisibleForTesting
-    protected Lot lotMixer(Lot lot) {
+    protected Lot lotMixer(Lot lot, @NotNull Map<UUID, Lot> lotMap) {
         if (lot == null) {
             return null;
+        }
+
+        if (!lot.isValid()) {
+            return lotMap.getOrDefault(lot.getId(), lot);
         }
 
         if (lot.getLocation() == null) {
@@ -216,11 +223,12 @@ public class LotServiceImpl implements LotService {
             return lot;
         }
 
-        Map<UUID, Lot> lotMap = new THashMap<>();
+        lot = lotMap.getOrDefault(lot.getId(), lot);
+        final Type lotType = lot.getType();
 
         // Get all lots with the same type and no serials or barcodes
         Set<Lot> candidates = lot.getLocation().getLots().stream()
-                .filter(c -> Objects.equals(c.getType(), lot.getType()))
+                .filter(c -> Objects.equals(c.getType(), lotType))
                 .filter(c -> c.getSerials() == null || c.getSerials().isEmpty())
                 .filter(c -> c.getCodes() == null || c.getCodes().isEmpty())
                 .collect(Collectors.toSet());

@@ -36,7 +36,7 @@ public class MixedLot extends Lot {
 
     public boolean addPossibleSource(Lot source) {
         if (!parents.isEmpty()) {
-            verifyLotsMixable(parents.iterator().next(), source);
+            verifyLotsCompatible(parents.iterator().next(), source);
         }
         return parents.add(source);
     }
@@ -46,6 +46,10 @@ public class MixedLot extends Lot {
     }
 
     public void addPartsToMix(Lot source) {
+        if (!parents.isEmpty()) {
+            verifyLotsMixable(parents.iterator().next(), source);
+        }
+
         if (addPossibleSource(source)) {
             count += source.getCount();
         }
@@ -102,17 +106,19 @@ public class MixedLot extends Lot {
         return from(uuidGenerator, Arrays.asList(lots));
     }
 
-    private static void verifyLotsMixable(Lot origin, Lot l) {
+    private static void verifyLotsCompatible(Lot origin, Lot l) {
         if (!Objects.equals(origin.getType(), l.getType())) {
             throw new IllegalArgumentException("All lots in MixedLot have to be of the same type");
         }
+    }
 
+    private static void verifyLotsMixable(Lot origin, Lot l) {
         if (!Objects.equals(origin.getUsedBy(), l.getUsedBy())) {
             throw new IllegalArgumentException("All lots in MixedLot have to be assigned to the same requirement");
         }
 
-        if (!Objects.equals(origin.getStatus(), l.getStatus())) {
-            throw new IllegalArgumentException("All lots in MixedLot have to be in the same status");
+        if (!l.isValid()) {
+            throw new IllegalArgumentException("All lots in MixedLot have to be valid");
         }
     }
 

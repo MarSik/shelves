@@ -41,7 +41,10 @@ export default LotBase.extend({
   icon: function () {
     if (this.get("canBeUnsoldered")) {
       return "check-square-o";
+    } else if (!Ember.isEmpty(this.get("parents"))) {
+      return "envelope-square";
     } else {
+    }
       return "square-o";
     }
   }.property("canBeUnsoldered"),
