@@ -5,7 +5,7 @@
 
   <ul class="item-list">
         {{#each this as |project|}}
-            <li><a {{action 'projectSelected' project}}>{{project.purchase.type.name}}</a></li>
+            <li><a {{action 'projectSelected' project}}>{{project.type.name}}</a></li>
         {{/each}}
     </ul>
 </section>

@@ -1,5 +1,5 @@
 <h2>
-  {{fa-icon 'flask'}} {{#link-to 'types.show' model.purchase.type}}{{model.purchase.type.name}}{{/link-to}} /
+  {{fa-icon 'flask'}} {{#link-to 'types.show' model.type}}{{model.type.name}}{{/link-to}} /
   {{#click-to-edit content=model field='content.serial' placeholder='place for serial number or name'}}{{model.serial}}{{/click-to-edit}}
 </h2>
 
@@ -8,15 +8,15 @@
 <div class="row">
   <div class="columns large-6">
     <dl>
-      <dt>{{#link-to 'types.show' model.purchase.type}}{{model.purchase.type.name}}{{/link-to}}</dt>
-      <dd>{{model.purchase.type.summary}}</dd>
+      <dt>{{#link-to 'types.show' model.type}}{{model.type.name}}{{/link-to}}</dt>
+      <dd>{{model.type.summary}}</dd>
     </dl>
 
-    <p>{{model.purchase.type.description}}</p>
+    <p>{{model.type.description}}</p>
   </div>
   <div class="columns large-6">
     <table>
-      {{#each model.purchase.type.describedBy as |doc|}}
+      {{#each model.type.describedBy as |doc|}}
       {{doc-summary-line deleteDocument="deleteDocument" doc=doc}}
       {{/each}}
     </table>
@@ -130,6 +130,7 @@ placeholder="Select a type" }}
     <table>
     {{#each assignableLots as |lot|}}
         <tr>
+            <td>{{fa-icon lot.icon}}</td>
             <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
             <td>{{lot.purchase.transaction.source.name}}</td>
             <td>{{lot.count}}</td>
