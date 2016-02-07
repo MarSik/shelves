@@ -94,6 +94,41 @@ public class LotServiceImplTest extends BaseUnitTest {
     }
 
     @Test
+    public void testLotWithSerial() throws Exception {
+        Lot l1 = getLot(Lot.class, type, 5);
+        box.addLot(l1);
+
+        Lot l2 = getLot(Lot.class, type, 7);
+        l2.setSerials(new THashSet<>());
+        l2.getSerials().add("SERIAL");
+        box.addLot(l2);
+
+        Lot result = service.lotMixer(l2, new THashMap<>());
+        Lot newL1 = service.lotMixer(l1, new THashMap<>());
+
+
+        assertThat(result)
+                .isNotNull()
+                .isInstanceOf(Lot.class)
+                .isEqualTo(l2);
+
+        assertThat(newL1)
+                .isNotNull()
+                .isInstanceOf(Lot.class)
+                .isEqualTo(l1);
+
+        assertThat(result.getCount())
+                .isEqualTo(l2.getCount());
+
+        assertThat(l1.isValid()).isTrue();
+        assertThat(l2.isValid()).isTrue();
+
+        assertThat(box.getLots())
+                .hasSize(2)
+                .contains(l1, l2);
+    }
+
+    @Test
     public void testLotMixerAlreadyMixedAndAssignment() throws Exception {
         Lot l1 = getLot(MixedLot.class, type, 5);
         box.addLot(l1);
