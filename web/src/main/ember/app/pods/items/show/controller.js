@@ -18,14 +18,17 @@ export default Ember.Controller.extend({
             this.set('assignableLots', lots);
         },
         performAssignment: function (req, lot, count) {
-            lot.set('status', 'ASSIGNED');
-            lot.set('usedBy', req);
-            lot.set('count', count);
+            nl = this.store.createRecord('lot', {
+              parent: lot,
+              status: "ASSIGNED",
+              usedBy: req,
+              count: count
+            });
 
             var self = this;
 
-            lot.save().catch(function (e) {
-                lot.rollback();
+            nl.save().catch(function (e) {
+                nl.rollback();
                 self.growl.error(e);
             }).then(function () {
                 console.log("MISSING");
