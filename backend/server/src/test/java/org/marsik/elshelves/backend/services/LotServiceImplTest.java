@@ -238,11 +238,23 @@ public class LotServiceImplTest extends BaseUnitTest {
         l2.setId(uuidGenerator.generate());
         l2.setDbId(dbId.incrementAndGet());
         box.addLot(l2);
-        Lot result = service.lotMixer(l2, new THashMap<>());
+        Map<UUID, Lot> cache = new THashMap<>();
+        Lot result = service.lotMixer(l2, cache);
+        Lot aux = service.lotMixer(l1, cache);
 
         assertThat(result)
                 .isNotNull()
-                .isInstanceOf(MixedLot.class);
+                .isInstanceOf(MixedLot.class)
+                .isEqualTo(aux);
+
+        for (Lot parent: ((MixedLot) result).getParents()) {
+            if (parent instanceof MixedLot) {
+                assertThat(((MixedLot) parent).getParents())
+                        .isNotNull()
+                        .hasSize(2)
+                        .doesNotContain(result);
+            }
+        }
 
         assertThat(((MixedLot) result).getParents())
                 .isNotNull()
