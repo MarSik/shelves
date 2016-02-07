@@ -25,7 +25,7 @@ public class IdsControllerTest extends BaseIntegrationTest {
     IdentifiedEntityServiceInterface service;
 
     @Test
-    //@Ignore
+    @Ignore
     public void testListIdsRestriction() throws Exception {
         given().
                 contentType(ContentType.JSON).
@@ -36,7 +36,7 @@ public class IdsControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void testListIds() throws Exception {
         Box b = new Box();
         b.setId(UUID.randomUUID());

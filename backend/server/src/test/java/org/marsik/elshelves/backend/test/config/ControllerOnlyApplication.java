@@ -64,6 +64,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @NoAutoscan
+@EnableAutoConfiguration
 @EnableTransactionManagement
 public class ControllerOnlyApplication {
     @Bean
