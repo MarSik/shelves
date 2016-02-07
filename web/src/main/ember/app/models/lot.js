@@ -17,7 +17,7 @@ export default LotBase.extend({
     return t;
   }),
   location: belongsTo("box", {async: true}),
-  previous: belongsTo("lot", {async: true}),
+  previous: belongsTo("lot", {async: true, inverse: null}),
   status: attr(),
   expiration: attr('date'),
   serials: attr(),
@@ -25,10 +25,10 @@ export default LotBase.extend({
 
   usedBy: belongsTo('requirement', {async: true}),
 
-  type: belongsTo('type', {async: true}),
+  type: belongsTo('type', {async: true, inverse: null}),
 
   purchase: belongsTo('purchase', {async: true}),
-  parents: hasMany("lot", {async: true}),
+  parents: hasMany("lot", {async: true, inverse: null}),
 
   canBeAssigned: attr(),
   canBeSoldered: attr(),
@@ -70,5 +70,33 @@ export default LotBase.extend({
 
   fullName: function () {
     return this.get('type.name') + " " + this.get('serial');
-  }.property('type.name', 'serial')
+  }.property('type.name', 'serial'),
+
+  ancestry: Ember.computed('purchase.transaction', 'parents.@each.ancestry', function () {
+    var ancestry = [];
+    if (this.get('purchase.transaction')) {
+      ancestry.pushObject(Ember.Object.create({
+        purchase: this.get('purchase'),
+        history: this.get('history'),
+        count: this.get('purchase.count')
+      }));
+    }
+
+    this.get('parents').forEach(function (p) {
+      p.get('ancestry.ancestors').forEach(function (a) {
+        ancestry.pushObject(a);
+      });
+    });
+
+    var sum = 0;
+
+    ancestry.forEach(function (a) {
+      sum += a.get('count');
+    });
+
+    return Ember.Object.create({
+      total: sum,
+      ancestors: ancestry
+    });
+  })
 });
