@@ -25,6 +25,15 @@ export default Ember.ArrayController.extend({
               object: null
             });
             randomCode.save();
+        },
+        fillWithRandomCodes() {
+            var rem = this.get('remainingAtLast');
+            for (var i = 0; i < rem; i++) {
+                var randomCode = this.store.createRecord('sticker', {
+                    object: null
+                });
+                randomCode.save();
+            }
         }
     },
 
@@ -64,5 +73,53 @@ export default Ember.ArrayController.extend({
     paperSlotSkip: 0,
 
     sortProperties: ['fullName'],
-    sortAscending: true
+    sortAscending: true,
+
+    pageCount: Ember.computed('paper', 'paper.stickerHorizontalCount', 'paper.stickerVerticalCount', function () {
+        var page = this.get('paper');
+        if (Ember.isEmpty(page)) return null;
+
+        var x = this.get('paper.stickerHorizontalCount');
+        var y = this.get('paper.stickerVerticalCount');
+
+        if (!Ember.isEmpty(x) && !Ember.isEmpty(y)) {
+            return (x*y) > 0 ? x*y : null;
+        } else {
+            return null;
+        }
+    }),
+
+    stickersAtLast: Ember.computed('stickersTotal', 'pageCount', function() {
+        var pageCount = this.get('pageCount');
+        if (Ember.isEmpty(pageCount)) return null;
+
+        var stickers = this.get('stickersTotal');
+        if (stickers % pageCount) {
+            return stickers % pageCount;
+        } else {
+            return pageCount;
+        }
+    }),
+
+    remainingAtLast: Ember.computed('stickersTotal', 'pageCount', function() {
+        var pageCount = this.get('pageCount');
+        if (Ember.isEmpty(pageCount)) return null;
+
+        var stickers = this.get('stickersTotal');
+        if (Ember.isEmpty(stickers)) return null;
+
+        return pageCount - (stickers % pageCount);
+    }),
+
+    pagesTotal: Ember.computed('stickersTotal', 'pageCount', function() {
+        var pageCount = this.get('pageCount');
+        if (Ember.isEmpty(pageCount)) return null;
+
+        var stickers = this.get('stickersTotal');
+        return Math.ceil(stickers / pageCount);
+    }),
+
+    stickersTotal: Ember.computed('model.length', 'paperSlotSkip', function() {
+        return this.get('model.length') + this.get('paperSlotSkip');
+    })
 });
