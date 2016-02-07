@@ -44,7 +44,6 @@ export default LotBase.extend({
     } else if (!Ember.isEmpty(this.get("parents"))) {
       return "envelope-square";
     } else {
-    }
       return "square-o";
     }
   }.property("canBeUnsoldered"),
