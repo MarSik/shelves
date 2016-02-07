@@ -111,7 +111,7 @@ public class Type extends NamedEntity implements StickerCapable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
-	Set<Lot> lots;
+	Set<Lot> lots = new THashSet<>();
 
 	@Override
 	public boolean canBeDeleted() {
