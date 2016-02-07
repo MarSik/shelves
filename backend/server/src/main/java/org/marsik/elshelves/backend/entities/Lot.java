@@ -125,7 +125,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
-				&& !LotAction.DESTROYED.equals(getStatus())
 				&& !LotAction.SOLDERED.equals(getStatus());
 	}
 
@@ -136,8 +135,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 	public boolean isCanBeAssigned() {
 		return isValid()
-                && getUsedBy() == null
-				&& LotAction.DESTROYED.equals(getStatus());
+                && getUsedBy() == null;
 	}
 
 	public boolean isCanBeUnassigned() {
