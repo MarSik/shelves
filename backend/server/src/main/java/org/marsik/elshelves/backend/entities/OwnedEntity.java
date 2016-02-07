@@ -90,4 +90,11 @@ public abstract class OwnedEntity extends IdentifiedEntity
 	public int hashCode() {
 		return super.hashCode();
 	}
+
+	@Override
+	public Object shallowClone() {
+		OwnedEntity entity = (OwnedEntity) super.shallowClone();
+		entity.setCodes(new THashSet<>(this.getCodes()));
+		return entity;
+	}
 }

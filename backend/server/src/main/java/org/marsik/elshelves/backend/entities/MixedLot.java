@@ -136,4 +136,11 @@ public class MixedLot extends Lot {
     public int hashCode() {
         return super.hashCode();
     }
+
+    @Override
+    public Object shallowClone() {
+        MixedLot ml = (MixedLot) super.shallowClone();
+        ml.setParents(new THashSet<>(this.getParents()));
+        return ml;
+    }
 }

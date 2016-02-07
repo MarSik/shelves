@@ -203,6 +203,16 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 					&& !isCanBeUnsoldered()) {
 				throw new OperationNotPermitted();
 			}
+
+			if (update.getStatus() == LotAction.UNASSIGNED) {
+				update.setUsedBy(null);
+			}
+
+			if (update.getStatus() == LotAction.DESTROYED
+					|| update.getStatus() == LotAction.MIXED) {
+				update.setUsedBy(null);
+				update.setLocation(null);
+			}
 		}
 
 		update(update.getStatus(), this::setStatus);
@@ -237,7 +247,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 			throw new OperationNotPermitted();
 		}
 
-		update(update.getUsedBy(), this::setUsedBy);
+		setUsedBy(update.getUsedBy());
 
 		update(update.getSerials(), this::setSerials);
 
@@ -302,5 +312,12 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		setStatus(action);
 		setUsedBy(null);
 		setLocation(null);
+	}
+
+	@Override
+	public Object shallowClone() {
+		Lot l = (Lot)super.shallowClone();
+		l.setSerials(new THashSet<>(this.getSerials()));
+		return l;
 	}
 }

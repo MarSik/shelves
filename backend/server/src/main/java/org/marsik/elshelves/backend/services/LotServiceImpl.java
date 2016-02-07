@@ -2,6 +2,7 @@ package org.marsik.elshelves.backend.services;
 
 import com.google.common.annotations.VisibleForTesting;
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -142,6 +143,9 @@ public class LotServiceImpl implements LotService {
             taken.setVersion(null);
             taken.setId(uuidGenerator.generate());
             taken.setCount(update.getCount());
+
+            // Taken entity does not inherit barcodes by default
+            taken.setCodes(new THashSet<>());
 
             taken.relink(context);
             save(taken);

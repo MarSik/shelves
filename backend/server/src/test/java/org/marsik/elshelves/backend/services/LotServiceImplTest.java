@@ -225,6 +225,36 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(box.getLots()).containsExactly(result);
     }
 
+    @Test
+    public void testSiblingUnassigned() throws Exception {
+        Lot l1a = getLot(Lot.class, type, 5);
+        Lot l1b = getLot(Lot.class, type, 5);
+        box.addLot(l1a);
+        box.addLot(l1b);
+        Lot l1 = service.lotMixer(l1a, new THashMap<>());
+        assertThat(box.getLots()).containsExactly(l1);
+
+        Lot l2 = (Lot)l1.shallowClone();
+        l2.setId(uuidGenerator.generate());
+        l2.setDbId(dbId.incrementAndGet());
+        box.addLot(l2);
+        Lot result = service.lotMixer(l2, new THashMap<>());
+
+        assertThat(result)
+                .isNotNull()
+                .isInstanceOf(MixedLot.class);
+
+        assertThat(((MixedLot) result).getParents())
+                .isNotNull()
+                .hasSize(3)
+                .contains(l1a, l1b);
+
+        assertThat(result.getCount())
+                .isEqualTo(20);
+
+        assertThat(box.getLots()).containsExactly(result);
+    }
+
     private <T extends Lot> T getLot(Class<T> cls, Type t, long count) throws IllegalAccessException, InstantiationException {
         T l = cls.newInstance();
         l.setId(uuidGenerator.generate());
