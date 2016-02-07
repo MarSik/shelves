@@ -18,6 +18,6 @@ export default NamedBase.extend({
     }.property(),
 
     icon: function () {
-        return "truck";
+        return "industry";
     }.property()
 });

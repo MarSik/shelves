@@ -22,6 +22,6 @@ export default NamedBase.extend({
   }.property(),
 
   icon: function () {
-      return "bug";
+      return "th-large";
   }.property()
 });

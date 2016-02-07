@@ -40,11 +40,11 @@ export default LotBase.extend({
 
   icon: function () {
     if (this.get("canBeUnsoldered")) {
-      return "check-square-o";
+      return "file";
     } else if (!Ember.isEmpty(this.get("parents"))) {
-      return "envelope-square";
+      return "files-o";
     } else {
-      return "square-o";
+      return "file-o";
     }
   }.property("canBeUnsoldered"),
 
@@ -77,13 +77,18 @@ export default LotBase.extend({
     if (this.get('purchase.transaction')) {
       ancestry.pushObject(Ember.Object.create({
         purchase: this.get('purchase'),
-        history: this.get('history'),
+        history: [ this.get('history') ],
         count: this.get('purchase.count')
       }));
     }
 
+    var self = this;
+
     this.get('parents').forEach(function (p) {
       p.get('ancestry.ancestors').forEach(function (a) {
+        console.log(a);
+        var hist = a.get("history")
+        hist.pushObject(self.get('history'));
         ancestry.pushObject(a);
       });
     });

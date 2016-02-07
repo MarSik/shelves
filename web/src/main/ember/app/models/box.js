@@ -84,6 +84,6 @@ export default NamedBase.extend({
   }.property(),
 
   icon: function () {
-      return "cube";
+      return "archive";
   }.property()
 });
