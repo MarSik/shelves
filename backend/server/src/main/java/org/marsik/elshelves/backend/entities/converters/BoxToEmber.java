@@ -56,6 +56,10 @@ public class BoxToEmber extends AbstractEntityToEmber<Box,BoxApiModel> {
 		if (box.getLots() != null) {
 			Set<LotApiModel> lots = new THashSet<>();
 			for (Lot l: box.getLots()) {
+				if (!l.isValid()) {
+					continue;
+				}
+
 				lots.add(lotToEmber.convert(path, "lot", l, cache, include));
 			}
 			model.setLots(lots);

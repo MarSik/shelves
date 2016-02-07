@@ -86,6 +86,10 @@ public class TypeToEmber extends AbstractEntityToEmber<Type, PartTypeApiModel> {
 		if (object.getLots() != null) {
 			model.setLots(new THashSet<>());
 			for (Lot l: object.getLots()) {
+				if (!l.isValid()) {
+					continue;
+				}
+
 				LotApiModel r = conversionService.converter(l, LotApiModel.class)
 						.convert(path, "lot", l, cache, include);
 				model.getLots().add(r);
