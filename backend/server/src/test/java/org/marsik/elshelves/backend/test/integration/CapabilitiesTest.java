@@ -10,7 +10,6 @@ import static com.jayway.restassured.RestAssured.given;
 
 public class CapabilitiesTest extends BaseIntegrationTest {
     @Test
-    @Ignore
     public void testCapabilitiesEndpoint() throws Exception {
         given().
                 contentType(ContentType.JSON).
