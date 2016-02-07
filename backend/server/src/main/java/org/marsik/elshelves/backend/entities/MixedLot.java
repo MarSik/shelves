@@ -88,6 +88,7 @@ public class MixedLot extends Lot {
         mixedLot.setStatus(action);
         mixedLot.setUsedBy(req);
         mixedLot.setLocation(firstLot.getLocation());
+        mixedLot.setOwner(firstLot.getOwner());
         mixedLot.setHistory(new LotHistory());
         mixedLot.getHistory().setId(uuidGenerator.generate());
         mixedLot.getHistory().setAction(LotAction.DELIVERY);
@@ -109,6 +110,10 @@ public class MixedLot extends Lot {
     private static void verifyLotsCompatible(Lot origin, Lot l) {
         if (!Objects.equals(origin.getType(), l.getType())) {
             throw new IllegalArgumentException("All lots in MixedLot have to be of the same type");
+        }
+
+        if (!Objects.equals(origin.getOwner(), l.getOwner())) {
+            throw new IllegalArgumentException("All lots in MixedLot have to belong to the same owner");
         }
     }
 
