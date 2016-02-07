@@ -17,9 +17,6 @@
 
 <h2>Chain of changes</h2>
 <table>
-<tr>
-    <td colspan="5">History:</td>
-</tr>
 {{#each history as |lot|}}
     <tr>
         <td>{{lot.validSince}}</td>
@@ -30,3 +27,26 @@
     </tr>
 {{/each}}
 </table>
+
+{{#if model.parents}}
+<h2>Mixed from</h2>
+
+<table>
+  <tr>
+    <th>%</th>
+    <th>type</th>
+    <th>purchased on</th>
+    <th>source</th>
+    <th>transaction</th>
+  </tr>
+{{#each model.ancestry.ancestors as |ancestor|}}
+<tr>
+  <td>{{percents ancestor.count model.ancestry.total}}%</td>
+  <td>{{#link-to 'types.show' ancestor.purchase.type}}{{ancestor.purchase.type.fullName}}{{/link-to}}</td>
+  <td>{{ancestor.purchase.transaction.date}}</td>
+  <td>{{#link-to 'sources.show' ancestor.purchase.transaction.source}}{{ancestor.purchase.transaction.source.fullName}}{{/link-to}}</td>
+  <td>{{#link-to 'transactions.show' ancestor.purchase.transaction}}{{ancestor.purchase.transaction.fullName}}{{/link-to}}</td>
+</tr>
+{{/each}}
+</table>
+{{/if}}
