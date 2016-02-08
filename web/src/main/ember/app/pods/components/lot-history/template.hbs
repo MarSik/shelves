@@ -1,0 +1,15 @@
+{{#if showHistory}}
+{{#each history as |lot|}}
+<tr>
+  <td>{{lot.validSince}}</td>
+  <td>{{lot.action}}</td>
+  <td>{{lot.location.fullName}}</td>
+  <td>{{lot.usedBy.project.name}}</td>
+  <td>{{lot.performedBy.name}}</td>
+</tr>
+{{/each}}
+{{else}}
+<tr>
+  <td colspan="5"><a {{action 'loadHistory'}}>Load history</a></td>
+</tr>
+{{/if}}

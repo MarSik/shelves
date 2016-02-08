@@ -51,15 +51,7 @@
 <h3>History</h3>
 
 <table>
-  {{#each history as |lot|}}
-  <tr>
-    <td>{{lot.validSince}}</td>
-    <td>{{lot.action}}</td>
-    <td>{{lot.location.fullName}}</td>
-    <td>{{lot.usedBy.project.name}}</td>
-    <td>{{lot.performedBy.name}}</td>
-  </tr>
-  {{/each}}
+{{lot-history model=model.history}}
 </table>
 
 {{#modal-dialog title="Add requirement" condition=showAddRequirement}}
