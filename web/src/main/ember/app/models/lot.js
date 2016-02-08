@@ -73,40 +73,57 @@ export default LotBase.extend({
   }.property('type.name', 'serial'),
 
   ancestry: Ember.computed('purchase.transaction', 'parents.@each.ancestry', function () {
-    var ancestry = [];
+    var ancestry = {};
     var sum = 0;
 
     if (this.get('purchase.transaction')) {
-      ancestry.pushObject(Ember.Object.create({
+      // This is a primitive Lot acting as its own ancestry
+      ancestry[this.get('id')] = Ember.Object.create({
+        lot: this,
         purchase: this.get('purchase'),
         history: [ this.get('history') ],
         count: this.get('count'),
         probability: 100.0
-      }));
+      });
 
       sum += this.get('count');
     }
 
     var self = this;
 
+    // Get the total count of ancestor lots
+    // this is needed to compute the probability
     this.get('parents').forEach(function (p) {
       console.log("ANCESTOR ", p.get("id"), " OF ", self.get("id"));
       sum += p.get('count');
     });
 
+    // Add all ancestors to probability list
     this.get('parents').forEach(function (p) {
       p.get('ancestry').forEach(function (a) {
-        var hist = a.get("history")
-        hist.pushObject(self.get('history'));
-        ancestry.pushObject(Ember.Object.create({
+        var aLotId = a.get('lot.id');
+        var probability = a.get('probability') * p.get('count') / sum;
+
+        if (aLotId in ancestry) {
+          // We already have this lot in ancestor list, just increase the probability
+          var newProb = ancestry[aLotId].get('probability') + probability;
+          ancestry[aLotId].set('probability', newProb);
+        } else {
+          // New ancestor, create new ancestor record
+          ancestry[aLotId] = Ember.Object.create({
             purchase: a.get('purchase'),
-            history: a.get('history'),
+            lot: a.get('lot'),
+            history: [self.get('history')].concat(a.get('history')),
             count: a.get('count'),
-            probability: a.get('probability') * p.get('count') / sum
-        }));
+            probability: probability
+          });
+        }
       });
     });
 
-    return ancestry;
+    // Return all ancestors as list
+    return Object.keys(ancestry).map(function(key){
+      return ancestry[key];
+    });
   })
 });
