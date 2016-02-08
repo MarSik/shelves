@@ -101,7 +101,7 @@ export default LotBase.extend({
     // Add all ancestors to probability list
     this.get('parents').forEach(function (p) {
       p.get('ancestry').forEach(function (a) {
-        var aLotHistoryId = a.get('lot.history');
+        var aLotHistoryId = a.get('history')[0];
         var probability = a.get('probability') * p.get('count') / sum;
 
         if (aLotHistoryId in ancestry) {
