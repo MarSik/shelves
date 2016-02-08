@@ -39,9 +39,9 @@
     <th>source</th>
     <th>transaction</th>
   </tr>
-{{#each model.ancestry.ancestors as |ancestor|}}
+{{#each model.ancestry key="@index" as |ancestor|}}
 <tr>
-  <td>{{percents ancestor.count model.ancestry.total}}%</td>
+  <td>{{price ancestor.probability}}%</td>
   <td>{{#link-to 'types.show' ancestor.purchase.type}}{{ancestor.purchase.type.fullName}}{{/link-to}}</td>
   <td>{{ancestor.purchase.transaction.date}}</td>
   <td>{{#link-to 'sources.show' ancestor.purchase.transaction.source}}{{ancestor.purchase.transaction.source.fullName}}{{/link-to}}</td>

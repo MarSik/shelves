@@ -19,7 +19,7 @@ export default Ember.Controller.extend({
         },
         performAssignment: function (req, lot, count) {
             nl = this.store.createRecord('lot', {
-              parent: lot,
+              previous: lot,
               status: "ASSIGNED",
               usedBy: req,
               count: count
