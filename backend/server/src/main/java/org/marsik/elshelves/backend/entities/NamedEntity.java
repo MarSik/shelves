@@ -147,7 +147,7 @@ public class NamedEntity extends OwnedEntity
 	}
 
 	@Override
-	public TextRevision createRevision(UuidGenerator uuidGenerator, User performedBy) {
+	public TextRevision createRevision(UpdateableEntity update, UuidGenerator uuidGenerator, User performedBy) {
 		TextRevision revision = new TextRevision();
 		revision.setId(uuidGenerator.generate());
 		revision.setPerformedBy(performedBy);

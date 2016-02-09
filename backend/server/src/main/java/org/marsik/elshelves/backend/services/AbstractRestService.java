@@ -72,7 +72,7 @@ public abstract class AbstractRestService<R extends BaseIdentifiedEntityReposito
 
         if (entity instanceof RevisionsSupport
                 && ((RevisionsSupport) entity).isRevisionNeeded(update)) {
-            revision = ((RevisionsSupport) entity).createRevision(uuidGenerator, currentUser);
+            revision = ((RevisionsSupport) entity).createRevision(update, uuidGenerator, currentUser);
         }
 
         entity.updateFrom(update);

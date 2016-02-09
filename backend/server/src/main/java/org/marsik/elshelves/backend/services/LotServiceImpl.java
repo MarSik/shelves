@@ -152,7 +152,7 @@ public class LotServiceImpl implements LotService {
 
             // Prepare history object
             if (taken.isRevisionNeeded(update)) {
-                LotHistory history = taken.createRevision(uuidGenerator, currentUser);
+                LotHistory history = taken.createRevision(update, uuidGenerator, currentUser);
                 taken.setPreviousRevision(history);
             }
 
@@ -165,7 +165,7 @@ public class LotServiceImpl implements LotService {
         } else {
             // Prepare history object
             if (lot.isRevisionNeeded(update)) {
-                LotHistory history = lot.createRevision(uuidGenerator, currentUser);
+                LotHistory history = lot.createRevision(update, uuidGenerator, currentUser);
                 lot.setPreviousRevision(history);
             }
 

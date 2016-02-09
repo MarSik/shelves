@@ -51,7 +51,7 @@ public class PurchasedLot extends Lot {
         l.setStatus(LotAction.DELIVERY);
         l.setType(purchase.getType());
 
-        LotHistory h = l.recordChange(null, performedBy, uuidGenerator);
+        LotHistory h = l.createRevision(null, uuidGenerator, performedBy);
         h.setLocation(location);
 
         return l;

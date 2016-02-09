@@ -96,19 +96,30 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
         return getCount() - usedCount();
     }
 
-	public LotHistory recordChange(Lot update, User performedBy, UuidGenerator uuidGenerator) {
+	@Override
+	public LotHistory createRevision(UpdateableEntity update0, UuidGenerator uuidGenerator, User performedBy) {
+		if (update0 != null && !(update0 instanceof Lot)) {
+			throw new IllegalArgumentException();
+		}
+
+		Lot update = (Lot) update0;
+
 		LotHistory.LotHistoryBuilder h = LotHistory.builder();
 
 		LotAction action = LotAction.EVENT;
 
 		if (update == null) {
 			action = LotAction.DELIVERY;
-		} else if (update.getStatus() == getStatus()) {
+			h.location(getLocation());
+			h.assignedTo(getUsedBy());
+		} else if (update.getStatus() != null && update.getStatus() != getStatus()) {
 			action = update.getStatus();
-		} else if (!update.getLocation().equals(getLocation())) {
+		} else if (!Objects.equals(update.getLocation(), getLocation())) {
 			action = LotAction.MOVED;
-		} else if (!update.getUsedBy().equals(getUsedBy())) {
+			h.location(update.getLocation());
+		} else if (!Objects.equals(update.getUsedBy(), getUsedBy())) {
 			action = update.getUsedBy() == null ? LotAction.UNASSIGNED : LotAction.ASSIGNED;
+			h.assignedTo(update.getUsedBy());
 		}
 
 		h.id(uuidGenerator.generate())
@@ -117,9 +128,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 				.action(action)
 				.created(new DateTime());
 
-		setHistory(h.build());
-
-		return getHistory();
+		return h.build();
 	}
 
 	public boolean isCanBeSoldered() {
@@ -285,17 +294,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 				|| willUpdate(getCount(), update.getCount())
 				|| willUpdate(getLocation(), update.getLocation())
 				|| willUpdate(getUsedBy(), update.getUsedBy());
-	}
-
-	@Override
-	public LotHistory createRevision(UuidGenerator uuidGenerator, User performedBy) {
-		LotHistory h = new LotHistory();
-		h.setId(uuidGenerator.generate());
-		h.setPrevious(getHistory());
-		h.setPerformedBy(performedBy);
-		h.setAction(LotAction.EVENT);
-		h.setValidSince(new DateTime());
-		return h;
 	}
 
 	@Override
