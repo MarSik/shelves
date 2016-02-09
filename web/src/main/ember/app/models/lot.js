@@ -76,9 +76,16 @@ export default LotBase.extend({
     var ancestry = {};
     var sum = 0;
 
+    if (this.get('status') == "DELIVERED") {
+       var prependHistory = [];
+    } else {
+       var prependHistory = [this.get('history')];
+    }
+
     if (this.get('purchase.transaction')) {
       // This is a primitive Lot acting as its own ancestry
-      ancestry[this.get('history')] = Ember.Object.create({
+      var aLotHistoryId = this.get('history.id');
+      ancestry[aLotHistoryId] = Ember.Object.create({
         lot: this,
         purchase: this.get('purchase'),
         history: [ this.get('history') ],
@@ -101,8 +108,10 @@ export default LotBase.extend({
     // Add all ancestors to probability list
     this.get('parents').forEach(function (p) {
       p.get('ancestry').forEach(function (a) {
-        var aLotHistoryId = a.get('history')[0];
+        var newHistory = prependHistory.concat(a.get('history'));
+        var aLotHistoryId = a.get('history').join();
         var probability = a.get('probability') * p.get('count') / sum;
+
 
         if (aLotHistoryId in ancestry) {
           // We already have this lot in ancestor list, just increase the probability
@@ -112,8 +121,7 @@ export default LotBase.extend({
           // New ancestor, create new ancestor record
           ancestry[aLotHistoryId] = Ember.Object.create({
             purchase: a.get('purchase'),
-            lot: a.get('lot'),
-            history: [self.get('history')].concat(a.get('history')),
+            history: newHistory,
             count: a.get('count'),
             probability: probability
           });

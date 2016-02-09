@@ -1,6 +1,11 @@
 <h2>Lot {{model.id}}</h2>
 
 <dl>
+  <dt>Type</dt>
+  <dd>{{fa-icon model.type.icon}} {{#link-to 'types.show' model.type}}{{model.type.fullName}}{{/link-to}}</dd>
+</dl>
+
+<dl>
     <dt>Count</dt>
     <dd>{{model.count}}</dd>
 </dl>
@@ -26,19 +31,13 @@
 <table>
   <tr>
     <th>%</th>
-    <th>type</th>
+    <th>history</th>
     <th>purchased on</th>
     <th>source</th>
     <th>transaction</th>
   </tr>
 {{#each model.ancestry key="@index" as |ancestor|}}
-<tr>
-  <td>{{price ancestor.probability}}%</td>
-  <td>{{#link-to 'types.show' ancestor.purchase.type}}{{ancestor.purchase.type.fullName}}{{/link-to}}</td>
-  <td>{{ancestor.purchase.transaction.date}}</td>
-  <td>{{#link-to 'sources.show' ancestor.purchase.transaction.source}}{{ancestor.purchase.transaction.source.fullName}}{{/link-to}}</td>
-  <td>{{#link-to 'transactions.show' ancestor.purchase.transaction}}{{ancestor.purchase.transaction.fullName}}{{/link-to}}</td>
-</tr>
+{{lot-ancestor-detail ancestor=ancestor}}
 {{/each}}
 </table>
 {{/if}}

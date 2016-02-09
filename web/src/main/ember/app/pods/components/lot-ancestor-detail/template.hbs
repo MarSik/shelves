@@ -1,0 +1,18 @@
+<tr>
+  <td>{{price ancestor.probability}}%</td>
+  <td><a {{action 'loadHistory'}}>{{fa-icon 'clock-o'}} show full history</a></td>
+  <td>{{moment-format ancestor.purchase.transaction.date 'll'}}</td>
+  <td>{{#link-to 'sources.show' ancestor.purchase.transaction.source}}{{ancestor.purchase.transaction.source.fullName}}{{/link-to}}</td>
+  <td>{{#link-to 'transactions.show' ancestor.purchase.transaction}}{{ancestor.purchase.transaction.fullName}}{{/link-to}}</td>
+</tr>
+{{#if showHistory}}
+<tr>
+  <td colspan="5">
+    <table>
+      {{#each ancestor.history as |h|}}
+      {{lot-history model=h showHistory=showHistory}}
+      {{/each}}
+    </table>
+  </td>
+</tr>
+{{/if}}
