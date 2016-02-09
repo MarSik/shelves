@@ -137,7 +137,16 @@ public class LotServiceImpl implements LotService {
 
         Lot taken = null;
 
-        if (count > update.getCount()) {
+        // Prepare update without count change
+        Lot dummyUpdate = (Lot) update.shallowClone();
+        dummyUpdate.setCount(count);
+
+        if (!lot.isRevisionNeeded(dummyUpdate)) {
+            // split and move to the same location, parts can't be distinguished
+            // so keep them together
+            return new LotSplitResult(lot, null);
+
+        } else if (count > update.getCount()) {
             taken = (Lot)lot.shallowClone();
             taken.setDbId(null);
             taken.setVersion(null);
