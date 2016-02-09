@@ -140,22 +140,20 @@ public class LotController {
         EmberModel.Builder<LotApiModel> modelBuilder;
 
         // The expected result of split action is the original (based on ID)
-        // lot with lower count, the taken lot is sideloaded
+        // lot with lower count, all other objects are sideloaded
 
-        if (result.getRemainder() != null
-                && !result.getRemainder().getId().equals(id)) {
-            modelBuilder = new EmberModel.Builder<>(
-                    lotToEmber.convert(result.getRemainder(), cache));
-            modelBuilder.sideLoad(
-                    lotToEmber.convert(result.getRequested(), cache));
-        } else if (result.getRemainder() != null) {
-            modelBuilder = new EmberModel.Builder<>(
-                    lotToEmber.convert(result.getRequested(), cache));
-            modelBuilder.sideLoad(
-                    lotToEmber.convert(result.getRemainder(), cache));
-        } else {
-            modelBuilder = new EmberModel.Builder<>(
-                    lotToEmber.convert(result.getRequested(), cache));
+        Map<UUID, Lot> lots = new THashMap<>();
+        lots.put(result.getRequested().getId(), result.getRequested());
+        for (Lot l: result.getOthers()) {
+            lots.put(l.getId(), l);
+        }
+
+        modelBuilder = new EmberModel.Builder<>(
+                lotToEmber.convert(lots.get(id), cache));
+        lots.remove(id);
+
+        for (Lot l: lots.values()) {
+            modelBuilder.sideLoad(lotToEmber.convert(l, cache));
         }
 
         return modelBuilder.build();
@@ -182,8 +180,8 @@ public class LotController {
             Map<UUID, Object> cache = new THashMap<>();
 
             modelBuilder = new EmberModel.Builder<>(lotToEmber.convert(result.getRequested(), cache));
-            if (result.getRemainder() != null) {
-                modelBuilder.sideLoad(lotToEmber.convert(result.getRemainder(), cache));
+            for (Lot l: result.getOthers()) {
+                modelBuilder.sideLoad(lotToEmber.convert(l, cache));
             }
         } else {
             throw new InvalidRequest();

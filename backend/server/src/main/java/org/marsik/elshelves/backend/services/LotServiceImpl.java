@@ -144,7 +144,7 @@ public class LotServiceImpl implements LotService {
         if (!lot.isRevisionNeeded(dummyUpdate)) {
             // split and move to the same location, parts can't be distinguished
             // so keep them together
-            return new LotSplitResult(lot, null);
+            return new LotSplitResult(lot, (Collection<Lot>) null);
 
         } else if (count > update.getCount()) {
             taken = (Lot)lot.shallowClone();
@@ -184,12 +184,18 @@ public class LotServiceImpl implements LotService {
 
         save(lot);
 
+        Map<Lot, Lot> cache = new THashMap<>();
+
         /*
            Perform Lot mixing
          */
-        Map<UUID, Lot> cache = new THashMap<>();
+        Lot original = lot;
         lot = lotMixer(lot, cache);
         taken = lotMixer(taken, cache);
+
+        // Make sure the possible modified lot is inserted to the cache for sideloading,
+        // but make sure we do not rewrite the result of mixing
+        cache.putIfAbsent(original, original);
 
         /* The old id belongs to the rest and the assigned / moved lot has a new uuid.
            This should help with concurrent access (the second request might still have chance
@@ -197,9 +203,9 @@ public class LotServiceImpl implements LotService {
          */
 
         if (taken == null) {
-            return new LotSplitResult(lot, null);
+            return new LotSplitResult(lot, cache);
         } else {
-            return new LotSplitResult(taken, lot);
+            return new LotSplitResult(taken, cache);
         }
 	}
 
@@ -215,13 +221,13 @@ public class LotServiceImpl implements LotService {
      * @return Mixed version of the lot if the lot was changed
      */
     @VisibleForTesting
-    protected Lot lotMixer(Lot lot, @NotNull Map<UUID, Lot> lotMap) {
+    protected Lot lotMixer(Lot lot, @NotNull Map<Lot, Lot> lotMap) {
         if (lot == null) {
             return null;
         }
 
         if (!lot.isValid()) {
-            return lotMap.getOrDefault(lot.getId(), lot);
+            return lotMap.getOrDefault(lot, lot);
         }
 
         if (lot.getLocation() == null) {
@@ -236,7 +242,7 @@ public class LotServiceImpl implements LotService {
             return lot;
         }
 
-        lot = lotMap.getOrDefault(lot.getId(), lot);
+        lot = lotMap.getOrDefault(lot, lot);
         final Type lotType = lot.getType();
 
         // Get all lots with the same type and no serials or barcodes
@@ -284,7 +290,7 @@ public class LotServiceImpl implements LotService {
             }
             unassigned.forEach(c -> c.unlinkWithStatus(LotAction.MIXED));
             unassigned.forEach(this::save);
-            unassigned.forEach(c -> lotMap.put(c.getId(), mixedLot));
+            unassigned.forEach(c -> lotMap.put(c, mixedLot));
             save(mixedLot);
         }
 
@@ -317,11 +323,11 @@ public class LotServiceImpl implements LotService {
                 save(l);
             }
 
-            lotMap.put(l.getId(), mixedLot);
+            lotMap.put(l, mixedLot);
             save(mixedLot);
         }
 
-        return lotMap.getOrDefault(lot.getId(), lot);
+        return lotMap.getOrDefault(lot, lot);
     }
 
     private <T extends Lot> void saveHistory(T lot) {

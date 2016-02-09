@@ -144,7 +144,7 @@ public class LotServiceImplTest extends BaseUnitTest {
         l3.setUsedBy(req);
         box.addLot(l3);
 
-        Map<UUID, Lot> cache = new THashMap<>();
+        Map<Lot, Lot> cache = new THashMap<>();
         Lot result = service.lotMixer(l2, cache);
         Lot assigned = service.lotMixer(l3, cache);
 
@@ -238,7 +238,7 @@ public class LotServiceImplTest extends BaseUnitTest {
         l2.setId(uuidGenerator.generate());
         l2.setDbId(dbId.incrementAndGet());
         box.addLot(l2);
-        Map<UUID, Lot> cache = new THashMap<>();
+        Map<Lot, Lot> cache = new THashMap<>();
         Lot result = service.lotMixer(l2, cache);
         Lot aux = service.lotMixer(l1, cache);
 

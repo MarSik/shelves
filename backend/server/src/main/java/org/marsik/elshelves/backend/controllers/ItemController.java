@@ -11,6 +11,7 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Item;
+import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Type;
@@ -110,9 +111,9 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
 
         EmberModel.Builder<ItemApiModel> modelBuilder = new EmberModel.Builder<>(
                 conversionService.convert(result.getRequested(), cache));
-        if (result.getRemainder() != null) {
+        for (Lot l: result.getOthers()) {
             modelBuilder.sideLoad(
-                    conversionService.convert(result.getRemainder(), cache));
+                    conversionService.convert(l, cache));
         }
 
         return modelBuilder.build();
