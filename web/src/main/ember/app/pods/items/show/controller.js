@@ -20,7 +20,6 @@ export default Ember.Controller.extend({
         performAssignment: function (req, lot, count) {
             nl = this.store.createRecord('lot', {
               previous: lot,
-              status: "ASSIGNED",
               usedBy: req,
               count: count
             });
@@ -44,7 +43,6 @@ export default Ember.Controller.extend({
             this.set('assignableLots', []);
         },
         unassignLot: function (lot) {
-            lot.set('status', 'UNASSIGNED');
             lot.set('usedBy', null);
 
             var self = this;
@@ -55,7 +53,7 @@ export default Ember.Controller.extend({
             });
         },
         solderLot: function (lot, count) {
-          lot.set('status', 'SOLDERED');
+          lot.set('used', true);
           lot.set('count', count);
 
           console.log("Lot count ", arguments);
@@ -68,7 +66,7 @@ export default Ember.Controller.extend({
           });
         },
         unsolderLot: function (lot) {
-          lot.set('status', 'UNSOLDERED');
+          lot.set('used', false);
 
           var self = this;
 

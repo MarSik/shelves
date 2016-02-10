@@ -82,7 +82,7 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 		return getLots().stream().allMatch(new Predicate<Lot>() {
 			@Override
 			public boolean test(Lot lot) {
-				return !lot.getStatus().equals(LotAction.SOLDERED);
+				return !lot.getUsed();
 			}
 		});
 	}

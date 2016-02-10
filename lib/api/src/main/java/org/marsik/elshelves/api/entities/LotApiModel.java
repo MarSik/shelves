@@ -52,6 +52,10 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	RequirementApiModel usedBy;
 
+	Boolean used;
+
+	Boolean usedInPast;
+
     DateTime expiration;
 
 	Set<LotApiModel> parents;

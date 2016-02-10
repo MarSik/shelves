@@ -269,7 +269,7 @@ public class LotServiceImpl implements LotService {
         if (!unassigned.isEmpty()) {
             // Check for existing mixed lot of the right type
             MixedLot mixedLot = (MixedLot)unassigned.stream()
-                    .filter(c -> c instanceof MixedLot)
+                    .filter(this::isMixedWithNoSignificantHistory)
                     .findFirst()
                     .orElseGet(() -> MixedLot.from(uuidGenerator, unassigned));
 
@@ -286,13 +286,23 @@ public class LotServiceImpl implements LotService {
                 // Avoid cyclic dependencies
                 if (possibleSource == mixedLot) continue;
 
-                mixedLot.addPossibleSource(possibleSource);
+                // Avoid dependencies between assigned lots that were kept
+                // because they do not have significant history
+                // When such mixed lot is detected, its parents are added instead
+                if (isMixedAssignedWithNoSignificantHistory(possibleSource)) {
+                    ((MixedLot) possibleSource).getParents().stream().forEach(mixedLot::addPossibleSource);
+                } else {
+                    mixedLot.addPossibleSource(possibleSource);
+                }
             }
-            unassigned.forEach(c -> c.unlinkWithStatus(LotAction.MIXED));
+
+            unassigned.forEach(Lot::invalidate);
             unassigned.forEach(this::save);
             unassigned.forEach(c -> lotMap.put(c, mixedLot));
             save(mixedLot);
         }
+
+        lot = lotMap.getOrDefault(lot, lot);
 
         // Find all already assigned Lots of the expected type
         Set<Lot> assigned = candidates.stream()
@@ -304,22 +314,30 @@ public class LotServiceImpl implements LotService {
         // update the assignments!
         for (Lot l: assigned) {
             MixedLot mixedLot;
-            if (l instanceof MixedLot) {
+            if (isMixedAssignedWithNoSignificantHistory(l)) {
                 mixedLot = (MixedLot) l;
             } else {
                 mixedLot = MixedLot.from(uuidGenerator, l);
             }
 
             for (Lot possibleSource: candidates) {
-                // Avoid cyclic dependencies
+                // Avoid self-cyclic dependencies
                 if (possibleSource == mixedLot) continue;
 
-                mixedLot.addPossibleSource(possibleSource);
+                // Avoid dependencies between assigned lots that were kept
+                // because they do not have significant history
+                // When such mixed lot is detected, its parents are added instead
+                if (isMixedAssignedWithNoSignificantHistory(possibleSource)) {
+                    ((MixedLot) possibleSource).getParents().stream().forEach(mixedLot::addPossibleSource);
+                } else {
+                    mixedLot.addPossibleSource(possibleSource);
+                }
+
             }
 
             // Unlink the old lot if necessary (this will unassign it)
             if (mixedLot != l) {
-                l.unlinkWithStatus(LotAction.MIXED);
+                l.invalidate();
                 save(l);
             }
 
@@ -328,6 +346,19 @@ public class LotServiceImpl implements LotService {
         }
 
         return lotMap.getOrDefault(lot, lot);
+    }
+
+    private boolean isMixedAssignedWithNoSignificantHistory(Lot l) {
+        // Avoid dependencies between assigned lots that were kept
+        // because they do not have significant history
+        return isMixedWithNoSignificantHistory(l)
+                && l.getUsedBy() != null;
+    }
+
+    private boolean isMixedWithNoSignificantHistory(Lot l) {
+        return (l instanceof MixedLot
+                && l.getHistory().getPrevious() == null
+                && l.getHistory().getAction() == LotAction.MIX);
     }
 
     private <T extends Lot> void saveHistory(T lot) {

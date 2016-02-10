@@ -53,10 +53,12 @@ public class LotToEmber extends AbstractEntityToEmber<Lot, LotApiModel> {
 		entity.setId(object.getId());
 		entity.setCount(object.getCount());
 
+		entity.setUsed(object.getUsed());
+		entity.setUsedInPast(object.getUsedInPast());
+
 		entity.setType(typeToEmber.convert(path, "type", object.getType(), cache, include));
         entity.setExpiration(object.getExpiration());
 		entity.setSerials(object.getSerials());
-		entity.setAction(object.getStatus());
 		entity.setUsedBy(requirementToEmber.convert(path, "used-by", object.getUsedBy(), cache, include));
 		entity.setLocation(boxToEmber.convert(path, "location", object.getLocation(), cache, include));
 		entity.setHistory(lotHistoryToEmber.convert(path, "history", object.getHistory(), cache, include));

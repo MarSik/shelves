@@ -134,7 +134,9 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
 
         item.setCount(1L);
         item.setRequires(new THashSet<>());
-        item.setStatus(LotAction.DELIVERY);
+        item.setUsed(false);
+        item.setUsedInPast(false);
+        item.setValid(true);
         item.setHistory(history);
         item.setType(type);
         created.add(item);

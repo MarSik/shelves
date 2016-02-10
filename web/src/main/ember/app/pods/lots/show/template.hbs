@@ -10,15 +10,16 @@
     <dd>{{model.count}}</dd>
 </dl>
 
+{{#if model.usedBy}}
 <dl>
-    <dt>Action</dt>
-    <dd>{{model.status}}</dd>
+  <dt>Used in</dt>
+  <dd>{{#link-to 'items.show' model.usedBy.item}}{{model.usedBy.item.fullName}}{{/link-to}}</dd>
 </dl>
+{{/if}}
 
-<dl>
-    <dt>Date</dt>
-    <dd>{{model.created}}</dd>
-</dl>
+{{#if model.usedInPast}}
+<p class="alert-boc warn">This lot contains parts that are or were used in the past.</p>
+{{/if}}
 
 <h2>Chain of changes</h2>
 <table>

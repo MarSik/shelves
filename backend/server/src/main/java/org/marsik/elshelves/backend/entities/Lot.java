@@ -12,20 +12,15 @@ import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
 import org.marsik.elshelves.backend.services.UuidGenerator;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -55,9 +50,22 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	@Min(1)
 	Long count;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	LotAction status;
+	/**
+	 * true if this Lot record is currently a valid Lot.
+	 * false if the Lot represents a destroyed part and also when this record
+	 * represents a historical state only.
+	 */
+	Boolean valid;
+
+	/**
+	 * Currently used
+	 */
+	Boolean used;
+
+	/**
+	 * Contains parts that were used in the past
+	 */
+	Boolean usedInPast;
 
 	@ManyToOne(fetch = FetchType.LAZY,
 	        optional = false)
@@ -112,8 +120,10 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 			action = LotAction.DELIVERY;
 			h.location(getLocation());
 			h.assignedTo(getUsedBy());
-		} else if (update.getStatus() != null && update.getStatus() != getStatus()) {
-			action = update.getStatus();
+		} else if (update.getValid() != null && !Objects.equals(update.getValid(), getValid())) {
+			action = update.getValid() ? LotAction.FIXED : LotAction.DESTROYED;
+		} else if (update.getUsed() != null && !Objects.equals(update.getUsed(), getUsed())) {
+			action = update.getUsed() ? LotAction.SOLDERED : LotAction.UNSOLDERED;
 		} else if (!Objects.equals(update.getLocation(), getLocation())) {
 			action = LotAction.MOVED;
 			h.location(update.getLocation());
@@ -134,12 +144,12 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	public boolean isCanBeSoldered() {
 		return isValid()
                 && getUsedBy() != null
-				&& !LotAction.SOLDERED.equals(getStatus());
+				&& !getUsed();
 	}
 
 	public boolean isCanBeUnsoldered() {
 		return isValid()
-                && LotAction.SOLDERED.equals(getStatus());
+                && getUsed();
 	}
 
 	public boolean isCanBeAssigned() {
@@ -153,8 +163,8 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
     public boolean isCanBeSplit() {
         return isValid()
-                && EnumSet.of(LotAction.SPLIT, LotAction.DELIVERY, LotAction.SOLDERED,
-				LotAction.UNASSIGNED, LotAction.EVENT, LotAction.MOVED).contains(getStatus());
+                && getUsedBy() == null
+				&& !getUsed();
     }
 
     public boolean isCanBeMoved() {
@@ -162,13 +172,8 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
                 && (isCanBeAssigned() || isCanBeSoldered());
     }
 
-    /**
-     * Return true if this Lot record is currently a valid Lot.
-     * Return false if the Lot represents a destroyed part and also when this record
-     * represents a historical state only.
-     */
     public boolean isValid() {
-        return getStatus() != null && !getStatus().equals(LotAction.DESTROYED) && !getStatus().equals(LotAction.MIXED);
+        return getValid();
     }
 
 	@Override
@@ -202,42 +207,56 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 		Lot update = (Lot)update0;
 
-		if (update.getStatus() != getStatus()) {
-			if (update.getStatus() == LotAction.SOLDERED
-					&& !isCanBeSoldered()) {
-				throw new OperationNotPermitted();
-			}
-
-			if (update.getStatus() == LotAction.UNSOLDERED
-					&& !isCanBeUnsoldered()) {
-				throw new OperationNotPermitted();
-			}
-
-			if (update.getStatus() == LotAction.UNASSIGNED) {
-				update.setUsedBy(null);
-			}
-
-			if (update.getStatus() == LotAction.DESTROYED
-					|| update.getStatus() == LotAction.MIXED) {
-				update.setUsedBy(null);
-				update.setLocation(null);
-			}
+		if (update.getUsed() != null
+				&& !getUsed()
+				&& update.getUsed()
+				&& !isCanBeSoldered()) {
+			throw new OperationNotPermitted();
 		}
 
-		update(update.getStatus(), this::setStatus);
+		if (update.getUsed() != null
+				&& getUsed()
+				&& !update.getUsed()
+				&& !isCanBeUnsoldered()) {
+			throw new OperationNotPermitted();
+		}
+
+		if (update.getValid() != null
+				&& !update.getValid()) {
+			update.setUsedBy(null);
+			update.setLocation(null);
+		}
+
+		update(update.getValid(), this::setValid);
+		update(update.getUsed(), this::setUsed);
+		setUsedInPast(getUsedInPast() || getUsed());
+
+		// reset location when soldering to an item
+		if (getUsed()) {
+			setLocation(null);
+		}
+
+		// restore location when unsoldering
+		if (!getUsed()
+				&& getUsedBy() != null
+				&& getLocation() == null) {
+			setLocation(getUsedBy().getItem().getLocation());
+		}
 
 		if (!Objects.equals(update.getCount(), getCount())
 				&& !isCanBeSplit()) {
 			throw new OperationNotPermitted();
 		}
 
-		if (update.getCount().compareTo(getCount()) > 0) {
+		if (update.getCount() != null
+				&& update.getCount().compareTo(getCount()) > 0) {
 			throw new OperationNotPermitted();
 		}
 
 		update(update.getCount(), this::setCount);
 
-		if (!Objects.equals(update.getLocation(), getLocation())
+		if (update.getLocation() != null
+				&& !Objects.equals(update.getLocation(), getLocation())
 				&& !isCanBeMoved()) {
 			throw new OperationNotPermitted();
 		}
@@ -290,7 +309,8 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 		Lot update = (Lot)update0;
 
-		return willUpdate(getStatus(), update.getStatus())
+		return willUpdate(getValid(), update.getValid())
+				|| willUpdate(getUsed(), update.getUsed())
 				|| willUpdate(getCount(), update.getCount())
 				|| willUpdate(getLocation(), update.getLocation())
 				|| willUpdate(getUsedBy(), update.getUsedBy());
@@ -306,8 +326,9 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		setHistory(revision);
 	}
 
-	public void unlinkWithStatus(LotAction action) {
-		setStatus(action);
+	public void invalidate() {
+		setValid(false);
+		setUsed(false);
 		setUsedBy(null);
 		setLocation(null);
 	}

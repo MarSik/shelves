@@ -18,7 +18,6 @@ export default LotBase.extend({
   }),
   location: belongsTo("box", {async: true}),
   previous: belongsTo("lot", {async: true, inverse: null}),
-  status: attr(),
   expiration: attr('date'),
   serials: attr(),
   history: belongsTo("history", {async: true}),
@@ -36,7 +35,10 @@ export default LotBase.extend({
   canBeUnassigned: attr(),
   canBeSplit: attr(),
   canBeMoved: attr(),
+
   valid: attr(),
+  used: attr(),
+  usedInPast: attr(),
 
   icon: function () {
     if (this.get("canBeUnsoldered")) {
@@ -75,12 +77,7 @@ export default LotBase.extend({
   ancestry: Ember.computed('purchase.transaction', 'parents.@each.ancestry', function () {
     var ancestry = {};
     var sum = 0;
-
-    if (this.get('status') == "DELIVERED") {
-       var prependHistory = [];
-    } else {
-       var prependHistory = [this.get('history')];
-    }
+    var prependHistory = [this.get('history')];
 
     if (this.get('purchase.transaction')) {
       // This is a primitive Lot acting as its own ancestry

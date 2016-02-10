@@ -48,7 +48,9 @@ public class PurchasedLot extends Lot {
         l.setCount(count);
         l.setPurchase(purchase);
         l.setExpiration(expiration);
-        l.setStatus(LotAction.DELIVERY);
+        l.setUsed(false);
+        l.setUsedInPast(false);
+        l.setValid(true);
         l.setType(purchase.getType());
 
         LotHistory h = l.createRevision(null, uuidGenerator, performedBy);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public enum LotAction {
     DELIVERY,
+    MIX,
 	SPLIT,
     MOVED,
     ASSIGNED,
@@ -12,6 +13,7 @@ public enum LotAction {
 	SOLDERED,
 	UNSOLDERED,
 	DESTROYED,
+    FIXED,
     EVENT,
     FINISHED,
     REOPENED,

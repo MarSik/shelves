@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 @Getter
 @Setter
@@ -77,7 +78,6 @@ public class MixedLot extends Lot {
         }
 
         final Lot firstLot = lots.iterator().next();
-        LotAction action = firstLot.getStatus();
         Type t = firstLot.getType();
         Requirement req = firstLot.getUsedBy();
 
@@ -85,13 +85,16 @@ public class MixedLot extends Lot {
         mixedLot.setId(uuidGenerator.generate());
         mixedLot.setType(t);
         mixedLot.setCount(0L);
-        mixedLot.setStatus(action);
+        mixedLot.setValid(true);
+        mixedLot.setUsed(firstLot.getUsed());
+        mixedLot.setUsedInPast(lots.stream().anyMatch(Lot::getUsedInPast));
         mixedLot.setUsedBy(req);
         mixedLot.setLocation(firstLot.getLocation());
         mixedLot.setOwner(firstLot.getOwner());
+
         mixedLot.setHistory(new LotHistory());
         mixedLot.getHistory().setId(uuidGenerator.generate());
-        mixedLot.getHistory().setAction(LotAction.DELIVERY);
+        mixedLot.getHistory().setAction(LotAction.MIX);
         mixedLot.getHistory().setLocation(mixedLot.getLocation());
         mixedLot.getHistory().setAssignedTo(req);
         mixedLot.getHistory().setValidSince(new DateTime());
@@ -124,6 +127,10 @@ public class MixedLot extends Lot {
 
         if (!l.isValid()) {
             throw new IllegalArgumentException("All lots in MixedLot have to be valid");
+        }
+
+        if (l.getUsed()) {
+            throw new IllegalArgumentException("All lots in MixedLot have to be un-used");
         }
     }
 
