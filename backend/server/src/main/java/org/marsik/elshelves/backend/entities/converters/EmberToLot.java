@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.MixedLot;
@@ -51,6 +52,20 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 	public Lot convert(String path, LotApiModel object, Lot model, Map<UUID, Object> cache, Set<String> include) {
 		model.setId(object.getId());
 		model.setCount(object.getCount());
+
+		if (object.getStatus() == LotAction.SOLDERED) {
+			object.setUsed(true);
+		} else if (object.getStatus() == LotAction.UNSOLDERED) {
+			object.setUsed(false);
+			object.setUsedInPast(true);
+		} else if (object.getStatus() == LotAction.DESTROYED) {
+			object.setValid(false);
+		} else if (object.getStatus() == LotAction.FIXED) {
+			object.setValid(true);
+		} else if (object.getStatus() == LotAction.UNASSIGNED) {
+			object.setUsedBy(null);
+		}
+
 		model.setUsed(object.getUsed());
 		model.setUsedInPast(object.getUsedInPast());
 

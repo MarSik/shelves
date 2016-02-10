@@ -46,6 +46,9 @@ public class LotApiModel extends AbstractEntityApiModel {
 
 	BoxApiModel location;
 
+	/**
+	 * Deprecated: only used for importing old data
+	 */
 	LotAction status;
 
 	PurchaseApiModel purchase;

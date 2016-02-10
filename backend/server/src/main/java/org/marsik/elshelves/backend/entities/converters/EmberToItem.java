@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.ItemApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
+import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
@@ -39,6 +40,12 @@ public class EmberToItem extends AbstractEmberToEntity<ItemApiModel, Item> {
 	@Override
 	public Item convert(String path, ItemApiModel object, Item item, Map<UUID, Object> cache, Set<String> include) {
 		emberToLot.convert(path, object, item, cache, include);
+
+		if (object.getStatus() == LotAction.FINISHED) {
+			object.setFinished(true);
+		} else if (object.getStatus() == LotAction.REOPENED) {
+			object.setFinished(false);
+		}
 
 		item.setFinished(object.getFinished());
 
