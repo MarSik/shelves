@@ -44,10 +44,6 @@ public class EmberToUser extends AbstractEmberToEntity<UserApiModel, User> {
 
 		u.setAuthorizations(new IdentifiedEntity.UnprovidedSet<>());
 
-		if (dto.getProjectSource() != null) {
-			u.setProjectSource(emberToSource.convert(path, "project-source", dto.getProjectSource(), cache, include));
-		}
-
 		if (dto.getLostAndFound() != null) {
 			u.setLostAndFound(emberToGroup.convert(path, "lost-and-found", dto.getLostAndFound(), cache, include));
 		}

@@ -51,7 +51,6 @@ public class UserToEmber extends AbstractEntityToEmber<User, UserApiModel> {
             }
         }
 
-        user.setProjectSource(sourceToEmber.convert(path, "project-source", entity.getProjectSource(), cache, include));
         user.setLostAndFound(groupToEmber.convert(path, "lost-and-found", entity.getLostAndFound(), cache, include));
 
 		return user;

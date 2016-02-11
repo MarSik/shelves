@@ -45,7 +45,6 @@ public class UserApiModel extends AbstractEntityApiModel {
     String currency;
 
     List<AuthorizationApiModel> authorizations;
-    SourceApiModel projectSource;
     PartGroupApiModel lostAndFound;
 
     @Override

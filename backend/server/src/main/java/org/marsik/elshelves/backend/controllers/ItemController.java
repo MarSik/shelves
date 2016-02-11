@@ -131,7 +131,7 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
         Source source = emberToSource.convert(source0, cache);
         Type type = emberToType.convert(type0, cache);
 
-        item = getService().startProject(item, type, source, currentUser);
+        item = getService().startProject(item, type, currentUser);
         getService().flush();
 
         ItemApiModel itemApiModel = getDbToRest().convert(item, new THashMap<>());

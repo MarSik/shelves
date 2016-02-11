@@ -5,7 +5,6 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.Requirement;
-import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.ItemRepository;
@@ -21,7 +20,6 @@ public interface ItemService extends AbstractRestServiceIntf<ItemRepository, Ite
 
     @Transactional
     Item startProject(Item item,
-            Type type,
-            Source source,
-            User currentUser);
+                      Type type,
+                      User currentUser);
 }

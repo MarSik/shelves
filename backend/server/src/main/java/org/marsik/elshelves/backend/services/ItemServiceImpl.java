@@ -10,10 +10,8 @@ import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Item;
 import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.OwnedEntity;
-import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Source;
-import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.interfaces.Relinker;
@@ -87,9 +85,8 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
 
     @Override @Transactional
     public Item startProject(Item item,
-            Type type,
-            Source source,
-            User currentUser) {
+                             Type type,
+                             User currentUser) {
         List<IdentifiedEntity> created = new ArrayList<>();
 
         item.setType(type);
@@ -110,20 +107,6 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
         }
 
         type.addLot(item);
-
-        if (source == null) {
-            source = currentUser.getProjectSource();
-        }
-
-        if (source == null) {
-            source = new Source();
-            source.setId(uuidGenerator.generate());
-            source.setName("Project source");
-            created.add(source);
-
-            currentUser.setProjectSource(source);
-            identifiedEntityRepository.save(currentUser);
-        }
 
         LotHistory history = new LotHistory();
         history.setId(uuidGenerator.generate());
@@ -155,7 +138,6 @@ public class ItemServiceImpl extends AbstractRestService<ItemRepository, Item> i
         }
 
         identifiedEntityRepository.save(type);
-        identifiedEntityRepository.save(source);
         identifiedEntityRepository.save(created);
         identifiedEntityRepository.save(item);
         identifiedEntityRepository.save(history);

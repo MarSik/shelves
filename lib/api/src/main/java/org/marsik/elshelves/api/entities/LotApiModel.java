@@ -47,8 +47,9 @@ public class LotApiModel extends AbstractEntityApiModel {
 	BoxApiModel location;
 
 	/**
-	 * Deprecated: only used for importing old data
+	 * Deprecated: only used for importing old data, treat as read only
 	 */
+	@Setter(AccessLevel.PRIVATE)
 	LotAction status;
 
 	PurchaseApiModel purchase;

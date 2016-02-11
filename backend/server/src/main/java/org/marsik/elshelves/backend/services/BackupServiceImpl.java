@@ -554,20 +554,6 @@ public class BackupServiceImpl implements BackupService {
         history.setValidSince(new DateTime());
         backup.getHistory().add(history);
 
-        SourceApiModel source = new SourceApiModel();
-
-        if (currentUser.getProjectSource() != null) {
-            source.setId(currentUser.getProjectSource().getId());
-            source.setStub(true);
-        } else {
-            source.setName("Backup restore " + new DateTime().toString());
-            source.setId(uuidGenerator.generate());
-            source.setDescribedBy(new THashSet<>());
-            source.setCodes(new THashSet<>());
-            source.setProperties(new THashSet<>());
-            backup.getSources().add(source);
-        }
-
         PartGroupApiModel g = new PartGroupApiModel();
         g.setId(uuidGenerator.generate());
         g.setName("Imported projects");
@@ -597,32 +583,14 @@ public class BackupServiceImpl implements BackupService {
             item.setFinished(false);
             item.setHistory(history);
             item.setType(type);
-            item.setStatus(LotAction.DELIVERY);
+            item.setValid(true);
+            item.setUsed(false);
+            item.setUsedInPast(false);
             item.setRequirements(project.getRequirements());
             backup.getItems().add(item);
 
             type.setLots(new THashSet<>());
             type.getLots().add(item);
-
-            PurchaseApiModel purchase = new PurchaseApiModel();
-            purchase.setId(uuidGenerator.generate());
-            purchase.setLots(new THashSet<>());
-            purchase.getLots().add(item);
-            purchase.setCount(1L);
-            purchase.setType(type);
-            backup.getPurchases().add(purchase);
-
-            TransactionApiModel transaction = new TransactionApiModel();
-            transaction.setId(uuidGenerator.generate());
-            transaction.setItems(new THashSet<>());
-            transaction.getItems().add(purchase);
-            transaction.setName(project.getName());
-            transaction.setDate(new DateTime());
-            transaction.setSource(source);
-            transaction.setDescribedBy(new THashSet<>());
-            transaction.setCodes(new THashSet<>());
-            transaction.setProperties(new THashSet<>());
-            backup.getTransactions().add(transaction);
         }
     }
 
