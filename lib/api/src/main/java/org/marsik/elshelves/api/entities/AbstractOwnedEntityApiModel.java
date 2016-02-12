@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -26,6 +27,8 @@ public abstract class AbstractOwnedEntityApiModel extends AbstractEntityApiModel
     }
 
     UserApiModel belongsTo;
+
+    Set<CodeApiModel> codes;
 
     @Override
     public boolean equals(Object o) {

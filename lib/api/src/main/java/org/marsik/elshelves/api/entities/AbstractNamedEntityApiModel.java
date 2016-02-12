@@ -59,8 +59,6 @@ public class AbstractNamedEntityApiModel extends AbstractOwnedEntityApiModel {
     Map<UUID, Long> values;
     Set<NumericPropertyApiModel> properties;
 
-    Set<CodeApiModel> codes;
-
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

@@ -16,7 +16,8 @@ export default Ember.Controller.extend({
     {id: "QR_CODE", name: "QR Code"},
     {id: "DATA_MATRIX", name: "Data Matrix"},
     {id: "AZTEC", name: "Aztec"},
-    {id: "PDF_417", name: "PDF 417"}
+    {id: "PDF_417", name: "PDF 417"},
+    {id: "QR+SHV", name: "Shelves UUID alias"}
   ],
 
   showCodeForModelPlural: Ember.computed("showCodeFor", function () {

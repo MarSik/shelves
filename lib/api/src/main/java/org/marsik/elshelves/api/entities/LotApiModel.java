@@ -30,7 +30,7 @@ import java.util.UUID;
 @JsonSubTypes({
 		@JsonSubTypes.Type(ItemApiModel.class)
 })
-public class LotApiModel extends AbstractEntityApiModel {
+public class LotApiModel extends AbstractOwnedEntityApiModel {
 	public LotApiModel(UUID id) {
 		super(id);
 	}

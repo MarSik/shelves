@@ -1,9 +1,11 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
+import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.backend.entities.MixedLot;
@@ -35,6 +37,9 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 
 	@Autowired
 	EmberToLotHistory emberToLotHistory;
+
+	@Autowired
+	EmberToCode emberToCode;
 
 	@Autowired
 	EmberToEntityConversionService conversionService;
@@ -96,6 +101,15 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 
 		if (model.getSerials() == null) {
 			model.setSerials(new IdentifiedEntity.UnprovidedSet<>());
+		}
+
+		if (object.getCodes() != null) {
+			model.setCodes(new THashSet<Code>());
+			for (CodeApiModel c: object.getCodes()) {
+				model.addCode(emberToCode.convert(path, "code", c, cache, include));
+			}
+		} else {
+			model.setCodes(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return model;
