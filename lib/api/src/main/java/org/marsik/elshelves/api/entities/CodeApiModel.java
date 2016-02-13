@@ -38,7 +38,7 @@ public class CodeApiModel extends AbstractEntityApiModel {
     @NotNull
     String code; // CODE_VALUE
 
-    AbstractNamedEntityApiModel reference;
+    AbstractOwnedEntityApiModel reference;
 
     UserApiModel belongsTo;
 
