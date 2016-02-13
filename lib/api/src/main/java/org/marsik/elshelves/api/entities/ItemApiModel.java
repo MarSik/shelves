@@ -37,10 +37,9 @@ public class ItemApiModel extends LotApiModel {
     Boolean finished;
 
     /**
-     * Both type and source are only used when new project is started. Can't be changed.
+     * Type only used when new project is started. Can't be changed.
      */
     PartTypeApiModel type;
-    SourceApiModel source;
 
     @Override
     public boolean equals(Object o) {

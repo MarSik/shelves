@@ -122,13 +122,11 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
     public ResponseEntity<EmberModel> create(HttpServletRequest request, @CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
-        SourceApiModel source0 = item0.getSource();
         PartTypeApiModel type0 = item0.getType();
 
         Map<UUID, Object> cache = new THashMap<>();
 
         Item item = getRestToDb().convert(item0, cache);
-        Source source = emberToSource.convert(source0, cache);
         Type type = emberToType.convert(type0, cache);
 
         item = getService().startProject(item, type, currentUser);
