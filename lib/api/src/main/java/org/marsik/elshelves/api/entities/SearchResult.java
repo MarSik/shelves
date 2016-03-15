@@ -25,6 +25,8 @@ public class SearchResult extends AbstractEntityApiModel {
     Collection<AbstractNamedEntityApiModel> items;
     Set<String> include;
 
+    Long total;
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
