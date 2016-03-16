@@ -6,7 +6,9 @@ var hasMany = DS.hasMany,
     belongsTo = DS.belongsTo;
 
 export default NamedBase.extend({
-  lots: hasMany("lot", {async: true}),
+  lots: hasMany("lot", {async: true, polymorphic: true, inverse: "location"}),
+  validLots: Ember.computed.filterBy("lots", "valid", true),
+
   parent: belongsTo("box", {async: true, inverse: "boxes"}),
   boxes: hasMany("box", {async: true, inverse: "parent"}),
   code: belongsTo("code", {async: true}),

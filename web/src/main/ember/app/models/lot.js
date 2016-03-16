@@ -16,7 +16,7 @@ export default LotBase.extend({
 
     return t;
   }),
-  location: belongsTo("box", {async: true}),
+  location: belongsTo("box", {async: true, inverse: "lots"}),
   previous: belongsTo("lot", {async: true, inverse: null}),
   expiration: attr('date'),
   serials: attr(),
@@ -24,7 +24,7 @@ export default LotBase.extend({
 
   usedBy: belongsTo('requirement', {async: true}),
 
-  type: belongsTo('type', {async: true, inverse: null}),
+  type: belongsTo('type', {async: true, inverse: "lots"}),
 
   purchase: belongsTo('purchase', {async: true}),
   parents: hasMany("lot", {async: true, inverse: null}),
