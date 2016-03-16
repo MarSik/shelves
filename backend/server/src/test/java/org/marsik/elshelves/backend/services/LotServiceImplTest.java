@@ -97,7 +97,8 @@ public class LotServiceImplTest extends BaseUnitTest {
 
         Lot l2 = getLot(Lot.class, type, 7);
         box.addLot(l2);
-        Lot result = service.lotMixer(l2, new THashMap<>());
+        final THashMap<Lot, Lot> lotMap = new THashMap<>();
+        Lot result = service.lotMixer(l2, lotMap);
 
         assertThat(result)
                 .isNotNull()
@@ -117,6 +118,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(l2.isValid()).isFalse();
 
         assertThat(box.getLots()).containsExactly(result);
+
+        assertThat(lotMap)
+                .containsKeys(l1, l2);
     }
 
     @Test
@@ -128,7 +132,8 @@ public class LotServiceImplTest extends BaseUnitTest {
         l2.setUsedInPast(true);
 
         box.addLot(l2);
-        Lot result = service.lotMixer(l2, new THashMap<>());
+        final THashMap<Lot, Lot> lotMap = new THashMap<>();
+        Lot result = service.lotMixer(l2, lotMap);
 
         assertThat(result)
                 .isNotNull()
@@ -152,6 +157,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(l2.isValid()).isFalse();
 
         assertThat(box.getLots()).containsExactly(result);
+
+        assertThat(lotMap)
+                .containsKeys(l1, l2);
     }
 
     @Test
@@ -164,8 +172,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         l2.getSerials().add("SERIAL");
         box.addLot(l2);
 
-        Lot result = service.lotMixer(l2, new THashMap<>());
-        Lot newL1 = service.lotMixer(l1, new THashMap<>());
+        final THashMap<Lot, Lot> lotMap = new THashMap<>();
+        Lot result = service.lotMixer(l2, lotMap);
+        Lot newL1 = service.lotMixer(l1, lotMap);
 
 
         assertThat(result)
@@ -187,6 +196,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(box.getLots())
                 .hasSize(2)
                 .contains(l1, l2);
+
+        assertThat(lotMap)
+                .isEmpty();
     }
 
     @Test
@@ -249,6 +261,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(box.getLots())
                 .hasSize(2)
                 .contains(result, assigned);
+
+        assertThat(cache)
+                .containsKeys(l3, l2);
     }
 
     @Test
@@ -258,7 +273,8 @@ public class LotServiceImplTest extends BaseUnitTest {
 
         Lot l2 = getLot(Lot.class, type, 7);
         box.addLot(l2);
-        Lot result = service.lotMixer(l2, new THashMap<>());
+        final THashMap<Lot, Lot> lotMap = new THashMap<>();
+        Lot result = service.lotMixer(l2, lotMap);
 
         assertThat(result)
                 .isNotNull()
@@ -278,6 +294,9 @@ public class LotServiceImplTest extends BaseUnitTest {
         assertThat(l2.isValid()).isFalse();
 
         assertThat(box.getLots()).containsExactly(result);
+
+        assertThat(lotMap)
+                .containsKeys(l1, l2);
     }
 
     @Test

@@ -273,6 +273,10 @@ public class LotServiceImpl implements LotService {
                     .findFirst()
                     .orElseGet(() -> MixedLot.from(uuidGenerator, unassigned));
 
+            // Record the target to the cache so we can sideload it
+            // when it was not the original lot
+            lotMap.put(mixedLot, mixedLot);
+
             // Just to make sure we are not creating cyclic dependency
             // or deleting the mixed lot
             unassigned.remove(mixedLot);
