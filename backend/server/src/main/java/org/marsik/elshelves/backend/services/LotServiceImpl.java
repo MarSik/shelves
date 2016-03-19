@@ -144,6 +144,11 @@ public class LotServiceImpl implements LotService {
         if (!lot.isRevisionNeeded(dummyUpdate)) {
             // split and move to the same location, parts can't be distinguished
             // so keep them together
+
+            // Perform count unrelated updates
+            lot.updateFrom(update);
+            save(lot);
+
             return new LotSplitResult(lot, (Collection<Lot>) null);
 
         } else if (count > update.getCount()) {
