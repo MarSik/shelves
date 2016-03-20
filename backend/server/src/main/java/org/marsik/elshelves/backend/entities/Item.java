@@ -54,16 +54,19 @@ public class Item extends Lot implements StickerCapable {
 
 	@Override
 	public void updateFrom(UpdateableEntity update0) throws OperationNotPermitted {
+		super.updateFrom(update0);
+
+		/* Item can be updated using a Lot instance too. Skip Item fields
+	       in that case.
+	    */
 		if (!(update0 instanceof Item)) {
-			throw new IllegalArgumentException();
+			return;
 		}
 
 		Item update = (Item)update0;
 
 		update(update.getFinished(), this::setFinished);
 		reconcileLists(update.getRequires(), this::getRequires, this::addRequirement, this::removeRequirement);
-
-		super.updateFrom(update0);
 	}
 
 	@Override
@@ -83,14 +86,18 @@ public class Item extends Lot implements StickerCapable {
 	}
 
 	@Override
-	public boolean isRevisionNeeded(UpdateableEntity update0) {
-		if (!(update0 instanceof Item)) {
-			throw new IllegalArgumentException();
+	public boolean isRevisionNeeded(UpdateableEntity update) {
+		if (super.isRevisionNeeded(update)) {
+			return true;
 		}
 
-		Item update = (Item)update0;
+		/* Item can be updated using a Lot instance too. Skip Item fields
+	       in that case.
+	    */
+		if (!(update instanceof Item)) {
+			return false;
+		}
 
-		return super.isRevisionNeeded(update)
-				|| willUpdate(getFinished(), update.getFinished());
+		return willUpdate(getFinished(), ((Item) update).getFinished());
 	}
 }
