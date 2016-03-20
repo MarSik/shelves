@@ -121,7 +121,11 @@ public class ItemController extends AbstractReadOnlyRestController<Item, ItemApi
 
     @RequestMapping(method = RequestMethod.POST)
     @Transactional
-    public ResponseEntity<EmberModel> create(HttpServletRequest request, @CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws OperationNotPermitted {
+    public ResponseEntity<EmberModel> create(HttpServletRequest request, @CurrentUser User currentUser, @Valid @RequestBody ItemApiModel item0) throws BaseRestException {
+        if (item0.getPrevious() != null) {
+            return ResponseEntity.ok(updateLot(currentUser, item0.getPrevious().getId(), item0));
+        }
+
         PartTypeApiModel type0 = item0.getType();
 
         Map<UUID, Object> cache = new THashMap<>();

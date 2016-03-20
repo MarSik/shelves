@@ -5,7 +5,9 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
+import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
+import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.ember.EmberModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
@@ -67,7 +69,7 @@ public class LotController {
     NamedObjectToEmber namedObjectToEmber;
 
     @Autowired
-    LotToEmber lotToEmber;
+    EntityToEmberConversionService entityToEmberConversionService;
 
     @Autowired
     EmberToLot emberToLot;
@@ -75,25 +77,25 @@ public class LotController {
     @Autowired
     LotRepository lotRepository;
 
-    private LotApiModel cnv(Lot l) {
-        return lotToEmber.convert(l, new THashMap<>());
+    private AbstractEntityApiModel cnv(Lot l) {
+        return entityToEmberConversionService.convert(l, new THashMap<>());
     }
 
     private EmberModel prepare(Lot l) {
-        LotApiModel res = cnv(l);
+        AbstractEntityApiModel res = cnv(l);
         EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<LotApiModel>(res);
         return modelBuilder.build();
     }
 
     private EmberModel prepare(Iterable<Lot> ls) {
         Map<UUID, Object> cache = new THashMap<>();
-        Collection<LotApiModel> lots = new THashSet<>();
+        Collection<AbstractEntityApiModel> lots = new THashSet<>();
 
         for (Lot l: ls) {
-            lots.add(lotToEmber.convert(l, cache));
+            lots.add(entityToEmberConversionService.convert(l, cache));
         }
 
-        EmberModel.Builder<LotApiModel> modelBuilder = new EmberModel.Builder<>(lots);
+        EmberModel.Builder<AbstractEntityApiModel> modelBuilder = new EmberModel.Builder<>(lots);
         return modelBuilder.build();
     }
 
@@ -149,11 +151,11 @@ public class LotController {
         }
 
         modelBuilder = new EmberModel.Builder<>(
-                lotToEmber.convert(lots.get(id), cache));
+                entityToEmberConversionService.convert(lots.get(id), cache));
         lots.remove(id);
 
         for (Lot l: lots.values()) {
-            modelBuilder.sideLoad(lotToEmber.convert(l, cache));
+            modelBuilder.sideLoad(entityToEmberConversionService.convert(l, cache));
         }
 
         return modelBuilder.build();
@@ -179,9 +181,9 @@ public class LotController {
             LotSplitResult result = lotService.update(lotRepository.findById(lot0.getPrevious().getId()), lot, currentUser);
             Map<UUID, Object> cache = new THashMap<>();
 
-            modelBuilder = new EmberModel.Builder<>(lotToEmber.convert(result.getRequested(), cache));
+            modelBuilder = new EmberModel.Builder<>(entityToEmberConversionService.convert(result.getRequested(), cache));
             for (Lot l: result.getOthers()) {
-                modelBuilder.sideLoad(lotToEmber.convert(l, cache));
+                modelBuilder.sideLoad(entityToEmberConversionService.convert(l, cache));
             }
         } else {
             throw new InvalidRequest();
