@@ -14,4 +14,5 @@ There are also two helper roles:
 - mariadb role if you want to use Dockerized mariadb database.
 - docker role if you need to make sure docker is installed and up
 - prometheus role to install time series database and grafana viewer
+- memcached role to install the memory caching store
 

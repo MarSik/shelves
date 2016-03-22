@@ -15,7 +15,7 @@
     restart_policy: always
     restart_policy_retry: 10
     state: reloaded
-    net: none
+    net: mariadb
     env:
       MYSQL_ROOT_PASSWORD: "{{ MARIADB_PASSWORD }}"
       MYSQL_DATABASE: "{{ MARIADB_DATABASE }}"

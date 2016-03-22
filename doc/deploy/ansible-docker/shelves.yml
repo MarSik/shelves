@@ -9,6 +9,7 @@
     - docker
     - prometheus
     - mariadb
+    - memcached
     - shelves_backend
     - shelves_frontend
 
