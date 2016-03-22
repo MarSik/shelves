@@ -1,0 +1,14 @@
+---
+- hosts: shelves
+  remote_user: root
+  vars:
+    MARIADB_PASSWORD: password
+    MARIADB_DATABASE: shelves
+    MARIADB_USERNAME: shelves
+  roles:
+    - docker
+    - prometheus
+    - mariadb
+    - shelves_backend
+    - shelves_frontend
+

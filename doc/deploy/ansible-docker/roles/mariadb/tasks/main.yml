@@ -1,0 +1,23 @@
+---
+- name: Create mariadb database volume
+  command: docker volume create --name=mariadb-db
+
+- name: MariaDB network
+  command: docker network create mariadb
+  ignore_errors: yes
+
+- name: Add mariadb
+  docker:
+    name: mariadb-server
+    image: mariadb:latest
+    volumes: mariadb-db:/var/lib/mysql
+    pull: always
+    restart_policy: always
+    restart_policy_retry: 10
+    state: reloaded
+    net: none
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ MARIADB_PASSWORD }}"
+      MYSQL_DATABASE: "{{ MARIADB_DATABASE }}"
+      MYSQL_USER: "{{ MARIADB_USERNAME }}"
+

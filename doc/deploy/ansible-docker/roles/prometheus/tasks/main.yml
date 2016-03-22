@@ -1,0 +1,85 @@
+# This playbook prepares and installs the Prometheus time series
+# database and the push endpoint.
+
+---
+- name: Prometheus scraping network
+  command: docker network create prometheus_net
+  ignore_errors: yes
+
+- name: Prometheus data volume
+  command: docker volume create --name=prometheus-db-data
+
+- name: Prometheus config volume
+  command: docker volume create --name=prometheus-db-etc
+
+- name: Copy the prometheus config over
+  copy:
+    src: 'prometheus.yml'
+    dest: '/tmp/prometheus.yml'
+
+- name: Update the data volume
+  docker:
+    name: prometheus-db-data-updater
+    volumes:
+      - /tmp/prometheus.yml:/tmp/prometheus.yml
+      - prometheus-db-etc:/etc/prometheus
+    image: busybox
+    command: "/bin/sh -c 'cp -r /tmp/prometheus.yml /etc/prometheus'"
+
+- name: Prometheus push gateway
+  docker:
+    name: prometheus-push
+    image: prom/pushgateway
+    ports: 9091
+    pull: always
+    restart_policy: always
+    restart_policy_retry: 10
+    state: reloaded
+
+- name: Connect push gw to scraping network
+  command: docker network connect prometheus_net prometheus-push
+
+- name: Prometheus time series db
+  docker:
+    name: prometheus-db
+    image: prom/prometheus
+    ports: 9090
+    volumes:
+      - prometheus-db-data:/prometheus
+      - prometheus-db-etc:/etc/prometheus
+    pull: always
+    restart_policy: always
+    restart_policy_retry: 10
+    state: reloaded
+    env:
+      PUSH_GW: 9091
+
+- name: Connect Prometheus to scraping network
+  command: docker network connect prometheus_net prometheus-db
+
+- name: Grafana dabase volume
+  command: docker volume create --name=grafana-db
+
+- name: Grafana config volume
+  command: docker volume create --name=grafana-etc
+
+- name: Graphing service
+  docker:
+    name: grafana
+    image: grafana/grafana
+    ports: 3000
+    volumes:
+      - grafana-db:/var/lib/grafana
+      - /etc/grafana
+    env:
+      GF_SECURITY_ADMIN_PASSWORD: password
+    pull: always
+    restart_policy: always
+    restart_policy_retry: 10
+    state: reloaded
+
+- name: Connect Grafana to scraping network
+  command: docker network connect prometheus_net grafana
+
+...
+

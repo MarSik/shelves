@@ -1,0 +1,24 @@
+FROM marsik/config-volume-creator
+
+ENV MARIADB_SERVER
+ENV MARIADB_DATABASE
+ENV MARIADB_USERNAME
+ENV MARIADB_PASSWORD
+
+ENV MAILGUN_API_KEY
+ENV MAILGUN_API_DOMAIN
+
+ENV GOOGLE_OAUTH_ID
+ENV GOOGLE_OAUTH_SECRET
+
+ENV GITHUB_OAUTH_ID
+ENV GITHUB_OAUTH_SECRET
+
+# The url of the main Shelves web application
+# connected to this backend
+ENV WEB_APP_URL
+
+
+ADD *.xml /sources/
+ADD *.properties /sources/
+

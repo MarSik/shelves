@@ -1,0 +1,24 @@
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	  <file>/shelves/log/shelves.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>/shelves/log/shelves.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 100MB -->
+        <maxFileSize>20MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <maxHistory>30</maxHistory>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="ROLLING" />
+  </root>
+
+  <logger name="org.springframework.web" level="INFO"/>
+</configuration>
+

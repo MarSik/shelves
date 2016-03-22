@@ -1,0 +1,13 @@
+---
+- name: Install Docker packages
+  yum:
+    name: docker,docker-python
+    state: installed
+
+- name: Make sure docker is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+
