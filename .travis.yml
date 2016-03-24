@@ -10,9 +10,9 @@ addons:
 
 before_install:
   - git clone https://github.com/MarSik/jackson-databind.git
-  - cd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install
+  - pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install && popd
   - git clone https://github.com/pauloubuntu/identicon.git
-  - cd identicon && mvn clean install
+  - pushd identicon && mvn clean install && popd
 
 before_script:
   - mysql -e 'create database elshelves_unittest;'
