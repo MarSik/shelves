@@ -1,30 +1,26 @@
 language: java
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 services:
-  - memcached
-
+- memcached
 addons:
   mariadb: '10.1'
-
 before_install:
-  - git clone https://github.com/MarSik/jackson-databind.git
-  - pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install && popd
-  - git clone https://github.com/pauloubuntu/identicon.git
-  - pushd identicon && mvn clean install && popd
-
+- git clone https://github.com/MarSik/jackson-databind.git
+- pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean
+  install && popd
+- git clone https://github.com/pauloubuntu/identicon.git
+- pushd identicon && mvn clean install && popd
 before_script:
-  - mysql -e 'create database elshelves_unittest;'
- 
+- mysql -e 'create database elshelves_unittest;'
 deploy:
   provider: releases
   api_key:
-    secure: "IVsGqfWGdgy1mgZrifhV4+m6dwZuRGy8Xh90xbex/4aN0jr4ZTw/nyBti5WUu4vIz1PYs6Q2Xjsyv7U9FS/OAxc0beHwOYJUMP0hkI0ZnZQh0uoOe8Osh+09mZFMJB2/u/akDpvfbOE99MClaebTCWKK70jWeH0GUNexrEIoHfg="
+    secure: QuwPOefMyNeveW6I9nHzh57iJ2HWvzsdPL8OJGZzpgxKA8fE6S9iDIR/H1nDkTVdzsXLAOm1XeiZ2O8n9PIu/UeoviL8wIT5CWUtaQQtNGmsViD5GP6LIMuyptd67rfgbpv2z58qQnr9f8Pp24giTYItofIdxBpIufTQjFWiZtKIfk3QE86rxpLS2X+xDOdf+OyyOnB4NHCxD2zBiUcocV7YXR02FPn317EApXj0/Gxwhw2dKW5dmnYIT+UJLnmB6n73sWwKBazgVTTRqU8Joy2dnvVl5KFcHTGzO1yz2seH+EsiqvxqSH+0usv+ANuGyRZYeksw0uU8LDV5Y6TUKCY8zghyosGesPt2nWD7I0kA8wSgfmWLhpTxz9fHs1gMSZbVD8JHiRLUAkxcKbptpmvImMb5UUXo46IzkzukWoWTcXhxHxc2ILaE1CKVGpwjG3qdxxH8LTaTozu4I6/iJ4cy0Nb8waYj4nK+35qXo5wb7AAesrhZlp+U1rAlsIgmnupw2yhZkiZ5leerMrZc10ks4jWJDAFAwzcS8/M+l4UafNBlkKNDWcpUHfenl7/Jy9cOg3VooL9sLfokyF7l5rWYUyC8FH3HnyuKCFErysEPkeKshzes2jvs6+R9xwfE/W/cutui+v9IyDpQ6lRoG0R9wVAl2kJIq9OqQ0qlmGM=
   file:
     - backend/server/target/server-1.0-SNAPSHOT.war
     - web/target/web-1.0-SNAPSHOT.war
   skip_cleanup: true
   on:
-    tags
+    repo: MarSik/shelves
 
