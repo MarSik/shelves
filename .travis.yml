@@ -19,8 +19,8 @@ before_script:
  
 deploy:
   provider: releases
-    api_key:
-      secure: "IVsGqfWGdgy1mgZrifhV4+m6dwZuRGy8Xh90xbex/4aN0jr4ZTw/nyBti5WUu4vIz1PYs6Q2Xjsyv7U9FS/OAxc0beHwOYJUMP0hkI0ZnZQh0uoOe8Osh+09mZFMJB2/u/akDpvfbOE99MClaebTCWKK70jWeH0GUNexrEIoHfg="
+  api_key:
+    secure: "IVsGqfWGdgy1mgZrifhV4+m6dwZuRGy8Xh90xbex/4aN0jr4ZTw/nyBti5WUu4vIz1PYs6Q2Xjsyv7U9FS/OAxc0beHwOYJUMP0hkI0ZnZQh0uoOe8Osh+09mZFMJB2/u/akDpvfbOE99MClaebTCWKK70jWeH0GUNexrEIoHfg="
   file:
     - backend/server/target/server-1.0-SNAPSHOT.war
     - web/target/web-1.0-SNAPSHOT.war
