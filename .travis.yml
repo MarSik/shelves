@@ -8,10 +8,12 @@ services:
 addons:
   mariadb: '10.1'
 
-before_script:
-  - mysql -e 'create database elshelves_unittest;'
+before_install:
   - git clone https://github.com/MarSik/jackson-databind.git
   - cd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install
   - git clone https://github.com/pauloubuntu/identicon.git
   - cd identicon && mvn clean install
+
+before_script:
+  - mysql -e 'create database elshelves_unittest;'
  

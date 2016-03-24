@@ -1,5 +1,4 @@
-Shelves
-=======
+# Shelves
 
 Part and project tracking REST-ful web application.
 
@@ -7,8 +6,7 @@ Distributed under the terms of Affero GPLv3 or later license.
 
 [![Build Status](https://travis-ci.org/MarSik/shelves.svg?branch=master)](https://travis-ci.org/MarSik/shelves)
 
-Development
------------
+## Development
 
 ### Version bump
 
@@ -21,11 +19,14 @@ mvn versions:set -DnewVersion=<new version>
 * Java 1.8 SDK (OpenJDK works fine)
 * Maven 3
 * MySQL
-** create empty elshelves_unittest database, with root:<no password> access
+  * create empty elshelves\_unittest database, with root:<no password> access
 * Memcached
 
 ### Source requirements
 
+Please use the following script to install the special versions of some dependencies:
+
+```
 git clone https://github.com/MarSik/jackson-databind.git
 
 pushd jackson-databind
@@ -37,10 +38,11 @@ git clone https://github.com/pauloubuntu/identicon.git
 pushd identicon
 mvn clean install
 popd
+```
 
 ### Build
 
-Just type "mvn clean install" to generate all necessary files.
+Just type `mvn clean install` to generate all necessary files.
 
 ### Deploy
 
