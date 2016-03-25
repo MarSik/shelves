@@ -20,6 +20,17 @@ EXPOSE 8000
 
 ADD run.sh /bin/run.sh
 
-# ADD and explode the server.war to /server.war directory
 ENTRYPOINT ["/bin/run.sh"]
+
+# Add and explode the server.war to /server.war directory
+RUN apk add --no-cache --virtual .build-deps curl \
+ && curl -L -O https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32 \
+ && chmod a+rx jq-linux32 \
+ && mkdir -p /server.war \
+ && curl -L -s https://api.github.com/repos/MarSik/shelves/releases/latest \
+    | ./jq-linux32 --raw-output '.assets[] | .browser_download_url | select(test("server"))' \
+    | xargs curl -L -o server-dl.war \
+ && unzip -d /server.war server-dl.war \
+ && apk --no-cache del .build-deps \
+ && rm -f jq-linux32 server-dl.war
 
