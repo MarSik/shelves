@@ -5,15 +5,22 @@ import net.spy.memcached.FailureMode;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.spring.MemcachedClientFactoryBean;
 import net.spy.memcached.transcoders.SerializingTranscoder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationCache {
+    @Value("${shelves.memcached.server:127.0.0.1}")
+    String memcachedServer;
+
+    @Value("${shelves.memcached.port:11211}")
+    String memcachedPort;
+
     @Bean
     MemcachedClient getMemcachedClientFactory() {
         MemcachedClientFactoryBean memcached = new MemcachedClientFactoryBean();
-        memcached.setServers("127.0.0.1:11211");
+        memcached.setServers(memcachedServer+":"+memcachedPort);
         memcached.setProtocol(ConnectionFactoryBuilder.Protocol.BINARY);
         SerializingTranscoder transcoder = new SerializingTranscoder();
         transcoder.setCompressionThreshold(1024);
