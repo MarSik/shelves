@@ -23,4 +23,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: MarSik/shelves
+    tags: true
 
