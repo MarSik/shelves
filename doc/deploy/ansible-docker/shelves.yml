@@ -2,14 +2,25 @@
 - hosts: shelves
   remote_user: root
   vars:
-    MARIADB_PASSWORD: password
-    MARIADB_DATABASE: shelves
-    MARIADB_USERNAME: shelves
+    docker:
+      config_dir: /etc/docker
+    secret:
+      database:
+        password: 
+        root_password:
+      google:
+        oauth:
+          id:
+          secret:
+      github:
+        oauth:
+          id:
+          secret:
+  vars_files:
+    - secrets.yml
   roles:
-    - docker
     - prometheus
-    - mariadb
-    - memcached
+    - nginx_proxy
     - shelves_backend
     - shelves_frontend
 

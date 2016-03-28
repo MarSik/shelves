@@ -1,0 +1,5 @@
+[submodule "doc/deploy/ansible-docker/roles"]
+	path = doc/deploy/ansible-docker/roles
+	url = https://github.com/MarSik/ansible-roles.git
+	branch = master
+

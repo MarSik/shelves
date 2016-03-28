@@ -20,17 +20,23 @@ EXPOSE 8000
 
 ADD run.sh /bin/run.sh
 
+ENV JAVA_MIN_MEM 128m
+ENV JAVA_MAX_MEM 3096m
+
 ENTRYPOINT ["/bin/run.sh"]
 
 # Add and explode the server.war to /server.war directory
-RUN apk add --no-cache --virtual .build-deps curl \
- && curl -L -O https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32 \
- && chmod a+rx jq-linux32 \
- && mkdir -p /server.war \
- && curl -L -s https://api.github.com/repos/MarSik/shelves/releases/latest \
-    | ./jq-linux32 --raw-output '.assets[] | .browser_download_url | select(test("server"))' \
-    | xargs curl -L -o server-dl.war \
- && unzip -d /server.war server-dl.war \
- && apk --no-cache del .build-deps \
- && rm -f jq-linux32 server-dl.war
+#RUN apk add --no-cache --virtual .build-deps curl \
+# && curl -L -O https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux32 \
+# && chmod a+rx jq-linux32 \
+# && mkdir -p /server.war \
+# && curl -L -s https://api.github.com/repos/MarSik/shelves/releases/latest \
+#    | ./jq-linux32 --raw-output '.assets[] | .browser_download_url | select(test("server"))' \
+#    | xargs curl -L -o server-dl.war \
+# && unzip -d /server.war server-dl.war \
+# && apk --no-cache del .build-deps \
+# && rm -f jq-linux32 server-dl.war
+
+ADD server-1.0-SNAPSHOT.war /
+RUN mkdir -p /server.war && unzip -d /server.war server-1.0-SNAPSHOT.war
 
