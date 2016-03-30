@@ -12,6 +12,14 @@ before_install:
   - pushd identicon && mvn clean install && popd
 before_script:
   - mysql -e 'create database elshelves_unittest;'
+notifications:
+  webhooks:
+    urls:
+      - https://registry.hub.docker.com/u/marsik/shelves-frontend/trigger/a81d76df-378d-4669-880f-5e2a4ed6779d/
+      - https://registry.hub.docker.com/u/marsik/shelves-backend/trigger/d54636e1-fcc6-451c-b586-1e063a47ca14/
+    on_success: always
+    on_failure: never
+    on_start: never
 deploy:
   provider: releases
   api_key:
