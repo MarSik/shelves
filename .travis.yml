@@ -1,18 +1,18 @@
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
 services:
-- memcached
+  - memcached
+  - mariadb
 addons:
   mariadb: '10.1'
 before_install:
-- git clone https://github.com/MarSik/jackson-databind.git
-- pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean
-  install && popd
-- git clone https://github.com/pauloubuntu/identicon.git
-- pushd identicon && mvn clean install && popd
+  - git clone https://github.com/MarSik/jackson-databind.git
+  - pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install && popd
+  - git clone https://github.com/pauloubuntu/identicon.git
+  - pushd identicon && mvn clean install && popd
 before_script:
-- mysql -e 'create database elshelves_unittest;'
+  - mysql -e 'create database elshelves_unittest;'
 deploy:
   provider: releases
   api_key:
