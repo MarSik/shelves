@@ -3,7 +3,7 @@ import Ember from 'ember';
 
 export default {
     name: 'api-server-setup',
-    before: ['oauth2-w-auth'],
+    before: ['oauth2-w-auth', 'simple-auth'],
 
     initialize: function() {
         if (!Ember.isEmpty(window.SHELVES_API_SERVER)) {
