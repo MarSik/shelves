@@ -44,6 +44,7 @@ export default Ember.Component.extend({
             }
         }
     },
+    session: Ember.inject.service('session'),
     url: function () {
         return ENV.APP.API_ENDPOINT + this.get("endpoint");
     }.property("endpoint"),

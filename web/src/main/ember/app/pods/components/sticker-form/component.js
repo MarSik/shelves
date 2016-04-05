@@ -4,11 +4,12 @@ import ENV from '../../../config/environment';
 export default Ember.Component.extend({
     tagName: "form",
     attributeBindings: ['action'],
+    session: Ember.inject.service('session'),
     action: function () {
         return ENV.APP.API_ENDPOINT + '/stickers';
     }.property(),
     access_token: function () {
-        return this.get('controller.session.content.secure.access_token');
-    }.property('controller.session.content')
+        return this.get('session.content.secure.access_token');
+    }.property('session.content')
     // items - array of items to generate the stickers for
 });

@@ -1,9 +1,10 @@
 import Ember from 'ember';
-import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
+import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import inject from 'webapp/injectors/repositories';
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
     capabilities: inject('capabilities'),
+    session: Ember.inject.service('session'),
     actions: {
         search: function(query) {
             var search = this.store.createRecord('search', {
@@ -90,6 +91,9 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             newLot.save().catch(function () {
                 newLot.rollback();
             });
+        },
+        invalidateSession() {
+            this.get('session').invalidate();
         }
     },
     willTransition(transition) {
@@ -117,8 +121,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         var self = this;
         if (!Ember.isEmpty(jAuth)) {
           console.log("Performing injected authentication request.");
-          return this.get('session').authenticate('oauth2-w-auth:oauth2-password-grant', jAuth).then(null, function () {
-             self.controllerFor('application').set('error', "Authentication failed.");
+          return this.get('session').authenticate('authenticator:generic', jAuth).then(null, function (reason) {
+             self.controllerFor('application').set('error', "Authentication failed: " + JSON.stringify(reason));
           });
         }
       }

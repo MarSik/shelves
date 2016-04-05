@@ -16,7 +16,6 @@
     "selectize": "~0.12.1",
     "foundation": "~5.5.0",
     "font-awesome": "~4.4.0",
-    "ember-simple-auth": "0.8.0",
     "qrcodejs": "^0.1.0",
     "webcamjs": "^1.0.4",
     "c3": "~0.4.10",

@@ -25,7 +25,7 @@ export default Ember.Component.extend({
         cameraSnap: function () {
             var self = this;
 
-            var token = this.get('controller.session.content.secure.access_token');
+            var token = this.get('session.content.secure.access_token');
             var entity = this.get('entity');
             var uploadUrl = this.get('url') + '?access_token=' + token + '&entity=' + entity.get('id');
 
@@ -47,6 +47,7 @@ export default Ember.Component.extend({
             this.set('enabled', false);
         }
     },
+    session: Ember.inject.service('session'),
     frozen: false,
     enabled: false,
     uploading: false,

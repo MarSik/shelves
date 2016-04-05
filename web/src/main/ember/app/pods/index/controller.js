@@ -1,10 +1,10 @@
 import Ember from 'ember';
-import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';
 import ENV from '../../config/environment';
 /* global $ */
 
 export default Ember.Controller.extend({
     app: Ember.inject.controller('application'),
+    session: Ember.inject.service('session'),
     actions: {
         register: function() {
             var store = this.store;
@@ -44,8 +44,8 @@ export default Ember.Controller.extend({
         authenticate() {
             var data = this.getProperties('identification', 'password');
             console.log("Auth: "+JSON.stringify(data));
-            this.get('session').authenticate(this.get('authenticator'), data);
+            this.get('session').authenticate(this.get('authenticator'), this.get('identification'), this.get('password'));
         }
     },
-    authenticator: 'oauth2-w-auth:oauth2-password-grant'
+    authenticator: 'authenticator:application'
 });

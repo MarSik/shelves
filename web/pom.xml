@@ -191,7 +191,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run release</arguments>
+                            <arguments>run</arguments>
                         </configuration>
                     </execution>
 

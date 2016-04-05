@@ -20,12 +20,10 @@ module.exports = function(environment) {
     }
   };
 
-  ENV['simple-auth'] = {
-    authorizer: 'simple-auth-authorizer:oauth2-bearer',
-    store: 'simple-auth-session-store:cookie',
+  ENV['ember-simple-auth'] = {
     'client-id': 'elshelves.js',
     'client-secret': 'public',
-    authenticationRoute: 'index'
+    authenticationRoute: 'signin'
   };
 
   if (environment === 'development') {
@@ -58,13 +56,7 @@ module.exports = function(environment) {
       ENV.APP.API_NAMESPACE = ENV.APP.API_BASE + '/v1';
   }
 
-  ENV['simple-auth-oauth2'] = {
-      serverTokenEndpoint: ENV.APP.API_SERVER + (ENV.APP.API_BASE ? '/' + ENV.APP.API_BASE : '') + '/oauth/token',
-      clientId: 'elshelves.js'
-  };
-
   ENV.APP.API_ENDPOINT = ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '');
-  ENV['simple-auth'].crossOriginWhitelist = [ENV.APP.API_SERVER];
 
   return ENV;
 };

@@ -3,17 +3,14 @@ import Ember from 'ember';
 
 export default {
     name: 'api-server-setup',
-    before: ['oauth2-w-auth', 'simple-auth'],
+    before: ['ember-data'],
 
-    initialize: function() {
+    initialize: function(application) {
         if (!Ember.isEmpty(window.SHELVES_API_SERVER)) {
              ENV.APP.API_SERVER = window.SHELVES_API_SERVER;
              ENV.APP.API_BASE = window.SHELVES_API_BASE;
              ENV.APP.API_NAMESPACE = ENV.APP.API_BASE + window.SHELVES_API_NAMESPACE;
-
-             ENV['simple-auth'].crossOriginWhitelist = [ENV.APP.API_SERVER];
-             ENV['simple-auth-oauth2'].serverTokenEndpoint = ENV.APP.API_SERVER
-                 + (ENV.APP.API_BASE ? '/' + ENV.APP.API_BASE : '') + '/oauth/token';
+             ENV.APP.API_ENDPOINT = ENV.APP.API_SERVER + (ENV.APP.API_NAMESPACE ? '/' + ENV.APP.API_NAMESPACE : '');
         }
     }
 };

@@ -9,6 +9,7 @@ export default Ember.Component.extend({
   didInsertElement: function() {
     this.$().foundation();
   },
-  stickerCount: undefined
+  stickerCount: undefined,
+  session: Ember.inject.service('session')
 });
 
