@@ -6,7 +6,7 @@ export default Ember.Component.extend({
     attributeBindings: ['href'],
     session: Ember.inject.service('session'),
     href: function () {
-        var token = this.get('session.content.secure.access_token');
+        var token = this.get('session.data.authenticated.access_token');
         return ENV.APP.API_ENDPOINT + '/backup?access_token=' + token;
     }.property('session.content')
 });

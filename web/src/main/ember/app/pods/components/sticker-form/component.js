@@ -9,7 +9,7 @@ export default Ember.Component.extend({
         return ENV.APP.API_ENDPOINT + '/stickers';
     }.property(),
     access_token: function () {
-        return this.get('session.content.secure.access_token');
+        return this.get('session.data.authenticated.access_token');
     }.property('session.content')
     // items - array of items to generate the stickers for
 });
