@@ -51,6 +51,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/status", "/favicon.ico").permitAll()
                     .antMatchers("/info/**").permitAll()
                     .antMatchers("/hystrix.stream").permitAll()
+                    .antMatchers("/metric").permitAll()
 
                     // Mail api is verified using HMAC
                     .antMatchers("/*/mail/**").permitAll()
