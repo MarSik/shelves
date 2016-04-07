@@ -1,6 +1,6 @@
 package org.marsik.elshelves.backend.repositories;
 
-import org.marsik.elshelves.backend.repositories.results.EntityCount;
+import org.marsik.elshelves.backend.repositories.results.EntityMetric;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -11,6 +11,6 @@ import java.util.UUID;
 public interface BaseIdentifiedEntityRepository<T> extends JpaRepository<T, Long> {
     T findById(UUID id);
 
-    @Query("SELECT NEW org.marsik.elshelves.backend.repositories.results.EntityCount(count(*)) FROM IdentifiedEntity i")
-    EntityCount totalCount();
+    @Query("SELECT NEW org.marsik.elshelves.backend.repositories.results.EntityMetric(count(*)) FROM IdentifiedEntity i")
+    EntityMetric totalCount();
 }

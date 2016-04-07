@@ -55,6 +55,7 @@ public class PurchasedLot extends Lot {
 
         LotHistory h = l.createRevision(null, uuidGenerator, performedBy);
         h.setLocation(location);
+        l.setHistory(h);
 
         return l;
     }

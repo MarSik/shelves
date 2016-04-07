@@ -3,10 +3,10 @@ package org.marsik.elshelves.backend.repositories.results;
 import lombok.Data;
 
 @Data
-public class EntityCount {
+public class EntityMetric {
     Long total;
 
-    public EntityCount(Long total) {
+    public EntityMetric(Long total) {
         this.total = total;
     }
 }
