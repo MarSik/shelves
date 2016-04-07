@@ -112,6 +112,7 @@ public class LotServiceImpl implements LotService {
 		save(lot);
 
 		purchase.addLot(lot);
+        saveOrUpdate(purchase);
 
 		return lotMixer(lot, new THashMap<>());
 	}
