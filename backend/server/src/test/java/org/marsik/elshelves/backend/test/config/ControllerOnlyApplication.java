@@ -12,6 +12,7 @@ import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.marsik.elshelves.backend.repositories.OwnedEntityRepository;
 import org.marsik.elshelves.backend.repositories.TestRepository;
+import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolverImpl;
 import org.marsik.elshelves.backend.services.AuthorizationService;
@@ -140,6 +141,11 @@ public class ControllerOnlyApplication {
     @Bean
     public MockitoFactoryBean<LotRepository> lotRepositoryMockitoFactoryBean() {
         return new MockitoFactoryBean<>(LotRepository.class);
+    }
+
+    @Bean
+    public MockitoFactoryBean<UserRepository> userRepositoryMockitoFactoryBean() {
+        return new MockitoFactoryBean<>(UserRepository.class);
     }
 
     @Bean
