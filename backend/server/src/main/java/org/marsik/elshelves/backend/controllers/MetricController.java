@@ -27,17 +27,17 @@ public class MetricController {
         LotMetric count = lotRepository.lotCount();
 
         StringBuilder result = new StringBuilder();
-        result.append("part_count{type=\"total\"} " + count.getTotal().toString() + '\n');
-        if (count.getUsed() != null) result.append("part_count{type=\"used\"} " + count.getUsed().toString() + '\n');
-        if (count.getUsedInPast() != null) result.append("part_count{type=\"used_in_past\"} " + count.getUsedInPast().toString() + '\n');
+        result.append("shelves_part_count{type=\"total\"} " + count.getTotal().toString() + '\n');
+        if (count.getUsed() != null) result.append("shelves_part_count{type=\"used\"} " + count.getUsed().toString() + '\n');
+        if (count.getUsedInPast() != null) result.append("shelves_part_count{type=\"used_in_past\"} " + count.getUsedInPast().toString() + '\n');
 
         UserMetric userMetric = userRepository.userCount();
-        result.append("user_count{type=\"total\"} " + userMetric.getTotal().toString() + '\n');
-        if (userMetric.getLocal() != null) result.append("user_count{type=\"local\"} " + userMetric.getLocal().toString() + '\n');
-        if (userMetric.getFederated() != null) result.append("user_count{type=\"federated\"} " + userMetric.getFederated().toString() + '\n');
+        result.append("shelves_user_count{type=\"total\"} " + userMetric.getTotal().toString() + '\n');
+        if (userMetric.getLocal() != null) result.append("shelves_user_count{type=\"local\"} " + userMetric.getLocal().toString() + '\n');
+        if (userMetric.getFederated() != null) result.append("shelves_user_count{type=\"federated\"} " + userMetric.getFederated().toString() + '\n');
 
         EntityMetric entityMetric = lotRepository.totalCount();
-        result.append("entity_count{type=\"total\"} " + entityMetric.getTotal().toString() + '\n');
+        result.append("shelves_entity_count{type=\"total\"} " + entityMetric.getTotal().toString() + '\n');
 
         return result.toString();
     }
