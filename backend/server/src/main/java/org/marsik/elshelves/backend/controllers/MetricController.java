@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/metric")
+@RequestMapping("/metrics")
 public class MetricController {
 
     @Autowired
