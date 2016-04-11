@@ -22,10 +22,10 @@ public class CircuitBreakerAspect {
     private static Map<String, String> names = new THashMap<>();
     private static Map<String, String> groups = new THashMap<>();
 
-    @Pointcut("within(@org.marsik.elshelves.backend.app.hystrix.CircuitBreaker *)")
+    @Pointcut("@annotation(org.marsik.elshelves.backend.app.hystrix.CircuitBreaker)")
     public void circuitBreakerAnnotationPresent() {}
 
-    @Pointcut("within(@org.springframework.web.bind.annotation.RequestMapping *)")
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestMappingPresent() {}
 
     @Pointcut("execution(public * *(..))")
@@ -40,7 +40,7 @@ public class CircuitBreakerAspect {
     @Pointcut("execution(* org.marsik.elshelves.backend.services.*.*(..)) && publicMethod()")
     public void serviceMethod() {}
 
-    @Around("circuitBreakerAnnotationPresent() || repositoryMethod() || controllerMethod()")
+    @Around("circuitBreakerAnnotationPresent() || serviceMethod() || repositoryMethod() || controllerMethod()")
     public Object circuitBreakerAround(final ProceedingJoinPoint aJoinPoint) throws Throwable {
         CircuitBreaker annotation = null;
 

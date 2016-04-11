@@ -9,6 +9,7 @@ import org.marsik.elshelves.backend.entities.NamedEntity_;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
+import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionServiceImpl;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

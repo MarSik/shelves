@@ -3,7 +3,6 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.CodeApiModel;
 import org.marsik.elshelves.api.entities.LotApiModel;
-import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.entities.Code;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;

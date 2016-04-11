@@ -60,7 +60,7 @@ import java.util.Locale;
 @ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class },
         excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Value("${http2.max-streams:10}")
