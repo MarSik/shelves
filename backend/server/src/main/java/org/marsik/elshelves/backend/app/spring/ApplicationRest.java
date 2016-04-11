@@ -52,6 +52,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -100,9 +102,20 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     }
 
+    private static class EtagHeaderFilter extends ShallowEtagHeaderFilter {
+        @Override
+        protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+            if (request.getRequestURI().equals("/hystrix.stream")) {
+                return true;
+            }
+
+            return super.shouldNotFilter(request);
+        }
+    }
+
     @Bean
     public Filter shallowEtagHeaderFilter() {
-        return new ShallowEtagHeaderFilter();
+        return new EtagHeaderFilter();
     }
 
     @Bean
