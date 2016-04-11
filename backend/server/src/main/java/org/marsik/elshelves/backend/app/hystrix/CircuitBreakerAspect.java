@@ -9,6 +9,7 @@ import gnu.trove.map.hash.THashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,25 @@ public class CircuitBreakerAspect {
     private static Map<String, String> names = new THashMap<>();
     private static Map<String, String> groups = new THashMap<>();
 
-    @Around("@annotation(org.marsik.elshelves.backend.app.hystrix.CircuitBreaker)")
+    @Pointcut("within(@org.marsik.elshelves.backend.app.hystrix.CircuitBreaker *)")
+    public void circuitBreakerAnnotationPresent() {}
+
+    @Pointcut("within(@org.springframework.web.bind.annotation.RequestMapping *)")
+    public void requestMappingPresent() {}
+
+    @Pointcut("execution(public * *(..))")
+    public void publicMethod() {}
+
+    @Pointcut("execution(* org.marsik.elshelves.backend.controllers.*.*(..)) && publicMethod() && requestMappingPresent()")
+    public void controllerMethod() {}
+
+    @Pointcut("execution(* org.marsik.elshelves.backend.repositories.*.*(..)) && publicMethod()")
+    public void repositoryMethod() {}
+
+    @Pointcut("execution(* org.marsik.elshelves.backend.services.*.*(..)) && publicMethod()")
+    public void serviceMethod() {}
+
+    @Around("circuitBreakerAnnotationPresent() || repositoryMethod() || controllerMethod()")
     public Object circuitBreakerAround(final ProceedingJoinPoint aJoinPoint) throws Throwable {
         CircuitBreaker annotation = null;
 
@@ -36,6 +55,7 @@ public class CircuitBreakerAspect {
                         Method m = tgt.getDeclaredMethod(aJoinPoint.getSignature().getName(),
                                 ((MethodSignature) aJoinPoint.getSignature()).getParameterTypes());
                         annotation = m.getDeclaredAnnotation(CircuitBreaker.class);
+                        break;
                     } catch (NoSuchMethodException ex) {
                         tgt = tgt.getSuperclass();
                     }
