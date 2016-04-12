@@ -1,10 +1,12 @@
 language: java
+sudo: required
+dist: trusty
 jdk:
   - oraclejdk8
 services:
   - memcached
 addons:
-  mariadb: '10.0'
+  mariadb: '10.1'
 before_install:
   - git clone https://github.com/MarSik/jackson-databind.git
   - pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install && popd
