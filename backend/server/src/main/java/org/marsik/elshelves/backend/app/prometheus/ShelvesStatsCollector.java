@@ -25,7 +25,6 @@ public class ShelvesStatsCollector extends Collector {
     @Override
     public List<MetricFamilySamples> collect() {
         List<MetricFamilySamples> metrics = new ArrayList<>();
-        StringBuilder result = new StringBuilder();
 
         LotMetric count = lotRepository.lotCount();
 
