@@ -13,7 +13,7 @@ before_install:
   - git clone https://github.com/pauloubuntu/identicon.git
   - pushd identicon && mvn clean install && popd
 before_script:
-  - mysql -e 'create database elshelves_unittest;'
+  - sudo mysql -e 'create database elshelves_unittest;'
 notifications:
   webhooks:
     urls:
