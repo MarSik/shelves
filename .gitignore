@@ -13,3 +13,4 @@ out
 .project
 application.properties
 webapp/src/main/webapp/css/main*.css
+pom.xml.versionsBackup
