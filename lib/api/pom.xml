@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lib</artifactId>
         <groupId>org.marsik.elshelves</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,19 +27,19 @@
         <dependency>
             <groupId>org.marsik.elshelves</groupId>
             <artifactId>jackson</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.marsik.elshelves</groupId>
             <artifactId>ember-lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.marsik.elshelves</groupId>
             <artifactId>backend-lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
