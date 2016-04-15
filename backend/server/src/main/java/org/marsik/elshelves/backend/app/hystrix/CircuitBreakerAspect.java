@@ -14,6 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 @Aspect
@@ -48,8 +49,10 @@ public class CircuitBreakerAspect {
         String theCmdName = groups.get(aJoinPoint.toLongString());
 
         if (theCmdName == null || theGroupName == null) {
+            final Object target = aJoinPoint.getTarget();
+            final Class<?> aClass = target.getClass();
             if (aJoinPoint.getSignature() instanceof MethodSignature) {
-                Class tgt = aJoinPoint.getTarget().getClass();
+                Class tgt = aClass;
                 while (tgt != null && annotation == null) {
                     try {
                         Method m = tgt.getDeclaredMethod(aJoinPoint.getSignature().getName(),
@@ -78,7 +81,12 @@ public class CircuitBreakerAspect {
 
             String theRealName = aJoinPoint.getSignature().toShortString();
             if (theGroupName == null) {
-                theGroupName = aJoinPoint.getTarget().getClass().getSimpleName();
+                if (target instanceof Proxy
+                        || target instanceof org.springframework.cglib.proxy.Proxy) {
+                    theGroupName = aClass.getInterfaces()[0].getSimpleName();
+                } else {
+                    theGroupName = aClass.getSimpleName();
+                }
             }
 
             if (theCmdName == null) {
