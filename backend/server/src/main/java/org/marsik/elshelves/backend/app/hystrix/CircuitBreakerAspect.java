@@ -45,8 +45,8 @@ public class CircuitBreakerAspect {
     public Object circuitBreakerAround(final ProceedingJoinPoint aJoinPoint) throws Throwable {
         CircuitBreaker annotation = null;
 
-        String theGroupName = names.get(aJoinPoint.toLongString());
-        String theCmdName = groups.get(aJoinPoint.toLongString());
+        String theGroupName = groups.get(aJoinPoint.toLongString());
+        String theCmdName = names.get(aJoinPoint.toLongString());
 
         if (theCmdName == null || theGroupName == null) {
             final Object target = aJoinPoint.getTarget();
