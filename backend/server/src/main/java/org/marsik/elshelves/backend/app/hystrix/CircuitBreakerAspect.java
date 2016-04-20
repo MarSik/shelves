@@ -101,7 +101,8 @@ public class CircuitBreakerAspect {
                 HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));
         theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theCmdName));
         theSetter = theSetter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE));
+                .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
+                .withExecutionTimeoutInMilliseconds(5000));
 
         HystrixCommand hystrixCommand = new HystrixCommand(theSetter) {
             @Override
