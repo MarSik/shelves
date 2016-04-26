@@ -4,6 +4,7 @@ import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandProperties;
+import com.netflix.hystrix.HystrixObservableCommand;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import gnu.trove.map.hash.THashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,6 +13,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import rx.Observable;
+import rx.Subscriber;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -97,26 +100,31 @@ public class CircuitBreakerAspect {
             groups.put(aJoinPoint.toLongString(), theGroupName);
         }
 
-        HystrixCommand.Setter theSetter =
-                HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));
+        HystrixObservableCommand.Setter theSetter =
+                HystrixObservableCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));
         theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theCmdName));
         theSetter = theSetter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
-                .withExecutionTimeoutInMilliseconds(5000));
+                .withExecutionTimeoutInMilliseconds(annotation != null && annotation.timeout() != 0
+                        ? annotation.timeout() : 5000));
 
-        HystrixCommand hystrixCommand = new HystrixCommand(theSetter) {
+        HystrixObservableCommand<Object> hystrixCommand = new HystrixObservableCommand<Object>(theSetter) {
             @Override
-            protected Object run() throws Exception {
-                try {
-                    return aJoinPoint.proceed();
-                } catch (Exception e) {
-                    throw e;
-                } catch (Throwable e) {
-                    throw new Exception(e);
-                }
+            protected Observable<Object> construct() {
+                return Observable.create(subscriber -> {
+                    try {
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onNext(aJoinPoint.proceed());
+                            subscriber.onCompleted();
+                        }
+
+                    } catch (Throwable throwable) {
+                        subscriber.onError(throwable);
+                    }
+                });
             }
         };
 
-        return hystrixCommand.execute();
+        return hystrixCommand.toObservable().toBlocking().toFuture().get();
     }
 }
