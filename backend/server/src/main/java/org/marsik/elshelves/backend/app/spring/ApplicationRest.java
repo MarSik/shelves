@@ -105,7 +105,7 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
     private static class EtagHeaderFilter extends ShallowEtagHeaderFilter {
         @Override
         protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-            if (request.getRequestURI().equals("/hystrix.stream")) {
+            if (request.getRequestURI().endsWith(".stream")) {
                 return true;
             }
 
@@ -174,6 +174,11 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (!registry.hasMappingForPattern("/webjars/**")) {
+            registry.addResourceHandler("/webjars/**").addResourceLocations(
+                    "classpath:/META-INF/resources/webjars/");
+        }
+
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("/favicon.ico");
     }

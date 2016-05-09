@@ -48,10 +48,16 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/federated/**").permitAll()
 
                     // Status and website icon are open
-                    .antMatchers("/status", "/favicon.ico").permitAll()
+                    .antMatchers("/status").permitAll()
                     .antMatchers("/info/**").permitAll()
                     .antMatchers("/hystrix.stream").permitAll()
                     .antMatchers("/metrics").permitAll()
+                    .antMatchers("/configuration/**").permitAll()
+                    .antMatchers("/v2/api-docs").permitAll()
+
+                    .antMatchers("/swagger*").permitAll()
+                    .antMatchers("/favicon.iso").permitAll()
+                    .antMatchers("/webjars/**").permitAll()
 
                     // Mail api is verified using HMAC
                     .antMatchers("/*/mail/**").permitAll()

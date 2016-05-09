@@ -399,6 +399,19 @@
             <version>0.0.14</version>
         </dependency>
 
+        <!-- Swagger for REST //-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-staticdocs</artifactId>
+            <version>${springfox.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
