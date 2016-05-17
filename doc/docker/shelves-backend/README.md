@@ -1,10 +1,10 @@
 # Shelves backend docker container
 
-This is a containerized version of the Shelves part tracking service API backend. The easiest way to start it up is using Docker compose and some ansible bits.
+This is a containerized version of the [Shelves part tracking service](http://www.shelves.cz) API backend. The easiest way to start it up is using Docker compose and some ansible bits.
 
 ## Prepare a configuration directory
 
-Fist you need to create a directory (lets remember the path as shelves_dir_with_config) that will contain the file with secret values. This file needs to be called application.properties and I would recommend to set 0700 permissions on the directory.
+Fist you need to create a directory (lets remember the path as shelves\_dir\_with\_config) that will contain the file with secret values. This file needs to be called application.properties and I would recommend to set 0700 permissions on the directory.
 
 The template config file is here:
 
