@@ -73,3 +73,4 @@ I recommend using jwilder/nginx-proxy reverse proxy together with JrCs/docker-le
     restart_policy: always
     restart_policy_retry: 20
     state: reloaded
+```
