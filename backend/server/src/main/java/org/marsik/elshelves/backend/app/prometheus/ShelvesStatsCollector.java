@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.ConversionQueryBuilder;
@@ -16,6 +17,7 @@ import javax.money.convert.MonetaryConversions;
 import io.prometheus.client.Collector;
 
 import org.javamoney.moneta.Money;
+import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.repositories.results.EntityMetric;
@@ -112,10 +114,11 @@ public class ShelvesStatsCollector extends Collector {
         Money sum = moneySumList.stream()
                 .map(i -> {
                     Money m = Money.of(i.getAmount(), i.getCurrency());
+                    DateTime date = Optional.of(i.getDate()).orElse(i.getCreated());
                     ConversionQuery query = ConversionQueryBuilder.of()
                             .setTermCurrency("CZK")
-                            .set(LocalDate.class, i.getDate().toDate().toInstant().atZone(
-                                    i.getDate().getZone().toTimeZone().toZoneId()).toLocalDate())
+                            .set(LocalDate.class, date.toDate().toInstant().atZone(
+                                    date.getZone().toTimeZone().toZoneId()).toLocalDate())
                             .build();
                     ExchangeRateProvider
                             provider = MonetaryConversions.getExchangeRateProvider("IDENT", "ECB-HIST", "ECB-HIST90", "ECB", "IMF");

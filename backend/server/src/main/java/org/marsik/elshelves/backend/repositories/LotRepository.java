@@ -20,11 +20,12 @@ public interface LotRepository extends BaseOwnedEntityRepository<Lot> {
     @Query("SELECT NEW org.marsik.elshelves.backend.repositories.results.MoneySum("
             + " p.currencyPaid,"
             + " SUM(p.totalPricePaidRaw),"
-            + " t.date"
+            + " t.date,"
+            + " t.created"
             + " ) "
             + " FROM Purchase p "
             + " JOIN p.transaction t"
             + " WHERE p.totalPricePaidRaw > 0"
-            + " GROUP BY p.currencyPaid, t.date")
+            + " GROUP BY p.currencyPaid, t.date, t.created")
     List<MoneySum> totalPricePaid();
 }
