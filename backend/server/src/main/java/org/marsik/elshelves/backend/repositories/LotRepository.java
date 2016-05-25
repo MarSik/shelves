@@ -22,8 +22,7 @@ public interface LotRepository extends BaseOwnedEntityRepository<Lot> {
             + " SUM(p.totalPricePaidRaw),"
             + " t.date"
             + " ) "
-            + " FROM PurchasedLot l"
-            + " JOIN l.purchase p "
+            + " FROM Purchase p "
             + " JOIN p.transaction t"
             + " WHERE p.totalPricePaidRaw > 0"
             + " GROUP BY p.currencyPaid, t.date")
