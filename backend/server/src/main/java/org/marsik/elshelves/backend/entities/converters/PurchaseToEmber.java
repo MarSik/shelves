@@ -47,18 +47,18 @@ public class PurchaseToEmber extends AbstractEntityToEmber<Purchase, PurchaseApi
 		model.setCount(object.getCount());
 
 		if (object.getSinglePrice() != null)
-			model.setSinglePrice(object.getSinglePrice().getAmount());
+			model.setSinglePrice(object.getSinglePrice().getNumberStripped());
 		if (object.getTotalPrice() != null)
-			model.setTotalPrice(object.getTotalPrice().getAmount());
+			model.setTotalPrice(object.getTotalPrice().getNumberStripped());
 		if (object.getSinglePrice() != null)
-			model.setCurrency(object.getSinglePrice().getCurrencyUnit().getCurrencyCode());
+			model.setCurrency(object.getSinglePrice().getCurrency().getCurrencyCode());
 
 		if (object.getSinglePricePaid() != null)
-			model.setSinglePricePaid(object.getSinglePricePaid().getAmount());
+			model.setSinglePricePaid(object.getSinglePricePaid().getNumberStripped());
 		if (object.getTotalPricePaid() != null)
-			model.setTotalPricePaid(object.getTotalPricePaid().getAmount());
+			model.setTotalPricePaid(object.getTotalPricePaid().getNumberStripped());
 		if (object.getSinglePricePaid() != null)
-			model.setCurrencyPaid(object.getSinglePricePaid().getCurrencyUnit().getCurrencyCode());
+			model.setCurrencyPaid(object.getSinglePricePaid().getCurrency().getCurrencyCode());
 
 		model.setVat(object.getVat());
 		model.setVatIncluded(object.getVatIncluded());

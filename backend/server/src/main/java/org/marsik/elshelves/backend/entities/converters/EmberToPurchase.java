@@ -1,8 +1,8 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import gnu.trove.set.hash.THashSet;
-import org.joda.money.BigMoney;
-import org.joda.money.CurrencyUnit;
+
+import org.javamoney.moneta.Money;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
@@ -14,6 +14,8 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -48,19 +50,19 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 		model.setCount(object.getCount());
 
 		if (object.getCurrency() != null) {
-			CurrencyUnit currency = CurrencyUnit.of(object.getCurrency());
+			CurrencyUnit currency = Monetary.getCurrency(object.getCurrency());
 			if (object.getSinglePrice() != null)
-				model.setSinglePrice(BigMoney.of(currency, object.getSinglePrice()));
+				model.setSinglePrice(Money.of(object.getSinglePrice(), currency));
 			if (object.getTotalPrice() != null)
-				model.setTotalPrice(BigMoney.of(currency, object.getTotalPrice()));
+				model.setTotalPrice(Money.of(object.getTotalPrice(), currency));
 		}
 
 		if (object.getCurrencyPaid() != null) {
-			CurrencyUnit currencyPaid = CurrencyUnit.of(object.getCurrencyPaid());
+			CurrencyUnit currencyPaid = Monetary.getCurrency(object.getCurrencyPaid());
 			if (object.getSinglePricePaid() != null)
-				model.setSinglePricePaid(BigMoney.of(currencyPaid, object.getSinglePricePaid()));
+				model.setSinglePricePaid(Money.of(object.getSinglePricePaid(), currencyPaid));
 			if (object.getTotalPricePaid() != null)
-				model.setTotalPricePaid(BigMoney.of(currencyPaid, object.getTotalPricePaid()));
+				model.setTotalPricePaid(Money.of(object.getTotalPricePaid(), currencyPaid));
 		}
 
 		model.setVat(object.getVat());

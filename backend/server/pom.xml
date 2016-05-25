@@ -283,11 +283,11 @@
             <version>1.7.3</version>
         </dependency>
 
-        <!-- Joda Money //-->
+        <!-- Money JSR 354 //-->
         <dependency>
-            <groupId>org.joda</groupId>
-            <artifactId>joda-money</artifactId>
-            <version>${joda.money.version}</version>
+            <groupId>org.zalando</groupId>
+            <artifactId>jackson-datatype-money</artifactId>
+            <version>0.7.0</version>
         </dependency>
 
         <!-- event bus //-->

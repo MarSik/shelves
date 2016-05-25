@@ -50,6 +50,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.zalando.jackson.datatype.money.MoneyModule;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -151,6 +152,7 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
         builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")).indentOutput(true);
 
         builder.modulesToInstall(new JodaModule());
+        builder.modulesToInstall(new MoneyModule());
 
         builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
         builder.deserializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Deserializer());
