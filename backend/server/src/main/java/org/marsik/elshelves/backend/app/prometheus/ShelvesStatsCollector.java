@@ -114,7 +114,7 @@ public class ShelvesStatsCollector extends Collector {
         Money sum = moneySumList.stream()
                 .map(i -> {
                     Money m = Money.of(i.getAmount(), i.getCurrency());
-                    DateTime date = Optional.of(i.getDate()).orElse(i.getCreated());
+                    DateTime date = Optional.ofNullable(i.getDate()).orElse(i.getCreated());
                     ConversionQuery query = ConversionQueryBuilder.of()
                             .setTermCurrency("CZK")
                             .set(LocalDate.class, date.toDate().toInstant().atZone(
