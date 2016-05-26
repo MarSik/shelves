@@ -20,7 +20,7 @@ public class CORSFilter implements Filter {
         if (req instanceof HttpServletRequest) {
             String url = ((HttpServletRequest) req).getRequestURI();
 
-            if (url.startsWith("/v1/")) {
+            if (url.startsWith("/v1/") || url.startsWith("/info/")) {
                 response.setHeader("Access-Control-Allow-Origin", "*");
                 response.setHeader("Access-Control-Allow-Methods", "POST, GET, PATCH, PUT, OPTIONS, DELETE");
                 response.setHeader("Access-Control-Max-Age", "3600");
