@@ -3,3 +3,6 @@
 	url = https://github.com/MarSik/ansible-roles.git
 	branch = master
 
+[submodule "vendor/prometheus-hystrix"]
+	path = vendor/prometheus-hystrix
+	url = git@github.com:soundcloud/prometheus-hystrix.git

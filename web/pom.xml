@@ -33,13 +33,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Web server overrides //-->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jsp</artifactId>
-            <version>${jetty-jsp.version}</version>
-        </dependency>
-
         <!-- Spring Dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>

@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
 import org.marsik.elshelves.backend.repositories.LotRepository;
@@ -31,5 +32,7 @@ public class MetricsInitializer implements ServletContextInitializer {
 
         ShelvesStatsCollector shelvesStatsCollector = new ShelvesStatsCollector(lotRepository, userRepository);
         shelvesStatsCollector.register();
+
+        HystrixPrometheusMetricsPublisher.register("shelves-backend");
     }
 }

@@ -2,11 +2,6 @@ package org.marsik.elshelves.backend.app.spring;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import net.spy.memcached.ConnectionFactoryBuilder;
-import net.spy.memcached.FailureMode;
-import net.spy.memcached.MemcachedClient;
-import net.spy.memcached.spring.MemcachedClientFactoryBean;
-import net.spy.memcached.transcoders.SerializingTranscoder;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -18,7 +13,6 @@ import org.marsik.elshelves.backend.app.mvc.RenamingProcessor;
 import org.marsik.elshelves.backend.controllers.UserController;
 import org.marsik.elshelves.backend.entities.converters.AbstractEmberToEntity;
 import org.marsik.elshelves.backend.security.CurrentUserArgumentResolver;
-import org.marsik.elshelves.backend.services.GoogleOauthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,12 +20,9 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -43,13 +34,9 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.zalando.jackson.datatype.money.MoneyModule;
 
 import javax.servlet.Filter;
@@ -57,13 +44,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 @EnableWebMvc
 @ComponentScan(basePackageClasses = { UserController.class, AbstractEmberToEntity.class },
         excludeFilters = { @ComponentScan.Filter(classes = NoAutoscan.class) })
 @Configuration
-//@EnableAspectJAutoProxy
 public class ApplicationRest extends WebMvcConfigurerAdapter {
 
     @Value("${http2.max-streams:10}")

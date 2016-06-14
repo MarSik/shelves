@@ -6,6 +6,7 @@ import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.MBeanExporter;
 
 import static com.jayway.restassured.RestAssured.given;
 
