@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Order(-1)
 public class ApplicationSecurity extends
         WebSecurityConfigurerAdapter {
     @Autowired
@@ -33,7 +35,7 @@ public class ApplicationSecurity extends
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers(HttpMethod.OPTIONS, "/**")
+        http.requestMatchers().antMatchers(HttpMethod.OPTIONS, "**")
                 .and()
                 .csrf().disable()
                 .authorizeRequests().anyRequest().permitAll()
