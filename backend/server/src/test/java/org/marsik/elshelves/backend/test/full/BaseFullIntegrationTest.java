@@ -1,6 +1,8 @@
 package org.marsik.elshelves.backend.test.full;
 
 import com.jayway.restassured.RestAssured;
+import com.netflix.hystrix.Hystrix;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.marsik.elshelves.ApplicationLauncher;
@@ -31,5 +33,10 @@ public abstract class BaseFullIntegrationTest {
     @Before
     public void setupRestAssured() {
         RestAssured.port = port;
+    }
+
+    @Before
+    public void resetHystrix() {
+        Hystrix.reset();
     }
 }
