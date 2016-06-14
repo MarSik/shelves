@@ -5,8 +5,14 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
+import org.marsik.elshelves.api.dtos.LotDeliveryAdHoc;
+import org.marsik.elshelves.api.dtos.LotDeliveryTransaction;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.entities.Box;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
+import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.ember.EmberModel;
@@ -17,11 +23,9 @@ import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted
 import org.marsik.elshelves.backend.controllers.exceptions.PermissionDenied;
 import org.marsik.elshelves.backend.dtos.LotSplitResult;
 import org.marsik.elshelves.backend.entities.Lot;
-import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToLot;
-import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.entities.converters.NamedObjectToEmber;
 import org.marsik.elshelves.backend.security.CurrentUser;
 import org.marsik.elshelves.backend.services.BoxService;
@@ -162,6 +166,7 @@ public class LotController {
     }
 
 
+
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     @Transactional
@@ -172,7 +177,7 @@ public class LotController {
         Lot lot = emberToLot.convert(lot0, new THashMap<>());
 
         if (lot0.getPurchase() != null && lot0.getPrevious() == null) {
-            Lot result = lotService.delivery((PurchasedLot)lot, lot.getExpiration(), currentUser);
+            Lot result = lotService.deliverPurchasedLot((PurchasedLot)lot, lot.getExpiration(), currentUser);
             modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
         } else if (lot0.getPrevious() != null) {
             // The expected result of split action is the new lot with expected count.
@@ -192,6 +197,57 @@ public class LotController {
         return modelBuilder.build();
     }
 
+    private <T extends IdentifiedEntity> T buildJustId(UUID id, Class<T> cls) {
+        try {
+            T object = cls.newInstance();
+            object.setId(id);
+            return object;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequestMapping(value = "/ad-hoc-delivery", method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional
+    public EmberModel deliverLotAdHoc(@CurrentUser User currentUser,
+                                 @RequestBody @Validated LotDeliveryAdHoc delivery) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        EmberModel.Builder<LotApiModel> modelBuilder;
+
+        Lot result = lotService.deliverAdHoc(
+                buildJustId(delivery.getSource(), Source.class),
+                buildJustId(delivery.getType(), Type.class),
+                buildJustId(delivery.getLocation(), Box.class),
+                delivery.getCount(),
+                null,
+                currentUser
+        );
+        modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
+
+        return modelBuilder.build();
+    }
+
+
+    @RequestMapping(value = "/transaction-delivery", method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional
+    public EmberModel deliverLotTransaction(@CurrentUser User currentUser,
+                                      @RequestBody @Validated LotDeliveryTransaction delivery) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        EmberModel.Builder<LotApiModel> modelBuilder;
+
+        Lot result = lotService.deliverTypeInTransaction(
+                buildJustId(delivery.getTransaction(), Transaction.class),
+                buildJustId(delivery.getType(), Type.class),
+                buildJustId(delivery.getLocation(), Box.class),
+                delivery.getCount(),
+                null,
+                currentUser
+        );
+        modelBuilder = new EmberModel.Builder<LotApiModel>(cnv(result));
+
+        return modelBuilder.build();
+    }
 
     @Transactional
 	@RequestMapping(value = "/{uuid}/qr", produces = "image/png")
