@@ -138,9 +138,18 @@ public class PurchaseDaoTest extends BaseDaoTest {
 
         lotRepository.save(lot2);
 
+        Purchase purchase3 = new Purchase();
+        purchase3.setId(uuidGenerator.generate());
+        purchase3.setType(type);
+        purchase3.setCount(20L);
+        purchase3.setOwner(user);
+        purchase3.setTransaction(transaction);
+
+        purchaseRepository.save(purchase3);
+
         List<UUID> ids = Lists.from(purchaseRepository.findUndelivered(user, type).iterator());
         assertThat(ids)
-                .hasSize(1)
-                .contains(purchase.getId());
+                .hasSize(2)
+                .contains(purchase.getId(), purchase3.getId());
     }
 }
