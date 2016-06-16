@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import com.google.common.annotations.VisibleForTesting;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.javamoney.moneta.Money;
 import org.javamoney.moneta.function.MonetaryFunctions;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
@@ -36,6 +37,7 @@ import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
@@ -155,14 +157,47 @@ public class LotServiceImpl implements LotService {
             throw new PermissionDenied();
         }
 
+        Comparator<Purchase> priceComparator = new Comparator<Purchase>() {
+            @Override
+            public int compare(Purchase one, Purchase two) {
+                return MonetaryFunctions.sortNumberDesc().compare(one.getSinglePricePaid(), two.getSinglePricePaid());
+            }
+        };
+
+        Comparator<Purchase> sizeComparator = new Comparator<Purchase>() {
+            @Override
+            public int compare(Purchase one, Purchase two) {
+                return Long.compare(one.getCount(), two.getCount());
+            }
+        };
+
         java.util.List<Purchase> purchases = transaction.getItems().stream()
                 .filter(p -> p.getType().equals(type))
-                .sorted((purchase1, t1) -> MonetaryFunctions.sortNumberDesc().compare(purchase1.getSinglePricePaid(), t1.getSinglePricePaid()))
+                .sorted(priceComparator.thenComparing(sizeComparator))
                 .collect(Collectors.toList());
 
-        Purchase purchase;
+        Purchase purchase = null;
 
-        if (purchases.isEmpty()) {
+        if (purchases.size() == 1) {
+            // single purchase, use it (normal situation)
+            purchase = purchases.get(0);
+        } else if (!purchases.isEmpty()) {
+            // multiple possible purchases, use the most expensive one that is not filled
+            // while we do allow this it is kind of unusual to have multiple prices for the same item
+            
+            // look for possible unfilled purchases with enough free space
+            for (Purchase p: purchases) {
+                if (p.getLots().stream()
+                        .filter(Lot::isValid)
+                        .mapToLong(Lot::getCount)
+                        .sum() <= p.getCount() - count) {
+                    purchase = p;
+                    break;
+                }
+            }
+        }
+
+        if (purchase == null) {
             // No such type is part of that transaction, create a Purchase
             purchase = new Purchase();
             purchase.setId(uuidGenerator.generate());
@@ -170,26 +205,6 @@ public class LotServiceImpl implements LotService {
             purchase.setTransaction(transaction);
             purchase.setCount(count);
             purchase.setType(type);
-        } else if (purchases.size() == 1) {
-            // single purchase, use it (normal situation)
-            purchase = purchases.get(0);
-        } else {
-            // multiple possible purchases, use the most expensive one that is not filled
-            // while we do allow this it is kind of unusual to have multiple prices for the same item
-
-            // use the most expensive one as fallback
-            purchase = purchases.get(0);
-
-            // look for possible unfilled purchases
-            for (Purchase p: purchases) {
-                if (p.getLots().stream()
-                        .filter(Lot::isValid)
-                        .mapToLong(Lot::getCount)
-                        .sum() < p.getCount()) {
-                    purchase = p;
-                    break;
-                }
-            }
         }
 
         PurchasedLot lot = delivery(purchase,
