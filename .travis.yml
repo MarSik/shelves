@@ -13,8 +13,6 @@ cache:
 before_cache:
   - rm -rf $HOME/.m2/repository/org/marsik
 before_install:
-  - git clone https://github.com/MarSik/jackson-databind.git
-  - pushd jackson-databind && git checkout improve-unresolved-handling-2.6 && mvn clean install && popd
   - git clone https://github.com/pauloubuntu/identicon.git
   - pushd identicon && mvn clean install && popd
 before_script:
