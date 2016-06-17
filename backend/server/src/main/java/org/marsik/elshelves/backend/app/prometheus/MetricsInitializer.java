@@ -33,6 +33,6 @@ public class MetricsInitializer implements ServletContextInitializer {
         ShelvesStatsCollector shelvesStatsCollector = new ShelvesStatsCollector(lotRepository, userRepository);
         shelvesStatsCollector.register();
 
-        HystrixPrometheusMetricsPublisher.register("shelves-backend");
+        HystrixPrometheusMetricsPublisher.register("shelves_backend");
     }
 }

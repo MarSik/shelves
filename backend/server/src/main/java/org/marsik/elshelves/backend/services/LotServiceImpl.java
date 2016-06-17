@@ -184,7 +184,7 @@ public class LotServiceImpl implements LotService {
         } else if (!purchases.isEmpty()) {
             // multiple possible purchases, use the most expensive one that is not filled
             // while we do allow this it is kind of unusual to have multiple prices for the same item
-            
+
             // look for possible unfilled purchases with enough free space
             for (Purchase p: purchases) {
                 if (p.getLots().stream()
