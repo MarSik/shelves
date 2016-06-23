@@ -1,12 +1,12 @@
 package org.marsik.elshelves.backend.test.integration;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.marsik.elshelves.backend.controllers.InfoController;
 import org.mockito.InjectMocks;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 
 public class CapabilitiesTest extends BaseIntegrationTest {
     @Test

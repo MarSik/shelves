@@ -1,6 +1,6 @@
 package org.marsik.elshelves.backend.test.integration;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.marsik.elshelves.backend.app.security.ApplicationOauth2Resources;

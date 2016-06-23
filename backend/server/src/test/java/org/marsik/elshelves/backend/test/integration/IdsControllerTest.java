@@ -1,6 +1,6 @@
 package org.marsik.elshelves.backend.test.integration;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.marsik.elshelves.backend.app.security.MemcacheTokenStore;
@@ -15,8 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.UUID;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 

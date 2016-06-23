@@ -29,8 +29,8 @@
         <version.findbugs>3.0.1</version.findbugs>
         <version.findbugs.annotations>3.0.0</version.findbugs.annotations>
 
-        <spring.version>4.2.4.RELEASE</spring.version>
-        <spring.security.version>4.0.3.RELEASE</spring.security.version>
+        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.security.version>4.1.0.RELEASE</spring.security.version>
         <spring.security.oauth.version>2.0.8.RELEASE</spring.security.oauth.version>
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
 
@@ -39,24 +39,24 @@
 
         <springfox.version>2.4.0</springfox.version>
 
-        <querydsl.version>4.0.5</querydsl.version>
+        <querydsl.version>4.1.2</querydsl.version>
 
         <hystrix.version>1.5.2</hystrix.version>
         <freemarker.version>2.3.21</freemarker.version>
         <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
         <glxn.version>2.0</glxn.version>
-        <pdfbox.version>2.0.0-RC3</pdfbox.version>
-        <jackson.version>2.6.4</jackson.version>
+        <pdfbox.version>2.0.2</pdfbox.version>
+        <jackson.version>2.7.5</jackson.version>
         <jackson.datatype.joda.version>${jackson.version}</jackson.datatype.joda.version>
-        <tika.version>1.7</tika.version>
-        <lombok.version>1.16.6</lombok.version>
+        <tika.version>1.13</tika.version>
+        <lombok.version>1.16.8</lombok.version>
         <modelmapper.version>0.7.5</modelmapper.version>
-        <flyway.version>3.2.1</flyway.version>
-        <assertj.version>3.2.0</assertj.version>
+        <flyway.version>4.0.3</flyway.version>
+        <assertj.version>3.4.1</assertj.version>
         <javax.validation.api.version>1.1.0.Final</javax.validation.api.version>
-        <guava.version>17.0</guava.version>
-        <mysql-connector.version>5.1.36</mysql-connector.version>
-        <joda.money.version>0.10.0</joda.money.version>
+        <guava.version>19.0</guava.version>
+        <mysql-connector.version>5.1.39</mysql-connector.version>
+        <joda.money.version>0.11</joda.money.version>
 
         <google.api.version>1.21.0</google.api.version>
 
@@ -136,13 +136,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -152,9 +152,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.restassured</groupId>
+            <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>2.8.0</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
 

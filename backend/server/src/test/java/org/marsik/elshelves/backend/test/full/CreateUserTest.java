@@ -1,6 +1,6 @@
 package org.marsik.elshelves.backend.test.full;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.backend.entities.User;
@@ -8,7 +8,7 @@ import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.MBeanExporter;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 
 public class CreateUserTest extends BaseFullIntegrationTest {
     @Autowired

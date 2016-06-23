@@ -1,11 +1,11 @@
 package org.marsik.elshelves.backend.test.integration;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 
 import org.junit.Test;
 
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Response;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 

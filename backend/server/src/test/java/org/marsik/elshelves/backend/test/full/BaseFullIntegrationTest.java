@@ -1,6 +1,6 @@
 package org.marsik.elshelves.backend.test.full;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import com.netflix.hystrix.Hystrix;
 
 import org.junit.Before;

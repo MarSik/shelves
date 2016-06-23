@@ -8,6 +8,7 @@ import org.springframework.cache.support.SimpleValueWrapper;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemcacheCacheManager implements CacheManager {
@@ -90,6 +91,21 @@ public class MemcacheCacheManager implements CacheManager {
         @Override
         public void clear() {
             // TODO
+        }
+
+        @Override
+        public <T> T get(Object o, Callable<T> callable) {
+            Object res = memcachedClient.get(getKey(o));
+            if (res == null) {
+                try {
+                    res = callable.call();
+                } catch (Exception e) {
+                    throw new ValueRetrievalException(o, callable, e);
+                }
+                put(o, res);
+            }
+
+            return (T)res;
         }
     }
 }
