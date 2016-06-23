@@ -1,5 +1,8 @@
 package org.marsik.elshelves.backend.app.servlet;
 
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CORSFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -30,6 +34,7 @@ public class CORSFilter implements Filter {
                         "x-requested-with, origin, authorization, accept, content-type");
             }
         }
+
         chain.doFilter(req, res);
     }
 

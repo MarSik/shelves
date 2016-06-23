@@ -3,6 +3,8 @@ package org.marsik.elshelves.backend.services;
 import com.google.common.annotations.VisibleForTesting;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.function.MonetaryFunctions;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
@@ -16,12 +18,17 @@ import org.marsik.elshelves.backend.entities.LotHistory;
 import org.marsik.elshelves.backend.entities.MixedLot;
 import org.marsik.elshelves.backend.entities.Purchase;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
+import org.marsik.elshelves.backend.entities.Source;
+import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.repositories.BoxRepository;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
+import org.marsik.elshelves.backend.repositories.SourceRepository;
+import org.marsik.elshelves.backend.repositories.TransactionRepository;
+import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +37,7 @@ import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
@@ -43,6 +51,9 @@ public class LotServiceImpl implements LotService {
 	PurchaseRepository purchaseRepository;
 	BoxRepository boxRepository;
 	UuidGenerator uuidGenerator;
+    private TransactionRepository transactionRepository;
+    private TypeRepository typeRepository;
+    private SourceRepository sourceRepository;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -52,13 +63,19 @@ public class LotServiceImpl implements LotService {
 
     @Autowired
     public LotServiceImpl(LotRepository lotRepository,
-            PurchaseRepository purchaseRepository,
-            BoxRepository boxRepository,
-            UuidGenerator uuidGenerator) {
+                          PurchaseRepository purchaseRepository,
+                          BoxRepository boxRepository,
+                          TransactionRepository transactionRepository,
+                          TypeRepository typeRepository,
+                          SourceRepository sourceRepository,
+                          UuidGenerator uuidGenerator) {
         this.lotRepository = lotRepository;
         this.purchaseRepository = purchaseRepository;
         this.boxRepository = boxRepository;
         this.uuidGenerator = uuidGenerator;
+        this.transactionRepository = transactionRepository;
+        this.typeRepository = typeRepository;
+        this.sourceRepository = sourceRepository;
     }
 
     protected Collection<Lot> getAllEntities(User currentUser) {
@@ -86,7 +103,7 @@ public class LotServiceImpl implements LotService {
 	}
 
 	@Override
-    public Lot delivery(PurchasedLot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+    public Lot deliverPurchasedLot(PurchasedLot newLot0, DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
 		Purchase purchase = purchaseRepository.findById(newLot0.getPurchase().getId());
 		Box location = boxRepository.findById(newLot0.getLocation().getId());
 
@@ -102,7 +119,7 @@ public class LotServiceImpl implements LotService {
 			throw new PermissionDenied();
 		}
 
-		PurchasedLot lot = PurchasedLot.delivery(purchase,
+		PurchasedLot lot = delivery(purchase,
                 uuidGenerator.generate(),
                 newLot0.getCount(),
                 location,
@@ -117,7 +134,174 @@ public class LotServiceImpl implements LotService {
 		return lotMixer(lot, new THashMap<>());
 	}
 
+    @Override
+    public Lot deliverTypeInTransaction(Transaction transaction0, Type type0, Box location0, Long count,
+                                        DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+        Transaction transaction = transactionRepository.findById(transaction0.getId());
+        Box location = boxRepository.findById(location0.getId());
+        Type type = typeRepository.findById(type0.getId());
 
+        if (transaction == null || location == null || type == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!transaction.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!location.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!type.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        Comparator<Purchase> priceComparator = new Comparator<Purchase>() {
+            @Override
+            public int compare(Purchase one, Purchase two) {
+                return MonetaryFunctions.sortNumberDesc().compare(one.getSinglePricePaid(), two.getSinglePricePaid());
+            }
+        };
+
+        Comparator<Purchase> sizeComparator = new Comparator<Purchase>() {
+            @Override
+            public int compare(Purchase one, Purchase two) {
+                return Long.compare(one.getCount(), two.getCount());
+            }
+        };
+
+        java.util.List<Purchase> purchases = transaction.getItems().stream()
+                .filter(p -> p.getType().equals(type))
+                .sorted(priceComparator.thenComparing(sizeComparator))
+                .collect(Collectors.toList());
+
+        Purchase purchase = null;
+
+        if (purchases.size() == 1) {
+            // single purchase, use it (normal situation)
+            purchase = purchases.get(0);
+        } else if (!purchases.isEmpty()) {
+            // multiple possible purchases, use the most expensive one that is not filled
+            // while we do allow this it is kind of unusual to have multiple prices for the same item
+
+            // look for possible unfilled purchases with enough free space
+            for (Purchase p: purchases) {
+                if (p.getLots().stream()
+                        .filter(Lot::isValid)
+                        .mapToLong(Lot::getCount)
+                        .sum() <= p.getCount() - count) {
+                    purchase = p;
+                    break;
+                }
+            }
+        }
+
+        if (purchase == null) {
+            // No such type is part of that transaction, create a Purchase
+            purchase = new Purchase();
+            purchase.setId(uuidGenerator.generate());
+            purchase.setType(type);
+            purchase.setTransaction(transaction);
+            purchase.setCount(count);
+            purchase.setType(type);
+        }
+
+        PurchasedLot lot = delivery(purchase,
+                uuidGenerator.generate(),
+                count,
+                location,
+                expiration,
+                currentUser,
+                uuidGenerator);
+
+        save(lot);
+        purchase.addLot(lot);
+        saveOrUpdate(purchase);
+
+        return lotMixer(lot, new THashMap<>());
+    }
+
+    @Override
+    public Lot deliverAdHoc(Source source0, Type type0, Box location0, Long count,
+                            DateTime expiration, User currentUser) throws EntityNotFound, PermissionDenied, OperationNotPermitted {
+        Source source = sourceRepository.findById(source0.getId());
+        Box location = boxRepository.findById(location0.getId());
+        Type type = typeRepository.findById(type0.getId());
+
+        if (source == null || location == null || type == null) {
+            throw new EntityNotFound();
+        }
+
+        if (!source.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!location.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        if (!type.getOwner().equals(currentUser)) {
+            throw new PermissionDenied();
+        }
+
+        Transaction transaction = new Transaction();
+        transaction.setId(uuidGenerator.generate());
+        transaction.setDate(DateTime.now());
+        transaction.setSource(source);
+        transaction.setFlagged(true);
+        transaction.setOwner(currentUser);
+        transaction.setCreated(DateTime.now());
+        transaction.setName("AdHoc transaction "
+                + source.getName()
+                + " "
+                + transaction.getCreated().toString("yyyy-MM-dd HH:mm"));
+
+        saveOrUpdate(transaction);
+
+        Purchase purchase = new Purchase();
+        purchase.setId(uuidGenerator.generate());
+        purchase.setType(type);
+        purchase.setTransaction(transaction);
+        purchase.setCount(count);
+        purchase.setType(type);
+
+        PurchasedLot lot = delivery(purchase,
+                uuidGenerator.generate(),
+                count,
+                location,
+                expiration,
+                currentUser,
+                uuidGenerator);
+
+        save(lot);
+        purchase.addLot(lot);
+        saveOrUpdate(purchase);
+        saveOrUpdate(transaction);
+
+        return lotMixer(lot, new THashMap<>());
+    }
+
+    private static PurchasedLot delivery(Purchase purchase, UUID uuid, Long count,
+                                        Box location, DateTime expiration, User performedBy, UuidGenerator uuidGenerator) {
+        PurchasedLot l = new PurchasedLot();
+        l.setOwner(purchase.getOwner());
+        l.setId(uuid);
+        l.setLocation(location);
+        l.setCount(count);
+        l.setPurchase(purchase);
+        l.setExpiration(expiration);
+        l.setUsed(false);
+        l.setUsedInPast(false);
+        l.setValid(true);
+        l.setType(purchase.getType());
+
+        LotHistory h = l.createRevision(null, uuidGenerator, performedBy);
+        h.setLocation(location);
+        l.setHistory(h);
+
+        return l;
+    }
 
 	@Override
     public LotSplitResult update(Lot lot, Lot update, User currentUser) throws PermissionDenied, EntityNotFound, OperationNotPermitted {

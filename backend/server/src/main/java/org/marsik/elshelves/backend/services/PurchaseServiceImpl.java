@@ -2,15 +2,19 @@ package org.marsik.elshelves.backend.services;
 
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
 import org.marsik.elshelves.backend.entities.Purchase;
+import org.marsik.elshelves.backend.entities.Type;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.LotToEmber;
 import org.marsik.elshelves.backend.repositories.PurchaseRepository;
 import org.marsik.elshelves.backend.repositories.TransactionRepository;
 import org.marsik.elshelves.backend.repositories.TypeRepository;
+import org.modelmapper.internal.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseServiceImpl extends AbstractRestService<PurchaseRepository, Purchase> implements PurchaseService {
@@ -19,6 +23,9 @@ public class PurchaseServiceImpl extends AbstractRestService<PurchaseRepository,
 
 	@Autowired
 	TransactionRepository transactionRepository;
+
+	@Autowired
+	PurchaseRepository purchaseRepository;
 
 	@Autowired
 	LotToEmber lotToEmber;
@@ -57,5 +64,12 @@ public class PurchaseServiceImpl extends AbstractRestService<PurchaseRepository,
 		Purchase p = super.save(entity);
 		saveOrUpdate(p.getSku());
 		return p;
+	}
+
+	@Override
+	public Collection<Purchase> findUndelivered(User user, Type type) {
+		return Lists.from(purchaseRepository.findUndelivered(user, type).iterator()).stream()
+				.map(purchaseRepository::findById)
+				.collect(Collectors.toList());
 	}
 }

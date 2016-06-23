@@ -1,8 +1,8 @@
 [submodule "doc/deploy/ansible-docker/roles"]
 	path = doc/deploy/ansible-docker/roles
-	url = https://github.com/MarSik/ansible-roles.git
+	url = git://github.com/MarSik/ansible-roles.git
 	branch = master
 
 [submodule "vendor/prometheus-hystrix"]
 	path = vendor/prometheus-hystrix
-	url = git@github.com:soundcloud/prometheus-hystrix.git
+	url = git://github.com/soundcloud/prometheus-hystrix.git

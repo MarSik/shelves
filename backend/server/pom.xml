@@ -299,6 +299,12 @@
             <version>0.7.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
         <!-- event bus //-->
         <dependency>
             <groupId>net.engio</groupId>

@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.app.spring;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.Connector;
@@ -138,6 +139,7 @@ public class ApplicationRest extends WebMvcConfigurerAdapter {
 
         builder.modulesToInstall(new JodaModule());
         builder.modulesToInstall(new MoneyModule());
+        builder.modulesToInstall(new Jdk8Module());
 
         builder.serializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Serializer());
         builder.deserializerByType(OAuth2AccessToken.class, new OAuth2AccessTokenJackson2Deserializer());

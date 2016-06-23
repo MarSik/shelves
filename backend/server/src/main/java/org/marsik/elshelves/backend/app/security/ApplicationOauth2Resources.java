@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.app.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 
 @Configuration
 @EnableResourceServer
+@AutoConfigureAfter(ApplicationSecurity.class)
 public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter {
     @Value("${shelves.security.loginPage}")
     String loginPage;
@@ -32,6 +34,9 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
 				// Enable anonymous access
 				.anonymous()
 				.and()
+
+                // Disable CSRF tokens
+                .csrf().disable()
 
 				// Disable sessions
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -56,7 +61,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
                     .antMatchers("/v2/api-docs").permitAll()
 
                     .antMatchers("/swagger*").permitAll()
-                    .antMatchers("/favicon.iso").permitAll()
+                    .antMatchers("/favicon.ico").permitAll()
                     .antMatchers("/webjars/**").permitAll()
 
                     // Mail api is verified using HMAC
@@ -73,7 +78,7 @@ public class ApplicationOauth2Resources extends ResourceServerConfigurerAdapter 
 				    .antMatchers(HttpMethod.POST, "/v1/users/reverify/**").permitAll()
 
                     // OPTIONS calls must be open for CORS to work properly
-                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .antMatchers(HttpMethod.OPTIONS, "**").permitAll()
 
                     // Test endpoints are open
                     .antMatchers("/test/**").permitAll()

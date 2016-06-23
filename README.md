@@ -27,13 +27,6 @@ mvn versions:set -DnewVersion=<new version>
 Please use the following script to install the special versions of some dependencies:
 
 ```
-git clone https://github.com/MarSik/jackson-databind.git
-
-pushd jackson-databind
-git checkout improve-unresolved-handling-2.6
-mvn clean install
-popd
-
 git clone https://github.com/pauloubuntu/identicon.git
 pushd identicon
 mvn clean install
