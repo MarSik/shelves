@@ -6,6 +6,8 @@ import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.HystrixObservableCommand;
 import com.netflix.hystrix.strategy.HystrixPlugins;
+import com.netflix.hystrix.strategy.properties.HystrixDynamicProperties;
+import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import gnu.trove.map.hash.THashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -99,6 +101,8 @@ public class CircuitBreakerAspect {
             names.put(aJoinPoint.toLongString(), theCmdName);
             groups.put(aJoinPoint.toLongString(), theGroupName);
         }
+
+
 
         HystrixObservableCommand.Setter theSetter =
                 HystrixObservableCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(theGroupName));

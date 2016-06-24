@@ -7,13 +7,16 @@ import javax.servlet.ServletRegistration;
 import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreakerAspect;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@AutoConfigureBefore(CircuitBreakerAspect.class)
 public class MetricsInitializer implements ServletContextInitializer {
     @Autowired
     LotRepository lotRepository;
@@ -32,7 +35,5 @@ public class MetricsInitializer implements ServletContextInitializer {
 
         ShelvesStatsCollector shelvesStatsCollector = new ShelvesStatsCollector(lotRepository, userRepository);
         shelvesStatsCollector.register();
-
-        HystrixPrometheusMetricsPublisher.register("shelves_backend");
     }
 }
