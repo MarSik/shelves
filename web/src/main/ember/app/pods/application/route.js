@@ -54,7 +54,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         },
         download: function (entity, url) {
             var newDoc = this.store.createRecord('document', {
-                url: url
+                url: url,
+                entity: entity
             });
 
             var self = this;
