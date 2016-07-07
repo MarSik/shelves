@@ -18,7 +18,9 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
 
         //Remove id from the payload for new records
         //Jackson was complaining when it received a null or 'new' id ...
-        if (record.get('id') == null || record.get('isNew')) {
+        var attributes = record.attributes()
+        if (('id' in attributes && Ember.isEmpty(attributes.id))
+            || attributes.isNew) {
             delete serialized.id;
         }
 
