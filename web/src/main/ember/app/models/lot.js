@@ -98,17 +98,18 @@ export default LotBase.extend({
     // Get the total count of ancestor lots
     // this is needed to compute the probability
     this.get('parents').forEach(function (p) {
-      console.log("ANCESTOR ", p.get("id"), " OF ", self.get("id"));
+      console.log("ANCESTOR ", p.get("id"), " OF ", self.get("id"), " count ", p.get("count"));
       sum += p.get('count');
     });
 
     // Add all ancestors to probability list
+    /*
+      TODO temporarily disabled pending algorithm update
     this.get('parents').forEach(function (p) {
       p.get('ancestry').forEach(function (a) {
         var newHistory = prependHistory.concat(a.get('history'));
         var aLotHistoryId = a.get('history').join();
         var probability = a.get('probability') * p.get('count') / sum;
-
 
         if (aLotHistoryId in ancestry) {
           // We already have this lot in ancestor list, just increase the probability
@@ -125,6 +126,7 @@ export default LotBase.extend({
         }
       });
     });
+    */
 
     // Return all ancestors as list
     return Object.keys(ancestry).map(function(key){
