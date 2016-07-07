@@ -58,7 +58,8 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 	Boolean valid;
 
 	/**
-	 * Currently used
+	 * Currently soldered (used in circuit). This is more than just
+	 * assignment to project, it really marks the part as tainted.
 	 */
 	Boolean used;
 
@@ -147,6 +148,13 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 				&& !getUsed();
 	}
 
+	public boolean isCanBeSolderedTo(@NotNull Requirement requirement) {
+		return isValid()
+				&& (Objects.equals(requirement, getUsedBy()) || getUsedBy() == null)
+				&& requirement != null
+				&& !getUsed();
+	}
+
 	public boolean isCanBeUnsoldered() {
 		return isValid()
                 && getUsed();
@@ -210,7 +218,7 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		if (update.getUsed() != null
 				&& !getUsed()
 				&& update.getUsed()
-				&& !isCanBeSoldered()) {
+				&& !isCanBeSolderedTo(update.getUsedBy())) {
 			throw new OperationNotPermitted();
 		}
 
@@ -312,8 +320,8 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		return willUpdate(getValid(), update.getValid())
 				|| willUpdate(getUsed(), update.getUsed())
 				|| willUpdate(getCount(), update.getCount())
-				|| willUpdate(getLocation(), update.getLocation())
-				|| willUpdate(getUsedBy(), update.getUsedBy());
+				|| !Objects.equals(getLocation(), update.getLocation())
+				|| !Objects.equals(getUsedBy(), update.getUsedBy());
 	}
 
 	@Override

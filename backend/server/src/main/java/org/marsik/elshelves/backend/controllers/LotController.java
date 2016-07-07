@@ -11,6 +11,7 @@ import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
+import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Source;
 import org.marsik.elshelves.backend.entities.Transaction;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
@@ -49,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -139,11 +141,16 @@ public class LotController {
                                 @PathVariable("uuid") UUID id,
                                 @RequestBody @Validated LotApiModel lot0) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
         Lot lot = emberToLot.convert(lot0, new THashMap<>());
-        LotSplitResult result = lotService.update(lotRepository.findById(id), lot, currentUser);
 
         Map<UUID, Object> cache = new THashMap<>();
 
         EmberModel.Builder<LotApiModel> modelBuilder;
+
+        final Lot lotDb = lotRepository.findById(id);
+
+        Requirement oldRequirement = lotDb.getUsedBy();
+
+        LotSplitResult result = lotService.update(lotDb, lot, currentUser);
 
         // The expected result of split action is the original (based on ID)
         // lot with lower count, all other objects are sideloaded
@@ -160,6 +167,16 @@ public class LotController {
 
         for (Lot l: lots.values()) {
             modelBuilder.sideLoad(entityToEmberConversionService.convert(l, cache));
+        }
+
+        // Send changed to assignments along
+        if (!Objects.equals(lot.getUsedBy(), oldRequirement)) {
+            if(lotDb.getUsedBy() != null) {
+                modelBuilder.sideLoad(entityToEmberConversionService.convert(lotDb.getUsedBy(), cache));
+            }
+            if (oldRequirement != null) {
+                modelBuilder.sideLoad(entityToEmberConversionService.convert(oldRequirement, cache));
+            }
         }
 
         return modelBuilder.build();

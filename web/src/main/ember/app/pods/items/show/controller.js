@@ -18,7 +18,7 @@ export default Ember.Controller.extend({
             this.set('assignableLots', lots);
         },
         performAssignment: function (req, lot, count) {
-            nl = this.store.createRecord('lot', {
+            var nl = this.store.createRecord('lot', {
               previous: lot,
               usedBy: req,
               count: count

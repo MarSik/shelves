@@ -29,7 +29,7 @@ export default Ember.Component.extend({
   },
 
   possibleTypes: Ember.computed.map('r.type', m => m),
-  assignedLots: Ember.computed.map('r.lots', m => m),
+  assignedLots: Ember.computed.filterBy('r.lots', 'valid', true),
 
   candidateLots: Ember.computed('possibleTypes.@each.lots', {
     set(key, value) {
