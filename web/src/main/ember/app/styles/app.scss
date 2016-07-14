@@ -400,3 +400,13 @@ table.transaction-summary {
   height: 3em;
   overflow: hidden;
 }
+
+.preview {
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 10px,
+    #f0f0f0 10px,
+    #f0f0f0 20px
+  );
+}

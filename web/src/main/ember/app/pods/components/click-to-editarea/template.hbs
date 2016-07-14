@@ -1,9 +1,16 @@
 {{#if editing}}
-<form {{action 'saveEdit' on='submit'}} class="inline">
-{{textarea type='text' value=value}}
-<button type="submit">save</button>
-<button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
-</form>
+<div class="row">
+  <div class="columns small-12">
+    <form {{action 'saveEdit' on='submit'}} class="inline">
+    {{textarea type='text' value=value}}
+    <button type="submit">save</button>
+    <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
+    </form>
+  </div>
+  <div class="columns small-12 preview">
+    {{markdown-to-html markdown=value headerLevelStart=4 tables=true strikethrough=true tasklists=true literalMidWordUnderscores=true}}
+  </div>
+</div>
 {{else if show}}
     {{yield}} {{#if enabled}}<button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>{{/if}}
 {{else if enabled}}
