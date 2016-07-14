@@ -69,12 +69,11 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<EmberModel> upload(@CurrentUser User currentUser,
-											 @RequestParam(value = "file", required = false) MultipartFile file,
-											 @RequestParam("entity") @Valid DocumentApiModel entity) throws IOException, BaseRestException {
+	@ResponseBody
+	public ResponseEntity<EmberModel> download(@CurrentUser User currentUser,
+			@RequestBody @Valid DocumentApiModel entity) throws IOException, BaseRestException {
 
-		if (file == null && entity.getUrl() == null) {
+		if (entity.getUrl() == null) {
 			throw new InvalidRequest();
 		}
 
@@ -88,10 +87,6 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 
 		EmberModel.Builder<DocumentApiModel> builder = new EmberModel.Builder<>(result);
 		sideLoad(entity, builder);
-
-		if (file != null) {
-			getService().processUpload(incoming, file);
-		}
 
 		return ResponseEntity
 				.ok()
