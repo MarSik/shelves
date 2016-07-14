@@ -90,7 +90,7 @@ public class DocumentController extends AbstractReadOnlyRestController<Document,
 
 		return ResponseEntity
 				.ok()
-				.eTag(entity.getVersion().toString())
+				.eTag(incoming.getVersion().toString())
 				.lastModified(incoming.getLastModified().getMillis())
 				.body(builder.build());
 	}
