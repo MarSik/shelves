@@ -10,7 +10,14 @@ export default Ember.Route.extend({
                 count: count
             });
 
-            lot.save();
+            lot.save().then(function (l) {
+                // Add the lot to the purchase explicitly to workaround polymorphic issues
+                // and implicit references from invalid lots
+                purchase.get('lots').pushObject(l);
+            }).catch(function (e) {
+                newDoc.rollback();
+                self.growl.error('Delivery request failed: '+e);
+            });
         },
         fixVat: function (purchase) {
             purchase.set('vatIncluded', !purchase.get('vatIncluded'));
