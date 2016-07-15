@@ -9,10 +9,10 @@
   <div class="columns large-6">
     <dl>
       <dt>{{#link-to 'types.show' model.type}}{{model.type.name}}{{/link-to}}</dt>
-      <dd>{{model.type.summary}}</dd>
+      <dd>{{markdown-to-html markdown=model.type.summary headerLevelStart=4 tables=true strikethrough=true tasklists=true literalMidWordUnderscores=true}}</dd>
     </dl>
 
-    <p>{{model.type.description}}</p>
+    <p>{{markdown-to-html markdown=model.type.description headerLevelStart=4 tables=true strikethrough=true tasklists=true literalMidWordUnderscores=true}}</p>
   </div>
   <div class="columns large-6">
     <table>
