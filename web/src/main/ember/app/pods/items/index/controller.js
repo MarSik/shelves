@@ -10,6 +10,6 @@ export default Ember.ArrayController.extend({
         return true;
       }
     },
-    sortProperties: ['purchase.type.name'],
+    sortProperties: ['type.name'],
     sortAscending: true
 });
