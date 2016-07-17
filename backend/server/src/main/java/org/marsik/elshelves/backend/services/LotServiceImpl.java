@@ -205,6 +205,7 @@ public class LotServiceImpl implements LotService {
             purchase.setTransaction(transaction);
             purchase.setCount(count);
             purchase.setType(type);
+            saveOrUpdate(purchase);
         }
 
         PurchasedLot lot = delivery(purchase,
@@ -265,6 +266,7 @@ public class LotServiceImpl implements LotService {
         purchase.setTransaction(transaction);
         purchase.setCount(count);
         purchase.setType(type);
+        saveOrUpdate(purchase);
 
         PurchasedLot lot = delivery(purchase,
                 uuidGenerator.generate(),
