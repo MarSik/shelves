@@ -205,6 +205,7 @@ public class LotServiceImpl implements LotService {
             purchase.setTransaction(transaction);
             purchase.setCount(count);
             purchase.setType(type);
+            purchase.setOwner(currentUser);
             saveOrUpdate(purchase);
         }
 
@@ -266,6 +267,7 @@ public class LotServiceImpl implements LotService {
         purchase.setTransaction(transaction);
         purchase.setCount(count);
         purchase.setType(type);
+        purchase.setOwner(currentUser);
         saveOrUpdate(purchase);
 
         PurchasedLot lot = delivery(purchase,
