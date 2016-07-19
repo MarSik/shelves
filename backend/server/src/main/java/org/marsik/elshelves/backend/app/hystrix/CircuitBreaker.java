@@ -10,5 +10,9 @@ import java.lang.annotation.Target;
 public @interface CircuitBreaker {
     String value() default "";
     String group() default "";
-    int timeout() default 0;
+
+    /**
+     * Timeout in milliseconds
+     */
+    int timeoutMs() default 0;
 }

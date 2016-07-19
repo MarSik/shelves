@@ -1,13 +1,9 @@
 package org.marsik.elshelves.backend.app.hystrix;
 
-import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.HystrixObservableCommand;
-import com.netflix.hystrix.strategy.HystrixPlugins;
-import com.netflix.hystrix.strategy.properties.HystrixDynamicProperties;
-import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import gnu.trove.map.hash.THashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import rx.Observable;
-import rx.Subscriber;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -109,8 +104,8 @@ public class CircuitBreakerAspect {
         theSetter = theSetter.andCommandKey(HystrixCommandKey.Factory.asKey(theCmdName));
         theSetter = theSetter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
-                .withExecutionTimeoutInMilliseconds(annotation != null && annotation.timeout() != 0
-                        ? annotation.timeout() : 5000));
+                .withExecutionTimeoutInMilliseconds(annotation != null && annotation.timeoutMs() != 0
+                        ? annotation.timeoutMs() : 5000));
 
         HystrixObservableCommand<Object> hystrixCommand = new HystrixObservableCommand<Object>(theSetter) {
             @Override

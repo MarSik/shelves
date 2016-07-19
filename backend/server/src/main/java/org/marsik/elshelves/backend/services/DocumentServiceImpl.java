@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.services;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import org.apache.commons.lang3.StringUtils;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
 import org.marsik.elshelves.backend.controllers.exceptions.EntityNotFound;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
@@ -65,7 +66,8 @@ public class DocumentServiceImpl extends AbstractRestService<DocumentRepository,
     }
 
     @Async
-    private void downloadDoc(UUID uuid, URL url) {
+    @CircuitBreaker(timeoutMs = 120000)
+    public void downloadDoc(UUID uuid, URL url) {
         try {
             storageManager.download(uuid, url, documentAnalysisDoneService);
         } catch (IOException ex) {
