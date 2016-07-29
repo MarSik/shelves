@@ -1,0 +1,38 @@
+{{partial '_itemheader'}}
+
+<div class="row">
+    <section class="footprint-summary small-12 large-12 columns">
+        <h3>Document information</h3>
+
+        <div class="row">
+            <dl class="small-6 columns">
+                <dt>Content type</dt>
+                <dd>{{#click-to-edit content=model field='content.contentType'}}{{fa-icon model.icon}} {{model.contentType}}{{/click-to-edit}}</dd>
+            </dl>
+            <dl class="small-6 columns">
+                <dt>Size</dt>
+                <dd>{{model.size}}</dd>
+            </dl>
+            <dl class="small-12 columns">
+                <dt>Uploaded</dt>
+                <dd>{{model.created}}</dd>
+            </dl>
+        </div>
+    </section>
+</div>
+
+<div class="row">
+    <section class="small-12 large-12 columns">
+      <h3>Describes</h3>
+
+      <ul class="item-list">
+        {{#each model.describes as |item|}}
+        <li>{{#link-to item.link item}}{{fa-icon item.icon}} {{item.name}}{{/link-to}}</li>
+        {{/each}}
+      </ul>
+    </section>
+</div>
+
+<nav class="actions">
+    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+</nav>

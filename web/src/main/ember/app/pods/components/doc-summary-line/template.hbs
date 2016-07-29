@@ -1,5 +1,5 @@
 <tr>
-  <td title="{{doc.contentType}}">{{#entity-link entity=doc resource='download' models='documents'}}{{fa-icon icon}} {{doc.name}}{{/entity-link}}</td>
+  <td title="{{doc.contentType}}">{{#entity-link entity=doc resource='download' models='documents'}}{{fa-icon doc.icon}} {{doc.name}}{{/entity-link}}</td>
   <td style="text-align: right;">{{#confirm-button action='deleteDocument' param=doc class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
 </tr>
 <tr class="summary">

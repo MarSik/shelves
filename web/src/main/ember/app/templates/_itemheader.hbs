@@ -16,7 +16,7 @@
 </div>
 
 <div class="row">
-    <section class="description columns small-12 large-6">
+    <section class="description columns small-12 {{if model.supportsAttachments "large-6" "large-12"}}">
         <h3>Summary</h3>
         <p>{{#click-to-editarea content=model field='content.summary' placeholder='place for short summary'}}{{markdown-to-html markdown=model.summary headerLevelStart=4 tables=true strikethrough=true tasklists=true literalMidWordUnderscores=true}}{{/click-to-editarea}}</p>
 
@@ -37,8 +37,8 @@
       <p class="placeholder">No barcode. <a {{action 'addBarcode' model}}>Associate one.</a></p>
       {{/if}}
     </section>
+  {{#if model.supportsAttachments}}
     <section class="attachments columns small-12 large-6">
-
 <h3>Attachments</h3>
 
 <table>
@@ -55,5 +55,6 @@
         <p>Press pause to freeze a picure and then upload to send it to server. Simply un-pause and try again if you do not like the paused image. Once you are done, click the stop button to exit.</p>
 {{/webcam-module}}
 </section>
+  {{/if}}
 </div>
 

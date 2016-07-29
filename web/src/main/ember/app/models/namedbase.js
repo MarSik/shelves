@@ -30,5 +30,8 @@ export default IdentifiedBase.extend({
         return "circle-thin";
     }.property(),
 
-    fullName: Ember.computed.alias('name')
+    fullName: Ember.computed.alias('name'),
+    supportsAttachments: function() {
+      return true;
+    }.property()
 });
