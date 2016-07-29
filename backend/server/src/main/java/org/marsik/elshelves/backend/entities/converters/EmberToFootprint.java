@@ -52,6 +52,8 @@ public class EmberToFootprint extends AbstractEmberToEntity<FootprintApiModel, F
 			model.setSeeAlsoIncoming(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
+		model.setTypes(new IdentifiedEntity.UnprovidedSet<>());
+
 		return model;
 	}
 }
