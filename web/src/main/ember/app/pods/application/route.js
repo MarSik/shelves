@@ -23,7 +23,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             this.intermediateTransitionTo("loading");
         },
         error: function(error, transition) {
-            Ember.onerror(error);
+            //Ember.onerror(error);
             return true;
         },
         addSticker: function (obj) {

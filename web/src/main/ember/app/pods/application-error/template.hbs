@@ -1,0 +1,11 @@
+{{title-bar stickerCount=stickers.length searchAction='search'}}
+
+<div class="main-content">
+<section id="error-report">
+  <h2>{{fa-icon 'exclamation-triangle'}} Application encountered an error:</h2>
+
+  <p class="alert-box error">The application encountered an error. The detailed description is attached below. The only thing you can do now is to refresh the page and try again.</p>
+
+  <pre>{{reason}}</pre>
+</section>
+</div>
