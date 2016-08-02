@@ -201,10 +201,10 @@
             {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
           {{/if}}
             {{#if lot.canBeSoldered}}
-          {{fa-icon 'flask'}} {{#link-to 'items.show' lot.usedBy}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+          {{fa-icon 'flask'}} {{#link-to 'items.show' lot.usedBy.item}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
           {{/if}}
           {{#if lot.canBeUnsoldered}}
-            {{fa-icon 'check-square'}} {{#link-to 'items.show' lot.usedBy}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+            {{fa-icon 'check-square'}} {{#link-to 'items.show' lot.usedBy.item}}{{lot.usedBy.item.purchase.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
           {{/if}}
 
           {{#if lot.canBeMoved}}<button class="button edit" {{action 'showMoveLot' lot}}>{{fa-icon 'mail-forward'}} move</button>{{/if}}
