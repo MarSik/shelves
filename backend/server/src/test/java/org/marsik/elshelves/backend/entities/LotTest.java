@@ -22,7 +22,7 @@ public class LotTest {
         assertThat(lot.getUsedBy())
                 .isEqualTo(requirement);
         assertThat(lot.getLocation())
-                .isNull();
+                .isEqualTo(location);
     }
 
     @Test
@@ -53,6 +53,7 @@ public class LotTest {
         lot.setValid(true);
         lot.setUsed(false);
         lot.setUsedInPast(false);
+        lot.setLocation(location);
     }
 
     @Test
@@ -81,6 +82,7 @@ public class LotTest {
         lot.setUsedBy(requirement);
         lot.setUsed(true);
         lot.setUsedInPast(true);
+        lot.setLocation(null);
 
         Lot update = new Lot();
         update.setUsed(false);
@@ -95,5 +97,26 @@ public class LotTest {
                 .isTrue();
         assertThat(lot.getLocation())
                 .isEqualTo(location);
+    }
+
+    @Test
+    public void testSoldering() throws Exception {
+        lot.setUsedBy(requirement);
+        lot.setUsed(false);
+
+        Lot update = new Lot();
+        update.setUsed(true);
+        update.setUsedBy(requirement);
+
+        lot.updateFrom(update);
+
+        assertThat(lot.getUsed())
+                .isTrue();
+        assertThat(lot.getUsedBy())
+                .isEqualTo(requirement);
+        assertThat(lot.getUsedInPast())
+                .isTrue();
+        assertThat(lot.getLocation())
+                .isNull();
     }
 }

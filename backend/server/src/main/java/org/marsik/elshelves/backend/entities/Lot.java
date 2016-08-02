@@ -239,6 +239,14 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		update(update.getUsed(), this::setUsed);
 		setUsedInPast(getUsedInPast() || getUsed());
 
+		if (update.getLocation() != null
+				&& !Objects.equals(update.getLocation(), getLocation())
+				&& !isCanBeMoved()) {
+			throw new OperationNotPermitted();
+		}
+
+		update(update.getLocation(), this::setLocation);
+
 		// reset location when soldering to an item
 		if (getUsed()) {
 			setLocation(null);
@@ -262,14 +270,6 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		}
 
 		update(update.getCount(), this::setCount);
-
-		if (update.getLocation() != null
-				&& !Objects.equals(update.getLocation(), getLocation())
-				&& !isCanBeMoved()) {
-			throw new OperationNotPermitted();
-		}
-
-		update(update.getLocation(), this::setLocation);
 
 		if (!Objects.equals(update.getUsedBy(), getUsedBy())
 				&& update.getUsedBy() == null
