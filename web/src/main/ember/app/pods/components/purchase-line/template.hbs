@@ -28,7 +28,7 @@
         {{input type='text' value=purchase.count id=count placeholder='count'}}
     </td>
     <td class="price">
-        {{input type='text' value=purchase.singlePrice id=price placeholder='price'}}
+        {{money-input value=purchase.singlePrice step='any' id=price placeholder='price'}}
     </td>
     <td class="vat-included">
         {{input type='checkbox' checked=purchase.vatIncluded id=vatIncluded}}
