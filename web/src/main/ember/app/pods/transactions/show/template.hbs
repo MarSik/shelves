@@ -141,7 +141,7 @@
                 {{#click-to-edit content=purchase field='content.vat' editable=editEnabled}}{{purchase.vat}}{{/click-to-edit}}
             </td>
         </tr>
-        {{#each purchase.next as |lot|}}
+        {{#each purchase.lots as |lot|}}
         <tr>
           <td colspan="2" class="location">
             {{fa-icon "cube"}} {{lot.location.fullName}}
