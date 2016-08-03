@@ -1,0 +1,18 @@
+<div class="message-area">
+  {{#if notification.isError}}
+    <h1>{{fa-icon 'times-circle'}} Uh oh.</h1>
+  {{/if}}
+
+  {{#if notification.isAlert}}
+    <h1>{{fa-icon 'exclamation-triangle'}} Attention!</h1>
+  {{/if}}
+
+  {{#if notification.isInfo}}
+    <h1>{{fa-icon 'info-circle'}} Hey!</h1>
+  {{/if}}
+
+  <div class="message">
+    {{{notification.content}}}
+  </div>
+</div>
+
