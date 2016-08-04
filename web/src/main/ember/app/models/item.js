@@ -41,5 +41,12 @@ export default Lot.extend({
     });
 
     return [soldered, sum];
-  }.property('requirements.@each.progress')
+  }.property('requirements.@each.progress'),
+
+  progressPct: function() {
+    var progress = this.get('progress');
+    if (progress[1] == 0) return 0;
+
+    return Math.round(1000.0 * progress[0] / progress[1]) / 10.0;
+  }.property('progress')
 });

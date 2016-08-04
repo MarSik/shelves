@@ -1,13 +1,21 @@
 <section class="columns small-12">
-    <h2>Projects</h2>
+  <h2>Open projects</h2>
 
   <button {{action 'showCreateProject'}}>{{fa-icon 'plus'}} Create new project</button>
 
   <ul class="item-list">
-        {{#each this as |project|}}
-            <li><a {{action 'projectSelected' project}}>{{project.type.name}}</a></li>
-        {{/each}}
-    </ul>
+    {{#each inProgress as |project|}}
+    <li>{{#link-to project.link project}}{{fa-icon project.icon}} ({{project.progressPct}}%) {{project.type.name}}{{#if project.serial}} &ndash; {{project.serial}}{{/if}}{{/link-to}}</li>
+    {{/each}}
+  </ul>
+
+  <h2>Closed projects</h2>
+
+  <ul class="item-list">
+    {{#each closed as |project|}}
+    <li>{{#link-to project.link project}}{{fa-icon project.icon}} {{project.type.name}} {{#if project.serial}} &ndash; {{project.serial}}{{/if}}{{/link-to}}</li>
+    {{/each}}
+  </ul>
 </section>
 
 {{#modal-dialog title="Create new project" condition=showCreateDialog}}
