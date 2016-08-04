@@ -60,11 +60,19 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 	@Min(0)
 	BigDecimal vat;
     Boolean vatIncluded;
-    Long missing;
+
+	/**
+	 * The transaction.source's SKU identifier for the type
+	 */
 	String sku;
 
+	// Read only
+    Long missing;
+
+	// Read only unless creating a new purchase
 	TransactionApiModel transaction;
 
+	// Read only unless creating a new purchase
 	PartTypeApiModel type;
 
 	// Read only
