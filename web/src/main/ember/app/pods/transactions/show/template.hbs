@@ -94,7 +94,7 @@
             <th>Type / Location</th>
             <th>SKU</th>
             <th>Cnt.</th>
-            <th>Price</th>
+            <th>Price / 1pcs</th>
             {{#if editEnabled}}
             <th>VAT?</th>
             {{else}}
@@ -174,7 +174,7 @@
 
 <div class="row">
   <section class="columns large-3">
-    <h3>Price in {{selectedItem.currency}}</h3>
+    <h3>Unit price in {{selectedItem.currency}}</h3>
 
     {{money-input value=selectedItem.singlePrice step='any'}}
   </section>

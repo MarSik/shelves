@@ -67,6 +67,9 @@ public class PurchaseApiModel extends AbstractEntityApiModel {
 
 	PartTypeApiModel type;
 
+	// Read only
+	// Lot delivery is a complex operation and
+	// should be always done using the lot endpoint
 	Set<LotApiModel> lots;
 
 

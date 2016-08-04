@@ -1,13 +1,9 @@
 package org.marsik.elshelves.backend.entities.converters;
 
-import gnu.trove.set.hash.THashSet;
-
 import org.javamoney.moneta.Money;
-import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.PurchaseApiModel;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Purchase;
-import org.marsik.elshelves.backend.entities.PurchasedLot;
 import org.marsik.elshelves.backend.entities.Sku;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -77,16 +73,9 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 			model.getSku().setSource(null);
 		}
 
-		if (object.getLots() != null) {
-			model.setLots(new THashSet<PurchasedLot>());
-			for (LotApiModel l: object.getLots()) {
-				final PurchasedLot lot = conversionService.converter(l, PurchasedLot.class)
-						.convert(path, "lot", l, cache, include);
-				model.addLot(lot);
-			}
-		} else {
-			model.setLots(new IdentifiedEntity.UnprovidedSet<>());
-		}
+		// Ignore provided lots, lot delivery is a complex operation and
+		// should be always done using the lot endpoint
+		model.setLots(new IdentifiedEntity.UnprovidedSet<>());
 
 		return model;
 	}
