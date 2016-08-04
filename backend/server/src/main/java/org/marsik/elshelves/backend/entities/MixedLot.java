@@ -4,10 +4,12 @@ import gnu.trove.set.hash.THashSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.dtos.AncestryLevel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.UuidGenerator;
@@ -17,11 +19,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -149,5 +148,58 @@ public class MixedLot extends Lot {
         MixedLot ml = (MixedLot) super.shallowClone();
         ml.setParents(new THashSet<>(this.getParents()));
         return ml;
+    }
+
+
+
+    @Override
+    public Collection<AncestryLevel> computeAncestry() {
+        Stack<AncestryLevel> toProcess = new Stack<>();
+        Set<AncestryLevel> ancestryCache = new HashSet<>();
+        Map<Lot, AncestryLevel> ancestry = new HashMap<>();
+        Map<UUID, Lot> lots = new HashMap<>();
+
+        toProcess.add(AncestryLevel.builder()
+                .count(1L)
+                .outOf(1L)
+                .lot(getId())
+                .build());
+        lots.put(getId(), this);
+
+        while (!toProcess.empty()) {
+            AncestryLevel node = toProcess.pop();
+            Lot nodeLot = lots.get(node.getLot());
+            // Skip already computed ancestries
+            if (ancestryCache.contains(node)) {
+                continue;
+            }
+
+            // Add subtrees to the waiting stack
+            if (nodeLot instanceof MixedLot) {
+                MixedLot mixedLot = ((MixedLot)nodeLot);
+                Long parentSum = mixedLot.getParents().stream().mapToLong(Lot::getCount).sum();
+                mixedLot.getParents().stream()
+                        .map(lot -> AncestryLevel.builder()
+                                .count(lot.getCount())
+                                .outOf(parentSum)
+                                .lot(lot.getId())
+                                .build())
+                        .map(node::parent)
+                        .forEach(toProcess::add);
+                mixedLot.getParents().forEach(lot -> lots.put(lot.getId(), lot));
+            }
+
+            // Add ancestry information
+            ancestryCache.add(node);
+            AncestryLevel an = ancestry.putIfAbsent(nodeLot, node);
+            if (an != null) {
+                an = an.add(node);
+                ancestry.put(lots.get(an.getLot()), an);
+            }
+        }
+
+        return Collections.unmodifiableCollection(ancestry.values().stream()
+                .map(AncestryLevel::normalize)
+                .collect(Collectors.toList()));
     }
 }

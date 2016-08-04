@@ -4,10 +4,12 @@ import gnu.trove.set.hash.THashSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.joda.time.DateTime;
 import org.marsik.elshelves.api.entities.LotApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
 import org.marsik.elshelves.backend.controllers.exceptions.OperationNotPermitted;
+import org.marsik.elshelves.backend.dtos.AncestryLevel;
 import org.marsik.elshelves.backend.entities.fields.DefaultEmberModel;
 import org.marsik.elshelves.backend.interfaces.Relinker;
 import org.marsik.elshelves.backend.services.StickerCapable;
@@ -21,9 +23,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -346,5 +346,13 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 		Lot l = (Lot)super.shallowClone();
 		l.setSerials(new THashSet<>(this.getSerials()));
 		return l;
+	}
+
+	public Collection<AncestryLevel> computeAncestry() {
+		return Collections.singletonList(AncestryLevel.builder()
+				.count(1L)
+				.outOf(1L)
+				.lot(this.getId())
+				.build());
 	}
 }
