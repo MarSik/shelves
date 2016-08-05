@@ -38,44 +38,6 @@
 {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button small'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </ul>
 
-<h3>Required parts</h3>
-<table>
-{{#each displayRequirements as |r|}}
-  {{project-requirement readOnly=r.item.finished r=r
-    solderLot="solderLot" unsolderLot="unsolderLot" unassignLot="unassignLot" assignLot="assignLot"
-    showAddAlternative="showAddAlternative" removeRequirement="removeRequirement"
-    removeAlternativePart="removeAlternativePart"}}
-{{/each}}
-</table>
-
-<h3>History</h3>
-
-<table>
-{{lot-history model=model.history}}
-</table>
-
-{{#modal-dialog title="Add requirement" condition=showAddRequirement}}
-<section>
-<form class="row" {{action 'addRequirement' model requiredType requiredCount on='submit'}}>
-        <div class="large-8 columns">
-{{ember-selectize
-content=sortedTypes
-optionValuePath="content.id"
-optionLabelPath="content.fullName"
-selection=requiredType
-sort="content.fullName"
-maxItems=1
-required=true
-placeholder="Select a type" }}
-        </div>
-        <div class="large-3 columns">
-{{input type='text' value=requiredCount}}
-        </div>
-    <button type="submit" class="large-1 columns">Add</button>
-</form>
-</section>
-{{/modal-dialog}}
-
 {{#if showImportRequirements}}
 <section>
 <h3>Import requirements from schematics</h3>
@@ -97,41 +59,32 @@ placeholder="Select a type" }}
 </section>
 {{/if}}
 
+<h3>
+{{#link-to 'items.show.index' model}}Requirements{{/link-to}} |
+{{#link-to 'items.show.dependencies' model}}Dependency Tree{{/link-to}} |
+{{#link-to 'items.show.history' model}}History{{/link-to}}
+</h3>
+
 {{outlet}}
 
-{{#modal-dialog condition=showAlternativeDialog title="Add alternative"}}
-    <form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>
-
+{{#modal-dialog title="Add requirement" condition=showAddRequirement}}
+<section>
+  <form class="row" {{action 'addRequirement' model requiredType requiredCount on='submit'}}>
+  <div class="large-8 columns">
     {{ember-selectize
     content=sortedTypes
-    loading=sortedTypes.isPending
     optionValuePath="content.id"
     optionLabelPath="content.fullName"
-    selection=alternativeType
+    selection=requiredType
     sort="content.fullName"
     maxItems=1
     required=true
     placeholder="Select a type" }}
-
-    <button type="submit">{{fa-icon 'plus'}} Add</button>
-    </form>
-{{/modal-dialog}}
-
-
-{{#modal-dialog condition=assignLotToRequirement title="Add lot"}}
-    <table>
-    {{#each assignableLots as |lot|}}
-        <tr>
-            <td>{{fa-icon lot.icon}}</td>
-            <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
-            <td>{{lot.purchase.transaction.source.name}}</td>
-            <td>{{lot.count}}</td>
-            <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
-            <td>{{lot.type.vendor}}</td>
-            <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
-            <td>{{#link-to lot.link lot}}[info]{{/link-to}}</td>
-            <td>{{#add-count-button action=(action 'performAssignment' assignLotToRequirement lot) default=assignLotToRequirement.missing}}assign{{/add-count-button}}</td>
-        </tr>
-    {{/each}}
-    </table>
+  </div>
+  <div class="large-3 columns">
+    {{input type='text' value=requiredCount}}
+  </div>
+  <button type="submit" class="large-1 columns">Add</button>
+  </form>
+</section>
 {{/modal-dialog}}

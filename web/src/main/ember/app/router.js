@@ -40,8 +40,9 @@ Router.map(function() {
   });
 
   this.resource("items", function() {
-    this.route("show", {
-      path: "/:item_id"
+    this.route("show", { path: "/:item_id" }, function () {
+      this.route("dependencies");
+      this.route("history");
     });
 
     this.route("new");

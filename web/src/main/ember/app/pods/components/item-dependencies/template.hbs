@@ -1,0 +1,12 @@
+{{#link-to model.link model}}{{fa-icon model.icon}} {{model.type.name}}{{/link-to}}
+<ul>
+  {{#each model.requirements as |req|}}
+    {{#each req.lots as |lot|}}
+      {{#if lot.requirements}}
+        <li>{{item-dependencies model=lot}}</li>
+      {{else}}
+        <li>{{#link-to lot.link lot}}{{fa-icon lot.icon}} {{lot.fullName}}{{/link-to}}</li>
+      {{/if}}
+    {{/each}}
+  {{/each}}
+</ul>

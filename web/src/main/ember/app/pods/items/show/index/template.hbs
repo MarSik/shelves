@@ -1,0 +1,46 @@
+<table>
+  {{#each displayRequirements as |r|}}
+  {{project-requirement readOnly=r.item.finished r=r
+  solderLot="solderLot" unsolderLot="unsolderLot" unassignLot="unassignLot" assignLot="assignLot"
+  showAddAlternative="showAddAlternative" removeRequirement="removeRequirement"
+  removeAlternativePart="removeAlternativePart"}}
+  {{/each}}
+</table>
+
+{{#modal-dialog condition=showAlternativeDialog title="Add alternative"}}
+<form {{action 'addAlternativePart' lastRequirement alternativeType on='submit'}}>
+
+{{ember-selectize
+content=sortedTypes
+loading=sortedTypes.isPending
+optionValuePath="content.id"
+optionLabelPath="content.fullName"
+selection=alternativeType
+sort="content.fullName"
+maxItems=1
+required=true
+placeholder="Select a type" }}
+
+<button type="submit">{{fa-icon 'plus'}} Add</button>
+</form>
+{{/modal-dialog}}
+
+
+{{#modal-dialog condition=assignLotToRequirement title="Add lot"}}
+<table>
+  {{#each assignableLots as |lot|}}
+  <tr>
+    <td>{{fa-icon lot.icon}}</td>
+    <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
+    <td>{{lot.purchase.transaction.source.name}}</td>
+    <td>{{lot.count}}</td>
+    <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
+    <td>{{lot.type.vendor}}</td>
+    <td>{{#link-to 'footprints.show' lot.type.footprint}}{{lot.type.footprint.name}}{{/link-to}}</td>
+    <td>{{#link-to lot.link lot}}[info]{{/link-to}}</td>
+    <td>{{#add-count-button action=(action 'performAssignment' assignLotToRequirement lot) default=assignLotToRequirement.missing}}assign{{/add-count-button}}</td>
+  </tr>
+  {{/each}}
+</table>
+{{/modal-dialog}}
+

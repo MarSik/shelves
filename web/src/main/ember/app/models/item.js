@@ -23,7 +23,7 @@ export default Lot.extend({
   }.property("canBeUnsoldered", "finished"),
 
   link: function () {
-    return "items.show";
+    return "items.show.index";
   }.property(),
 
   editable: Ember.computed("finished", function () {
