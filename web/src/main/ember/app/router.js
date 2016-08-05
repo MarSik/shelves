@@ -77,6 +77,7 @@ Router.map(function() {
     });
   });
 
+  this.route("cart");
   this.route("stickers");
   this.route("backup");
 

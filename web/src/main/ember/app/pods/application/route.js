@@ -5,7 +5,11 @@ import inject from 'webapp/injectors/repositories';
 export default Ember.Route.extend(ApplicationRouteMixin, {
     capabilities: inject('capabilities'),
     session: Ember.inject.service('session'),
+    cart: Ember.inject.service(),
     actions: {
+        addToCart: function(item) {
+          this.get('cart').add(item);
+        },
         search: function(query) {
             var search = this.store.createRecord('search', {
                 query: query

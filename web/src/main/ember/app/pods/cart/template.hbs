@@ -1,0 +1,20 @@
+<h2>Cart</h2>
+
+<ul class="row">
+  {{#each model key="@index" as |obj|}}
+  <li class="columns small-6 large-3 sticker">{{fa-icon obj.icon size=2}} {{obj.fullName}}
+    <button {{action 'removeFromCart' obj}} class="remove button single-line">{{fa-icon 'times'}}</button>
+  </li>
+  {{else}}
+  <li class="placeholder">Nothing in the cart yet..</li>
+  {{/each}}
+</ul>
+
+<h2>Actions</h2>
+
+<button {{action 'moveAllLots'}}>Move content of the cart to different location</button>
+<button {{action 'assignToItem'}}>Assign to item</button>
+<button {{action 'addToStickers'}}>Add to stickers</button>
+<button {{action 'clearCart'}}>Clear</button>
+
+{{outlet}}

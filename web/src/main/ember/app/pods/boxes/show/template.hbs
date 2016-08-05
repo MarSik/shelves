@@ -17,11 +17,7 @@
     <tbody>
     <tr {{action 'showQr' 'lots' lot on='mouseEnter'}}>
         <td>
-            {{#if lot.canBeMoved}}
-                {{#draggable-item content=lot.id}}{{fa-icon 'hand-o-up'}}{{/draggable-item}}
-            {{else}}
-                &nbsp;
-            {{/if}}
+          <button class="button edit" {{action 'addToCart' lot}}>{{fa-icon 'cart-arrow-down'}} add to cart</button>
         </td>
         <td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}}</td>
         <td>{{lot.type.vendor}}</td>
