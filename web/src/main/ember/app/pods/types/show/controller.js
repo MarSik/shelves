@@ -84,6 +84,10 @@ export default Ember.Controller.extend({
             entity.get('properties').pushObject(property);
 
             var values = entity.get('values');
+            if (values === undefined) {
+              values = Ember.Object.create();
+              entity.set('values', values);
+            }
             values.set(propertyId, normalizedValue);
 
             entity.save().catch(function (e) {
