@@ -52,7 +52,7 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 				model.addType(emberToType.convert(path, "type", p, cache, include));
 			}
 		} else {
-			model.setType(null);
+			model.setType(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		model.setItem(emberToItem.convert(path, "item", object.getItem(), cache, include));

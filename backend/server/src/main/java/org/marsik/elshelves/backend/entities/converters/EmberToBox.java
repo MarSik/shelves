@@ -43,7 +43,7 @@ public class EmberToBox extends AbstractEmberToEntity<BoxApiModel, Box> {
 		}
 
 		if (object.getBoxes() == null) {
-			box.setContains(null);
+			box.setContains(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
 		return box;

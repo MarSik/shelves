@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.SourceApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -35,6 +36,7 @@ public class EmberToSource extends AbstractEmberToEntity<SourceApiModel, Source>
 		emberToNamedObject.convert(path, object, model, cache, include);
 		model.setUrl(object.getUrl());
 		model.setSkuUrl(object.getSkuUrl());
+		model.setTransactions(new IdentifiedEntity.UnprovidedSet<>());
 
 		return model;
 	}

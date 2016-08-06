@@ -85,6 +85,8 @@ public class EmberToType extends AbstractEmberToEntity<PartTypeApiModel, Type> {
 			model.setSeeAlsoIncoming(new IdentifiedEntity.UnprovidedSet<>());
 		}
 
+		model.setSkus(new IdentifiedEntity.UnprovidedSet<>());
+
 		return model;
 	}
 }

@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.entities.converters;
 
 import org.marsik.elshelves.api.entities.UnitApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -36,6 +37,7 @@ public class EmberToUnit extends AbstractEmberToEntity<UnitApiModel, Unit> {
 		emberToNamedObject.convert(path, object, model, cache, include);
 		model.setSymbol(object.getSymbol());
 		model.setPrefixes(object.getPrefixes());
+		model.setUnitUses(new IdentifiedEntity.UnprovidedSet<>());
 
 		return model;
 	}
