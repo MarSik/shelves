@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.entities.converters;
 import gnu.trove.set.hash.THashSet;
 import org.marsik.elshelves.api.entities.PartTypeApiModel;
 import org.marsik.elshelves.api.entities.RequirementApiModel;
+import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.Requirement;
 import org.marsik.elshelves.backend.entities.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class EmberToRequirement extends AbstractEmberToEntity<RequirementApiMode
 		}
 
 		model.setItem(emberToItem.convert(path, "item", object.getItem(), cache, include));
+		model.setLots(new IdentifiedEntity.UnprovidedSet<>());
 
 		return model;
 	}

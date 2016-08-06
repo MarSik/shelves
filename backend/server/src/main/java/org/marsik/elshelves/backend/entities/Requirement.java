@@ -55,11 +55,11 @@ public class Requirement extends IdentifiedEntity implements OwnedEntityInterfac
 	Set<Lot> lots = new THashSet<>();
 
 	public void addLot(Lot l) {
-		l.setUsedBy(this);
+		if (l.isCanBeAssigned()) l.setUsedBy(this);
 	}
 
 	public void removeLot(Lot l) {
-		l.setUsedBy(null);
+		if (l.isCanBeUnassigned()) l.setUsedBy(null);
 	}
 
     String name;
