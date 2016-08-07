@@ -25,14 +25,10 @@
     <section class="small-12 large-12 columns">
       <h3>Describes</h3>
 
-      <ul class="item-list">
-        {{#each model.describes as |item|}}
-        <li>{{#link-to item.link item}}{{fa-icon item.icon}} {{item.name}}{{/link-to}}</li>
-        {{/each}}
-      </ul>
+      {{entity-selectize value=model.describes options=everything add=(route-action 'addDescribes' model) remove=(route-action 'removeDescribes' model)}}
     </section>
 </div>
 
 <nav class="actions">
-    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+    {{#if model.canBeDeleted}}{{#confirm-button action=(route-action 'deleteEntity' model) class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </nav>

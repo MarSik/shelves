@@ -10,7 +10,7 @@
   <li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
   <li><button class="small" {{action 'showBarcode' model}}>Show barcode</button></li>
   {{#if model.canBeDeleted}}
-  <li>{{#confirm-button action='deleteEntity' param=model class='small alert button'}}Delete{{/confirm-button}}</li>
+  <li>{{#confirm-button action=(route-action 'deleteEntity' model) class='small alert button'}}Delete{{/confirm-button}}</li>
   {{/if}}
 </ul>
 </div>

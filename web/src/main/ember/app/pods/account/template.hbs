@@ -27,7 +27,7 @@
 
         <ul>
             {{#each model.authorizations as |auth|}}
-                <li>{{auth.name}} {{#confirm-button class='remove button' action='removeAuthorization' param=auth}}{{fa-icon 'times'}}{{/confirm-button}}</li>
+                <li>{{auth.name}} {{#confirm-button class='remove button' action=(route-action 'removeAuthorization' auth)}}{{fa-icon 'times'}}{{/confirm-button}}</li>
             {{/each}}
         </ul>
     </section>

@@ -141,7 +141,7 @@ button .edit, .button.edit {
   }
 }
 
-button .remove, .button.remove {
+button .remove, .button.remove, button.remove {
   @extend button.alert;
   display: inline;
 

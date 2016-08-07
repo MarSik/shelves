@@ -1,0 +1,23 @@
+<ul class="item-list">
+  {{#each value as |item|}}
+  <li>
+    {{#link-to item.link item}}{{fa-icon item.icon}} {{item.name}}{{/link-to}}
+    {{#if display}}{{#confirm-button class='single-line remove' action=(action remove item)}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+  </li>
+  {{/each}}
+</ul>
+
+{{#if display}}
+{{ember-selectize
+content=sortedOptions
+optionValuePath="content.id"
+optionLabelPath="content.fullName"
+selection=selected
+maxItems=1
+placeholder="Select the described object" }}
+
+<button {{action add selected}} class="button primary">{{fa-icon 'plus'}} Add</button>
+<button {{action 'hide'}} class="button secondary">Hide</button>
+{{else}}
+<button {{action 'show'}} class="button secondary">{{fa-icon 'eye'}} Manage</button>
+{{/if}}

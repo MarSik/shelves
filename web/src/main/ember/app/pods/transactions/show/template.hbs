@@ -44,7 +44,7 @@
         <dt>Status</dt>
         <dd>
             {{#if model.locked}}
-              {{#confirm-button action="unlock" param=model}}{{fa-icon "lock"}} locked{{/confirm-button}}
+              {{#confirm-button action=(route-action "unlock" model)}}{{fa-icon "lock"}} locked{{/confirm-button}}
             {{else}}
               <button {{action 'lock' model}}>{{fa-icon "unlock"}} unlocked</button>
             {{/if}}

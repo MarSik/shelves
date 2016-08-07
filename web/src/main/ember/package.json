@@ -56,6 +56,7 @@
     "ember-localstorage-adapter": "0.5.5",
     "ember-moment": "6.0.0",
     "ember-promise": "1.2.0",
+    "ember-route-action-helper": "0.3.3",
     "ember-simple-auth": "1.0.1",
     "gulp-sass": "^2.0.4",
     "moment": "2.11.2",

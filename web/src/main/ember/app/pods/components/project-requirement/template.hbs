@@ -3,7 +3,7 @@
   <td>{{#click-to-edit editable=r.item.editable content=r field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
 
   <td colspan="2">
-    {{#unless readOnly}}{{#confirm-button action='removeRequirement' class='alert tiny button'}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
+    {{#unless readOnly}}{{#confirm-button action=(action 'removeRequirement') class='alert tiny button'}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
     <button {{action 'showAddAlternative'}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
     {{#if r.missing}}<button {{action 'assignLot'}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}{{/unless}}
   </td>

@@ -90,6 +90,8 @@ export default Ember.Controller.extend({
             }
             values.set(propertyId, normalizedValue);
 
+            console.log("Property saved with value "+normalizedValue);
+
             entity.save().catch(function (e) {
                 e.rollback();
             });

@@ -25,5 +25,5 @@
 {{outlet}}
 
 <nav class="actions">
-    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+    {{#if model.canBeDeleted}}{{#confirm-button action=(route-action 'deleteEntity' model) class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </nav>

@@ -37,7 +37,7 @@
         {{#each model.showProperties as |property|}}
         <li>
             {{#link-to 'properties.show' property}}{{property.niceName}}{{/link-to}}
-            {{#if manageProperties}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}} remove{{/confirm-button}}{{/if}}
+            {{#if manageProperties}}{{#confirm-button class='button remove' action=(action 'removeProperty' model property)}}{{fa-icon 'times'}} remove{{/confirm-button}}{{/if}}
         </li>
         {{/each}}
     </ul>

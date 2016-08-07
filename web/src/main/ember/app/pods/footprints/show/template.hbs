@@ -33,7 +33,7 @@
 
         <ul>
             {{#each model.seeAlso as |fp|}}
-                <li>{{#link-to 'footprints.show' fp}}{{fa-icon 'file-o'}} {{fp.name}}{{/link-to}} {{#confirm-button class='remove button' action='removeSeeAlso' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}</li>
+                <li>{{#link-to 'footprints.show' fp}}{{fa-icon 'file-o'}} {{fp.name}}{{/link-to}} {{#confirm-button class='remove button' action=(action 'removeSeeAlso' fp)}}{{fa-icon 'times'}}{{/confirm-button}}</li>
             {{/each}}
         </ul>
 
@@ -55,5 +55,5 @@
 </div>
 
 <nav class="actions">
-    {{#if model.canBeDeleted}}{{#confirm-button action='deleteEntity' param=model class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
+    {{#if model.canBeDeleted}}{{#confirm-button action=(route-action 'deleteEntity' model) class='alert button'}}{{fa-icon 'times'}} Delete{{/confirm-button}}{{/if}}
 </nav>

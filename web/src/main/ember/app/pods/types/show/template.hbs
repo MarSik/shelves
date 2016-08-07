@@ -46,7 +46,7 @@
 {{#each model.footprints as |fp|}}
     <li>
         {{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}
-    {{#if displayAddFootprint}}{{#confirm-button class='button remove' action='removeFootprint' param=fp}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+    {{#if displayAddFootprint}}{{#confirm-button class='button remove' action=(action 'removeFootprint' fp)}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
     </li>
 {{/each}}
 </ul>
@@ -76,7 +76,7 @@
     {{#each model.groups as |group|}}
         <li>
             {{#link-to 'groups.show' group}}{{fa-icon 'box'}} {{group.fullName}}{{/link-to}}
-            {{#if displayAddGroup}}{{#confirm-button class='button remove' action='removeGroup' param=group}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+            {{#if displayAddGroup}}{{#confirm-button class='button remove' action=(action 'removeGroup' group)}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
         </li>
     {{/each}}
 </ul>
@@ -104,7 +104,7 @@
     {{#each model.seeAlso as |type|}}
         <li>
             {{#link-to 'types.show' type}}{{fa-icon 'book'}} {{type.fullName}}{{/link-to}}
-            {{#if displayAddSeeAlso}}{{#confirm-button class='remove' action='removeSeeAlso' param=type}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
+            {{#if displayAddSeeAlso}}{{#confirm-button class='remove' action=(action 'removeSeeAlso' type)}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}
         </li>
     {{/each}}
 </ul>
@@ -131,7 +131,7 @@
     <tr>
       <td>{{property.name}}</td>
       <td>{{property-value entity=model property=property}}</td>
-      <td width="5ex">{{#if propertyAddingAllowed}}{{#confirm-button class='button remove' action='removeProperty' param=model param2=property}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}</td>
+      <td width="5ex">{{#if propertyAddingAllowed}}{{#confirm-button class='button remove' action=(action 'removeProperty' model property)}}{{fa-icon 'times'}}{{/confirm-button}}{{/if}}</td>
     </tr>
     {{/each}}
   </table>
