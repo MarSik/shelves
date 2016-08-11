@@ -166,6 +166,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 return !i.get('isNew');
             }));
 
+            // Prepare paper records
+            self.store.unloadAll('page');
             self.store.createRecord('page', {
                 name: "A4",
                 custom: true,
