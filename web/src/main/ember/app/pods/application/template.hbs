@@ -1,4 +1,4 @@
-{{title-bar stickerCount=stickers.length searchAction='search'}}
+{{title-bar stickerCount=stickers.length cartCount=cart.length searchAction=(route-action 'search')}}
 
 <div class="main-content">
     {{#if error}}<p class="alert-box warning">{{fa-icon 'exclamation-triangle'}} {{error}}</p>{{/if}}

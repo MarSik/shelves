@@ -21,11 +21,11 @@ export default Ember.Component.extend({
             var self = this;
 
             uploader.on('progress', function (e) {
-                self.sendAction('uploadProgress', e.percent);
+                self.get('uploadProgress')(e.percent);
             });
 
             uploader.on('didUpload', function (e) {
-                self.sendAction('uploadFinished', e);
+                self.get('uploadFinished')(e);
             });
 
             if (!Ember.isEmpty(files)) {
@@ -44,6 +44,8 @@ export default Ember.Component.extend({
             }
         }
     },
+    uploadProgress(progress) {},
+    uploadFinished(event) {},
     session: Ember.inject.service('session'),
     url: function () {
         return ENV.APP.API_ENDPOINT + this.get("endpoint");

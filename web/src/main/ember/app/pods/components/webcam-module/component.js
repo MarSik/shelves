@@ -36,7 +36,7 @@ export default Ember.Component.extend({
                     // Upload complete!
                     // 'code' will be the HTTP response code from the server, e.g. 200
                     // 'text' will be the raw response content
-                    self.sendAction('uploadFinished', JSON.parse(text));
+                    self.get('uploadFinished')(JSON.parse(text));
                     self.set('uploading', false);
                 });
             });
@@ -47,6 +47,7 @@ export default Ember.Component.extend({
             this.set('enabled', false);
         }
     },
+    uploadFinished(json) {},
     session: Ember.inject.service('session'),
     frozen: false,
     enabled: false,

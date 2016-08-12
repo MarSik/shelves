@@ -6,12 +6,13 @@
 
 <div class="row">
 <ul class="button-group round">
-  <li><button class="small" {{action 'addBarcode' model}}>Add barcode</button></li>
-  <li><button class="small" {{action 'addSticker' model}}>Add to sticker list</button></li>
-  <li><button class="small" {{action 'showBarcode' model}}>Show barcode</button></li>
+  <li><button class="small" {{action (route-action 'addBarcode' model)}}>Add barcode</button></li>
+  <li><button class="small" {{action (route-action 'addSticker' model)}}>Add to sticker list</button></li>
+  <li><button class="small" {{action (route-action 'showBarcode' model)}}>Show barcode</button></li>
   {{#if model.canBeDeleted}}
   <li>{{#confirm-button action=(route-action 'deleteEntity' model) class='small alert button'}}Delete{{/confirm-button}}</li>
   {{/if}}
+  {{outlet}}
 </ul>
 </div>
 
@@ -31,10 +32,10 @@
         {{#each model.codes as |code|}}
         {{bar-code model=code}}
         {{/each}}
-        <li><a {{action 'addBarcode' model}}>Add barcode</a></li>
+        <li><a {{action (route-action 'addBarcode' model)}}>Add barcode</a></li>
       </ul>
       {{else}}
-      <p class="placeholder">No barcode. <a {{action 'addBarcode' model}}>Associate one.</a></p>
+      <p class="placeholder">No barcode. <a {{action (route-action 'addBarcode' model)}}>Associate one.</a></p>
       {{/if}}
     </section>
   {{#if model.supportsAttachments}}
@@ -43,13 +44,13 @@
 
 <table>
     {{#each model.describedBy as |doc|}}
-        {{doc-summary-line deleteDocument="deleteDocument" doc=doc}}
+        {{doc-summary-line deleteDocument=(route-action "deleteDocument") doc=doc}}
     {{/each}}
 </table>
 
-{{save-from-web action='download' entity=model}}
-{{upload-attachments entity=model uploadFinished='uploadFinished'}}
-{{#webcam-module uploadFinished='uploadFinished' entity=model}}
+{{save-from-web action=(route-action 'download') entity=model}}
+{{upload-attachments entity=model uploadFinished=(route-action 'uploadFinished')}}
+{{#webcam-module uploadFinished=(route-action 'uploadFinished') entity=model}}
         <h3>Upload picture from webcam</h3>
 
         <p>Press pause to freeze a picure and then upload to send it to server. Simply un-pause and try again if you do not like the paused image. Once you are done, click the stop button to exit.</p>

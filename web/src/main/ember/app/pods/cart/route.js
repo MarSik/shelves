@@ -10,6 +10,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         },
         removeFromCart: function (obj) {
             this.get('cart').remove(obj);
+        },
+        addToStickers() {
+            var self = this;
+            this.get('cart').getAll().then(function (cart) {
+              cart.forEach(function (item) {
+                console.log("adding ", item, " to stickers");
+                self.send('addSticker', item.get('object'));
+              });
+            });
         }
     },
     model: function () {

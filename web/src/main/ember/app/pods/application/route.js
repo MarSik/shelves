@@ -263,6 +263,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             controller.set('availablePapers', self.store.all('page'));
             var stickers = self.store.findAll('sticker');
             controller.set('stickers', stickers);
+            var cartitems = self.get('cart').getAll();
+            controller.set('cart', cartitems);
             return stickers;
         }
     }
