@@ -1,7 +1,7 @@
 import Ember from 'ember';
 /* global $ */
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
     needs: "application",
     actions: {
         showCreateProperty: function () {
