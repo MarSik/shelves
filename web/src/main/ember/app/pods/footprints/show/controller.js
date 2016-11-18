@@ -10,14 +10,14 @@ export default Ember.Controller.extend({
 
             model.get('seeAlso').pushObject(fp);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         removeSeeAlso: function (fp) {
             var model = this.model;
             model.get('seeAlso').removeObject(fp);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         showAddSeeAlso: function () {

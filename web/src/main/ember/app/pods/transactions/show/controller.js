@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
 
       cancelPriceChange() {
         var purchase = this.get('selectedItem');
-        purchase.rollback();
+        purchase.rollbackAttributes();
         self.set('selectedItem', null);
       }
     },

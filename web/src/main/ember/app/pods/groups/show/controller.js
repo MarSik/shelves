@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
           self.growl.info("Group created");
         })
         .catch(function() {
-          newGroup.rollback();
+          newGroup.rollbackAttributes();
           self.growl.error("Group creation failed");
         });
     },
@@ -35,7 +35,7 @@ export default Ember.Controller.extend({
             group.get('showProperties').pushObject(property);
             var self = this;
             group.save().catch(function (e) {
-                group.rollback();
+                group.rollbackAttributes();
                 self.growl.error("Could not add property: "+e);
             });
         },
@@ -43,7 +43,7 @@ export default Ember.Controller.extend({
             group.get('showProperties').removeObject(property);
             var self = this;
             group.save().catch(function (e) {
-                group.rollback();
+                group.rollbackAttributes();
                 self.growl.error("Could not remove property: "+e);
             });
         },

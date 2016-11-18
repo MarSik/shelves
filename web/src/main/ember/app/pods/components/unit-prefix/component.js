@@ -7,7 +7,7 @@ export default Ember.Component.extend({
       var prefixes = unit.get('prefixes');
       prefixes.pushObject(prefix);
       unit.save().catch(function () {
-        unit.rollback();
+        unit.rollbackAttributes();
       });
     },
     disablePrefix: function (prefix) {
@@ -15,7 +15,7 @@ export default Ember.Component.extend({
       var prefixes = unit.get('prefixes');
       prefixes.removeObject(prefix);
       unit.save().catch(function () {
-        unit.rollback();
+        unit.rollbackAttributes();
       });
     }
   },

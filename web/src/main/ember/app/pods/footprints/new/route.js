@@ -9,7 +9,7 @@ export default Ember.Route.extend({
                 self.transitionTo('footprints.show', fp);
             }).catch(function (reason) {
                 self.growl.error('Failed to save: '+reason);
-                entity.rollback();
+                entity.rollbackAttributes();
             });
         }
     },

@@ -21,7 +21,7 @@ export default Ember.Controller.extend({
                     self.growl.info("Property created");
                 })
                 .catch(function(e) {
-                    newProperty.rollback();
+                    newProperty.rollbackAttributes();
                     self.growl.error("Property creation failed: "+e);
                 });
         }

@@ -22,7 +22,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             project.save().then(function (p) {
                 self.transitionTo('items.show', p);
             }).catch(function () {
-                project.rollback();
+                project.rollbackAttributes();
             });
         }
     },

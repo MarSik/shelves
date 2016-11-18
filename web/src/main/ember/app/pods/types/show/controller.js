@@ -93,7 +93,7 @@ export default Ember.Controller.extend({
             console.log("Property saved with value "+normalizedValue);
 
             entity.save().catch(function (e) {
-                e.rollback();
+                e.rollbackAttributes();
             });
         },
         removeProperty: function (entity, property) {
@@ -101,7 +101,7 @@ export default Ember.Controller.extend({
             entity.get('values').set(property.get('id'), null);
 
             entity.save().catch(function (e) {
-                e.rollback();
+                e.rollbackAttributes();
             });
         },
         enableAddProperty: function () {
@@ -130,7 +130,7 @@ export default Ember.Controller.extend({
             var model = this.model;
             model.get('groups').removeObject(group);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         showAddGroup: function () {
@@ -160,7 +160,7 @@ export default Ember.Controller.extend({
             var model = this.model;
             model.get('footprints').removeObject(footprint);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         showAddFootprint: function () {
@@ -172,7 +172,7 @@ export default Ember.Controller.extend({
         changeObserved: function () {
             var model = this.get('model');
             model.save().catch(function() {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         addSeeAlso: function (type) {
@@ -183,14 +183,14 @@ export default Ember.Controller.extend({
 
             model.get('seeAlso').pushObject(type);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         removeSeeAlso: function (type) {
             var model = this.model;
             model.get('seeAlso').removeObject(type);
             model.save().catch(function () {
-                model.rollback();
+                model.rollbackAttributes();
             });
         },
         showAddSeeAlso: function () {

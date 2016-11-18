@@ -15,7 +15,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             unit.save().then(function (u) {
                 self.transitionTo('units.show', u);
             }).catch(function () {
-                unit.rollback();
+                unit.rollbackAttributes();
             });
         }
     },

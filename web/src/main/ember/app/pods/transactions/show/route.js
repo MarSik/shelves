@@ -15,7 +15,7 @@ export default Ember.Route.extend({
                 // and implicit references from invalid lots
                 purchase.get('lots').pushObject(l);
             }).catch(function (e) {
-                newDoc.rollback();
+                newDoc.rollbackAttributes();
                 self.growl.error('Delivery request failed: '+e);
             });
         },

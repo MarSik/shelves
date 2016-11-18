@@ -25,7 +25,7 @@ export default Ember.Controller.extend({
             var self = this;
 
             nl.save().catch(function (e) {
-                nl.rollback();
+                nl.rollbackAttributes();
                 self.growl.error(e);
             }).then(function () {
                 console.log("MISSING");
@@ -46,7 +46,7 @@ export default Ember.Controller.extend({
             var self = this;
 
             lot.save().catch(function (e) {
-                lot.rollback();
+                lot.rollbackAttributes();
                 self.growl.error(e);
             });
         },
@@ -59,7 +59,7 @@ export default Ember.Controller.extend({
           var self = this;
 
           lot.save().catch(function (e) {
-            lot.rollback();
+            lot.rollbackAttributes();
             self.growl.error(e);
           });
         },
@@ -69,7 +69,7 @@ export default Ember.Controller.extend({
           var self = this;
 
           lot.save().catch(function (e) {
-            lot.rollback();
+            lot.rollbackAttributes();
             self.growl.error(e);
           });
         },

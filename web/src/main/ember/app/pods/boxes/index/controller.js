@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
           self.growl.info("Box created");
         })
         .catch(function() {
-          newBox.rollback();
+          newBox.rollbackAttributes();
           self.growl.error("Box creation failed");
         });
     }

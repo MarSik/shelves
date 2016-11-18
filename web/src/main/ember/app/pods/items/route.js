@@ -40,11 +40,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 project.save().then(function (p) {
                     self.transitionTo('items.show', p);
                 }).catch(function () {
-                    project.rollback();
+                    project.rollbackAttributes();
                     self.transitionTo('types.show', t);
                 });
             }).catch(function () {
-                type.rollback();
+                type.rollbackAttributes();
             });
         },
         addRequirement: function (project, type, count) {

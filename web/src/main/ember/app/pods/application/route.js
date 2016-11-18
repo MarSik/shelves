@@ -72,7 +72,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 entity.get('describedBy').pushObject(e);
                 entity.save();
             }).catch(function (e) {
-                newDoc.rollback();
+                newDoc.rollbackAttributes();
                 self.growl.error('Download request failed: '+e);
             });
         },
@@ -94,7 +94,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
             });
 
             newLot.save().catch(function () {
-                newLot.rollback();
+                newLot.rollbackAttributes();
             });
         },
         invalidateSession() {

@@ -14,7 +14,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                     item.save().then(function () {
                         self.growl.info(item.get('name') + " moved to " + group.get('fullName'));
                     }).catch(function () {
-                        item.rollback();
+                        item.rollbackAttributes();
                     });
                 });
             });

@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
           self.growl.info("Group created");
         })
         .catch(function() {
-          newGroup.rollback();
+          newGroup.rollbackAttributes();
           self.growl.error("Group creation failed");
         });
     }
