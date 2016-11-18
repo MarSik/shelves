@@ -30,11 +30,11 @@ export default Ember.Controller.extend({
             });
         }
     },
-    needs: "application",
+    application: Ember.inject.controller("application"),
     footprintSorting: ['name'],
-    sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'footprintSorting'),
+    sortedFootprints: Ember.computed.sort('application.availableFootprints', 'footprintSorting'),
     groupSorting: ['fullName'],
-    sortedGroups: Ember.computed.sort('controllers.application.availableGroups', 'groupSorting'),
+    sortedGroups: Ember.computed.sort('application.availableGroups', 'groupSorting'),
     incompleteForm: function () {
         return Ember.isEmpty(this.get('model.name'));
     }.property('model.name')

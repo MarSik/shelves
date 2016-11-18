@@ -36,6 +36,9 @@ module.exports = function(environment) {
     ENV.APP.API_SERVER = 'http://localhost:8080';
     ENV.APP.API_BASE = '';
     ENV.APP.API_NAMESPACE = ENV.APP.API_BASE + 'v1';
+      ENV.APP.API_SERVER = 'https://api.shelves.cz';
+      ENV.APP.API_BASE = '';
+      ENV.APP.API_NAMESPACE = ENV.APP.API_BASE + 'v1';
   }
 
   if (environment === 'test') {

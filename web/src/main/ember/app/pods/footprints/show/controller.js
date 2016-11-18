@@ -28,10 +28,10 @@ export default Ember.Controller.extend({
         }
     },
 
-    needs: "application",
+    application: Ember.inject.controller("application"),
 
     fpSorting: ['name'],
 
-    sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'fpSorting'),
-    footprintTypes: Ember.computed.alias('controllers.application.availableFootprintTypes')
+    sortedFootprints: Ember.computed.sort('application.availableFootprints', 'fpSorting'),
+    footprintTypes: Ember.computed.alias('application.availableFootprintTypes')
 });

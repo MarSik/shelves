@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-    needs: ['application'],
+    application: Ember.inject.controller("application"),
     actions: {
         clearStickers: function () {
             console.log('Clearing sticker...');
@@ -37,7 +37,7 @@ export default Ember.Controller.extend({
         }
     },
 
-    papers: Ember.computed.alias('controllers.application.availablePapers'),
+    papers: Ember.computed.alias('application.availablePapers'),
     paper: null,
 
     knownPaper: function() {

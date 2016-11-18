@@ -1,7 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-    needs: ["application", "transactions"],
+    application: Ember.inject.controller("application"),
+    transactions: Ember.inject.controller("transactions"),
     actions: {
         addRow: function () {
             this.store.createRecord('purchase', {
@@ -52,9 +53,9 @@ export default Ember.Controller.extend({
     selectedSource: null,
 
     typeSorting: ['name'],
-    sortedTypes: Ember.computed.sort('controllers.application.availableTypes', 'typeSorting'),
+    sortedTypes: Ember.computed.sort('application.availableTypes', 'typeSorting'),
     sourceSorting: ['name'],
-    sortedSources: Ember.computed.sort('controllers.application.availableSources', 'sourceSorting'),
+    sortedSources: Ember.computed.sort('application.availableSources', 'sourceSorting'),
     submitDisabled: function () {
         if (Ember.isEmpty(this.get('model.name'))) {
             return true;
@@ -77,9 +78,9 @@ export default Ember.Controller.extend({
         return false;
     }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
 
-    pendingTransactions: Ember.computed("pendingOnly", "controllers.transactions.model.@each.fullyDelivered",
+    pendingTransactions: Ember.computed("pendingOnly", "transactions.model.@each.fullyDelivered",
       function () {
-        var trs = this.get('controllers.transactions.model');
+        var trs = this.get('transactions.model');
 
         if (this.get('pendingOnly')) {
           return trs.filterBy('fullyDelivered', false).sortBy('date');

@@ -2,7 +2,7 @@ import Ember from 'ember';
 /* global $ */
 
 export default Ember.Controller.extend({
-    needs: "application",
+    application: Ember.inject.controller("application"),
     actions: {
         showCreateProperty: function () {
           this.set('showCreateDialog', true);
@@ -32,9 +32,9 @@ export default Ember.Controller.extend({
         return Ember.isEmpty(this.get('propertyName')) || Ember.isEmpty(this.get('propertyUnit')) || Ember.isEmpty(this.get('propertyBase'));
     }.property('propertyName', 'propertyUnit', 'propertyBase'),
     prefixSorting: ['base', 'power'],
-    sortedPrefixes: Ember.computed.sort('controllers.application.availableSiPrefixes', 'prefixSorting'),
+    sortedPrefixes: Ember.computed.sort('application.availableSiPrefixes', 'prefixSorting'),
     unitSorting: ['name'],
-    sortedUnits: Ember.computed.sort('controllers.application.availableUnits', 'unitSorting'),
+    sortedUnits: Ember.computed.sort('application.availableUnits', 'unitSorting'),
     propertyNotComplete: function () {
         return Ember.isEmpty(this.get('propertyName')) || Ember.isEmpty(this.get('propertyBase')) || Ember.isEmpty(this.get('propertyUnit'));
     }.property('propertyName', 'propertyBase', 'propertyUnit')

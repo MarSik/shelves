@@ -222,21 +222,21 @@ export default Ember.Controller.extend({
             return true;
         }
     },
-    needs: "application",
+    application: Ember.inject.controller("application"),
     propertySorting: ['name'],
-    sortedProperties: Ember.computed.sort('controllers.application.availableProperties', 'propertySorting'),
+    sortedProperties: Ember.computed.sort('application.availableProperties', 'propertySorting'),
 
     typeSorting: ['fullName'],
-    sortedTypes: Ember.computed.sort('controllers.application.availableTypes', 'typeSorting'),
+    sortedTypes: Ember.computed.sort('application.availableTypes', 'typeSorting'),
 
     groupSorting: ['fullName'],
-    sortedGroups: Ember.computed.sort('controllers.application.availableGroups', 'groupSorting'),
+    sortedGroups: Ember.computed.sort('application.availableGroups', 'groupSorting'),
 
     footprintSorting: ['fullName'],
-    sortedFootprints: Ember.computed.sort('controllers.application.availableFootprints', 'footprintSorting'),
+    sortedFootprints: Ember.computed.sort('application.availableFootprints', 'footprintSorting'),
 
     boxSorting: ['fullName'],
-    sortedBoxes: Ember.computed.sort('controllers.application.availableLocations', 'boxSorting'),
+    sortedBoxes: Ember.computed.sort('application.availableLocations', 'boxSorting'),
 
     unitPrefixes: function () {
         return this.get('propertyToAdd.unit.prefixes');
