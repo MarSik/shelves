@@ -10,7 +10,7 @@ var ShelvesStickerSerializer = DS.JSONSerializer.extend({
 
     // if provided, use the mapping provided by `attrs` in
     // the serializer
-    var payloadKey = this._getMappedKey(key);
+    var payloadKey = this._getMappedKey(key, snapshot.type);
     if (payloadKey === key && this.keyForRelationship) {
       payloadKey = this.keyForRelationship(key, "belongsTo", "serialize");
     }
