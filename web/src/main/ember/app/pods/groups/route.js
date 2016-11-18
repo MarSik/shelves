@@ -7,8 +7,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         moveItem: function (itemId, groupId) {
             var self = this;
             console.log('drop processing');
-            this.store.find('type', itemId).then(function (item) {
-                self.store.find('group', groupId).then(function (group) {
+            this.store.findRecord('type', itemId).then(function (item) {
+                self.store.findRecord('group', groupId).then(function (group) {
                     item.get('groups').clear();
                     item.get('groups').pushObject(group);
                     item.save().then(function () {

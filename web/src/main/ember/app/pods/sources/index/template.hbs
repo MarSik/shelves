@@ -4,7 +4,7 @@
     <button {{action 'createSource'}}>Create source</button>
 
     <ul class="small-block-grid-2 large-block-grid-4">
-        {{#each this as |source|}}
+        {{#each sorted as |source|}}
         <li>
             {{rest-image models='sources' entity=source resource='icon' size=48}}
             {{#link-to 'sources.show' source}}{{source.name}}{{/link-to}}<br/>

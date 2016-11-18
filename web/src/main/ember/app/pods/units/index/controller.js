@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
     }
   },
     sortProperties: ['name'],
-    sortAscending: true,
+    sorted: Ember.computed.sort('model', 'sortProperties'),
     createDisabled: function () {
         return Ember.isEmpty(this.get('unitName'));
     }.property('unitName')

@@ -4,7 +4,7 @@
   <button {{action 'showCreateUnit'}}>{{fa-icon 'plus'}} Create unit</button>
 
   <ul class="small-block-grid-2 large-block-grid-4">
-        {{#each this as |unit|}}
+        {{#each sorted as |unit|}}
         <li>
             {{#link-to 'units.show' unit}}{{unit.name}}{{/link-to}}<br/>{{unit.summary}}
             <aside>[ {{unit.symbol}} ]</aside>

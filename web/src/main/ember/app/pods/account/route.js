@@ -9,7 +9,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
     },
     model: function() {
-        return this.store.find('user', 'whoami');
+        return this.store.findRecord('user', 'whoami');
     },
     activate: function() {
         $(document).attr('title', 'shelves - User information');

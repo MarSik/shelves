@@ -4,7 +4,7 @@
   <button {{action 'showCreateList'}}>{{fa-icon 'plus'}} Create new list</button>
 
   <ul class="item-list">
-        {{#each this as |list|}}
+        {{#each sorted as |list|}}
             <li>{{#link-to 'lists.show' list}}{{list.name}}{{/link-to}}</li>
         {{/each}}
     </ul>

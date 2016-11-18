@@ -18,8 +18,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         moveItem: function (itemId, boxId) {
             var self = this;
             console.log('drop processing');
-            this.store.find('lot', itemId).then(function (item) {
-                self.store.find('box', boxId).then(function (box) {
+            this.store.findRecord('lot', itemId).then(function (item) {
+                self.store.findRecord('box', boxId).then(function (box) {
                     self.send('moveLot', item, box);
                 });
             });

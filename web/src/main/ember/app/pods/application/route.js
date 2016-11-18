@@ -138,33 +138,15 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
     preloadData: function (self, controller) {
         if (self.get('session.isAuthenticated')) {
-            controller.set('availableFootprints', self.store.filter("footprint", function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableFootprintTypes', self.store.filter("footprinttype", {}, function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableGroups', self.store.filter('group', function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableTypes', self.store.filter('type', function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableLocations', self.store.filter('box', function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableSources', self.store.filter('source', function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableSiPrefixes', self.store.filter('siprefix', {}, function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableUnits', self.store.filter('unit', function (i) {
-                return !i.get('isNew');
-            }));
-            controller.set('availableProperties', self.store.filter('property', function (i) {
-                return !i.get('isNew');
-            }));
+            controller.set('availableFootprints', self.store.peekAll("footprint").filterBy('isNew', false));
+            controller.set('availableFootprintTypes', self.store.peekAll("footprinttype").filterBy('isNew', false));
+            controller.set('availableGroups', self.store.peekAll('group').filterBy('isNew', false));
+            controller.set('availableTypes', self.store.peekAll('type').filterBy('isNew', false));
+            controller.set('availableLocations', self.store.peekAll('box').filterBy('isNew', false));
+            controller.set('availableSources', self.store.peekAll('source').filterBy('isNew', false));
+            controller.set('availableSiPrefixes', self.store.peekAll('siprefix').filterBy('isNew', false));
+            controller.set('availableUnits', self.store.peekAll('unit').filterBy('isNew', false));
+            controller.set('availableProperties', self.store.peekAll('property').filterBy('isNew', false));
 
             // Prepare paper records
             self.store.unloadAll('page');
@@ -260,7 +242,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 detailsFontSize: 10
             });
 
-            controller.set('availablePapers', self.store.all('page'));
+            controller.set('availablePapers', self.store.peekAll('page'));
             var stickers = self.store.findAll('sticker');
             controller.set('stickers', stickers);
             var cartitems = self.get('cart').getAll();

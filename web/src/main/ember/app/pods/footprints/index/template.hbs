@@ -4,7 +4,7 @@
     <button {{action 'createFootprint'}}>{{fa-icon 'plus'}} Create footprint</button>
 
     <ul class="item-list">
-        {{#each this as |fp|}}
+        {{#each sorted as |fp|}}
             <li>{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}}</li>
         {{/each}}
     </ul>
