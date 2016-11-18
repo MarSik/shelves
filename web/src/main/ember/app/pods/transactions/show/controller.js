@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
       cancelPriceChange() {
         var purchase = this.get('selectedItem');
         purchase.rollbackAttributes();
-        self.set('selectedItem', null);
+        this.set('selectedItem', null);
       }
     },
     boxSorting: ['fullName'],
