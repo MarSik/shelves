@@ -76,7 +76,7 @@ export default Ember.Controller.extend({
         }
 
         return false;
-    }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type.content', 'model.items.@each.count'),
+    }.property('model.name', 'model.source.content', 'model.items.length', 'model.items.@each.type', 'model.items.@each.count'),
 
     pendingTransactions: Ember.computed("pendingOnly", "transactions.model.@each.fullyDelivered",
       function () {
