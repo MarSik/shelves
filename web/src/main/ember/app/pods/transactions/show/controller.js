@@ -32,7 +32,8 @@ export default Ember.Controller.extend({
       }
     },
     boxSorting: ['fullName'],
-    sortedBoxes: Ember.computed.sort('application.availableLocations', 'boxSorting'),
+    allBoxes: [],
+    sortedBoxes: Ember.computed.sort('allBoxes', 'boxSorting'),
     itemSorting: ['type.name'],
     sortedItems: Ember.computed.sort('model.items', 'itemSorting'),
     location: null,

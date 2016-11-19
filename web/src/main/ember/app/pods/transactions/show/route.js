@@ -30,7 +30,8 @@ export default Ember.Route.extend({
           model.set("locked", false);
         }
     },
-    afterModel() {
-      this.store.findAll('box');
+    setupController: function(controller, model) {
+        controller.set('model', model);
+        controller.set('allBoxes', this.store.findAll('box'));
     }
 });
