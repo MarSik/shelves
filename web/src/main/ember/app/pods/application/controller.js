@@ -22,5 +22,46 @@ export default Ember.Controller.extend({
 
   showCodeForModelPlural: Ember.computed("showCodeFor", function () {
     return Ember.Inflector.inflector.pluralize(this.get('showCodeFor.constructor.modelName'));
+  }),
+
+  session: Ember.inject.service('session'),
+  cart: Ember.inject.service(),
+  store: Ember.inject.service(),
+
+  availableFootprints: Ember.computed(function() {
+    return this.get('store').findAll("footprint");
+  }),
+  availableFootprintTypes: Ember.computed(function() {
+    return this.get('store').findAll("footprinttype");
+  }),
+  availableGroups: Ember.computed(function() {
+    return this.get('store').findAll('group'); 
+  }),
+  availableTypes: Ember.computed(function() {
+    return this.get('store').findAll('type'); 
+  }),
+  availableLocations: Ember.computed(function() {
+    return this.get('store').findAll('box');
+  }),
+  availableSources: Ember.computed(function() {
+    return this.get('store').findAll('source');
+  }),
+  availableSiPrefixes: Ember.computed(function() {
+    return this.get('store').findAll('siprefix');
+  }),
+  availableUnits: Ember.computed(function() {
+    return this.get('store').findAll('unit');
+  }),
+  availableProperties: Ember.computed(function() {
+    return this.get('store').findAll('property');
+  }),
+  availablePapers: Ember.computed(function() {
+    return this.get('store').findAll('page');
+  }),
+  stickers: Ember.computed(function() {
+    return this.get('store').findAll('sticker');
+  }),
+  cartitems: Ember.computed(function() {
+    return this.get('cart').findAll();
   })
 });

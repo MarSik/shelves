@@ -10,9 +10,7 @@ export default Ember.Controller.extend({
         }
     },
     displayAddDescribes: false,
-    everything: function() {
-      return this.store.filter("type", function (i) {
-        return !i.get('isNew');
-      });
-    }.property()
+    everything: Ember.computed(function() {
+      return this.store.findAll("type");
+    })
 });

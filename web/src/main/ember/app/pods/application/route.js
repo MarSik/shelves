@@ -5,6 +5,7 @@ import inject from 'webapp/injectors/repositories';
 export default Ember.Route.extend(ApplicationRouteMixin, {
     capabilities: inject('capabilities'),
     session: Ember.inject.service('session'),
+    store: Ember.inject.service(),
     cart: Ember.inject.service(),
     actions: {
         addToCart: function(item) {
@@ -111,6 +112,101 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         results = regex.exec(location.search);
       return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     },
+    beforeModel() {
+      // Prepare paper records
+      this.get('store').unloadAll('page');
+      this.get('store').createRecord('page', {
+	name: "A4",
+	custom: true,
+	pageSize: 'A4',
+	topMarginMm: 0,
+	leftMarginMm: 0,
+	stickerHorizontalCount: 1,
+	stickerVerticalCount: 1,
+	stickerWidthMm: 0,
+	stickerHeightMm: 0,
+	stickerTopMarginMm: 0,
+	stickerLeftMarginMm: 0,
+	rightSpaceMm: 0,
+	bottomSpaceMm: 0,
+	titleFontSize: 12,
+	detailsFontSize: 10
+      });
+
+
+      this.get('store').createRecord('page', {
+	name: "A4 Landscape",
+	custom: true,
+	pageSize: 'A4R',
+	topMarginMm: 0,
+	leftMarginMm: 0,
+	stickerHorizontalCount: 1,
+	stickerVerticalCount: 1,
+	stickerWidthMm: 0,
+	stickerHeightMm: 0,
+	stickerTopMarginMm: 0,
+	stickerLeftMarginMm: 0,
+	rightSpaceMm: 0,
+	bottomSpaceMm: 0,
+	titleFontSize: 12,
+	detailsFontSize: 10
+      });
+
+      this.get('store').createRecord('page', {
+	name: "Letter",
+	custom: true,
+	pageSize: 'LETTER',
+	topMarginMm: 0,
+	leftMarginMm: 0,
+	stickerHorizontalCount: 1,
+	stickerVerticalCount: 1,
+	stickerWidthMm: 0,
+	stickerHeightMm: 0,
+	stickerTopMarginMm: 0,
+	stickerLeftMarginMm: 0,
+	rightSpaceMm: 0,
+	bottomSpaceMm: 0,
+	titleFontSize: 12,
+	detailsFontSize: 10
+      });
+
+
+      this.get('store').createRecord('page', {
+	name: "Letter Landscape",
+	custom: true,
+	pageSize: 'LETTERR',
+	topMarginMm: 0,
+	leftMarginMm: 0,
+	stickerHorizontalCount: 1,
+	stickerVerticalCount: 1,
+	stickerWidthMm: 0,
+	stickerHeightMm: 0,
+	stickerTopMarginMm: 0,
+	stickerLeftMarginMm: 0,
+	rightSpaceMm: 0,
+	bottomSpaceMm: 0,
+	titleFontSize: 12,
+	detailsFontSize: 10
+      });
+
+      this.get('store').createRecord('page', {
+	name: "Print Etikety KZK 2500 - 3x8 70x36mm",
+	custom: false,
+	pageSize: 'A4',
+	topMarginMm: 5,
+	leftMarginMm: 1,
+	stickerHorizontalCount: 3,
+	stickerVerticalCount: 8,
+	stickerWidthMm: 70,
+	stickerHeightMm: 36,
+	stickerTopMarginMm: 1,
+	stickerLeftMarginMm: 3,
+	rightSpaceMm: 0,
+	bottomSpaceMm: 0,
+	titleFontSize: 12,
+	detailsFontSize: 10
+      });
+    },
     model() {
       return this.get('capabilities').fetch();
     },
@@ -131,123 +227,5 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
           });
         }
       }
-    },
-    setupController: function(controller, model) {
-        controller.set('model', model);
-        return this.preloadData(this, controller);
-    },
-    preloadData: function (self, controller) {
-        if (self.get('session.isAuthenticated')) {
-            controller.set('availableFootprints', self.store.peekAll("footprint").filterBy('isNew', false));
-            controller.set('availableFootprintTypes', self.store.peekAll("footprinttype").filterBy('isNew', false));
-            controller.set('availableGroups', self.store.peekAll('group').filterBy('isNew', false));
-            controller.set('availableTypes', self.store.peekAll('type').filterBy('isNew', false));
-            controller.set('availableLocations', self.store.peekAll('box').filterBy('isNew', false));
-            controller.set('availableSources', self.store.peekAll('source').filterBy('isNew', false));
-            controller.set('availableSiPrefixes', self.store.peekAll('siprefix').filterBy('isNew', false));
-            controller.set('availableUnits', self.store.peekAll('unit').filterBy('isNew', false));
-            controller.set('availableProperties', self.store.peekAll('property').filterBy('isNew', false));
-
-            // Prepare paper records
-            self.store.unloadAll('page');
-            self.store.createRecord('page', {
-                name: "A4",
-                custom: true,
-                pageSize: 'A4',
-                topMarginMm: 0,
-                leftMarginMm: 0,
-                stickerHorizontalCount: 1,
-                stickerVerticalCount: 1,
-                stickerWidthMm: 0,
-                stickerHeightMm: 0,
-                stickerTopMarginMm: 0,
-                stickerLeftMarginMm: 0,
-                rightSpaceMm: 0,
-                bottomSpaceMm: 0,
-                titleFontSize: 12,
-                detailsFontSize: 10
-            });
-
-
-            self.store.createRecord('page', {
-                name: "A4 Landscape",
-                custom: true,
-                pageSize: 'A4R',
-                topMarginMm: 0,
-                leftMarginMm: 0,
-                stickerHorizontalCount: 1,
-                stickerVerticalCount: 1,
-                stickerWidthMm: 0,
-                stickerHeightMm: 0,
-                stickerTopMarginMm: 0,
-                stickerLeftMarginMm: 0,
-                rightSpaceMm: 0,
-                bottomSpaceMm: 0,
-                titleFontSize: 12,
-                detailsFontSize: 10
-            });
-
-            self.store.createRecord('page', {
-                name: "Letter",
-                custom: true,
-                pageSize: 'LETTER',
-                topMarginMm: 0,
-                leftMarginMm: 0,
-                stickerHorizontalCount: 1,
-                stickerVerticalCount: 1,
-                stickerWidthMm: 0,
-                stickerHeightMm: 0,
-                stickerTopMarginMm: 0,
-                stickerLeftMarginMm: 0,
-                rightSpaceMm: 0,
-                bottomSpaceMm: 0,
-                titleFontSize: 12,
-                detailsFontSize: 10
-            });
-
-
-            self.store.createRecord('page', {
-                name: "Letter Landscape",
-                custom: true,
-                pageSize: 'LETTERR',
-                topMarginMm: 0,
-                leftMarginMm: 0,
-                stickerHorizontalCount: 1,
-                stickerVerticalCount: 1,
-                stickerWidthMm: 0,
-                stickerHeightMm: 0,
-                stickerTopMarginMm: 0,
-                stickerLeftMarginMm: 0,
-                rightSpaceMm: 0,
-                bottomSpaceMm: 0,
-                titleFontSize: 12,
-                detailsFontSize: 10
-            });
-
-            self.store.createRecord('page', {
-                name: "Print Etikety KZK 2500 - 3x8 70x36mm",
-                custom: false,
-                pageSize: 'A4',
-                topMarginMm: 5,
-                leftMarginMm: 1,
-                stickerHorizontalCount: 3,
-                stickerVerticalCount: 8,
-                stickerWidthMm: 70,
-                stickerHeightMm: 36,
-                stickerTopMarginMm: 1,
-                stickerLeftMarginMm: 3,
-                rightSpaceMm: 0,
-                bottomSpaceMm: 0,
-                titleFontSize: 12,
-                detailsFontSize: 10
-            });
-
-            controller.set('availablePapers', self.store.peekAll('page'));
-            var stickers = self.store.findAll('sticker');
-            controller.set('stickers', stickers);
-            var cartitems = self.get('cart').getAll();
-            controller.set('cart', cartitems);
-            return stickers;
-        }
     }
 });
