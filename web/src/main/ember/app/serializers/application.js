@@ -194,6 +194,10 @@ var ShelvesSerializer = DS.JSONSerializer.extend({
       documentHash.included = documentHash.included.map(this._normalizeResourceHelper, this);
     }
 
+    if (documentHash != null && !("meta" in documentHash)) {
+      documentHash.meta = {};
+    }
+
     return documentHash;
   },
 
