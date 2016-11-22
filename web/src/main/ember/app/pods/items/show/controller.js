@@ -11,9 +11,9 @@ export default Ember.Controller.extend({
             this.set('showAlternativeDialog', false);
             return true;
         },
-        assignLot: function (req, lots) {
+        assignLot: function (req, lotGroups) {
             this.set('assignLotToRequirement', req);
-            this.set('assignableLots', lots);
+            this.set('assignableLotGroups', lotGroups);
         },
         performAssignment: function (req, lot, count) {
             var nl = this.store.createRecord('lot', {
@@ -32,13 +32,13 @@ export default Ember.Controller.extend({
                 console.log(req.get('missing'));
                 if (req.get('missing') <= 0) {
                     self.set('assignLotToRequirement', null);
-                    self.set('assignableLots', []);
+                    self.set('assignableLotGroups', []);
                 }
             });
         },
         closeAssignment: function () {
             this.set('assignLotToRequirement', null);
-            this.set('assignableLots', []);
+            this.set('assignableLotGroups', []);
         },
         unassignLot: function (lot) {
             lot.set('usedBy', null);
@@ -100,7 +100,7 @@ export default Ember.Controller.extend({
     }.property('requiredType', 'requiredCount'),
 
     assignLotToRequirement: null,
-    assignableLots: [],
+    assignableLotGroups: [],
 
     displayRequirements: Ember.computed.map('model.requirements', m => m),
     importableDocuments: Ember.computed.filterBy('model.describedBy', 'contentType', 'application/x-kicad-schematic'),

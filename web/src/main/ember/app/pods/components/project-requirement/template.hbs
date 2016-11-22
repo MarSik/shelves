@@ -8,7 +8,7 @@
     {{#if r.missing}}<button {{action 'assignLot'}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}{{/unless}}
   </td>
 </tr>
-{{#each possibleTypes as |type|}}
+{{#each r.type as |type|}}
 <tr>
   <td>{{fa-icon 'book'}}</td>
   <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>

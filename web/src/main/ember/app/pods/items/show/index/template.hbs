@@ -28,7 +28,10 @@ placeholder="Select a type" }}
 
 {{#modal-dialog condition=assignLotToRequirement title="Add lot"}}
 <table>
-  {{#each assignableLots as |lot|}}
+  {{#each assignLotToRequirement.type as |assignableType|}}
+  {{#each assignableType.lots as |lot|}}
+  {{#if lot.valid}}
+  {{#if lot.canBeAssigned}}
   <tr>
     <td>{{fa-icon lot.icon}}</td>
     <td>{{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}</td>
@@ -40,6 +43,9 @@ placeholder="Select a type" }}
     <td>{{#link-to lot.link lot}}[info]{{/link-to}}</td>
     <td>{{#add-count-button action=(action 'performAssignment' assignLotToRequirement lot) default=assignLotToRequirement.missing}}assign{{/add-count-button}}</td>
   </tr>
+  {{/if}}
+  {{/if}}
+  {{/each}}
   {{/each}}
 </table>
 {{/modal-dialog}}

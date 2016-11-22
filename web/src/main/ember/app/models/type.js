@@ -25,6 +25,7 @@ export default NamedBase.extend({
   footprints: hasMany("footprint", {async: true}),
   lots: hasMany("lot", {async: true, inverse: "type", polymorphic: true}),
   validLots: Ember.computed.filterBy("lots", "valid", true),
+  assignableLots: Ember.computed.filterBy("validLots", "canBeAssigned", true),
 
   seeAlso: hasMany("type", {async: true, inverse: "seeAlso"}),
 

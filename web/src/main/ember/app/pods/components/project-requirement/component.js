@@ -15,7 +15,8 @@ export default Ember.Component.extend({
       this.sendAction("unassignLot", lot, count);
     },
     assignLot() {
-      this.sendAction("assignLot", this.get("r"), this.get('assignableLots'));
+      console.log("Assignable lot groups: ", JSON.stringify(this.get('assignableLotGroups')));
+      this.sendAction("assignLot", this.get("r"));
     },
     showAddAlternative() {
       this.sendAction("showAddAlternative", this.get("r"));
@@ -28,46 +29,6 @@ export default Ember.Component.extend({
     }
   },
 
-  possibleTypes: Ember.computed.map('r.type', m => m),
   assignedLots: Ember.computed.filterBy('r.lots', 'valid', true),
-
-  candidateLots: Ember.computed('possibleTypes.@each.lots', {
-    set(key, value) {
-      return value;
-    },
-    get() {
-      var self = this;
-      var req = this.get('r');
-
-      console.log('Recomputing available parts');
-
-      if (Ember.isEmpty(req)) {
-        return [];
-      }
-
-      Promise.all(this.get('possibleTypes')).then(function (types) {
-        var lots = [];
-        types.forEach(function (type) {
-          lots.pushObject(type.get('lots'));
-        });
-
-        Promise.all(lots).then(function (lots) {
-          var usable = [];
-          lots.forEach(function (lotArray) {
-            lotArray.forEach(function (lot) {
-              usable.pushObject(lot);
-            });
-          });
-          self.set('candidateLots', usable);
-        });
-      });
-
-      return [];
-    }
-  }),
-
-  assignableLots: Ember.computed.map('resolvedLots', m => m),
-  resolvedLots: Ember.computed.filterBy('candidateLots', 'canBeAssigned', true)
-
   // r
 });
