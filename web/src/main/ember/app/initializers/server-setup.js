@@ -12,5 +12,6 @@ export function initialize(application) {
 
 export default {
     name: 'api-server-setup',
-    before: 'ember-data'
+    before: 'ember-data',
+    initialize: initialize
 };
