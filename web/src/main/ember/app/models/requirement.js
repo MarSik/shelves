@@ -19,21 +19,22 @@ export default IdentifiedBase.extend({
         return this.get('type.length') > 1;
     }.property('type'),
 
-    missing: Ember.computed('lots.@each.count', 'count', {
-      set(key, value) {
-          return value;
-      },
-      get() {
-        var self = this;
-        this.get('lots').then(function (lots) {
-          var assigned = 0;
-          lots.forEach(function (lot) {
-            assigned += lot.get('count');
-          });
-          self.set('missing', self.get('count') - assigned);
-        });
-        return 0;
-      }
+    _lots: Ember.computed('lots.@each.valid', {
+      const promise = this.get('lots').then(lots => {
+        return lots.filterBy('valid');
+      });
+
+      return DS.PromiseArray.create({
+        promise: promise
+      });
+    }),
+
+    missing: Ember.computed('_lots.@each.count', 'count', function () {
+      var assigned = 0;
+      this.get('_lots').forEach(function (lot) {
+        assigned += lot.get('count');
+      });
+      return this.get('count') - assigned;
     }),
 
     progress: function () {
@@ -41,7 +42,7 @@ export default IdentifiedBase.extend({
         var soldered = 0;
         var assigned = 0;
 
-        this.get('lots').forEach(function (req) {
+        this.get('_lots').forEach(function (req) {
             var prog = req.get('progress');
             soldered += prog[0];
             assigned += prog[1];
@@ -49,5 +50,5 @@ export default IdentifiedBase.extend({
 
         return [soldered, sum];
 
-    }.property('count', 'lots.@each.progress')
+    }.property('count', '_lots.@each.progress')
 });
