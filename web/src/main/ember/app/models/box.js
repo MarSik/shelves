@@ -61,24 +61,21 @@ export default NamedBase.extend({
       }
   }),
 
-  count: Ember.computed('lots', 'lots.@each.count', 'lots.@each.valid', {
-      set(key, value) {
-          console.log(this.get('name') + ' box count ' + value);
-          return value;
-      },
-      get() {
-        var self = this;
+  count: Ember.computed('_lots.@each.count', function () {
+    let sum = 0;
+    this.get('_lots').forEach(function (item) {
+      sum += item.get('count');
+    });
+  }),
 
-        this.get('lots').then(function (lots) {
-          var sum = 0;
-          lots.filterBy('valid', true).forEach(function (item) {
-            sum += item.get('count');
-          });
-          self.set('count', sum);
-        });
+  _lots: Ember.computed('lots.@each.count', 'lots.@each.valid', {
+    const promise = this.get('lots').then(lots => {
+      return lots.filterBy('valid');
+    });
 
-        return 0;
-      }
+    return DS.PromiseArray.create({
+      promise: promise
+    });
   }),
 
   link: function() {

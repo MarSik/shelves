@@ -53,16 +53,25 @@ export default LotBase.extend({
       }
   }.property('vatIncluded', 'singlePrice', 'vat'),
 
-  delivered: function () {
-      var count = 0;
+  _lots: Ember.computed('lots.@each.valid', {
+    const promise = this.get('lots').then(lots => {
+      return lots.filterBy('valid');
+    });
 
-      this.get('lots').forEach(function (lot) {
-          console.log("C+");
+    return DS.PromiseArray.create({
+      promise: promise
+    });
+  }),
+
+  delivered: function () {
+      let count = 0;
+
+      this.get('_lots').forEach(function (lot) {
           count += lot.get('count');
       });
 
       return count;
-  }.property('lots.@each.count'),
+  }.property('_lots.@each.count'),
 
   fullyDelivered: function() {
       return this.get('missing') <= 0;
