@@ -26,7 +26,7 @@ export default NamedBase.extend({
     // UI specific field
     locked: attr('boolean', {serialize: false, defaultValue: true}),
 
-    _items: Ember.computed('items.@each', {
+    _items: Ember.computed('items.@each', function () {
       const promise = this.get('items').then(items => {
         return items;
       });
