@@ -68,7 +68,7 @@ export default NamedBase.extend({
     });
   }),
 
-  _lots: Ember.computed('lots.@each.count', 'lots.@each.valid', {
+  _lots: Ember.computed('lots.@each.count', 'lots.@each.valid', function () {
     const promise = this.get('lots').then(lots => {
       return lots.filterBy('valid');
     });
