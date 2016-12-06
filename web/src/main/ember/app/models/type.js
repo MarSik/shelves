@@ -43,7 +43,7 @@ export default NamedBase.extend({
       return n;
   }.property('name', 'footprint', 'vendor', 'summary', 'available', 'free'),
 
-  _footprints: Ember.computed('footprints.@each', {
+  _footprints: Ember.computed('footprints.@each', function () {
     const promise = this.get('footprints').then(footprints => {
       return footprints;
     });

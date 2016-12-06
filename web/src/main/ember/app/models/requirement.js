@@ -19,7 +19,7 @@ export default IdentifiedBase.extend({
         return this.get('type.length') > 1;
     }.property('type'),
 
-    _lots: Ember.computed('lots.@each.valid', {
+    _lots: Ember.computed('lots.@each.valid', function () {
       const promise = this.get('lots').then(lots => {
         return lots.filterBy('valid');
       });
