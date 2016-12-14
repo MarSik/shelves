@@ -18,7 +18,7 @@
 {{#modal-dialog title="Create location" condition=showCreateDialog}}
 <form {{action 'createBox' name on='submit'}}>
 <label for="name">Name:</label>
-{{input id='name' placeholder='Enter box name' value=name required='required'}}
+{{input id='name' placeholder='Enter box name' value=(mut name) required='required'}}
 {{#if selectedBox}}
 <label for="parent">Parent:
   <div>{{selectedBox.name}}</div></label>

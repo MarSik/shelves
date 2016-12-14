@@ -60,7 +60,7 @@
 {{#modal-dialog title="Create group" condition=showCreateDialog}}
 <form {{action 'createGroup' createName on='submit'}}>
 <label for="name">Name:</label>
-{{input id='name' placeholder='Enter group name' value=createName required='required'}}
+{{input id='name' placeholder='Enter group name' value=(mut createName) required='required'}}
 {{#if selectedGroup}}
 <label for="parent">Parent:
   <div>{{selectedGroup.name}}</div></label>

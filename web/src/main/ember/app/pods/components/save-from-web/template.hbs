@@ -1,7 +1,7 @@
 <form {{action 'download' on='submit'}}>
 <div class="row collapse">
     <div class="small-10 columns">
-        {{input type="text" placeholder="Please enter the url to download" value=url}}
+        {{input type="text" placeholder="Please enter the url to download" value=(mut url)}}
     </div>
     <div class="small-2 columns">
         <button type="submit" class="button postfix" disabled={{disabled}}>{{fa-icon 'cloud-download'}} Download</button>

@@ -22,18 +22,18 @@
 </tr>
 <tr>
     <td class="sku">
-        {{input type='text' value=purchase.sku id=sku placeholder='SKU'}}
+        {{input type='text' value=(mut purchase.sku) id=sku placeholder='SKU'}}
     </td>
     <td class="count">
-        {{input type='text' value=purchase.count id=count placeholder='count'}}
+        {{input type='text' value=(mut purchase.count) id=count placeholder='count'}}
     </td>
     <td class="price">
-        {{money-input value=purchase.singlePrice step='any' id=price placeholder='price'}}
+        {{money-input value=(mut purchase.singlePrice) step='any' id=price placeholder='price'}}
     </td>
     <td class="vat-included">
         {{input type='checkbox' checked=purchase.vatIncluded id=vatIncluded}}
     </td>
     <td class="vat">
-        {{input type='text' value=purchase.vat id=vat placeholder='vat%'}}
+        {{input type='text' value=(mut purchase.vat) id=vat placeholder='vat%'}}
     </td>
 </tr>

@@ -18,7 +18,7 @@
     <form {{action 'createProperty' propertyName propertyUnit propertyBase on='submit'}}>
     <p>
     <label for="name">Name:</label>
-    {{input id='name' placeholder='Enter property name' value=propertyName required='required'}}
+    {{input id='name' placeholder='Enter property name' value=(mut propertyName) required='required'}}
     </p>
 
     <p>

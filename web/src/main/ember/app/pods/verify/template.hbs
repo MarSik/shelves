@@ -3,7 +3,7 @@
 <p>Please enter your verification token here:</p>
 
 <form {{action 'verify' token on='submit'}}>
-        {{input type='text' value=token placeholder='paste token here' required=required}}
+        {{input type='text' value=(mut token) placeholder='paste token here' required=required}}
         <button type="submit">Verify</button>
 </form>
 

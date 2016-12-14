@@ -13,7 +13,7 @@
         multiple=false
         maxItems=1
         placeholder="Select a paper" }}
-        {{input type='hidden' name='pageSize' value=paper.paperSize}}
+        {{input type='hidden' name='pageSize' value=(mut paper.paperSize)}}
     </dd>
 </dl>
 
@@ -22,83 +22,83 @@
     <li class="always-on">
         <dl>
             <dt>Skip [count] positions</dt>
-            <dd>{{input type="number" name="skip" value=paperSlotSkip}}</dd>
+            <dd>{{input type="number" name="skip" value=(mut paperSlotSkip)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Top page margin [mm]</dt>
-            <dd>{{input type="number" name="topMarginMm" readonly=fieldEditable value=paper.topMarginMm}}</dd>
+            <dd>{{input type="number" name="topMarginMm" readonly=fieldEditable value=(mut paper.topMarginMm)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Left page margin [mm]</dt>
-            <dd>{{input type="number" name="leftMarginMm" readonly=fieldEditable value=paper.leftMarginMm}}</dd>
+            <dd>{{input type="number" name="leftMarginMm" readonly=fieldEditable value=(mut paper.leftMarginMm)}}</dd>
         </dl>
     </li>
 
     <li>
         <dl>
             <dt>Horizontal count</dt>
-            <dd>{{input type="number" name="stickerHorizontalCount" readonly=fieldEditable value=paper.stickerHorizontalCount}}</dd>
+            <dd>{{input type="number" name="stickerHorizontalCount" readonly=fieldEditable value=(mut paper.stickerHorizontalCount)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Vertical count</dt>
-            <dd>{{input type="number" name="stickerVerticalCount" readonly=fieldEditable value=paper.stickerVerticalCount}}</dd>
+            <dd>{{input type="number" name="stickerVerticalCount" readonly=fieldEditable value=(mut paper.stickerVerticalCount)}}</dd>
         </dl>
     </li>
 
     <li>
         <dl>
             <dt>Sticker width [mm]</dt>
-            <dd>{{input type="number" name="stickerWidthMm" readonly=fieldEditable value=paper.stickerWidthMm}}</dd>
+            <dd>{{input type="number" name="stickerWidthMm" readonly=fieldEditable value=(mut paper.stickerWidthMm)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Sticker height [mm]</dt>
-            <dd>{{input type="number" name="stickerHeightMm" readonly=fieldEditable value=paper.stickerHeightMm}}</dd>
+            <dd>{{input type="number" name="stickerHeightMm" readonly=fieldEditable value=(mut paper.stickerHeightMm)}}</dd>
         </dl>
     </li>
 
     <li>
         <dl>
             <dt>Top sticker margin [mm]</dt>
-            <dd>{{input type="number" name="stickerTopMarginMm" readonly=fieldEditable value=paper.stickerTopMarginMm}}</dd>
+            <dd>{{input type="number" name="stickerTopMarginMm" readonly=fieldEditable value=(mut paper.stickerTopMarginMm)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Left sticker margin [mm]</dt>
-            <dd>{{input type="number" name="stickerLeftMarginMm" readonly=fieldEditable value=paper.stickerLeftMarginMm}}</dd>
+            <dd>{{input type="number" name="stickerLeftMarginMm" readonly=fieldEditable value=(mut paper.stickerLeftMarginMm)}}</dd>
         </dl>
     </li>
 
     <li>
         <dl>
             <dt>Horizontal sticker spacing [mm]</dt>
-            <dd>{{input type="number" name="rightSpaceMm" readonly=fieldEditable value=paper.rightSpaceMm}}</dd>
+            <dd>{{input type="number" name="rightSpaceMm" readonly=fieldEditable value=(mut paper.rightSpaceMm)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Vertical sticker spacing [mm]</dt>
-            <dd>{{input type="number" name="bottomSpaceMm" readonly=fieldEditable value=paper.bottomSpaceMm}}</dd>
+            <dd>{{input type="number" name="bottomSpaceMm" readonly=fieldEditable value=(mut paper.bottomSpaceMm)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Title font size [pt]</dt>
-            <dd>{{input type="number" name="titleFontSize" readonly=fieldEditable value=paper.titleFontSize}}</dd>
+            <dd>{{input type="number" name="titleFontSize" readonly=fieldEditable value=(mut paper.titleFontSize)}}</dd>
         </dl>
     </li>
     <li>
         <dl>
             <dt>Details font size [pt]</dt>
-            <dd>{{input type="number" name="detailsFontSize" readonly=fieldEditable value=paper.detailsFontSize}}</dd>
+            <dd>{{input type="number" name="detailsFontSize" readonly=fieldEditable value=(mut paper.detailsFontSize)}}</dd>
         </dl>
     </li>
 </ol>

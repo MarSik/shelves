@@ -20,7 +20,7 @@
 
 {{#modal-dialog title="Create new project" condition=showCreateDialog}}
   <form {{action 'startProject' projectName on='submit'}}>
-  {{input type='text' value=projectName placeholder='project name'}}
+  {{input type='text' value=(mut projectName) placeholder='project name'}}
   <button type="submit">Create</button>
   </form>
 {{/modal-dialog}}

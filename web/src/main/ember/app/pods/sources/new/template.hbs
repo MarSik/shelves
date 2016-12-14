@@ -2,10 +2,10 @@
 
  <form {{action 'saveSource' model on='submit'}}>
 <h3>Name</h3>
-{{input type='text' value=model.name}}
+{{input type='text' value=(mut model.name)}}
 
 <h3>URL</h3>
-{{input type='text' value=model.url}}
+{{input type='text' value=(mut model.url)}}
 
  <button type="submit">Save</button>
  </form>

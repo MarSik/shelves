@@ -23,7 +23,7 @@
             <td>{{#link-to 'transactions.show' trans}}{{trans.source.name}}{{/link-to}}</td>
             <td>{{trans.date}}</td>
             <td>{{trans.name}}</td>
-            <td>{{is-loading cond=trans.items value=trans.missing}}</td>
+            <td>{{is-loading cond=trans.items value=(mut trans.missing)}}</td>
             <td>{{trans.totalCount}}</td>
             </tr>
       </tbody>
@@ -38,7 +38,7 @@
 
     <form {{action 'purchase' model invoiceCurrency paidCurrency exchangeRate on='submit'}}>
 
-    {{input type='text' value=model.name id=name placeholder='Purchase name'}}
+    {{input type='text' value=(mut model.name) id=name placeholder='Purchase name'}}
 
     <label for="source">
         Source:
@@ -63,19 +63,19 @@
       <section class="columns large-3">
         <h3>Invoice currency</h3>
 
-        {{input type='text' value=invoiceCurrency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+        {{input type='text' value=(mut invoiceCurrency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
       </section>
 
       <section class="columns large-3">
         <h3>Paid currency</h3>
 
-        {{input type='text' value=paidCurrency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+        {{input type='text' value=(mut paidCurrency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
       </section>
 
       <section class="columns large-3">
         <h3>Exchange rate</h3>
 
-        {{input type='text' value=exchangeRate placeholder='1.00'}}
+        {{input type='text' value=(mut exchangeRate) placeholder='1.00'}}
       </section>
 
       <section class="columns large-1">
@@ -87,7 +87,7 @@
       <section class="columns large-2">
         <h3>default VAT</h3>
 
-        {{input type='text' value=defaultVat placeholder='20'}}
+        {{input type='text' value=(mut defaultVat) placeholder='20'}}
       </section>
     </div>
 

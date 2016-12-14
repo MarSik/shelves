@@ -13,7 +13,7 @@
 {{#if isEditing}}
 <form {{action 'editDone' on='submit'}} class="row collapse">
 <div class="small-10 columns">
-    {{input type='text' value=item.name}}
+    {{input type='text' value=(mut item.name)}}
 </div>
 <div class="small-2 columns">
     <button type="submit">save</button>

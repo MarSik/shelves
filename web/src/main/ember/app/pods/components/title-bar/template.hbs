@@ -12,7 +12,7 @@
                 <li class="has-form">
                     <form {{action 'search' query on='submit'}} class="row collapse">
                         <div class="large-8 small-9 columns">
-                            {{input placeholder='Search terms' value=query required='required'}}
+                            {{input placeholder='Search terms' value=(mut query) required='required'}}
                         </div>
                         <div class="large-4 small-3 columns">
                             <button type="submit" class="alert button expand">Search</button>

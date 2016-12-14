@@ -1,6 +1,6 @@
 {{#if editing}}
 <form {{action 'saveEdit' on='submit'}} class="inline">
-    {{input type='text' value=value}}
+    {{input type='text' value=(mut value)}}
     <button type="submit">save</button>
     <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
 </form>

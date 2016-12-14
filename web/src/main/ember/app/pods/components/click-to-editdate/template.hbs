@@ -1,6 +1,6 @@
 {{#if editing}}
 <form {{action 'saveEdit' on='submit'}} class="inline">
-{{date-picker date=value valueFormat='date'}}
+{{date-picker date=(mut value) valueFormat='date'}}
 <button type="submit">save</button>
 <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
 </form>

@@ -2,7 +2,7 @@
     <h2>Search</h2>
 
     <form {{action 'search' query on='submit'}}>
-    {{input type='text' value=query}}
+    {{input type='text' value=(mut query)}}
     <button type="submit">{{fa-icon 'search'}}</button>
     </form>
 </section>

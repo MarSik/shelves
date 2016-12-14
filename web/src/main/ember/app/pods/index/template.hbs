@@ -54,9 +54,9 @@
     <h2>Login</h2>
     <form {{action 'authenticate' on='submit'}}>
         <label for="identification">Email address</label>
-        {{input type='email' id='identification' required='required' placeholder='Enter email address' value=identification}}
+        {{input type='email' id='identification' required='required' placeholder='Enter email address' value=(mut identification)}}
         <label for="password">Password</label>
-        {{input id='password' placeholder='Enter Password' type='password' value=password}}
+        {{input id='password' placeholder='Enter Password' type='password' value=(mut password)}}
         <button type="submit">Login</button><button class="secondary" {{action 'reverify'}}>Reset password</button>
     </form>
     </section>
@@ -65,9 +65,9 @@
         <h2>Register</h2>
         <form {{action 'register' on='submit'}}>
             <label for="name">Name:</label>
-            {{input id='name' placeholder='Enter your name' value=name required='required'}}
+            {{input id='name' placeholder='Enter your name' value=(mut name) required='required'}}
             <label for="email">Email:</label>
-            {{input type='email' id='email' placeholder='Enter email address' value=email required='required'}}
+            {{input type='email' id='email' placeholder='Enter email address' value=(mut email) required='required'}}
             <button type="submit">Register</button>
         </form>
     </section>

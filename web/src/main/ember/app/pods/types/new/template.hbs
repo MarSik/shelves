@@ -6,12 +6,12 @@
 
 <form {{action 'save' model on='submit'}}>
     <h3>Name</h3>
-    {{input type='text' value=model.name required="required" placeholder='name'}}
+    {{input type='text' value=(mut model.name) required="required" placeholder='name'}}
 
     <p class="placeholder">The name argument is mandatory. All others are optional. Everything can be changed later if needed.</p>
 
     <h3>Manufacturer or vendor</h3>
-    {{input type='text' value=model.vendor placeholder='vendor'}}
+    {{input type='text' value=(mut model.vendor) placeholder='vendor'}}
 
     <h3>Footprints</h3>
     {{ember-selectize
@@ -24,7 +24,7 @@
     placeholder="Select a footprint" }}
 
     <h3>Description</h3>
-    {{textarea type='text' value=model.description placeholder='description'}}
+    {{textarea type='text' value=(mut model.description) placeholder='description'}}
 
     <h3>Groups</h3>
     {{ember-selectize

@@ -25,7 +25,7 @@
     <section class="small-12 large-12 columns">
       <h3>Describes</h3>
 
-      {{entity-selectize value=model.describes options=everything add=(route-action 'addDescribes' model) remove=(route-action 'removeDescribes' model)}}
+      {{entity-selectize value=(mut model.describes) options=everything add=(route-action 'addDescribes' model) remove=(route-action 'removeDescribes' model)}}
     </section>
 </div>
 

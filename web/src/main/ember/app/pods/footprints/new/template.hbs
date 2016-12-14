@@ -2,24 +2,24 @@
 
 <form {{action 'save' model on='submit'}}>
 <label for="name">Name</label>
-{{input type='text' value=name id='name' placeholder='name'}}
+{{input type='text' value=(mut name) id='name' placeholder='name'}}
 
 <div class="footprint-summary">
 <dl>
     <dt>{{fa-icon 'fa-square'}} Pads</dt>
-    <dd>{{input type='text' value=pads placeholder='pads'}}</dd>
+    <dd>{{input type='text' value=(mut pads) placeholder='pads'}}</dd>
 </dl>
 <dl>
     <dt>{{fa-icon 'fa-circle-o'}} Holes</dt>
-    <dd>{{input type='text' value=holes placeholder='holes'}}</dd>
+    <dd>{{input type='text' value=(mut holes) placeholder='holes'}}</dd>
 </dl>
 <dl>
     <dt>{{fa-icon 'fa-circle'}} NPTH</dt>
-    <dt>{{input type='text' value=npth placeholder='npth'}}</dt>
+    <dt>{{input type='text' value=(mut npth) placeholder='npth'}}</dt>
 </dl>
 <dl>
     <dt>{{fa-icon 'fa-bars'}} Pitch</dt>
-    <dt>{{input type='text' value=pitch placeholder='pitch'}}</dt>
+    <dt>{{input type='text' value=(mut pitch) placeholder='pitch'}}</dt>
 </dl>
 </div>
 

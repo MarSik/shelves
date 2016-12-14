@@ -176,25 +176,25 @@
   <section class="columns large-3">
     <h3>Unit price in {{selectedItem.currency}}</h3>
 
-    {{money-input value=selectedItem.singlePrice step='any'}}
+    {{money-input value=(mut selectedItem.singlePrice) step='any'}}
   </section>
 
   <section class="columns large-3">
     <h3>Invoice currency</h3>
 
-    {{input maxlength=3 type='text' value=selectedItem.currency placeholder='3 letter ISO code - USD, EUR, CZK'}}
+    {{input maxlength=3 type='text' value=(mut selectedItem.currency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
   </section>
 
   <section class="columns large-3">
     <h3>Paid currency</h3>
 
-    {{input maxlength=3 type='text' value=selectedItem.currencyPaid placeholder='3 letter ISO code - USD, EUR, CZK'}}
+    {{input maxlength=3 type='text' value=(mut selectedItem.currencyPaid) placeholder='3 letter ISO code - USD, EUR, CZK'}}
   </section>
 
   <section class="columns large-3">
     <h3>Exchange rate</h3>
 
-    {{money-input value=exchangeRate placeholder='1.00'}}
+    {{money-input value=(mut exchangeRate) placeholder='1.00'}}
   </section>
 
   <section class="columns large-1">
@@ -206,7 +206,7 @@
   <section class="columns large-2">
     <h3>VAT</h3>
 
-    {{money-input max=100 step=0.001 value=selectedItem.vat placeholder='20'}}
+    {{money-input max=100 step=0.001 value=(mut selectedItem.vat) placeholder='20'}}
   </section>
 
   <section class="columns large-3">&nbsp;</section>

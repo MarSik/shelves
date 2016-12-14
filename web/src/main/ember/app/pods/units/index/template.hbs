@@ -15,8 +15,8 @@
 
 {{#modal-dialog title="Create unit" condition=showCreateDialog}}
 <form {{action 'createUnit' unitName unitSymbol on='submit'}}>
-{{input type='text' value=unitName placeholder='unit name'}}
-{{input type='text' value=unitSymbol placeholder='unit symbol'}}
+{{input type='text' value=(mut unitName) placeholder='unit name'}}
+{{input type='text' value=(mut unitSymbol) placeholder='unit symbol'}}
 <button type="submit" disabled={{createDisabled}}>Create</button>
 </form>
 {{/modal-dialog}}

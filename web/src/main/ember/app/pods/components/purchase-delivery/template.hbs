@@ -1,7 +1,7 @@
 {{#if isDelivering}}
 <div class="row collapse">
     <div class="small-1 columns">
-        {{input value=count}}
+        {{input value=(mut count)}}
     </div>
     <div class="small-10 columns">
         {{ember-selectize

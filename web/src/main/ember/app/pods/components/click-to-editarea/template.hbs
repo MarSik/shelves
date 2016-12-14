@@ -2,7 +2,7 @@
 <div class="row">
   <div class="columns small-12">
     <form {{action 'saveEdit' on='submit'}} class="inline">
-    {{textarea type='text' value=value}}
+    {{textarea type='text' value=(mut value)}}
     <button type="submit">save</button>
     <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
     </form>
