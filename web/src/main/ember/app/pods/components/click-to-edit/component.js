@@ -13,6 +13,8 @@ export default Ember.Component.extend({
         },
         saveEdit: function () {
             this.set('show', this.get('value'));
+            this.set(this.get('field'), this.get('value')); // workaround for https://github.com/gordonkristan/ember-computed-indirect/issues/10
+            console.log("Edit save: ", this.get('value'), " -> ", this.get('field'), " = ", this.get(this.get('field')), ' = ', this.get('show'));
             this.get('content').save();
             this.set('editing', false);
         },
