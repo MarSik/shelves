@@ -163,6 +163,19 @@
                     </execution>
 
                     <execution>
+                        <id>npm sass install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+
+                        <phase>generate-resources</phase>
+
+                        <configuration>
+                            <arguments>rebuild node-sass</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>bower install</id>
                         <goals>
                             <goal>bower</goal>
