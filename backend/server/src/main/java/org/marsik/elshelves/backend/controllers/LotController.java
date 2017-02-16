@@ -8,6 +8,7 @@ import net.glxn.qrgen.javase.QRCode;
 import org.marsik.elshelves.api.dtos.LotDeliveryAdHoc;
 import org.marsik.elshelves.api.dtos.LotDeliveryTransaction;
 import org.marsik.elshelves.api.entities.AbstractEntityApiModel;
+import org.marsik.elshelves.backend.dtos.AncestryLevel;
 import org.marsik.elshelves.backend.entities.Box;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
 import org.marsik.elshelves.backend.entities.PurchasedLot;
@@ -288,4 +289,13 @@ public class LotController {
 		response.getOutputStream().write(os.toByteArray());
 		response.flushBuffer();
 	}
+
+    @RequestMapping(value = "/{uuid}/ancestry", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional
+    public Collection<AncestryLevel> getAncestors(@CurrentUser User currentUser,
+            @PathVariable("uuid") UUID uuid) throws InvalidRequest, PermissionDenied, EntityNotFound, OperationNotPermitted {
+        Lot lot = lotService.get(uuid, currentUser);
+        return lot.computeAncestry();
+    }
 }

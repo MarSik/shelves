@@ -37,8 +37,8 @@
     <th>source</th>
     <th>transaction</th>
   </tr>
-{{#each model.ancestry key="@index" as |ancestor|}}
-{{lot-ancestor-detail ancestor=ancestor}}
+{{#each model.ancestry as |ancestor|}}
+{{lot-ancestor-detail ancestorRecord=ancestor store=store}}
 {{/each}}
 </table>
 {{/if}}
