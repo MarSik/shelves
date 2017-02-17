@@ -6,11 +6,17 @@ export default Ember.Object.extend({
   fetch: function(lotId, token) {
     var link = ENV.APP.API_SERVER + (ENV.APP.API_BASE ? '/' + ENV.APP.API_BASE : '')
                + '/v1/lots/'
-               + lotId + '/ancestry?access_token=' + token;
+               + lotId + '/ancestry';
     return DS.PromiseArray.create({
-      promise: Ember.$.getJSON(link).then(function (d) {
-        return d.map(it => Ember.Object.create(it));
+      promise: Ember.$.ajax({
+        dataType: "json",
+        url: link,
+        type: 'GET',
+        success: d => d.map(it => Ember.Object.create(it)),
+        beforeSend: xhr => xhr.setRequestHeader('Authorization', 'Bearer ' + token)
       })
     });
   }
 });
+
+
