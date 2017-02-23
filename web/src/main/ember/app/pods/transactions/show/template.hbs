@@ -91,9 +91,10 @@
     <table class="transaction-summary">
         <thead>
         <tr>
-            <th>Type / Location</th>
-            <th>SKU</th>
             <th>Cnt.</th>
+            <th>Type / Location</th>
+            <th>Source</th>
+            <th>SKU</th>
             <th>Price / 1pcs</th>
             {{#if editEnabled}}
             <th>VAT?</th>
@@ -106,10 +107,14 @@
         {{#each sortedItems as |purchase|}}
         <tbody class="delivery">
         <tr>
+            <td class="count">
+                {{#click-to-edit content=purchase field='content.count' editable=editEnabled}}{{purchase.count}}{{/click-to-edit}}
+            </td>
             <td class="truncate">
                 {{#link-to 'types.show' purchase.type}}{{purchase.type.fullName}}{{/link-to}}
             </td>
-            <td class="sku">{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}} -
+            <td class="source">{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}}</td>
+            <td class="sku">
               {{#click-to-edit content=purchase field='content.sku' editable=editEnabled}}
                 {{#if model.source.skuUrl}}
                   <a href="{{skuurl model.source.skuUrl sku=purchase.sku}}">{{purchase.sku}}</a>
@@ -117,9 +122,6 @@
                   {{purchase.sku}}
                 {{/if}}
               {{/click-to-edit}}
-            </td>
-            <td class="count">
-                {{#click-to-edit content=purchase field='content.count' editable=editEnabled}}{{purchase.count}}{{/click-to-edit}}
             </td>
             {{#if editEnabled}}
             <td class="price">
@@ -141,19 +143,27 @@
                 {{#click-to-edit content=purchase field='content.vat' editable=editEnabled}}{{purchase.vat}}{{/click-to-edit}}
             </td>
         </tr>
-        {{#each purchase.lots as |lot|}}
+        {{#each purchase.validLots as |lot|}}
         <tr>
-          <td colspan="2" class="location">
-            {{fa-icon "cube"}} {{lot.location.fullName}}
-          </td>
-          <td colspan="4" class="count">
+          <td class="count">
             {{lot.count}}
+          </td>
+          <td colspan="6" class="location">
+            {{#if lot.canBeAssigned}}
+            {{fa-icon 'cube'}} {{#link-to 'boxes.show' lot.location}}{{lot.location.fullName}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeSoldered}}
+            {{fa-icon 'flask'}} {{#link-to 'items.show' lot.usedBy.item}}{{lot.usedBy.item.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+            {{/if}}
+            {{#if lot.canBeUnsoldered}}
+            {{fa-icon 'check-square'}} {{#link-to 'items.show' lot.usedBy.item}}{{lot.usedBy.item.type.name}} {{lot.usedBy.item.serials}}{{/link-to}}
+            {{/if}}
           </td>
         </tr>
         {{/each}}
         {{#if purchase.missing}}
         <tr>
-            <td colspan="6">
+            <td colspan="7">
                 {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
             </td>
         </tr>

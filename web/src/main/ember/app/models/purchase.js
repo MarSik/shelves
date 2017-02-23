@@ -22,6 +22,7 @@ export default LotBase.extend({
   vatIncluded: attr("boolean"),
   transaction: belongsTo("transaction", {async: true}),
   lots: hasMany("lot", {inverse: null, async: true, polymorphic: true}),
+  validLots: Ember.computed.filterBy("lots", "valid", true),
 
   /*missing: Ember.computed('delivered', 'count', function () {
       return this.get('count') - this.get('delivered')
