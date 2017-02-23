@@ -1,14 +1,16 @@
 <h2>Lot {{model.id}}</h2>
 
-<dl>
-  <dt>Type</dt>
-  <dd>{{fa-icon model.type.icon}} {{#link-to 'types.show' model.type}}{{model.type.fullName}}{{/link-to}}</dd>
-</dl>
-
-<dl>
+<div class="row">
+  <dl class="columns small-12 large-1">
     <dt>Count</dt>
     <dd>{{model.count}}</dd>
-</dl>
+  </dl>
+
+  <dl class="columns small-12 large-11">
+    <dt>Type</dt>
+    <dd>{{fa-icon model.type.icon}} {{#link-to 'types.show' model.type}}{{model.type.fullName}}{{/link-to}}</dd>
+  </dl>
+</div>
 
 {{#if model.usedBy}}
 <dl>
@@ -28,6 +30,8 @@
 
 {{#if model.parents}}
 <h2>Mixed from</h2>
+
+<p class="alert-box secondary">Please note that more than one probability record might be applicable at the same time.</p>
 
 <table>
   <tr>

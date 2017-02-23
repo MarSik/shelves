@@ -9,9 +9,7 @@
 <tr>
   <td colspan="5">
     <table>
-      {{#each ancestor.history as |h|}}
-      {{lot-history model=h showHistory=showHistory}}
-      {{/each}}
+      {{lot-history model=ancestor.history showHistory=showHistory}}
     </table>
   </td>
 </tr>
