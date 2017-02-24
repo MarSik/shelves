@@ -176,6 +176,8 @@ public class Purchase extends OwnedEntity {
 
 		update(update.getSinglePrice(), this::setSinglePrice);
 		update(update.getTotalPrice(), this::setTotalPrice);
+		update(update.getSinglePricePaid(), this::setSinglePricePaid);
+		update(update.getTotalPricePaid(), this::setTotalPricePaid);
 		update(update.getVat(), this::setVat);
 		update(update.getVatIncluded(), this::setVatIncluded);
 		update(update.getType(), this::setType);
