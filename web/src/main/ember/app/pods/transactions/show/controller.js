@@ -15,6 +15,9 @@ export default Ember.Controller.extend({
         updatePrice() {
             var purchase = this.get('selectedItem');
 
+            purchase.set('currency', this.get('invoiceCurrency'));
+            purchase.set('currencyPaid', this.get('paidCurrency'));
+
             purchase.set('singlePricePaid', this.get('exchangeRate') * purchase.get('singlePrice'));
             purchase.set('totalPrice', purchase.get('count') * purchase.get('singlePrice'));
             purchase.set('totalPricePaid', this.get('exchangeRate') * purchase.get('totalPrice'));
@@ -42,7 +45,23 @@ export default Ember.Controller.extend({
     }),
 
     selectedItem: null,
-    exchangeRate: 1.00,
+    exchangeRateDefault: 1.00,
+    exchangeRate: Ember.computed('selectedItem.singlePrice', 'selectedItem.singlePricePaid', {
+      get(key) {
+        var singlePrice = this.get('selectedItem.singlePrice');
+        var singlePricePaid = this.get('selectedItem.singlePricePaid');
+
+        if (!Ember.isEmpty(singlePrice) && !Ember.isEmpty(singlePricePaid)) {
+          this.set('exchangeRateDefault', singlePricePaid / singlePrice);
+          return singlePricePaid / singlePrice;
+        } else {
+          return this.get('exchangeRateDefault');
+        }
+      },
+      set(key, value) {
+        this.set('exchangeRateDefault', value);
+      }
+    }),
 
     selectedItemPaidPrice: Ember.computed('selectedItem.singlePrice', 'selectedItem', 'exchangeRate', function () {
       var purchase = this.get('selectedItem');
@@ -51,5 +70,39 @@ export default Ember.Controller.extend({
       if (Ember.isEmpty(purchase)) return null;
 
       return purchase.get('singlePrice') * exchangeRate;
-    })
+    }),
+
+    invoiceCurrencyDefault: "",
+    invoiceCurrency: Ember.computed('selectedItem.currency', {
+      get(key) {
+        var modelValue = this.get('selectedItem.currency');
+        if (!Ember.isEmpty(modelValue)) {
+          this.set('invoiceCurrencyDefault', modelValue);
+          return modelValue;
+        } else {
+          return this.get('invoiceCurrencyDefault');
+        }
+      },
+      set(key, value) {
+        this.set('invoiceCurrencyDefault', value);
+        this.set('selectedItem.currency', value);
+      }
+    }),
+
+    paidCurrencyDefault: "",
+    paidCurrency: Ember.computed('selectedItem.currencyPaid', {
+      get(key) {
+        var modelValue = this.get('selectedItem.currencyPaid');
+        if (!Ember.isEmpty(modelValue)) {
+          this.set('paidCurrencyDefault', modelValue);
+          return modelValue;
+        } else {
+          return this.get('paidCurrencyDefault');
+        }
+      },
+      set(key, value) {
+        this.set('paidCurrencyDefault', value);
+        this.set('selectedItem.currencyPaid', value);
+      }
+    }),
 });

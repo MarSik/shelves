@@ -192,13 +192,13 @@
   <section class="columns large-3">
     <h3>Invoice currency</h3>
 
-    {{input maxlength=3 type='text' value=(mut selectedItem.currency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
+    {{input maxlength=3 type='text' value=(mut invoiceCurrency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
   </section>
 
   <section class="columns large-3">
     <h3>Paid currency</h3>
 
-    {{input maxlength=3 type='text' value=(mut selectedItem.currencyPaid) placeholder='3 letter ISO code - USD, EUR, CZK'}}
+    {{input maxlength=3 type='text' value=(mut paidCurrency) placeholder='3 letter ISO code - USD, EUR, CZK'}}
   </section>
 
   <section class="columns large-3">
