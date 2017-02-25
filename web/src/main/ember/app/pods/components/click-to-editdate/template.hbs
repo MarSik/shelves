@@ -1,8 +1,8 @@
 {{#if editing}}
 <form {{action 'saveEdit' on='submit'}} class="inline">
 {{date-picker date=(mut value) valueFormat='date'}}
-<button type="submit">save</button>
-<button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
+<button class="tiny" type="submit">save</button>
+<button class="tiny button secondary" {{action 'cancelEdit'}}>cancel</button>
 </form>
 {{else if show}}
     {{yield}} {{#if enabled}}<button class="button edit tiny" {{action 'startEdit'}}>{{fa-icon 'edit'}}</button>{{/if}}
