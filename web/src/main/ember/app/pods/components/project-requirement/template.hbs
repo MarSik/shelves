@@ -15,7 +15,7 @@
   <td>{{fa-icon type.icon}} {{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
   <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
 
-  <td>{{#unless readOnly}}{{#if r.typeCanBeRemoved}}{{#confirm-button class='alert single-line button' action=(action 'removeAlternativePart' type)}}>{{fa-icon 'times'}}{{/confirm-button}}{{else}}&nbsp;{{/if}}{{/unless}}</td>
+  <td>{{#unless readOnly}}{{#if r.typeCanBeRemoved}}{{#confirm-button class='alert single-line button' action=(action 'removeAlternativePart' type)}}{{fa-icon 'times'}}{{/confirm-button}}{{else}}&nbsp;{{/if}}{{/unless}}</td>
 </tr>
 {{/each}}
 {{#each assignedLots as |lot|}}
