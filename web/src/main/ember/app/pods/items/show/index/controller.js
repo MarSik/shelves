@@ -3,7 +3,7 @@ import ENV from 'webapp/config/environment';
 /* global $ */
 
 export default Ember.Controller.extend({
-    needs: "application",
+    application: Ember.inject.controller(),
     actions: {
         showAddAlternative: function (req) {
             this.set('lastRequirement', req);
@@ -75,7 +75,7 @@ export default Ember.Controller.extend({
     },
 
       typeSorting: ['name'],
-      sortedTypes: Ember.computed.sort('controllers.application.availableTypes', 'typeSorting'),
+      sortedTypes: Ember.computed.sort('application.availableTypes', 'typeSorting'),
     lastRequirement: null,
     alternativeType: null,
 
