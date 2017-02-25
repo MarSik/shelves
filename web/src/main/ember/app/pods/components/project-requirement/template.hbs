@@ -1,12 +1,13 @@
 <tr>
   <td>{{#click-to-edit editable=r.item.editable content=r field='content.count' placeholder='item count'}}{{r.count}}{{/click-to-edit}} of</td>
-  <td>{{#click-to-edit editable=r.item.editable content=r field='content.name'}}{{r.name}}{{/click-to-edit}}</td>
-
-  <td colspan="2">
-    {{#unless readOnly}}{{#confirm-button action=(action 'removeRequirement') class='alert tiny button'}}{{fa-icon 'minus'}} Remove{{/confirm-button}}
-    <button {{action 'showAddAlternative'}} class="button tiny">{{fa-icon 'plus'}} Alternative</button>
-    {{#if r.missing}}<button {{action 'assignLot'}} class="button tiny">{{fa-icon 'plus'}} Assign parts</button>{{/if}}{{/unless}}
+  <td colspan="3">
+    {{#unless readOnly}}{{#confirm-button action=(action 'removeRequirement') class='alert single-line button'}}{{fa-icon 'minus'}} Remove requirement{{/confirm-button}}
+    <button {{action 'showAddAlternative'}} class="button single-line">{{fa-icon 'plus'}} Add alternative type</button>
+    {{#if r.missing}}<button {{action 'assignLot'}} class="button single-line">{{fa-icon 'plus'}} Assign parts</button>{{/if}}{{/unless}}
   </td>
+</tr>
+<tr>
+  <td colspan="4">{{#click-to-edit editable=r.item.editable content=r field='content.name' placeholder='REF'}}{{r.name}}{{/click-to-edit}}</td>
 </tr>
 {{#each r.type as |type|}}
 <tr>
@@ -14,7 +15,7 @@
   <td>{{fa-icon type.icon}} {{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
   <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
 
-  <td>{{#unless readOnly}}{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}{{/unless}}</td>
+  <td>{{#unless readOnly}}{{#if r.typeCanBeRemoved}}{{#confirm-button class='alert single-line button' action=(action 'removeAlternativePart' type)}}>{{fa-icon 'times'}}{{/confirm-button}}{{else}}&nbsp;{{/if}}{{/unless}}</td>
 </tr>
 {{/each}}
 {{#each assignedLots as |lot|}}
