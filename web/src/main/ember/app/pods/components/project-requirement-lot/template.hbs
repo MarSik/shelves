@@ -1,5 +1,5 @@
-<td>{{fa-icon lot.icon}} {{lot.count}}</td>
-<td>{{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
+<td>{{lot.count}}</td>
+<td> {{fa-icon lot.icon}} {{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
 {{#if displayActions}}
 <td colspan="2">
   {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count class="tiny alert" action=(action 'solderLot' lot)}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}

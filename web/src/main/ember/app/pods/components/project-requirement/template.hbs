@@ -10,8 +10,8 @@
 </tr>
 {{#each r.type as |type|}}
 <tr>
-  <td>{{fa-icon 'book'}}</td>
-  <td>{{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
+  <td>&nbsp;</td>
+  <td>{{fa-icon type.icon}} {{#link-to 'types.show' type}}{{type.name}}{{/link-to}} / {{type.vendor}}</td>
   <td>{{#each type.footprints as |fp|}}{{#link-to 'footprints.show' fp}}{{fp.name}}{{/link-to}} {{/each}}</td>
 
   <td>{{#unless readOnly}}{{#if r.typeCanBeRemoved}}<button class="button tiny alert" {{action 'removeAlternativePart' type}}>{{fa-icon 'times'}}</button>{{else}}&nbsp;{{/if}}{{/unless}}</td>
