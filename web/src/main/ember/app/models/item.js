@@ -48,5 +48,9 @@ export default Lot.extend({
     if (progress[1] == 0) return 0;
 
     return Math.round(1000.0 * progress[0] / progress[1]) / 10.0;
-  }.property('progress')
+  }.property('progress'),
+
+  endpoint: function () {
+    return "items.show";
+  }.property()
 });

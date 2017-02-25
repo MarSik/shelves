@@ -3,5 +3,5 @@
 <button class="primary button" {{action 'saveEdit'}}>save</button>
 <button class="button secondary" {{action 'cancelEdit'}}>cancel</button>
 {{else}}
-<button class="button tiny" {{action 'startEdit'}}>{{yield}}</button>
+<button class="button {{ button-class }}" {{action 'startEdit'}}>{{yield}}</button>
 {{/if}}

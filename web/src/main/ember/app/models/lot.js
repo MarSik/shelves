@@ -74,5 +74,9 @@ export default LotBase.extend({
 
   fullName: function () {
     return this.get('type.name') + " " + this.get('serial');
-  }.property('type.name', 'serial')
+  }.property('type.name', 'serial'),
+
+  endpoint: function () {
+    return "lots.show";
+  }.property()
 });

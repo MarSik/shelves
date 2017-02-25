@@ -1,24 +1,15 @@
 <td>{{lot.count}}</td>
 <td> {{fa-icon lot.icon}} {{#link-to 'types.show' lot.type}}{{lot.type.name}}{{/link-to}} / {{lot.type.footprint}}</td>
-{{#if displayActions}}
-<td colspan="2">
-  {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count class="tiny alert" action=(action 'solderLot' lot)}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
-  {{#if lot.canBeUnassigned}}{{#confirm-button class="tiny" action=(action 'unassignLot' lot)}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
-  {{#if lot.canBeUnsoldered}}{{#confirm-button class="tiny" action=(action 'unsolderLot' lot)}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
-  <button {{action 'hideActions'}} class="tiny button">Hide</button>
-</td>
-{{else}}
 <td>
   {{#if lot.purchase}}
-  {{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{lot.purchase.transaction.date}}{{/link-to}}
+  {{lot.purchase.transaction.source.name}} / {{#link-to 'transactions.show' lot.purchase.transaction}}{{moment-format lot.purchase.transaction.date 'll'}}{{/link-to}}
   {{else}}
   {{#link-to 'lots.show' lot}}mixed parts{{/link-to}}
   {{/if}}
 </td>
 <td>
-  {{#unless readOnly}}
-  <a {{action 'showActions'}}>{{fa-icon 'play'}}&nbsp;actions</a>
-  {{/unless}}
+  {{#if lot.canBeSoldered}}{{#add-count-button default=lot.count button-class="single-line alert" action=(action 'solderLot' lot)}}{{fa-icon 'pencil'}} Solder{{/add-count-button}}{{/if}}
+  {{#if lot.canBeUnassigned}}{{#confirm-button class="single-line" action=(action 'unassignLot' lot)}}{{fa-icon 'times'}} Unassign{{/confirm-button}}{{/if}}
+  {{#if lot.canBeUnsoldered}}{{#confirm-button class="single-line" action=(action 'unsolderLot' lot)}}{{fa-icon 'reply'}} Unsolder{{/confirm-button}}{{/if}}
   {{#link-to lot.endpoint lot}}{{fa-icon 'history'}}&nbsp;info{{/link-to}}
 </td>
-{{/if}}
