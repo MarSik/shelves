@@ -1,7 +1,10 @@
 <tr>
   <td title="{{doc.contentType}}">{{#entity-link entity=doc resource='download' models='documents'}}{{fa-icon doc.icon}} {{doc.name}}{{/entity-link}} {{#link-to doc.link doc}}{{fa-icon 'info-circle'}}{{/link-to}}</td>
+  <td>&nbsp;</td>
   <td style="text-align: right;">{{#confirm-button action=(action 'deleteDocument' doc) class='remove button alert'}}{{fa-icon 'times'}} Delete{{/confirm-button}}</td>
 </tr>
 <tr class="summary">
-  <td colspan="2">{{doc.created}}</td>
+  <td>{{moment-format doc.created 'lll'}}</td>
+  <td>{{size}}</td>
+  <td>&nbsp;</td>
 </tr>

@@ -1,4 +1,4 @@
-package org.marsik.elshelves.backend.repositories.results;
+package org.marsik.elshelves.api.dtos;
 
 import lombok.Data;
 

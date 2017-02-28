@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import gnu.trove.map.hash.THashMap;
 import org.marsik.elshelves.backend.controllers.exceptions.BaseRestException;
+import org.marsik.elshelves.backend.dtos.UserInfo;
 import org.marsik.elshelves.backend.services.BaseOauthService;
 import org.marsik.elshelves.backend.services.GithubOauthService;
 import org.marsik.elshelves.backend.services.GoogleOauthService;
@@ -93,6 +94,12 @@ public class UserController extends AbstractRestController<User, UserApiModel, U
     public EmberModel getCurrentUser(@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
         final User user = getService().get(currentUser.getId(), currentUser);
         return new EmberModel.Builder<UserApiModel>(getDbToRest().convert(user, new THashMap<>())).build();
+    }
+
+    @Transactional
+    @RequestMapping("/info")
+    public UserInfo getCurrentUserInfo(@CurrentUser User currentUser) throws EntityNotFound, PermissionDenied {
+        return getService().getInfo(currentUser.getId(), currentUser);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.marsik.elshelves.backend.app.prometheus;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +20,7 @@ import org.joda.time.DateTime;
 import org.marsik.elshelves.backend.repositories.LotRepository;
 import org.marsik.elshelves.backend.repositories.UserRepository;
 import org.marsik.elshelves.backend.repositories.results.EntityMetric;
-import org.marsik.elshelves.backend.repositories.results.LotMetric;
+import org.marsik.elshelves.api.dtos.LotMetric;
 import org.marsik.elshelves.backend.repositories.results.MoneySum;
 import org.marsik.elshelves.backend.repositories.results.UserMetric;
 

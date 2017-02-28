@@ -3,12 +3,12 @@ package org.marsik.elshelves.backend.repositories;
 import java.util.List;
 
 import org.marsik.elshelves.backend.entities.Lot;
-import org.marsik.elshelves.backend.repositories.results.LotMetric;
+import org.marsik.elshelves.api.dtos.LotMetric;
 import org.marsik.elshelves.backend.repositories.results.MoneySum;
 import org.springframework.data.jpa.repository.Query;
 
 public interface LotRepository extends BaseOwnedEntityRepository<Lot> {
-    @Query("SELECT NEW org.marsik.elshelves.backend.repositories.results.LotMetric(" +
+    @Query("SELECT NEW org.marsik.elshelves.api.dtos.LotMetric(" +
             " SUM(l.count)," +
             " SUM(CASE l.used WHEN true THEN l.count ELSE 0 END)," +
             " SUM(CASE l.usedInPast WHEN true THEN l.count ELSE 0 END)" +

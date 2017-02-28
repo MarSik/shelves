@@ -36,3 +36,9 @@
         You can then go to {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} page and assign the properties with values to your parts. You can also show important properties in the table when you browse your parts in
         {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}} view so you can better compare your parts.</p>
 </section>
+
+<section class="columns small-12">
+  <h3>Dashboard</h3>
+
+  {{lot-usage-chart unused=unused usedInPast=usedInPast used=used title="Tracked parts"}}
+</section>
