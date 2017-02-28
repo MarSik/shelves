@@ -1,0 +1,37 @@
+<h2>Electronic part and project management</h2>
+
+<div class="row">
+    <section class="columns small-12">
+      <h2>Login using external service</h2>
+
+      <p>
+        {{#if app.model.google}}<a href="{{apilink "/federated/google/login"}}" class="button">{{fa-icon 'google' size=2}} Google</a>{{/if}}
+        {{#if app.model.github}}<a href="{{apilink "/federated/github/login"}}" class="button">{{fa-icon 'github' size=2}} Github</a>{{/if}}
+      </p>
+    </section>
+</div>
+<div class="row">
+    <section class="small-12 large-6 columns" id="login-form">
+    <h2>Login</h2>
+    <form {{action 'authenticate' on='submit'}}>
+        <label for="identification">Email address</label>
+        {{input type='email' id='identification' required='required' placeholder='Enter email address' value=(mut identification)}}
+        <label for="password">Password</label>
+        {{input id='password' placeholder='Enter Password' type='password' value=(mut password)}}
+        <button type="submit">Login</button><button class="secondary" {{action 'reverify'}}>Reset password</button>
+    </form>
+    </section>
+
+    <section class="small-12 large-6 columns" id="registration-form">
+        <h2>Register</h2>
+        <form {{action 'register' on='submit'}}>
+            <label for="name">Name:</label>
+            {{input id='name' placeholder='Enter your name' value=(mut name) required='required'}}
+            <label for="email">Email:</label>
+            {{input type='email' id='email' placeholder='Enter email address' value=(mut email) required='required'}}
+            <button type="submit">Register</button>
+        </form>
+    </section>
+</div>
+
+

@@ -7,6 +7,8 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route("login");
+
   this.route("groups", { resetNamespace: true }, function() {
     this.route("show", {
       path: "/:group_id"

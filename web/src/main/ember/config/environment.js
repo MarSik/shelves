@@ -23,7 +23,7 @@ module.exports = function(environment) {
   ENV['ember-simple-auth'] = {
     'client-id': 'elshelves.js',
     'client-secret': 'public',
-    authenticationRoute: 'signin'
+    authenticationRoute: 'login'
   };
 
   if (environment === 'development') {
