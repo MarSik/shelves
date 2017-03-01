@@ -410,3 +410,26 @@ table.transaction-summary {
     #f0f0f0 20px
   );
 }
+
+.main-menu {
+  background-color: black;
+  &, a {
+    color: white;
+    text-transform: lowercase;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+
+}
+
+.title-area {
+  &, h1, a {
+    text-transform: lowercase;
+    background-color: black;
+    color: white;
+    font-size: 24pt;
+  }
+}

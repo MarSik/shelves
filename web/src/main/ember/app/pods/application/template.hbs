@@ -1,8 +1,14 @@
-{{title-bar stickerCount=stickers.length cartCount=cart.length searchAction=(route-action 'search')}}
+<div class="row">
+{{title-bar class="small-2 columns main-menu" logout=(route-action "invalidateSession") stickerCount=stickers.length cartCount=cart.length searchAction=(route-action 'search')}}
 
-<div class="main-content">
+  <div class="small-10 columns">
+    <div class="row">
+      {{search-bar class="columns small-offset-6 small-6" search=(route-action "search")}}
+    </div>
+
     {{#if error}}<p class="alert-box warning">{{fa-icon 'exclamation-triangle'}} {{error}}</p>{{/if}}
     {{outlet}}
+  </div>
 </div>
 
 {{growl-manager notifications=growl.notifications}}

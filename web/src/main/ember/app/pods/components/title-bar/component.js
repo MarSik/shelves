@@ -1,11 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  actions: {
-    search(query) {
-      this.get('searchAction')(query);
-    }
-  },
   didInsertElement: function() {
     this.$().foundation();
   },

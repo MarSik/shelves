@@ -1,0 +1,8 @@
+<form {{action (action search query) on='submit'}} class="row collapse">
+<div class="large-9 small-8 columns">
+    {{input placeholder='Search terms' value=(mut query) required='required'}}
+</div>
+<div class="large-3 small-4 columns">
+    <button type="submit" class="alert button tiny">{{fa-icon 'search'}} Search</button>
+</div>
+</form>

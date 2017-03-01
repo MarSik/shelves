@@ -1,11 +1,17 @@
-{{title-bar stickerCount=stickers.length searchAction='search'}}
+<div class="row">
+  {{title-bar class="small-2 columns main-menu" logout=(route-action "invalidateSession") stickerCount=stickers.length cartCount=cart.length searchAction=(route-action 'search')}}
 
-<div class="main-content">
-<section id="error-report">
-  <h2>{{fa-icon 'times-circle'}} Application encountered an error:</h2>
+  <div class="small-10 columns">
+    <div class="row">
+      {{search-bar class="columns small-offset-6 small-6" search=(route-action "search")}}
+    </div>
 
-  <p class="alert-box error">The application encountered an error. The detailed description is attached below. The only thing you can do now is to refresh the page and try again.</p>
+    <section id="error-report">
+      <h2>{{fa-icon 'times-circle'}} Application encountered an error:</h2>
 
-  <pre>{{reason}}</pre>
-</section>
+      <p class="alert-box error">The application encountered an error. The detailed description is attached below. The only thing you can do now is to refresh the page and try again.</p>
+
+      <pre>{{reason}}</pre>
+    </section>
+  </div>
 </div>
