@@ -15,7 +15,7 @@ public interface UserRepository extends BaseIdentifiedEntityRepository<User> {
 
     @Query("SELECT NEW org.marsik.elshelves.backend.repositories.results.UserMetric(" +
             " COUNT(DISTINCT l.dbId)," +
-            " SUM(CASE l.password WHEN NULL THEN 0 ELSE 1 END)," +
+            " SUM(CASE WHEN l.password IS NULL THEN 0 ELSE 1 END)," +
             " COUNT(ids)" +
             " ) " +
             " FROM User l LEFT JOIN l.externalIds ids")
@@ -23,10 +23,11 @@ public interface UserRepository extends BaseIdentifiedEntityRepository<User> {
 
     @Query("SELECT NEW org.marsik.elshelves.api.dtos.LotMetric(" +
             " SUM(l.count)," +
-            " SUM(CASE l.used WHEN true THEN l.count ELSE 0 END)," +
-            " SUM(CASE l.usedInPast WHEN true THEN l.count ELSE 0 END)" +
+            " SUM(CASE WHEN l.used = true THEN l.count ELSE 0 END)," +
+            " SUM(CASE WHEN l.usedInPast = true THEN l.count ELSE 0 END)," +
+            " SUM(CASE WHEN l.usedBy IS NULL THEN 0 ELSE l.count END)" +
             " ) " +
-            " FROM Lot l" +
+            " FROM Lot l LEFT JOIN l.usedBy r" +
             " WHERE l.valid = true AND l.owner = ?1")
     LotMetric lotCount(User user);
 

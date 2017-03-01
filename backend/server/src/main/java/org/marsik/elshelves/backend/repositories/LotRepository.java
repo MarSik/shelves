@@ -10,10 +10,11 @@ import org.springframework.data.jpa.repository.Query;
 public interface LotRepository extends BaseOwnedEntityRepository<Lot> {
     @Query("SELECT NEW org.marsik.elshelves.api.dtos.LotMetric(" +
             " SUM(l.count)," +
-            " SUM(CASE l.used WHEN true THEN l.count ELSE 0 END)," +
-            " SUM(CASE l.usedInPast WHEN true THEN l.count ELSE 0 END)" +
+            " SUM(CASE WHEN l.used = true THEN l.count ELSE 0 END)," +
+            " SUM(CASE WHEN l.usedInPast = true THEN l.count ELSE 0 END)," +
+            " SUM(CASE WHEN l.usedBy IS NULL THEN 0 ELSE l.count END)" +
             " ) " +
-            " FROM Lot l" +
+            " FROM Lot l LEFT JOIN l.usedBy r" +
             " WHERE l.valid = true")
     LotMetric lotCount();
 

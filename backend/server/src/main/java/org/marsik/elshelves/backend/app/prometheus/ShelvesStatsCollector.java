@@ -64,6 +64,13 @@ public class ShelvesStatsCollector extends Collector {
                 count.getUsedInPast()
         ));
 
+        sample.add(new MetricFamilySamples.Sample(
+                "shelves_part_count",
+                Collections.singletonList("type"),
+                Collections.singletonList("assigned"),
+                count.getAssigned()
+        ));
+
         metrics.add(new MetricFamilySamples("shelves_part_count",
                 Type.GAUGE, "Simple part count", sample));
 
