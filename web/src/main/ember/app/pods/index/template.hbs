@@ -1,7 +1,7 @@
 <h2>Electronic part and project management</h2>
 
 <section class="columns small-12">
-    <p class="alert-box alert">This is an unstable demo version. Expect possible data loss. No usage or backup guarantees.</p>
+    <p class="alert-box alert">This is an unstable demo version. Expect possible data loss. No usage or backup guarantees. You can <a href="https://hub.docker.com/r/marsik/shelves-backend/">deploy your own instance {{fa-icon "paper-plane"}}</a> when guarantees are needed.</p>
 </section>
 
 <section class="columns small-12">
@@ -9,7 +9,6 @@
 
     <ul>
         <li>{{fa-icon 'exclamation-triangle'}} Do not open extra windows or tabs. This application is not designed to work in such environment and might present outdated information if you do it.</li>
-        <li>{{fa-icon 'exclamation-triangle'}} The logout button in menu is currently broken, please use the link here: <strong><a {{ action 'invalidateSession' }}>{{fa-icon 'hand-o-right'}} Logout</a></strong></li>
         <li>{{fa-icon 'exclamation-triangle'}} The part count in {{#link-to 'types'}}{{fa-icon 'book'}} types{{/link-to}} and {{#link-to 'groups'}}{{fa-icon 'database'}} groups{{/link-to}} tree views can show zeros when displayed for the first time.</li>
     </ul>
 </section>
@@ -39,6 +38,8 @@
 
 <section class="columns small-12">
   <h3>Dashboard</h3>
+
+  <p>This section shows summary data for all your parts. I will add more as needed or requested.</p>
 
   {{lot-usage-chart reserved=reserved unused=unused usedInPast=usedInPast used=used title="Tracked parts"}}
 </section>

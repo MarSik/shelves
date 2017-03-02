@@ -56,12 +56,12 @@ export default Ember.Controller.extend({
     return this.get('store').findAll('property');
   }),
   availablePapers: Ember.computed(function() {
-    return this.get('store').findAll('page');
+    return this.get('store').peekAll('page');
   }),
   stickers: Ember.computed(function() {
     return this.get('store').findAll('sticker');
   }),
   cartitems: Ember.computed(function() {
-    return this.get('cart').findAll();
+    return this.get('cart').getAll();
   })
 });

@@ -3,76 +3,77 @@
 <nav class="" role="navigation">
             <ul class="left">
                 {{#if session.isAuthenticated}}
-                <li class="active">{{#link-to 'account'}}{{fa-icon "user"}} Account info{{/link-to}}</li>
-                <li><a href="#" {{ action (action logout) }}>{{fa-icon "lock"}} Logout</a></li>
+                <li class="active">{{#link-to 'account'}}{{fa-icon "user" fixedWidth=true}} Account info{{/link-to}}</li>
+                <li><a href="#" {{ action (action logout) }}>{{fa-icon "lock" fixedWidth=true}} Logout</a></li>
                 {{else}}
-                <li><a href="#"><span style="color: gray;">{{fa-icon "user"}}</span></a></li>
+                <li><a href="#"><span style="color: gray;">{{fa-icon "user" fixedWidth=true}}</span></a></li>
                 {{/if}}
                 <li>&nbsp;</li>
 
                 <li>
                     {{#link-to 'groups.index' class='item' title='Organize your parts to groups here'}}
-                    {{fa-icon "database"}} groups
+                    {{fa-icon "database" fixedWidth=true}} groups
                     {{/link-to}}
                 </li>
                 <li>
                     {{#link-to 'boxes.index' class='item' title='Manage locations of your parts'}}
-                    {{fa-icon "archive"}} locations
+                    {{fa-icon "archive" fixedWidth=true}} locations
                     {{/link-to}}
                 </li>
                 <li>&nbsp;</li>
                 <li>
                     {{#link-to 'footprints.index' class='item' title='Create and manage footprints and connection types'}}
-                    {{fa-icon "th-large"}} footprints
+                    {{fa-icon "th-large" fixedWidth=true}} footprints
                     {{/link-to}}
                 </li>
                 <li>
                     {{#link-to 'types' class='item' title='Manage the part types here'}}
-                    {{fa-icon "book"}} types
+                    {{fa-icon "book" fixedWidth=true}} types
                     {{/link-to}}
                 </li>
                 <li>&nbsp;</li>
                 <li>
                     {{#link-to 'items.index' class='item' title='This is where all your projects are tracked and managed'}}
-                    {{fa-icon "flask"}} projects
+                    {{fa-icon "flask" fixedWidth=true}} projects
                     {{/link-to}}
                 </li>
                 <li>&nbsp;</li>
                 <li>
                     {{#link-to 'sources' class='item' title='You can find all sources you acquire parts from here'}}
-                    {{fa-icon "industry"}} sources
+                    {{fa-icon "industry" fixedWidth=true}} sources
                     {{/link-to}}
                 </li>
                 <li>
                     {{#link-to 'transactions' class='item' title='Register a part order or a part delivery'}}
-                    {{fa-icon "credit-card"}} orders
+                    {{fa-icon "credit-card" fixedWidth=true}} orders
+                    {{/link-to}}
+                </li>
+                <li>
+                    {{#link-to 'lists' class='item' title='Item lists'}}
+                    {{fa-icon "list" fixedWidth=true}} lists
                     {{/link-to}}
                 </li>
                 <li>&nbsp;</li>
                 <li>
                     {{#link-to 'stickers' class='item' title='Prepare printable PDF with QR codes for selected objects'}}
-                        {{fa-icon "qrcode"}} {{stickerCount}} stickers
+                        {{fa-icon "qrcode" fixedWidth=true}} {{stickerCount}} stickers
                     {{/link-to}}
                 </li>
-              <li>
-                {{#link-to 'lists' class='item' title='Item lists'}}
-                {{fa-icon "list"}} lists
-                {{/link-to}}
-              </li>
+
               <li>
                 {{#link-to 'cart' class='item' title='Cart'}}
-                {{fa-icon "shopping-cart"}} {{cartCount}}
+                {{fa-icon "shopping-cart" fixedWidth=true}} {{cartCount}} lots
                 {{/link-to}}
               </li>
                 <li>&nbsp;</li>
                 <li>
                     {{#link-to 'units' class='item' title='Manage measurements units including allowed SI prefixes'}}
-                    {{fa-icon "arrows"}} units
+                    {{fa-icon "arrows" fixedWidth=true}} units
                     {{/link-to}}
                 </li>
                 <li>
                     {{#link-to 'properties' class='item' title='Create tracked values, assign measurement units and precision'}}
-                    {{fa-icon "bar-chart"}} values
+                    {{fa-icon "bar-chart" fixedWidth=true}} values
                     {{/link-to}}
                 </li>
                 <li>&nbsp;</li>

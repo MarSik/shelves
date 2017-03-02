@@ -1,9 +1,11 @@
 <div class="row">
-    <section class="meta columns large-6">
+    <section class="meta columns large-12">
         <h2>{{#click-to-edit content=model field='content.name'}}{{model.name}}{{/click-to-edit}}</h2>
-
-<p>{{#click-to-editarea content=model field='content.summary'}}{{summary}}{{/click-to-editarea}}</p>
-
+        <p>{{#click-to-editarea content=model field='content.summary'}}{{summary}}{{/click-to-editarea}}</p>
+    </section>
+</div>
+<div class="row">
+    <section class="meta columns large-6">
 <h3>Description</h3>
 
 {{#click-to-editarea content=model field='content.description'}}{{description}}{{/click-to-editarea}}
@@ -25,22 +27,24 @@
 
 <div class="row purchase">
 
-    <dl class="columns large-4">
+    <dl class="columns large-6">
         <dt>Source</dt>
         <dd>{{#link-to 'sources.show' model.source}}{{model.source.name}}{{/link-to}}</dd>
     </dl>
 
-    <dl class="columns large-4">
+    <dl class="columns large-6">
         <dt>Purchase date</dt>
         <dd>{{#click-to-editdate content=model field='content.date' editable=editEnabled}}{{model.date}}{{/click-to-editdate}}</dd>
     </dl>
+</div>
 
-    <dl class="columns large-4">
+<div class="row purchase">
+    <dl class="columns large-6">
         <dt>Expected delivery</dt>
         <dd>{{#click-to-editdate content=model field='content.expectedDelivery' editable=editEnabled}}{{model.expectedDelivery}}{{/click-to-editdate}}</dd>
     </dl>
 
-    <dl class="columns large-4">
+    <dl class="columns large-6">
         <dt>Status</dt>
         <dd>
             {{#if model.locked}}
@@ -163,7 +167,8 @@
         {{/each}}
         {{#if purchase.missing}}
         <tr>
-            <td colspan="7">
+            <td>&nbsp;</td>
+            <td colspan="6">
                 {{purchase-delivery sortedBoxes=sortedBoxes purchase=purchase action='delivered' location=location count=purchase.missing}}
             </td>
         </tr>
