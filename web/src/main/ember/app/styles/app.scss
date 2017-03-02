@@ -412,9 +412,9 @@ table.transaction-summary {
 }
 
 .main-menu {
-  background-color: black;
+  background-color: #eee;
   &, a {
-    color: white;
+    color: black;
     text-transform: lowercase;
   }
 
@@ -428,8 +428,8 @@ table.transaction-summary {
 .title-area {
   &, h1, a {
     text-transform: lowercase;
-    background-color: black;
-    color: white;
+    background-color: #eee;
+    color: black;
     font-size: 24pt;
   }
 }
