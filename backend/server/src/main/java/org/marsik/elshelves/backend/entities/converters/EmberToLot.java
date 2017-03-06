@@ -87,8 +87,9 @@ public class EmberToLot extends AbstractEmberToEntity<LotApiModel, Lot> {
 					.collect(Collectors.toSet()));
 		}
 		model.setUsedBy(emberToRequirement.convert(path, "used-by", object.getUsedBy(), cache, include));
-		model.setSerials(object.getSerials());
 		model.setHistory(emberToLotHistory.convert(path, "history", object.getHistory(), cache, include));
+
+		model.setSerials(object.getSerials());
 
 		if (object.getSerial() != null
 				&& !object.getSerial().isEmpty()) {

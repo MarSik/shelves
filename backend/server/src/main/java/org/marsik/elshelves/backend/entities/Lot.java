@@ -285,7 +285,9 @@ public class Lot extends OwnedEntity implements StickerCapable, RevisionsSupport
 
 		setUsedBy(update.getUsedBy());
 
-		update(update.getSerials(), this::setSerials);
+		if (!(update.getSerials() instanceof UnprovidedSet)) {
+			update(update.getSerials(), this::setSerials);
+		}
 
 		super.updateFrom(update);
 	}
