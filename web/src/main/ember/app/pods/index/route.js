@@ -9,5 +9,5 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     model() {
       var token = this.get('session.data.authenticated.access_token');
       return this.get('userinfo').fetch(token);
-    }
+    },
 });
