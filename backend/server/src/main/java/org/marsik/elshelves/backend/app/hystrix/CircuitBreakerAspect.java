@@ -20,6 +20,8 @@ import java.util.Map;
 @Aspect
 @Component
 public class CircuitBreakerAspect {
+    public static final int DEFAULT_TIMEOUT = 10000;
+
     private static Map<String, String> names = new THashMap<>();
     private static Map<String, String> groups = new THashMap<>();
 
@@ -105,7 +107,7 @@ public class CircuitBreakerAspect {
         theSetter = theSetter.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
                 .withExecutionTimeoutInMilliseconds(annotation != null && annotation.timeoutMs() != 0
-                        ? annotation.timeoutMs() : 5000));
+                        ? annotation.timeoutMs() : DEFAULT_TIMEOUT));
 
         HystrixObservableCommand<Object> hystrixCommand = new HystrixObservableCommand<Object>(theSetter) {
             @Override

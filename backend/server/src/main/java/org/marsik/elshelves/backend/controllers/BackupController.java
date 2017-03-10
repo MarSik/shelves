@@ -3,6 +3,7 @@ package org.marsik.elshelves.backend.controllers;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.marsik.elshelves.api.entities.BackupApiModel;
 import org.marsik.elshelves.api.entities.RestoreApiModel;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.EmberToEntityConversionService;
 import org.marsik.elshelves.backend.security.CurrentUser;
@@ -46,6 +47,7 @@ public class BackupController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	@Transactional
+    @CircuitBreaker(timeoutMs = 600000)
 	public void restoreBackup(@RequestBody RestoreApiModel backup,
 							  @CurrentUser User currentUser) {
 		backupService.restoreFromBackup(backup, currentUser);
@@ -53,6 +55,7 @@ public class BackupController {
 
     @RequestMapping
     @Transactional(readOnly = true)
+    @CircuitBreaker(timeoutMs = 600000)
     public BackupApiModel getBackup(@CurrentUser User currentUser,
                                     HttpServletResponse response) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
@@ -65,6 +68,7 @@ public class BackupController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @Transactional
+    @CircuitBreaker(timeoutMs = 600000)
     public void upload(@CurrentUser User currentUser,
             @RequestParam("files[]") MultipartFile[] files) throws IOException {
         for (MultipartFile file: files) {

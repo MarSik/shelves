@@ -17,6 +17,7 @@ import org.marsik.elshelves.api.entities.SourceApiModel;
 import org.marsik.elshelves.api.entities.TransactionApiModel;
 import org.marsik.elshelves.api.entities.UserApiModel;
 import org.marsik.elshelves.api.entities.fields.LotAction;
+import org.marsik.elshelves.backend.app.hystrix.CircuitBreaker;
 import org.marsik.elshelves.backend.entities.Document;
 import org.marsik.elshelves.backend.entities.Footprint;
 import org.marsik.elshelves.backend.entities.IdentifiedEntity;
@@ -417,7 +418,8 @@ public class BackupServiceImpl implements BackupService {
     }
 
     @Override @Transactional
-	public boolean restoreFromBackup(RestoreApiModel backup,
+    @CircuitBreaker(timeoutMs = 600000)
+    public boolean restoreFromBackup(RestoreApiModel backup,
             User currentUser) {
 		Map<UUID, Object> conversionCache = new THashMap<>();
         Relinker relinkContext = relinkService.newRelinker().currentUser(currentUser);
@@ -721,7 +723,8 @@ public class BackupServiceImpl implements BackupService {
     }
 
     @Override @Transactional(readOnly = true)
-	public RestoreApiModel doBackup(User currentUser) {
+    @CircuitBreaker(timeoutMs = 600000)
+    public RestoreApiModel doBackup(User currentUser) {
         RestoreApiModel backup = new RestoreApiModel();
         Map<UUID, Object> cache = new THashMap<>();
 
