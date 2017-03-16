@@ -1,6 +1,7 @@
 package org.marsik.elshelves.backend.repositories;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.marsik.elshelves.backend.entities.Lot;
 import org.marsik.elshelves.api.dtos.LotMetric;
@@ -28,5 +29,5 @@ public interface LotRepository extends BaseOwnedEntityRepository<Lot> {
             + " JOIN p.transaction t"
             + " WHERE p.totalPricePaidRaw > 0"
             + " GROUP BY p.currencyPaid, t.date, t.created")
-    List<MoneySum> totalPricePaid();
+    Stream<MoneySum> totalPricePaid();
 }

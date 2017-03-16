@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.ConversionQueryBuilder;
@@ -13,6 +16,9 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import io.prometheus.client.Collector;
 
 import org.javamoney.moneta.Money;
@@ -25,18 +31,40 @@ import org.marsik.elshelves.backend.repositories.results.MoneySum;
 import org.marsik.elshelves.backend.repositories.results.UserMetric;
 
 public class ShelvesStatsCollector extends Collector {
-    LotRepository lotRepository;
+    final LotRepository lotRepository;
 
-    UserRepository userRepository;
+    final UserRepository userRepository;
+
+    final LoadingCache<Integer, List<MetricFamilySamples>> cache;
 
     public ShelvesStatsCollector(LotRepository lotRepository,
             UserRepository userRepository) {
         this.lotRepository = lotRepository;
         this.userRepository = userRepository;
+
+        cache = CacheBuilder.newBuilder()
+                .maximumSize(1)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .build(new CacheLoader<Integer, List<MetricFamilySamples>>() {
+                    @Override
+                    public List<MetricFamilySamples> load(Integer aVoid) throws Exception {
+                        return compute();
+                    }
+                });
     }
 
+    // !!! Return money and db stats only once per 10 minutes
     @Override
     public List<MetricFamilySamples> collect() {
+        try {
+            return cache.get(0);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    private List<MetricFamilySamples> compute() {
         List<MetricFamilySamples> metrics = new ArrayList<>();
 
         LotMetric count = lotRepository.lotCount();
@@ -115,20 +143,21 @@ public class ShelvesStatsCollector extends Collector {
         metrics.add(new MetricFamilySamples("shelves_entity_count",
                 Type.GAUGE, "Database entity count", sample));
 
-        List<MoneySum> moneySumList = lotRepository.totalPricePaid();
+        final Stream<MoneySum> moneySumList = lotRepository.totalPricePaid();
+        final ExchangeRateProvider
+                provider = MonetaryConversions.getExchangeRateProvider("IDENT", "ECB-HIST", "ECB-HIST90", "ECB", "IMF");
 
-        Money sum = moneySumList.stream()
+        Money sum = moneySumList
                 .map(i -> {
-                    Money m = Money.of(i.getAmount(), i.getCurrency());
-                    DateTime date = Optional.ofNullable(i.getDate()).orElse(i.getCreated());
-                    ConversionQuery query = ConversionQueryBuilder.of()
+                    final Money m = Money.of(i.getAmount(), i.getCurrency());
+                    final DateTime date = Optional.ofNullable(i.getDate()).orElse(i.getCreated());
+                    final ConversionQuery query = ConversionQueryBuilder.of()
                             .setTermCurrency("CZK")
                             .set(LocalDate.class, date.toDate().toInstant().atZone(
                                     date.getZone().toTimeZone().toZoneId()).toLocalDate())
                             .build();
-                    ExchangeRateProvider
-                            provider = MonetaryConversions.getExchangeRateProvider("IDENT", "ECB-HIST", "ECB-HIST90", "ECB", "IMF");
-                    CurrencyConversion conversion = provider.getCurrencyConversion(query);
+
+                    final CurrencyConversion conversion = provider.getCurrencyConversion(query);
                     return m.with(conversion);
                 })
                 .reduce(Money::add)
