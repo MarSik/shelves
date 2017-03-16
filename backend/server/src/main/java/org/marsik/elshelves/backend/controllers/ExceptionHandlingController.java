@@ -1,5 +1,6 @@
 package org.marsik.elshelves.backend.controllers;
 
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,12 @@ public class ExceptionHandlingController {
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	public void handleBadValues() {
+
+	}
+
+	@ExceptionHandler(HystrixRuntimeException.class)
+	@ResponseStatus(HttpStatus.GATEWAY_TIMEOUT)
+	public void hystrixTimeout() {
 
 	}
 }
