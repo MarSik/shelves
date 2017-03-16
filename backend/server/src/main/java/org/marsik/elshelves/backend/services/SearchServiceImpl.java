@@ -10,7 +10,11 @@ import org.marsik.elshelves.backend.entities.User;
 import org.marsik.elshelves.backend.entities.converters.CachingConverter;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionService;
 import org.marsik.elshelves.backend.entities.converters.EntityToEmberConversionServiceImpl;
+import org.marsik.elshelves.backend.repositories.BaseOwnedEntityRepository;
+import org.marsik.elshelves.backend.repositories.FootprintRepository;
+import org.marsik.elshelves.backend.repositories.ItemRepository;
 import org.marsik.elshelves.backend.repositories.NamedEntityRepository;
+import org.marsik.elshelves.backend.repositories.TypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -43,10 +48,16 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     EntityToEmberConversionService conversionService;
 
-    public static Specification<NamedEntity> searchSpecification(User user, String... queries) {
-        return new Specification<NamedEntity>() {
+    @Autowired
+    TypeRepository typeRepository;
+
+    @Autowired
+    FootprintRepository footprintRepository;
+
+    public static <T extends NamedEntity> Specification<T> searchSpecification(User user, String... queries) {
+        return new Specification<T>() {
             @Override
-            public Predicate toPredicate(Root<NamedEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
 
                 predicates.add(criteriaBuilder.equal(root.get(NamedEntity_.owner), user));
@@ -66,22 +77,41 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchResult query(String q, User currentUser, Map<UUID, Object> cache, Set<String> include) {
+    public SearchResult query(String q, User currentUser, Map<UUID, Object> cache, Set<String> include, String type, int limit) {
         SearchResult searchResult = new SearchResult();
         searchResult.setId(uuidGenerator.generate());
         searchResult.setQuery(q);
         searchResult.setInclude(include);
 
+        JpaSpecificationExecutor<? extends NamedEntity> repository;
+
+        if (type == null) {
+            type = "default";
+        }
+
+        switch (type) {
+            case "type":
+            case "t":
+                repository = typeRepository;
+                break;
+            case "footprint":
+            case "f":
+                repository = footprintRepository;
+                break;
+            default:
+                repository = entityRepository;
+        }
+
         final String[] tokenArray = new StrTokenizer(q, ' ', '"').getTokenArray();
-        Pageable pageable = new PageRequest(0, 100);
-        Page<NamedEntity> result = entityRepository.findAll(searchSpecification(currentUser, tokenArray), pageable);
+        Pageable pageable = new PageRequest(0, Math.min(limit != 0 ? limit : 100, 100));
+        Page<? extends NamedEntity> result = repository.findAll(searchSpecification(currentUser, tokenArray), pageable);
 
         searchResult.setItems(new THashSet<>());
         if (result == null) {
             return searchResult;
         }
 
-        searchResult.setTotal(result.getTotalElements());
+        searchResult.setTotal((int) result.getTotalElements());
 
         for (NamedEntity n: result) {
             final CachingConverter<NamedEntity, AbstractNamedEntityApiModel, UUID> converter = conversionService.converter(n, AbstractNamedEntityApiModel.class);
