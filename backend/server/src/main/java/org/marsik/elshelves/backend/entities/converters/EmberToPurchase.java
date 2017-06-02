@@ -66,7 +66,7 @@ public class EmberToPurchase extends AbstractEmberToEntity<PurchaseApiModel, Pur
 		model.setTransaction(emberToTransaction.convert(path, "transaction", object.getTransaction(), cache, include));
 		model.setType(emberToType.convert(path, "type", object.getType(), cache, include));
 
-		if (object.getSku() != null) {
+		if (object.getSku() != null && !object.getSku().isEmpty()) {
 			model.setSku(new Sku());
 			model.getSku().setSku(object.getSku());
 			model.getSku().setType(model.getType());
