@@ -60,6 +60,7 @@ export default Ember.Controller.extend({
       },
       set(key, value) {
         this.set('exchangeRateDefault', value);
+        return value;
       }
     }),
 
@@ -73,7 +74,7 @@ export default Ember.Controller.extend({
     }),
 
     invoiceCurrencyDefault: "",
-    invoiceCurrency: Ember.computed('selectedItem.currency', {
+    invoiceCurrency: Ember.computed('selectedItem.currency', 'invoiceCurrencyDefault', {
       get(key) {
         var modelValue = this.get('selectedItem.currency');
         if (!Ember.isEmpty(modelValue)) {
@@ -86,11 +87,12 @@ export default Ember.Controller.extend({
       set(key, value) {
         this.set('invoiceCurrencyDefault', value);
         this.set('selectedItem.currency', value);
+        return value;
       }
     }),
 
     paidCurrencyDefault: "",
-    paidCurrency: Ember.computed('selectedItem.currencyPaid', {
+    paidCurrency: Ember.computed('selectedItem.currencyPaid', 'paidCurrencyDefault', {
       get(key) {
         var modelValue = this.get('selectedItem.currencyPaid');
         if (!Ember.isEmpty(modelValue)) {
@@ -103,6 +105,7 @@ export default Ember.Controller.extend({
       set(key, value) {
         this.set('paidCurrencyDefault', value);
         this.set('selectedItem.currencyPaid', value);
+        return value;
       }
     }),
 });
